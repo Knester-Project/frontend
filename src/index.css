@@ -83,6 +83,7 @@
 }
 
 .dark {
+
   /* Inverted tone for dark mode */
   --background: oklch(0.12 0.005 75);
   --foreground: oklch(0.95 0.01 75);
