@@ -1,6 +1,7 @@
 import { Outlet, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 //Layouts
+import AuthLayout from '@/layouts/AuthLayout';
 
 
 //Pages
@@ -10,11 +11,11 @@ import Home from '@/pages/Home';
 
 
 
-// const Auth = () => (
-//     <AuthLayout>
-//         <Outlet />
-//     </AuthLayout>
-// )
+const Auth = () => (
+    <AuthLayout>
+        <Outlet />
+    </AuthLayout>
+)
 
 // const User = () => (
 //     <UserLayout>
@@ -27,9 +28,9 @@ const AppRoutes = () => {
     return (
         <Router>
             <Routes>
-                {/* <Route element={<Auth />}>
-                </Route> */}
-                <Route path="/" element={<Home />} />
+                <Route element={<Auth />}>
+                    <Route path="/" element={<Home />} />
+                </Route>
 
                 {/* Page Routes */}
                 {/* // <Route path="/auth" element={<Create />} /> */}
