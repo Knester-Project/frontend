@@ -2,25 +2,25 @@ import { useState, type ChangeEvent } from 'react';
 import { toast } from "react-fox-toast";
 
 //Hooks, Stores and Utils
-import { useValidateUser } from "@/services/userMutations";
+import { useCreateUser, useValidateUser } from "@/services/userMutations";
 import { CheckUsername } from '@/services/userQueries';
-import useValidationStore from '@/stores/validation.store';
 import { generateCustomUsernames } from '@/utils/generate';
 
 //Components
 import Button from '@/components/Button';
 
 //Icons
-import { User, ArrowBigRight, CircleCheckBig, Loader, Eye, EyeOff, Lock, Check } from "lucide-react";
+import { User, ArrowBigRight, CircleCheckBig, Loader, Eye, EyeOff, Lock, Check, UserPlus } from "lucide-react";
 
 
 const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
 
-    const [enteredUsername, setEnteredUsername] = useState<string>("")
-    const [passwordPage, setPasswordPage] = useState<boolean>(true)
-    const { setReferrer } = useValidationStore();
+    const [enteredUsername, setEnteredUsername] = useState<string>("");
+    const [referrer, setReferrer] = useState<string>("");
+    const [passwordPage, setPasswordPage] = useState<boolean>(false);
+    const [recoveryPage, setRecoveryPage] = useState<boolean>(false);
     const { data, isFetching, isError, isLoading, error } = CheckUsername(enteredUsername);
-    const generatedUsernames = generateCustomUsernames(enteredUsername)
+    const generatedUsernames = generateCustomUsernames(enteredUsername);
 
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -47,15 +47,18 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
 
     // Form submission handler
     const validateInvite = useValidateUser();
+    const createUser = useCreateUser();
+
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         if (invitationCode.length !== 10) return toast.error("Invalid Referral Link");
 
-        //Save Username in a state
         validateInvite.mutate({ invitationCode }, {
             onSuccess: (response) => {
+                console.log("The response", response)
                 toast.success(response.data.message || "Referral Validation was successfully!");
+                setReferrer(response.data.data.referrer)
                 setPasswordPage(true);
             },
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -67,7 +70,20 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
     }
 
     const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
 
+        toast("Creating your account", { isCloseBtn: true })
+        createUser.mutate({ username: enteredUsername, password, referrer }, {
+            onSuccess: (response) => {
+                toast.success(response.data.message || "Your account was created successfully!");
+                setRecoveryPage(true);
+            },
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onError: (error: any) => {
+                const message = error?.response?.data?.message || "Account creation failed. Kindly restart the process.";
+                toast.error(message);
+            },
+        });
     }
 
     return (
@@ -99,7 +115,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                         <CircleCheckBig className='inline size-3 md:size-4 xl:size-5' />
                         {data.message} press continue to enter password.
                     </div>}
-                    <Button text="Continue" loadingText={"Validating Invitation and Username..."} disabled={validateInvite.isPending || (isFetching || isError || isLoading)} loading={validateInvite.isPending} icon={<ArrowBigRight className='size-4 md:size-5' />} variant='primary' />
+                    <Button text="Continue" loadingText={"Validating Invitation..."} disabled={validateInvite.isPending || (isFetching || isError || isLoading)} loading={validateInvite.isPending} icon={<ArrowBigRight className='size-4 md:size-5' />} variant='primary' />
                 </form>
             </div>}
             {passwordPage &&
@@ -155,7 +171,12 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                                 ))}
                             </div>
                         </div>
+                        <Button text="Create Account" loadingText={"Creating Account..."} disabled={createUser.isPending || (!allRequirementsMet || !passwordsMatch)} loading={createUser.isPending} icon={<UserPlus className='size-4 md:size-5' />} variant='primary' />
                     </form>
+                </div>
+            }
+            {recoveryPage &&
+                <div>
                 </div>
             }
         </>
