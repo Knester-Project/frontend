@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent } from 'react';
 import { toast } from "react-fox-toast";
+import { Link } from 'react-router-dom';
 
 //Hooks, Stores and Utils
 import { useCreateUser, useValidateUser } from "@/services/userMutations";
@@ -10,7 +11,7 @@ import { generateCustomUsernames } from '@/utils/generate';
 import Button from '@/components/Button';
 
 //Icons
-import { User, ArrowBigRight, CircleCheckBig, Loader, Eye, EyeOff, Lock, Check, UserPlus } from "lucide-react";
+import { User, ArrowBigRight, CircleCheckBig, Loader, Eye, EyeOff, Lock, Check, UserPlus, Shield, AlertTriangle, CheckCircle } from "lucide-react";
 
 
 const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
@@ -18,15 +19,19 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
     const [enteredUsername, setEnteredUsername] = useState<string>("");
     const [referrer, setReferrer] = useState<string>("");
     const [passwordPage, setPasswordPage] = useState<boolean>(false);
-    const [recoveryPage, setRecoveryPage] = useState<boolean>(false);
+    const [recoveryPage, setRecoveryPage] = useState<boolean>(true);
     const { data, isFetching, isError, isLoading, error } = CheckUsername(enteredUsername);
     const generatedUsernames = generateCustomUsernames(enteredUsername);
 
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [password, setPassword] = useState<string>('');
+    const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+    const [recoveryPhrase, setRecoveryPhrase] = useState<string>('');
+    const [copied, setCopied] = useState<boolean>(false);
+
+    //Functions
     const passwordRequirements = [
         { text: 'At least 8 characters', met: password.length >= 8 },
         { text: 'Contains uppercase letter', met: /[A-Z]/.test(password) },
@@ -38,11 +43,17 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
     const allRequirementsMet = passwordRequirements.every(req => req.met);
     const passwordsMatch = password === confirmPassword && confirmPassword.length > 0;
 
-    //Functions
     const handleUsername = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const formattedValue = value.replace(/ /g, '.').replace(/[^A-Za-z0-9_]/g, '');
         setEnteredUsername(formattedValue);
+    };
+
+    const handleCopy = async (phrase: string) => {
+        await navigator.clipboard.writeText(phrase);
+        setCopied(true);
+        toast.success("Your Recovery Phrase Was Copied Successfully.")
+        setTimeout(() => setCopied(false), 3000);
     };
 
     // Form submission handler
@@ -56,9 +67,8 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
 
         validateInvite.mutate({ invitationCode }, {
             onSuccess: (response) => {
-                console.log("The response", response)
                 toast.success(response.data.message || "Referral Validation was successfully!");
-                setReferrer(response.data.data.referrer)
+                setReferrer(response.data.referrer)
                 setPasswordPage(true);
             },
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -76,6 +86,8 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
         createUser.mutate({ username: enteredUsername, password, referrer }, {
             onSuccess: (response) => {
                 toast.success(response.data.message || "Your account was created successfully!");
+                setRecoveryPhrase(response.data.recoveryUsername)
+                setPasswordPage(false);
                 setRecoveryPage(true);
             },
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -88,7 +100,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
 
     return (
         <>
-            {!passwordPage && <div className="bg-white dark:bg-neutral-900 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-md">
+            {!passwordPage || !recoveryPage && <div className="bg-white dark:bg-neutral-900 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-md">
                 <div className="mb-8 text-center">
                     <div className="flex justify-center items-center bg-purple-100 mx-auto mb-4 rounded-full size-16">
                         <User className="size-8 text-primary" />
@@ -100,7 +112,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                     <div className="relative flex flex-col gap-y-1">
                         <label htmlFor="username" className='font-medium cursor-pointer'>Username</label>
                         <input type="text" id="username" className='bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none text-sm md:text-base xl:text-lg duration-300 focus:caret-primary' onChange={handleUsername} value={enteredUsername} title="Please enter only letters, numbers, and underscores (spaces will be replaced with underscores)" minLength={5} placeholder="Inclusive.Iguana" required />
-                        <div className="right-3 bottom-4 absolute transform">
+                        <div className="right-3 bottom-4 absolute cursor-pointer transform">
                             {(isLoading && isFetching) && <Loader className="size-3 md:size-4 xl:size-5 text-foreground animate-spin" />}
                         </div>
                     </div>
@@ -134,8 +146,8 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                             </label>
                             <div className="relative">
                                 <input type={showPassword ? 'text' : 'password'} id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none w-full text-sm md:text-base xl:text-lg duration-300 focus:caret-primary" placeholder="Enter your password" required />
-                                <button type="button" onClick={() => setShowPassword(!showPassword)} className="top-1/2 right-3 absolute text-foreground hover:text-gray-600 -translate-y-1/2 transform">
-                                    {showPassword ? <EyeOff className="size-5" /> : <Eye className="size-5" />}
+                                <button type="button" onClick={() => setShowPassword(!showPassword)} className="top-1/2 right-3 absolute text-foreground hover:text-gray-600 -translate-y-1/2 cursor-pointer transform">
+                                    {showPassword ? <EyeOff className="size-4 md:size-5" /> : <Eye className="size-4 md:size-5" />}
                                 </button>
                             </div>
                         </div>
@@ -146,8 +158,8 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                             </label>
                             <div className="relative">
                                 <input type={showConfirmPassword ? 'text' : 'password'} id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none w-full text-sm md:text-base xl:text-lg duration-300 focus:caret-primary" placeholder="Confirm your password" required />
-                                <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="top-1/2 right-3 absolute text-foreground hover:text-gray-600 -translate-y-1/2 transform">
-                                    {showConfirmPassword ? <EyeOff className="size-5" /> : <Eye className="size-5" />}
+                                <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="top-1/2 right-3 absolute text-foreground hover:text-gray-600 -translate-y-1/2 cursor-pointer transform">
+                                    {showConfirmPassword ? <EyeOff className="size-4 md:size-5" /> : <Eye className="size-4 md:size-5" />}
                                 </button>
                             </div>
                             {confirmPassword && !passwordsMatch && (
@@ -176,7 +188,33 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                 </div>
             }
             {recoveryPage &&
-                <div>
+                <div className="bg-white dark:bg-neutral-900 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-md">
+                    <div className="mb-8 text-center">
+                        <div className="flex justify-center items-center bg-purple-100 mx-auto mb-4 rounded-full size-16">
+                            <Shield className="size-8 text-amber-500" />
+                        </div>
+                        <h2 className="mb-2 font-bold text-lg md:text-xl xl:text-2xl montserrat">Secure Your Account</h2>
+                        <p className="-mt-2 text-neutral-700 dark:text-neutral-400">Your recovery phrase is the only way to restore access to your account if you lose your password.</p>
+                    </div>
+                    <div className="bg-amber-50 mb-6 p-4 border border-amber-200 rounded-2xl">
+                        <div className="flex items-start space-x-3">
+                            <AlertTriangle className="flex-shrink-0 mt-0.5 size-4 md:size-5 text-amber-600" />
+                            <div>
+                                <p className="mb-1 font-semibold text-amber-600 dark:text-amber-800">Important Security Notice</p>
+                                <ul className="space-y-1 text-amber-500 dark:text-amber-700">
+                                    <li>• Store this phrase in a safe, offline location</li>
+                                    <li>• Never share it with anyone or store it digitally</li>
+                                    <li>• You'll need it to recover your account if you lose access</li>
+                                    <li>• Knester cannot recover your account without this phrase</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='bg-background p-4 md:p-6 xl:p-8 border border-border rounded-2xl'>
+                        <p className='my-2 font-medium text-base md:text-lg xl:text-xl montserrat'>{recoveryPhrase}</p>
+                        <Button onClick={() => handleCopy(recoveryPhrase)} text={copied ? 'Copied!' : 'Copy Recovery Phrase'} disabled={false} loading={false} icon={<CheckCircle className="size-4 md:size-5" />} variant='success' />
+                    </div>
+                    {copied && <Link to={"/dashboard"} className='block bg-primary hover:bg-accent my-4 p-3 rounded-2xl w-full text-center'>Enter Your Dashboard</Link>}
                 </div>
             }
         </>

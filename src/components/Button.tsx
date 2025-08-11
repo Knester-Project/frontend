@@ -4,7 +4,7 @@ export default function Button({ text, loadingText = "Processing...", icon, onCl
     const variantStyles = {
         primary: "hover:bg-gradient-to-r bg-primary duration hover:from-primary hover:to-accent text-background rounded-2xl",
         secondary: "bg-gradient-to-r from-slate-700 to-slate-900 hover:from-slate-800 hover:to-slate-950 text-white",
-        success: "bg-green-400 dark:bg-green-600 text-white rounded-2xl hover:bg-green-800 duration-300 hover:text-white",
+        success: "bg-green-500 dark:bg-green-600 text-white rounded-2xl hover:bg-green-700 dark:hover:bg-green-800 duration-300 hover:text-white",
     }
 
     // Size styles
