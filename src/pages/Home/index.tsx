@@ -2,6 +2,7 @@ import { useSearchParams } from "react-router";
 
 //Components
 import InviteOnly from "../Home/InviteOnly";
+import InviteValidation from "./InviteValidation";
 
 const Index = () => {
 
@@ -11,6 +12,7 @@ const Index = () => {
     return (
         <>
             {invite === null && <InviteOnly />}
+            {invite !== null && <InviteValidation invitationCode={invite} />}
         </>
     );
 }

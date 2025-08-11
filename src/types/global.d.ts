@@ -9,3 +9,9 @@ declare type FancyButtonProps = {
     disabled: boolean;
     loading: boolean;
 }
+
+//Validation Store
+declare type ValidationStore = {
+    referrer: string;
+    setReferrer: (newReferrer: string) => void;
+}

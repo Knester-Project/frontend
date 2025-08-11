@@ -5,12 +5,12 @@ import { Mail, Users } from 'lucide-react';
 
 const InviteOnly = () => {
     return (
-        <main className="bg-white dark:bg-neutral-900 shadow-xl mx-auto p-8 border border-border rounded-2xl w-full max-w-md text-center">
+        <main className="bg-white dark:bg-neutral-900 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-md text-center">
             <div className="mb-8">
                 <div className="flex justify-center items-center bg-background mx-auto mb-4 rounded-full size-16">
                     <Mail className="size-8 text-primary" />
                 </div>
-                <h2 className="mb-2 font-bold text-2xl 00">Invitation Required</h2>
+                <h2 className="mb-2 font-bold text-2xl montserrat">Invitation Required</h2>
                 <p className='text-neutral-700 dark:text-neutral-400'>
                     Knester is currently invite-only. You'll need an invitation from an existing member to join.
                 </p>
@@ -33,7 +33,7 @@ const InviteOnly = () => {
 
                 <p className="text-gray-500 text-sm">
                     Have questions?{' '}
-                    <a href="mailto:hello@knester.com" className="text-purple-600 hover:underline">
+                    <a href="mailto:hello@knester.com" className="text-purple-600 dark:text-purple-400 hover:underline">
                         Contact us
                     </a>
                 </p>
