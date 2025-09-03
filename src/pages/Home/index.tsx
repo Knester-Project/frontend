@@ -1,20 +1,18 @@
-import { useSearchParams } from "react-router";
+import { Route } from '@/routes/index'; 
 
-//Components
-import InviteOnly from "../Home/InviteOnly";
+import InviteOnly from "./InviteOnly";
 import InviteValidation from "./InviteValidation";
 
-const Index = () => {
-
-    const [searchParams] = useSearchParams();
-    const invite = searchParams.get("invite")
+const Home = () => {
+    
+    const { invite } = Route.useSearch();
 
     return (
         <>
-            {invite === null && <InviteOnly />}
-            {invite !== null && <InviteValidation invitationCode={invite} />}
+            {!invite && <InviteOnly />}
+            {invite && <InviteValidation invitationCode={invite} />}
         </>
     );
-}
+};
 
-export default Index;
+export default Home;

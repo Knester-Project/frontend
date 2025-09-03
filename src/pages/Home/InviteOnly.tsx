@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@tanstack/react-router';
 
 //Icons
 import { Mail, Users } from 'lucide-react';
@@ -33,9 +33,9 @@ const InviteOnly = () => {
 
                 <p className="text-gray-500 text-sm">
                     Have questions?{' '}
-                    <a href="mailto:hello@knester.com" className="text-purple-600 dark:text-purple-400 hover:underline">
+                    <Link to="/contact" className="text-purple-600 dark:text-purple-400 hover:underline">
                         Contact us
-                    </a>
+                    </Link>
                 </p>
             </div>
         </main>

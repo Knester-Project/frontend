@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent } from 'react';
 import { toast } from "react-fox-toast";
-import { Link } from 'react-router-dom';
+import { Link } from '@tanstack/react-router';
 
 //Hooks, Stores and Utils
 import { useCreateUser, useValidateUser } from "@/services/userMutations";
@@ -16,10 +16,11 @@ import { User, ArrowBigRight, CircleCheckBig, Loader, Eye, EyeOff, Lock, Check, 
 
 const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
 
+    const [indexPage, setIndexPage] = useState<boolean>(true);
     const [enteredUsername, setEnteredUsername] = useState<string>("");
     const [referrer, setReferrer] = useState<string>("");
     const [passwordPage, setPasswordPage] = useState<boolean>(false);
-    const [recoveryPage, setRecoveryPage] = useState<boolean>(true);
+    const [recoveryPage, setRecoveryPage] = useState<boolean>(false);
     const { data, isFetching, isError, isLoading, error } = CheckUsername(enteredUsername);
     const generatedUsernames = generateCustomUsernames(enteredUsername);
 
@@ -53,7 +54,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
         await navigator.clipboard.writeText(phrase);
         setCopied(true);
         toast.success("Your Recovery Phrase Was Copied Successfully.")
-        setTimeout(() => setCopied(false), 3000);
+        setTimeout(() => setCopied(false), 10000);
     };
 
     // Form submission handler
@@ -69,6 +70,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
             onSuccess: (response) => {
                 toast.success(response.data.message || "Referral Validation was successfully!");
                 setReferrer(response.data.referrer)
+                setIndexPage(false);
                 setPasswordPage(true);
             },
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -100,7 +102,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
 
     return (
         <>
-            {!passwordPage || !recoveryPage && <div className="bg-white dark:bg-neutral-900 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-md">
+            {indexPage && <div className="bg-white dark:bg-neutral-900 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-md">
                 <div className="mb-8 text-center">
                     <div className="flex justify-center items-center bg-purple-100 mx-auto mb-4 rounded-full size-16">
                         <User className="size-8 text-primary" />
@@ -211,7 +213,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                         </div>
                     </div>
                     <div className='bg-background p-4 md:p-6 xl:p-8 border border-border rounded-2xl'>
-                        <p className='my-2 font-medium text-base md:text-lg xl:text-xl montserrat'>{recoveryPhrase}</p>
+                        <p className='my-2 font-medium text-base md:text-lg xl:text-xl text-center montserrat'>{recoveryPhrase}</p>
                         <Button onClick={() => handleCopy(recoveryPhrase)} text={copied ? 'Copied!' : 'Copy Recovery Phrase'} disabled={false} loading={false} icon={<CheckCircle className="size-4 md:size-5" />} variant='success' />
                     </div>
                     {copied && <Link to={"/dashboard"} className='block bg-primary hover:bg-accent my-4 p-3 rounded-2xl w-full text-center'>Enter Your Dashboard</Link>}

@@ -1,48 +1,14 @@
-import { Outlet, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-//Layouts
-import AuthLayout from '@/layouts/AuthLayout';
-
-
-//Pages
+import { createFileRoute } from '@tanstack/react-router';
 import Home from '@/pages/Home';
 
-// User pages
+export const Route = createFileRoute('/')({
+    
+    validateSearch: (search: Record<string, unknown>) => ({
+        invite: search.invite as string | undefined,
+    }),
+    component: RouteComponent,
+});
 
-
-
-const Auth = () => (
-    <AuthLayout>
-        <Outlet />
-    </AuthLayout>
-)
-
-// const User = () => (
-//     <UserLayout>
-//         <Outlet />
-//     </UserLayout>
-// )
-
-
-const AppRoutes = () => {
-    return (
-        <Router>
-            <Routes>
-                <Route element={<Auth />}>
-                    <Route path="/" element={<Home />} />
-                </Route>
-
-                {/* Page Routes */}
-                {/* // <Route path="/auth" element={<Create />} /> */}
-
-
-                {/* User Routes */}
-                {/* <Route path="/user" element={<User />}> */}
-                {/* <Route path="dashboard" element={<Dashboard />} /> */}
-                {/* </Route> */}
-            </Routes>
-        </Router>
-    );
+function RouteComponent() {
+    return <Home />;
 }
-
-export default AppRoutes;
