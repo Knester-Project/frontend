@@ -1,10 +1,10 @@
-import { Route } from '@/routes/index'; 
+import { Route } from '@/routes/_auth/index'; 
 
 import InviteOnly from "./InviteOnly";
 import InviteValidation from "./InviteValidation";
 
 const Home = () => {
-    
+
     const { invite } = Route.useSearch();
 
     return (
