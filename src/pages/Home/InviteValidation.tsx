@@ -11,7 +11,7 @@ import { generateCustomUsernames } from '@/utils/generate';
 import Button from '@/components/Button';
 
 //Icons
-import { User, ArrowBigRight, CircleCheckBig, Loader, Eye, EyeOff, Lock, Check, UserPlus, Shield, AlertTriangle, CheckCircle } from "lucide-react";
+import { User, CircleCheckBig, Loader, Eye, EyeOff, Lock, Check, UserPlus, Shield, AlertTriangle, CheckCircle, LogIn } from "lucide-react";
 
 
 const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
@@ -104,7 +104,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
         <>
             {indexPage && <div className="bg-white dark:bg-neutral-900 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-md">
                 <div className="mb-8 text-center">
-                    <div className="flex justify-center items-center bg-purple-100 mx-auto mb-4 rounded-full size-16">
+                    <div className="flex justify-center items-center mx-auto mb-4 bg-border rounded-full size-16">
                         <User className="size-8 text-primary" />
                     </div>
                     <h2 className="mb-2 font-bold text-lg md:text-xl xl:text-2xl montserrat">Choose Your Username</h2>
@@ -129,13 +129,13 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                         <CircleCheckBig className='inline size-3 md:size-4 xl:size-5' />
                         {data.message} press continue to enter password.
                     </div>}
-                    <Button text="Continue" loadingText={"Validating Invitation..."} disabled={validateInvite.isPending || (isFetching || isError || isLoading)} loading={validateInvite.isPending} icon={<ArrowBigRight className='size-4 md:size-5' />} variant='primary' />
+                    <Button text="Continue" loadingText={"Validating Invitation..."} disabled={validateInvite.isPending || (isFetching || isError || isLoading)} loading={validateInvite.isPending} icon={<LogIn className='size-4 md:size-5' />} variant='primary' />
                 </form>
             </div>}
             {passwordPage &&
                 <div className="bg-white dark:bg-neutral-900 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-md">
                     <div className="mb-8 text-center">
-                        <div className="flex justify-center items-center bg-purple-100 mx-auto mb-4 rounded-full size-16">
+                        <div className="flex justify-center items-center mx-auto mb-4 bg-border rounded-full size-16">
                             <Lock className="size-8 text-primary" />
                         </div>
                         <h2 className="mb-2 font-bold text-lg md:text-xl xl:text-2xl montserrat">Secure Your Account</h2>
@@ -192,7 +192,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
             {recoveryPage &&
                 <div className="bg-white dark:bg-neutral-900 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-md">
                     <div className="mb-8 text-center">
-                        <div className="flex justify-center items-center bg-purple-100 mx-auto mb-4 rounded-full size-16">
+                        <div className="flex justify-center items-center mx-auto mb-4 bg-border rounded-full size-16">
                             <Shield className="size-8 text-amber-500" />
                         </div>
                         <h2 className="mb-2 font-bold text-lg md:text-xl xl:text-2xl montserrat">Secure Your Account</h2>
@@ -216,7 +216,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                         <p className='my-2 font-medium text-base md:text-lg xl:text-xl text-center montserrat'>{recoveryPhrase}</p>
                         <Button onClick={() => handleCopy(recoveryPhrase)} text={copied ? 'Copied!' : 'Copy Recovery Phrase'} disabled={false} loading={false} icon={<CheckCircle className="size-4 md:size-5" />} variant='success' />
                     </div>
-                    {copied && <Link to={"/dashboard"} className='block bg-primary hover:bg-accent my-4 p-3 rounded-2xl w-full text-center'>Enter Your Dashboard</Link>}
+                    {copied && <Link to={"/dashboard"} className='block bg-primary hover:bg-accent my-4 p-3 rounded-2xl w-full text-center'>Enter Your Feed</Link>}
                 </div>
             }
         </>

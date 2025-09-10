@@ -7,7 +7,7 @@ const InviteOnly = () => {
     return (
         <main className="bg-white dark:bg-neutral-900 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-md text-center">
             <div className="mb-8">
-                <div className="flex justify-center items-center bg-background mx-auto mb-4 rounded-full size-16">
+                <div className="flex justify-center items-center bg-background mx-auto mb-4 border border-border rounded-full size-16">
                     <Mail className="size-8 text-primary" />
                 </div>
                 <h2 className="mb-2 font-bold text-2xl montserrat">Invitation Required</h2>
@@ -16,10 +16,10 @@ const InviteOnly = () => {
                 </p>
             </div>
 
-            <div className="bg-background mb-6 p-6 rounded-xl">
+            <div className="bg-background mb-6 p-6 border border-border rounded-xl">
                 <div className="flex justify-center items-center space-x-2 mb-3">
                     <Users className="size-5" />
-                    <h3 className="font-semibold text-muted-foreground">How to get invited</h3>
+                    <h3 className="font-semibold">How to get invited</h3>
                 </div>
                 <ul className="space-y-2 text-foreground text-left">
                     <li>• Ask a friend who's already on Knester</li>
@@ -33,7 +33,7 @@ const InviteOnly = () => {
 
                 <p className="text-gray-500 text-sm">
                     Have questions?{' '}
-                    <Link to="/contact" className="text-purple-600 dark:text-purple-400 hover:underline">
+                    <Link to="/contact" className="text-foreground hover:underline">
                         Contact us
                     </Link>
                 </p>
