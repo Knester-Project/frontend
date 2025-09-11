@@ -24,7 +24,7 @@ const ZodInput = <T extends FieldValues>({ type, placeholder, label, id, value, 
     return (
         <main className="flex flex-col gap-y-1">
             {label && (
-                <label className="font-medium cursor-pointer" htmlFor={id}>
+                <label className="font-medium text-foreground text-xs md:text-sm xl:text-base cursor-pointer" htmlFor={id}>
                     {label}
                     {required && <span className="text-red-500">*</span>}
                 </label>

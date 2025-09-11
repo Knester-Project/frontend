@@ -8,6 +8,7 @@ declare type FancyButtonProps = {
     size?: "sm" | "md" | "lg";
     disabled: boolean;
     loading: boolean;
+    classNames?: string;
 }
 
 //Validation Store

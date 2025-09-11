@@ -11,9 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WaitlistRouteImport } from './routes/waitlist'
 import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
+import { Route as AuthContactRouteImport } from './routes/_auth/contact'
 
 const WaitlistRoute = WaitlistRouteImport.update({
   id: '/waitlist',
@@ -25,11 +25,6 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
@@ -39,44 +34,48 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AuthContactRoute = AuthContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/waitlist': typeof WaitlistRoute
+  '/contact': typeof AuthContactRoute
   '/': typeof AuthIndexRoute
 }
 export interface FileRoutesByTo {
-  '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/waitlist': typeof WaitlistRoute
+  '/contact': typeof AuthContactRoute
   '/': typeof AuthIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/waitlist': typeof WaitlistRoute
+  '/_auth/contact': typeof AuthContactRoute
   '/_auth/': typeof AuthIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/contact' | '/dashboard' | '/waitlist' | '/'
+  fullPaths: '/dashboard' | '/waitlist' | '/contact' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/contact' | '/dashboard' | '/waitlist' | '/'
+  to: '/dashboard' | '/waitlist' | '/contact' | '/'
   id:
     | '__root__'
     | '/_auth'
-    | '/contact'
     | '/dashboard'
     | '/waitlist'
+    | '/_auth/contact'
     | '/_auth/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   WaitlistRoute: typeof WaitlistRoute
 }
@@ -97,13 +96,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_auth': {
       id: '/_auth'
       path: ''
@@ -118,14 +110,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/contact': {
+      id: '/_auth/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof AuthContactRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
   }
 }
 
 interface AuthRouteRouteChildren {
+  AuthContactRoute: typeof AuthContactRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthContactRoute: AuthContactRoute,
   AuthIndexRoute: AuthIndexRoute,
 }
 
@@ -135,7 +136,6 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   WaitlistRoute: WaitlistRoute,
 }

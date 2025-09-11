@@ -1,4 +1,4 @@
-export default function Button({ text, loadingText = "Processing...", icon, onClick, variant = "primary", size = "md", disabled = false, loading = false }: FancyButtonProps) {
+export default function Button({ text, loadingText = "Processing...", icon, onClick, variant = "primary", size = "md", disabled = false, loading = false, classNames = "" }: FancyButtonProps) {
 
     // Variant styles
     const variantStyles = {
@@ -9,14 +9,14 @@ export default function Button({ text, loadingText = "Processing...", icon, onCl
 
     // Size styles
     const sizeStyles = {
-        sm: "text-[10px] md:text-xs xl:text-sm px-4 py-2",
+        sm: "text-[11px] md:text-xs xl:text-sm px-4 py-2",
         md: "text-xs md:text-sm xl:text-base px-6 py-3",
         lg: "text-sm md:text-base xl:text-lg px-8 py-4",
     }
 
     return (
         <button onClick={onClick} disabled={disabled} className={`mt-4 font-medium transition-all duration-300 cursor-pointer
-        shadow-md hover:shadow-lg active:scale-[0.98] disabled:opacity-90 ${variantStyles[variant]} ${sizeStyles[size]} w-full flex items-center justify-center gap-x-2 disabled:cursor-not-allowed`}>
+        shadow-md hover:shadow-lg active:scale-[0.98] disabled:opacity-90 ${variantStyles[variant]} ${sizeStyles[size]} ${classNames} w-full flex items-center justify-center gap-x-2 disabled:cursor-not-allowed`}>
             {loading && (
                 <svg className="size-5 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
