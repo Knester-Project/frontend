@@ -5,7 +5,7 @@ import { Mail, Users } from 'lucide-react';
 
 const InviteOnly = () => {
     return (
-        <main className="bg-white dark:bg-neutral-900 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-md text-center">
+        <main className="bg-accent/20 dark:bg-accent/5 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl text-center">
             <div className="mb-8">
                 <div className="flex justify-center items-center bg-background mx-auto mb-4 border border-border rounded-full size-16">
                     <Mail className="size-8 text-primary" />

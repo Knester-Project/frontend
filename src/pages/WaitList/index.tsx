@@ -24,7 +24,7 @@ const Index = () => {
     }
     return (
         <main>
-            <section className="bg-accent/20 dark:bg-accent/5 shadow-lg p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-2xl">
+            <section className="bg-accent/20 dark:bg-accent/5 shadow-lg p-4 md:p-6 xl:p-8 border border-border rounded-2xl">
                 <div className="mb-8 text-center">
                     <h2 className="mb-4 font-bold text-xl md:text-2xl xl:text-3xl text-balance">Join Our List</h2>
                     <p className="text-muted text-pretty">Stay updated with the latest news and opportunities. We'll never spam you.</p>
