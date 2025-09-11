@@ -9,7 +9,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
                 {children}
             </main>
             <footer className="py-4 font-medium text-center montserrat">
-                <p>© {new Date().getFullYear()} <span className="font-bold text-chart-4">KNESTER</span></p>
+                <p>© {new Date().getFullYear()} <span className="font-bold text-primary">KNESTER</span></p>
             </footer>
         </div>
     );

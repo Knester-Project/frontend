@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/waitlist')({
+export const Route = createFileRoute('/privacy')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  return <div>Hello "/waitlist"!</div>
+  return <div>Hello "/privacy"!</div>
 }

@@ -9,15 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WaitlistRouteImport } from './routes/waitlist'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
+import { Route as AuthWaitlistRouteImport } from './routes/_auth/waitlist'
 import { Route as AuthContactRouteImport } from './routes/_auth/contact'
 
-const WaitlistRoute = WaitlistRouteImport.update({
-  id: '/waitlist',
-  path: '/waitlist',
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -34,6 +41,11 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AuthWaitlistRoute = AuthWaitlistRouteImport.update({
+  id: '/waitlist',
+  path: '/waitlist',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthContactRoute = AuthContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -42,51 +54,73 @@ const AuthContactRoute = AuthContactRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
-  '/waitlist': typeof WaitlistRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/contact': typeof AuthContactRoute
+  '/waitlist': typeof AuthWaitlistRoute
   '/': typeof AuthIndexRoute
 }
 export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
-  '/waitlist': typeof WaitlistRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/contact': typeof AuthContactRoute
+  '/waitlist': typeof AuthWaitlistRoute
   '/': typeof AuthIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth': typeof AuthRouteRouteWithChildren
   '/dashboard': typeof DashboardRoute
-  '/waitlist': typeof WaitlistRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/_auth/contact': typeof AuthContactRoute
+  '/_auth/waitlist': typeof AuthWaitlistRoute
   '/_auth/': typeof AuthIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/dashboard' | '/waitlist' | '/contact' | '/'
+  fullPaths:
+    | '/dashboard'
+    | '/privacy'
+    | '/terms'
+    | '/contact'
+    | '/waitlist'
+    | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/dashboard' | '/waitlist' | '/contact' | '/'
+  to: '/dashboard' | '/privacy' | '/terms' | '/contact' | '/waitlist' | '/'
   id:
     | '__root__'
     | '/_auth'
     | '/dashboard'
-    | '/waitlist'
+    | '/privacy'
+    | '/terms'
     | '/_auth/contact'
+    | '/_auth/waitlist'
     | '/_auth/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   DashboardRoute: typeof DashboardRoute
-  WaitlistRoute: typeof WaitlistRoute
+  PrivacyRoute: typeof PrivacyRoute
+  TermsRoute: typeof TermsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/waitlist': {
-      id: '/waitlist'
-      path: '/waitlist'
-      fullPath: '/waitlist'
-      preLoaderRoute: typeof WaitlistRouteImport
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -110,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/waitlist': {
+      id: '/_auth/waitlist'
+      path: '/waitlist'
+      fullPath: '/waitlist'
+      preLoaderRoute: typeof AuthWaitlistRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/contact': {
       id: '/_auth/contact'
       path: '/contact'
@@ -122,11 +163,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthRouteRouteChildren {
   AuthContactRoute: typeof AuthContactRoute
+  AuthWaitlistRoute: typeof AuthWaitlistRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthContactRoute: AuthContactRoute,
+  AuthWaitlistRoute: AuthWaitlistRoute,
   AuthIndexRoute: AuthIndexRoute,
 }
 
@@ -137,7 +180,8 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
   DashboardRoute: DashboardRoute,
-  WaitlistRoute: WaitlistRoute,
+  PrivacyRoute: PrivacyRoute,
+  TermsRoute: TermsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
