@@ -1,9 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-.body {
-  font-family: "Raleway", sans-serif;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Raleway", sans-serif;
   font-optical-sizing: auto;
+   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .montserrat {

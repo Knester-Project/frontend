@@ -15,6 +15,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
 import { Route as AuthWaitlistRouteImport } from './routes/_auth/waitlist'
+import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthContactRouteImport } from './routes/_auth/contact'
 
 const TermsRoute = TermsRouteImport.update({
@@ -46,6 +47,11 @@ const AuthWaitlistRoute = AuthWaitlistRouteImport.update({
   path: '/waitlist',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthContactRoute = AuthContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/contact': typeof AuthContactRoute
+  '/login': typeof AuthLoginRoute
   '/waitlist': typeof AuthWaitlistRoute
   '/': typeof AuthIndexRoute
 }
@@ -65,6 +72,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/contact': typeof AuthContactRoute
+  '/login': typeof AuthLoginRoute
   '/waitlist': typeof AuthWaitlistRoute
   '/': typeof AuthIndexRoute
 }
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/_auth/contact': typeof AuthContactRoute
+  '/_auth/login': typeof AuthLoginRoute
   '/_auth/waitlist': typeof AuthWaitlistRoute
   '/_auth/': typeof AuthIndexRoute
 }
@@ -85,10 +94,18 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/terms'
     | '/contact'
+    | '/login'
     | '/waitlist'
     | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/dashboard' | '/privacy' | '/terms' | '/contact' | '/waitlist' | '/'
+  to:
+    | '/dashboard'
+    | '/privacy'
+    | '/terms'
+    | '/contact'
+    | '/login'
+    | '/waitlist'
+    | '/'
   id:
     | '__root__'
     | '/_auth'
@@ -96,6 +113,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/terms'
     | '/_auth/contact'
+    | '/_auth/login'
     | '/_auth/waitlist'
     | '/_auth/'
   fileRoutesById: FileRoutesById
@@ -151,6 +169,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthWaitlistRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/contact': {
       id: '/_auth/contact'
       path: '/contact'
@@ -163,12 +188,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthRouteRouteChildren {
   AuthContactRoute: typeof AuthContactRoute
+  AuthLoginRoute: typeof AuthLoginRoute
   AuthWaitlistRoute: typeof AuthWaitlistRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthContactRoute: AuthContactRoute,
+  AuthLoginRoute: AuthLoginRoute,
   AuthWaitlistRoute: AuthWaitlistRoute,
   AuthIndexRoute: AuthIndexRoute,
 }

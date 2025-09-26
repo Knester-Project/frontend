@@ -17,3 +17,9 @@ export const createUser = async (data: {username: string, password: string, refe
     const response = await axiosUnauthInstance.post("users/create", data);
     return response.data;
 }
+
+//Login User
+export const authenticateUser = async (data: {username: string, password: string }) => {
+    const response = await axiosUnauthInstance.post("auth/login", data);
+    return response.data;
+}
