@@ -1,10 +1,16 @@
 import { useState, type ChangeEvent } from 'react';
+import { UAParser } from 'ua-parser-js';
+import { toast } from 'react-fox-toast';
+import { useNavigate } from '@tanstack/react-router';
 
-//Services
+//Schemas, Services and Utils
+import { loginSchema, type AuthInput } from '@/schemas/auth.schema';
 import { useAuthUser } from '@/services/userMutations';
+import { getPublicIp } from '@/utils/getPublicIp';
 
 //Component
 import Button from '@/components/Button';
+import ErrorText from '@/components/ErrorText';
 
 //Icons
 import { Eye, EyeOff, KeyRound, ScanFace } from 'lucide-react';
@@ -15,6 +21,8 @@ const Index = () => {
     const [enteredUsername, setEnteredUsername] = useState<string>("");
     const [password, setPassword] = useState<string>('');
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [errors, setErrors] = useState<Record<string, string[]>>({});
+    const navigate = useNavigate();
 
     //Functions
     const handleUsername = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,8 +41,46 @@ const Index = () => {
     const allRequirementsMet = passwordRequirements.every(req => req.met);
 
     const authUser = useAuthUser();
-    const onSubmit = (e: React.FormEvent) => {
+    const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        const parser = new UAParser();
+        const result = parser.getResult();
+
+        const device = {
+            ua: navigator.userAgent,
+            type: result.device.type,
+            os: result.os.name,
+            browser: result.browser.name,
+        };
+
+        const ip = await getPublicIp();
+
+        const payload: AuthInput = {
+            username: enteredUsername,
+            password,
+            ipHash: ip ? ip : null,
+            device,
+        };
+
+        const parsed = loginSchema.safeParse(payload);
+        if (!parsed.success) {
+            setErrors(parsed.error.flatten().fieldErrors);
+            return;
+        } else {
+            setErrors({});
+            authUser.mutate(parsed.data, {
+                onSuccess: (response) => {
+                    toast.success(response.message);
+                    navigate({ to: "/dashboard" });
+                },
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                onError: (error: any) => {
+                    const message = error?.response?.data?.message || "Login failed. Please check your credentials.";
+                    toast.error(message);
+                },
+            });
+        }
     }
 
     return (
@@ -50,6 +96,7 @@ const Index = () => {
                 <div className="relative flex flex-col gap-y-1">
                     <label htmlFor="username" className='font-medium cursor-pointer'>Username</label>
                     <input type="text" id="username" className='bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none text-sm md:text-base xl:text-lg duration-300 focus:caret-primary' onChange={handleUsername} value={enteredUsername} title="Please enter only letters, numbers, and underscores (spaces will be replaced with underscores)" minLength={5} placeholder="Inclusive.Iguana" required />
+                    {errors.username && <ErrorText message={errors.username[0]} />}
                 </div>
                 <div className="flex flex-col gap-y-1">
                     <label htmlFor="password" className='font-medium cursor-pointer'>
@@ -61,6 +108,7 @@ const Index = () => {
                             {showPassword ? <EyeOff className="size-4 md:size-5" /> : <Eye className="size-4 md:size-5" />}
                         </button>
                     </div>
+                    {errors.password && <ErrorText message={errors.password[0]} />}
                 </div>
                 <Button text="Join the Party." loadingText={"Joining..."} disabled={authUser.isPending || (!allRequirementsMet)} loading={authUser.isPending} icon={<ScanFace className='size-4 md:size-5' />} variant='primary' />
             </form>

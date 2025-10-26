@@ -3,6 +3,9 @@ import { useMutation } from "@tanstack/react-query";
 //Functions
 import { authenticateUser, createUser, validateInvite } from "./api.services";
 
+//Schemas
+import type { AuthInput } from "@/schemas/auth.schema";
+
 
 //Validate Users
 export function useValidateUser() {
@@ -30,7 +33,7 @@ export function useCreateUser() {
 export function useAuthUser() {
 
     return useMutation({
-        mutationFn: (data: { username: string, password: string }) => authenticateUser(data),
+        mutationFn: (data: AuthInput) => authenticateUser(data),
         onError: (error) => {
             console.error("User Authentication failed:", error);
         },
