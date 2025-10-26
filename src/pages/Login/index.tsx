@@ -7,13 +7,14 @@ import { useNavigate } from '@tanstack/react-router';
 import { loginSchema, type AuthInput } from '@/schemas/auth.schema';
 import { useAuthUser } from '@/services/userMutations';
 import { getPublicIp } from '@/utils/getPublicIp';
+import { flattenZodErrors } from '@/utils/zod';
 
 //Component
 import Button from '@/components/Button';
 import ErrorText from '@/components/ErrorText';
 
 //Icons
-import { Eye, EyeOff, KeyRound, ScanFace } from 'lucide-react';
+import { Check, Eye, EyeOff, KeyRound, ScanFace } from 'lucide-react';
 
 
 const Index = () => {
@@ -65,7 +66,7 @@ const Index = () => {
 
         const parsed = loginSchema.safeParse(payload);
         if (!parsed.success) {
-            setErrors(parsed.error.flatten().fieldErrors);
+            setErrors(flattenZodErrors(parsed.error));
             return;
         } else {
             setErrors({});
@@ -107,6 +108,19 @@ const Index = () => {
                         <button type="button" onClick={() => setShowPassword(!showPassword)} className="top-1/2 right-3 absolute text-foreground hover:text-gray-600 -translate-y-1/2 cursor-pointer transform">
                             {showPassword ? <EyeOff className="size-4 md:size-5" /> : <Eye className="size-4 md:size-5" />}
                         </button>
+                    </div>
+                    <div className="space-y-2 mt-1">
+                        <p className="font-medium montserrat">Password Requirements:</p>
+                        <div className="space-y-1">
+                            {passwordRequirements.map((req, index) => (
+                                <div key={index} className="flex items-center space-x-2">
+                                    <Check className={`size-4 ${req.met ? 'text-green-400' : 'text-gray-500'}`} />
+                                    <span className={`${req.met ? 'text-green-400' : 'text-gray-500'}`}>
+                                        {req.text}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                     {errors.password && <ErrorText message={errors.password[0]} />}
                 </div>
