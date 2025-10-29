@@ -15,6 +15,7 @@ import ErrorText from '@/components/ErrorText';
 
 //Icons
 import { Check, Eye, EyeOff, KeyRound, ScanFace } from 'lucide-react';
+import { Information } from 'iconsax-reactjs';
 
 
 const Index = () => {
@@ -98,6 +99,7 @@ const Index = () => {
                     <label htmlFor="username" className='font-medium cursor-pointer'>Username</label>
                     <input type="text" id="username" className='bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none text-sm md:text-base xl:text-lg duration-300 focus:caret-primary' onChange={handleUsername} value={enteredUsername} title="Please enter only letters, numbers, and underscores (spaces will be replaced with underscores)" minLength={5} placeholder="Inclusive.Iguana" required />
                     {errors.username && <ErrorText message={errors.username[0]} />}
+                    <p className='text-[11px] text-primary md:text-xs xl:text-sm'><Information className="inline size-4 xl:size-5" variant='Bold' /> Usernames are case-sensitive (e.g., "Remy" is not "remy").</p>
                 </div>
                 <div className="flex flex-col gap-y-1">
                     <label htmlFor="password" className='font-medium cursor-pointer'>
@@ -114,8 +116,8 @@ const Index = () => {
                         <div className="space-y-1">
                             {passwordRequirements.map((req, index) => (
                                 <div key={index} className="flex items-center space-x-2">
-                                    <Check className={`size-4 ${req.met ? 'text-green-400' : 'text-gray-500'}`} />
-                                    <span className={`${req.met ? 'text-green-400' : 'text-gray-500'}`}>
+                                    <Check className={`size-4 ${req.met ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-500'}`} />
+                                    <span className={`${req.met ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-500'}`}>
                                         {req.text}
                                     </span>
                                 </div>
