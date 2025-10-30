@@ -16,9 +16,11 @@ import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
 import { Route as DashboardVideosRouteImport } from './routes/_dashboard/videos'
 import { Route as DashboardSearchRouteImport } from './routes/_dashboard/search'
+import { Route as DashboardSafetyRouteImport } from './routes/_dashboard/safety'
 import { Route as DashboardProfileRouteImport } from './routes/_dashboard/profile'
 import { Route as DashboardPeopleRouteImport } from './routes/_dashboard/people'
 import { Route as DashboardMessagesRouteImport } from './routes/_dashboard/messages'
+import { Route as DashboardInstallRouteImport } from './routes/_dashboard/install'
 import { Route as DashboardFeedRouteImport } from './routes/_dashboard/feed'
 import { Route as AuthWaitlistRouteImport } from './routes/_auth/waitlist'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
@@ -57,6 +59,11 @@ const DashboardSearchRoute = DashboardSearchRouteImport.update({
   path: '/search',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardSafetyRoute = DashboardSafetyRouteImport.update({
+  id: '/safety',
+  path: '/safety',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardProfileRoute = DashboardProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -70,6 +77,11 @@ const DashboardPeopleRoute = DashboardPeopleRouteImport.update({
 const DashboardMessagesRoute = DashboardMessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardInstallRoute = DashboardInstallRouteImport.update({
+  id: '/install',
+  path: '/install',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardFeedRoute = DashboardFeedRouteImport.update({
@@ -100,9 +112,11 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/waitlist': typeof AuthWaitlistRoute
   '/feed': typeof DashboardFeedRoute
+  '/install': typeof DashboardInstallRoute
   '/messages': typeof DashboardMessagesRoute
   '/people': typeof DashboardPeopleRoute
   '/profile': typeof DashboardProfileRoute
+  '/safety': typeof DashboardSafetyRoute
   '/search': typeof DashboardSearchRoute
   '/videos': typeof DashboardVideosRoute
   '/': typeof AuthIndexRoute
@@ -114,9 +128,11 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/waitlist': typeof AuthWaitlistRoute
   '/feed': typeof DashboardFeedRoute
+  '/install': typeof DashboardInstallRoute
   '/messages': typeof DashboardMessagesRoute
   '/people': typeof DashboardPeopleRoute
   '/profile': typeof DashboardProfileRoute
+  '/safety': typeof DashboardSafetyRoute
   '/search': typeof DashboardSearchRoute
   '/videos': typeof DashboardVideosRoute
   '/': typeof AuthIndexRoute
@@ -131,9 +147,11 @@ export interface FileRoutesById {
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/waitlist': typeof AuthWaitlistRoute
   '/_dashboard/feed': typeof DashboardFeedRoute
+  '/_dashboard/install': typeof DashboardInstallRoute
   '/_dashboard/messages': typeof DashboardMessagesRoute
   '/_dashboard/people': typeof DashboardPeopleRoute
   '/_dashboard/profile': typeof DashboardProfileRoute
+  '/_dashboard/safety': typeof DashboardSafetyRoute
   '/_dashboard/search': typeof DashboardSearchRoute
   '/_dashboard/videos': typeof DashboardVideosRoute
   '/_auth/': typeof AuthIndexRoute
@@ -147,9 +165,11 @@ export interface FileRouteTypes {
     | '/login'
     | '/waitlist'
     | '/feed'
+    | '/install'
     | '/messages'
     | '/people'
     | '/profile'
+    | '/safety'
     | '/search'
     | '/videos'
     | '/'
@@ -161,9 +181,11 @@ export interface FileRouteTypes {
     | '/login'
     | '/waitlist'
     | '/feed'
+    | '/install'
     | '/messages'
     | '/people'
     | '/profile'
+    | '/safety'
     | '/search'
     | '/videos'
     | '/'
@@ -177,9 +199,11 @@ export interface FileRouteTypes {
     | '/_auth/login'
     | '/_auth/waitlist'
     | '/_dashboard/feed'
+    | '/_dashboard/install'
     | '/_dashboard/messages'
     | '/_dashboard/people'
     | '/_dashboard/profile'
+    | '/_dashboard/safety'
     | '/_dashboard/search'
     | '/_dashboard/videos'
     | '/_auth/'
@@ -243,6 +267,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSearchRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/_dashboard/safety': {
+      id: '/_dashboard/safety'
+      path: '/safety'
+      fullPath: '/safety'
+      preLoaderRoute: typeof DashboardSafetyRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/_dashboard/profile': {
       id: '/_dashboard/profile'
       path: '/profile'
@@ -262,6 +293,13 @@ declare module '@tanstack/react-router' {
       path: '/messages'
       fullPath: '/messages'
       preLoaderRoute: typeof DashboardMessagesRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/install': {
+      id: '/_dashboard/install'
+      path: '/install'
+      fullPath: '/install'
+      preLoaderRoute: typeof DashboardInstallRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/_dashboard/feed': {
@@ -315,18 +353,22 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 interface DashboardRouteRouteChildren {
   DashboardFeedRoute: typeof DashboardFeedRoute
+  DashboardInstallRoute: typeof DashboardInstallRoute
   DashboardMessagesRoute: typeof DashboardMessagesRoute
   DashboardPeopleRoute: typeof DashboardPeopleRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
+  DashboardSafetyRoute: typeof DashboardSafetyRoute
   DashboardSearchRoute: typeof DashboardSearchRoute
   DashboardVideosRoute: typeof DashboardVideosRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardFeedRoute: DashboardFeedRoute,
+  DashboardInstallRoute: DashboardInstallRoute,
   DashboardMessagesRoute: DashboardMessagesRoute,
   DashboardPeopleRoute: DashboardPeopleRoute,
   DashboardProfileRoute: DashboardProfileRoute,
+  DashboardSafetyRoute: DashboardSafetyRoute,
   DashboardSearchRoute: DashboardSearchRoute,
   DashboardVideosRoute: DashboardVideosRoute,
 }
