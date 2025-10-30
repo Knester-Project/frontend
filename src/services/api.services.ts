@@ -24,6 +24,5 @@ export const createUser = async (data: { username: string, password: string, ref
 //Login User
 export const authenticateUser = async (data: AuthInput) => {
     const response = await axiosUnauthInstance.post("auth/login", data);
-    console.log("The response", response.data)
     return response.data;
 }

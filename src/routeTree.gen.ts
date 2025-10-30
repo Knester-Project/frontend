@@ -11,9 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DashboardRouteRouteImport } from './routes/_dashboard/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
+import { Route as DashboardVideosRouteImport } from './routes/_dashboard/videos'
+import { Route as DashboardSearchRouteImport } from './routes/_dashboard/search'
+import { Route as DashboardProfileRouteImport } from './routes/_dashboard/profile'
+import { Route as DashboardPeopleRouteImport } from './routes/_dashboard/people'
+import { Route as DashboardMessagesRouteImport } from './routes/_dashboard/messages'
+import { Route as DashboardFeedRouteImport } from './routes/_dashboard/feed'
 import { Route as AuthWaitlistRouteImport } from './routes/_auth/waitlist'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthContactRouteImport } from './routes/_auth/contact'
@@ -28,9 +34,8 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const DashboardRouteRoute = DashboardRouteRouteImport.update({
+  id: '/_dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -41,6 +46,36 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthRouteRoute,
+} as any)
+const DashboardVideosRoute = DashboardVideosRouteImport.update({
+  id: '/videos',
+  path: '/videos',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardSearchRoute = DashboardSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardProfileRoute = DashboardProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardPeopleRoute = DashboardPeopleRouteImport.update({
+  id: '/people',
+  path: '/people',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardMessagesRoute = DashboardMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardFeedRoute = DashboardFeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const AuthWaitlistRoute = AuthWaitlistRouteImport.update({
   id: '/waitlist',
@@ -59,68 +94,100 @@ const AuthContactRoute = AuthContactRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/dashboard': typeof DashboardRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/contact': typeof AuthContactRoute
   '/login': typeof AuthLoginRoute
   '/waitlist': typeof AuthWaitlistRoute
+  '/feed': typeof DashboardFeedRoute
+  '/messages': typeof DashboardMessagesRoute
+  '/people': typeof DashboardPeopleRoute
+  '/profile': typeof DashboardProfileRoute
+  '/search': typeof DashboardSearchRoute
+  '/videos': typeof DashboardVideosRoute
   '/': typeof AuthIndexRoute
 }
 export interface FileRoutesByTo {
-  '/dashboard': typeof DashboardRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/contact': typeof AuthContactRoute
   '/login': typeof AuthLoginRoute
   '/waitlist': typeof AuthWaitlistRoute
+  '/feed': typeof DashboardFeedRoute
+  '/messages': typeof DashboardMessagesRoute
+  '/people': typeof DashboardPeopleRoute
+  '/profile': typeof DashboardProfileRoute
+  '/search': typeof DashboardSearchRoute
+  '/videos': typeof DashboardVideosRoute
   '/': typeof AuthIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/dashboard': typeof DashboardRoute
+  '/_dashboard': typeof DashboardRouteRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/_auth/contact': typeof AuthContactRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/waitlist': typeof AuthWaitlistRoute
+  '/_dashboard/feed': typeof DashboardFeedRoute
+  '/_dashboard/messages': typeof DashboardMessagesRoute
+  '/_dashboard/people': typeof DashboardPeopleRoute
+  '/_dashboard/profile': typeof DashboardProfileRoute
+  '/_dashboard/search': typeof DashboardSearchRoute
+  '/_dashboard/videos': typeof DashboardVideosRoute
   '/_auth/': typeof AuthIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/dashboard'
     | '/privacy'
     | '/terms'
     | '/contact'
     | '/login'
     | '/waitlist'
+    | '/feed'
+    | '/messages'
+    | '/people'
+    | '/profile'
+    | '/search'
+    | '/videos'
     | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/dashboard'
     | '/privacy'
     | '/terms'
     | '/contact'
     | '/login'
     | '/waitlist'
+    | '/feed'
+    | '/messages'
+    | '/people'
+    | '/profile'
+    | '/search'
+    | '/videos'
     | '/'
   id:
     | '__root__'
     | '/_auth'
-    | '/dashboard'
+    | '/_dashboard'
     | '/privacy'
     | '/terms'
     | '/_auth/contact'
     | '/_auth/login'
     | '/_auth/waitlist'
+    | '/_dashboard/feed'
+    | '/_dashboard/messages'
+    | '/_dashboard/people'
+    | '/_dashboard/profile'
+    | '/_dashboard/search'
+    | '/_dashboard/videos'
     | '/_auth/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  DashboardRoute: typeof DashboardRoute
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
 }
@@ -141,11 +208,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+    '/_dashboard': {
+      id: '/_dashboard'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof DashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth': {
@@ -161,6 +228,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/_dashboard/videos': {
+      id: '/_dashboard/videos'
+      path: '/videos'
+      fullPath: '/videos'
+      preLoaderRoute: typeof DashboardVideosRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/search': {
+      id: '/_dashboard/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof DashboardSearchRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/profile': {
+      id: '/_dashboard/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof DashboardProfileRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/people': {
+      id: '/_dashboard/people'
+      path: '/people'
+      fullPath: '/people'
+      preLoaderRoute: typeof DashboardPeopleRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/messages': {
+      id: '/_dashboard/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof DashboardMessagesRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/feed': {
+      id: '/_dashboard/feed'
+      path: '/feed'
+      fullPath: '/feed'
+      preLoaderRoute: typeof DashboardFeedRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/_auth/waitlist': {
       id: '/_auth/waitlist'
@@ -204,9 +313,31 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface DashboardRouteRouteChildren {
+  DashboardFeedRoute: typeof DashboardFeedRoute
+  DashboardMessagesRoute: typeof DashboardMessagesRoute
+  DashboardPeopleRoute: typeof DashboardPeopleRoute
+  DashboardProfileRoute: typeof DashboardProfileRoute
+  DashboardSearchRoute: typeof DashboardSearchRoute
+  DashboardVideosRoute: typeof DashboardVideosRoute
+}
+
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardFeedRoute: DashboardFeedRoute,
+  DashboardMessagesRoute: DashboardMessagesRoute,
+  DashboardPeopleRoute: DashboardPeopleRoute,
+  DashboardProfileRoute: DashboardProfileRoute,
+  DashboardSearchRoute: DashboardSearchRoute,
+  DashboardVideosRoute: DashboardVideosRoute,
+}
+
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  DashboardRoute: DashboardRoute,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
 }

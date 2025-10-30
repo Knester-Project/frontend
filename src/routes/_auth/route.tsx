@@ -1,4 +1,6 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router';
+
+//Layouts
 import AuthLayout from '@/layouts/AuthLayout';
 
 export const Route = createFileRoute('/_auth')({

@@ -1,37 +1,39 @@
 import Cookies from "js-cookie";
 
-// Save tokens
-export const setTokens = (accessToken: string) => {
-  Cookies.set("accessToken", accessToken, {
-    secure: true,
-    sameSite: "strict",
-    expires: 1,
-  });
+const COOKIE_OPTIONS = {
+  secure: true,
+  sameSite: "strict" as const,
+  expires: 7,
+  path: "/", 
+};
+
+// ======= USER TOKEN =======
+
+// Save user token
+export const setUserToken = (token: string) => {
+  Cookies.set("kn_auth_token", token, COOKIE_OPTIONS);
+};
+
+// Get user token
+export const getUserToken = () => Cookies.get("kn_auth_token");
+
+// Clear user token
+export const clearUserToken = () => {
+  Cookies.remove("kn_auth_token", { path: "/" });
 };
 
 
-// Get token
-export const getAccessToken = () => Cookies.get("accessToken");
+// ======= ADMIN TOKEN =======
 
-// Clear tokens
-export const clearTokens = () => {
-  Cookies.remove("accessToken");
-};
-
-
-//Save Admin Token
-export const setAdminTokens = (accessToken: string) => {
-  Cookies.set("_access", accessToken, {
-    secure: true,
-    sameSite: "strict",
-    expires: 1,
-  });
+// Save admin token
+export const setAdminToken = (token: string) => {
+  Cookies.set("kn_admin_token", token, COOKIE_OPTIONS);
 };
 
 // Get admin token
-export const getAdminAccessToken = () => Cookies.get("_access");
+export const getAdminToken = () => Cookies.get("kn_admin_token");
 
-// Clear tokens
-export const clearAdminTokens = () => {
-  Cookies.remove("_access");
+// Clear admin token
+export const clearAdminToken = () => {
+  Cookies.remove("kn_admin_token", { path: "/" });
 };

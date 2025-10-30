@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance } from "axios";
 
 //Libs, Enums
-import { getAccessToken, getAdminAccessToken } from "@/lib/token";
+import { getUserToken, getAdminToken } from "@/lib/token";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -14,7 +14,7 @@ export const getAxiosAuthInstance = (type: 'user' | 'admin' = 'user'): AxiosInst
   // Attach the correct token
   instance.interceptors.request.use(
     async (config) => {
-      const token = type === 'admin' ? getAdminAccessToken() : getAccessToken();
+      const token = type === 'admin' ? getAdminToken() : getUserToken();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }

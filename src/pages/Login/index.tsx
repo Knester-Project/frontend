@@ -74,7 +74,7 @@ const Index = () => {
             authUser.mutate(parsed.data, {
                 onSuccess: (response) => {
                     toast.success(response.message);
-                    navigate({ to: "/dashboard" });
+                    navigate({ to: "/feed" });
                 },
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onError: (error: any) => {
