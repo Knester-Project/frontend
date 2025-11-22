@@ -42,6 +42,7 @@ body {
   --color-accent-foreground: var(--accent-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
 
   --color-border: var(--border);
   --color-input: var(--input);
@@ -72,6 +73,9 @@ body {
   --accent-foreground: var(--foreground);       /* use dark text on light accent */
   --muted: oklch(0.518 0.023 245.912);          /* #5e6a75 (secondary text) */
   --muted-foreground: var(--background);
+  --destructive: oklch(0.6 0.22 25);
+  /* industrial red-orange */
+  --destructive-foreground: oklch(0.98 0.005 255);
 
   /* Borders, outline */
   --border: oklch(0.907 0.000 90);              /* #e0e0e0 */
@@ -101,8 +105,10 @@ body {
   --primary-foreground: oklch(1.000 0.000 90);   /* #ffffff */
   --accent: oklch(0.603 0.153 46.681);          /* #c85e1f (darker pumpkin) */
   --accent-foreground: var(--foreground);
-  --muted: oklch(0.793 0.018 229.071);          /* #b0bec5 */
+  --muted: oklch(96.755% 0.01105 226.389);          /* #b0bec5 */
   --muted-foreground: var(--background);
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.98 0.005 255);
 
   --border: oklch(0.293 0.000 90);              /* #2c2c2c */
   --input: var(--border);

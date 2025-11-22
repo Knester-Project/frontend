@@ -11,11 +11,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 
 //Logo
-import logo from "/short_logo.svg";
+import logo from "/logo.svg";
 
 //Icons
-import { Search, Plus, Menu, X } from "lucide-react";
-import { Home, Video, Profile2User, Message, Notification, SearchNormal, SecuritySafe, AddSquare } from "iconsax-reactjs";
+import { Search, Menu, X } from "lucide-react";
+import { Home, Video, Profile2User, Message, Notification, SearchNormal, SecuritySafe } from "iconsax-reactjs";
 
 
 const Nav = () => {
@@ -37,7 +37,7 @@ const Nav = () => {
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <Link to="/feed" className="shrink-0">
-                            <img src={logo} alt="Knester Logo" className="mr-2 size-6 md:size-7 xl:size-8" />
+                            <img src={logo} alt="Knester Logo" className="mr-2 rounded-[50%] size-8 md:size-9 xl:size-10" />
                         </Link>
 
                         <nav className="hidden lg:flex items-center gap-4">
@@ -47,7 +47,7 @@ const Nav = () => {
 
                                 return (
                                     <Link key={item.href} to={item.href}>
-                                        <Button variant="ghost" size="sm" className={cn("gap-2 transition-colors", isActive && "bg-accent text-accent-foreground")}>
+                                        <Button variant="ghost" size="sm" className={cn("gap-2 transition-colors", isActive && "bg-primary text-primary-foreground")}>
                                             <Icon className="size-4" variant={isActive ? "Bold" : "Outline"} />
                                             {item.label}
                                         </Button>
@@ -71,17 +71,11 @@ const Nav = () => {
                             <span className="-top-1 -right-1 absolute bg-red-500 px-1 pb-[1px] rounded-full text-white text-xs">0</span>
                         </Button>
 
-                        {/* Create Post */}
-                        <Button size="sm" className="hidden sm:flex gap-x-1">
-                            <AddSquare className="size-4" variant="Bold" />
-                            Post
-                        </Button>
-
                         {/* Profile */}
-                        <Link to="/profile">
+                        <Link to="/profile" search={{ profile: "me" }}>
                             <Avatar className="size-8 cursor-pointer">
-                                <AvatarImage src="/user-profile-illustration.png" />
-                                <AvatarFallback>KN</AvatarFallback>
+                                <AvatarImage src="https://github.com/evilrabbit.png" />
+                                <AvatarFallback>You</AvatarFallback>
                             </Avatar>
                         </Link>
 
@@ -105,7 +99,7 @@ const Nav = () => {
                                         <motion.div key={item.href} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.2 }}>
                                             <Link to={item.href} onClick={() => setIsMobileMenuOpen(false)}>
                                                 <Button variant="ghost" size="sm"
-                                                    className={cn("justify-start gap-2 w-full", isActive && "bg-accent text-accent-foreground")}>
+                                                    className={cn("justify-start gap-2 w-full", isActive && "bg-primary text-primary-foreground")}>
                                                     <Icon className="size-4" variant={isActive ? "Bold" : "Outline"} />
                                                     {item.label}
                                                 </Button>
@@ -118,14 +112,6 @@ const Nav = () => {
                                 <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 5 }} transition={{ duration: 0.2, delay: 0.1 }} className="relative mt-2">
                                     <Search className="top-1/2 left-3 absolute size-4 -translate-y-1/2 transform" />
                                     <Input placeholder="Search Knester..." className="pl-10" />
-                                </motion.div>
-
-                                {/* Mobile Create Post */}
-                                <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 5 }} transition={{ duration: 0.2, delay: 0.15 }}>
-                                    <Button size="sm" className="gap-2 mt-2 w-full">
-                                        <Plus className="size-4" />
-                                        Create Post
-                                    </Button>
                                 </motion.div>
                             </nav>
                         </motion.div>
