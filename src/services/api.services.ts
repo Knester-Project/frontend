@@ -1,4 +1,9 @@
 import { axiosUnauthInstance } from './config';
+import { getAxiosAuthInstance } from './config';
+
+// Auth Instances
+const userAxios = getAxiosAuthInstance();
+
 
 //Schemas
 import type { AuthInput } from '@/schemas/auth.schema';
@@ -24,5 +29,11 @@ export const createUser = async (data: { username: string, password: string, ref
 //Login User
 export const authenticateUser = async (data: AuthInput) => {
     const response = await axiosUnauthInstance.post("auth/login", data);
+    return response.data;
+}
+
+// Presigned URL Request
+export const requestPresignedUrls = async (kind: string, files: { fileName: string }[]) => {
+    const response = await userAxios.post("general/presigned", { kind, files });
     return response.data;
 }

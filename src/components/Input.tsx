@@ -1,4 +1,4 @@
-type InputType = 'text' | 'number' | 'email' | 'password' | 'checkbox' | 'radio' | 'date' | 'file' | 'tel';
+type InputType = 'text' | 'number' | 'email' | 'password' | 'checkbox' | 'radio' | 'date' | 'datetime-local' | 'file' | 'tel' | 'url';
 
 type InputProps = {
     type: InputType;
@@ -28,7 +28,7 @@ const Input = ({ type, placeholder, label, name, value, onChange, pattern, title
             <input type={type} placeholder={placeholder}
                 id={name} value={value} onChange={onChange} pattern={pattern}
                 title={title} autoComplete={autoComplete} name={name}
-                className={`text-sm md:text-base xl:text-lg px-4 py-3 bg-background rounded-lg border border-border duration-300 focus:caret-primary focus:outline-none placeholder:text-xs md:placeholder:text-sm xl:placeholder:text-base placeholder:text-muted ${widthClass} ${otherClass}`}
+                className={`px-4 py-3 bg-background rounded-lg border border-border duration-300 focus:caret-primary focus:border-primary focus:outline-none placeholder:text-xs md:placeholder:text-sm xl:placeholder:text-base placeholder:text-muted ${widthClass} ${otherClass}`}
                 required={required}
             />
         </main>
