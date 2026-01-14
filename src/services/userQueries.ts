@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 
-//API endpoints
+// API endpoints
 import { checkUsername } from "./api.services";
 
 
-//Get Account Number Details
+// Get Account Number Details
 export function CheckUsername(username: string){
     return useQuery({
         queryKey: ['checkedUsername'],

@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-//Functions
-import { authenticateUser, createUser, validateInvite } from "./api.services";
+// Functions
+import { authenticateUser, createSafetyPost, createUser, validateInvite } from "./api.services";
 
-//Schemas
+// Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
 
-//Libs
+// Libs
 import { setUserToken } from "@/lib/token";
 
 
-//Validate Users
+// Validate Users
 export function useValidateUser() {
 
     return useMutation({
@@ -21,7 +21,7 @@ export function useValidateUser() {
     })
 }
 
-//Create User
+// Create User
 export function useCreateUser() {
 
     return useMutation({
@@ -32,7 +32,7 @@ export function useCreateUser() {
     })
 }
 
-//Authenticate User
+// Authenticate User
 export function useAuthUser() {
 
     const queryClient = useQueryClient();
@@ -45,5 +45,16 @@ export function useAuthUser() {
             setUserToken(response.data.accessToken);
             queryClient.invalidateQueries();
         }
+    })
+}
+
+// Create Post
+export function useCreateSafetyPost() {
+
+    return useMutation({
+        mutationFn: (data: SafetyInput) => createSafetyPost(data),
+        onError: (error) => {
+            console.error("Safety Post Creation Failed:", error);
+        },
     })
 }

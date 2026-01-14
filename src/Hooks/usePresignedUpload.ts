@@ -39,9 +39,9 @@ export function usePresignedUpload() {
       }));
       setUploads(items);
 
-      const mediaFiles = files.map((f) => ({ fileName: f.name }));
+      const mediaFiles = files.map((f) => ({ fileName: f.name, contentType: f.type }));
 
-      // API call
+      // Get Presigned Urls
       const res = await requestPresignedUrls(kind, mediaFiles);
 
       const presignedList: BackendUploadItem[] = res.data;
@@ -70,7 +70,11 @@ export function usePresignedUpload() {
     Object.entries(presigned.fields).forEach(([k, v]) =>
       formData.append(k, v)
     );
+
     formData.append("file", file);
+
+    console.log("The file type", file.type)
+    console.log("The presigned", presigned)
 
     setUploads((prev) =>
       prev.map((u, i) =>
@@ -79,7 +83,6 @@ export function usePresignedUpload() {
     );
 
     await axios.post(presigned.uploadUrl, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
       onUploadProgress: (e) => {
         if (!e.total) return;
         const percent = Math.round((e.loaded / e.total) * 100);
@@ -105,5 +108,18 @@ export function usePresignedUpload() {
     );
   }
 
-  return { uploadFiles, uploads, uploading, error };
+  // Make sure all the uploads has a status of success
+  const requiredKeys: (keyof UploadItem)[] = [
+    'file',
+    'progress',
+    'status',
+    'publicUrl',
+    'key',
+  ];
+
+  const hasKeys = (obj: UploadItem, keys: (keyof UploadItem)[]) => keys.every((k) => obj[k] != null);
+  const allSuccessful = uploads.every((u) => hasKeys(u, requiredKeys) && u.status === 'success');
+
+
+  return { uploadFiles, uploads, allSuccessful, uploading, error };
 }

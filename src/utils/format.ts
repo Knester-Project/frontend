@@ -13,3 +13,13 @@ export const formatTrendingCount = (num: number) => {
     }
     return num.toString();
 };
+
+// Convert to ISO Date and Time
+export function isoDateTime(value: string): string | null {
+    if (!value) return null;
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return null;
+
+    return date.toISOString();
+}

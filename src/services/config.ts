@@ -15,9 +15,10 @@ export const getAxiosAuthInstance = (type: 'user' | 'admin' = 'user'): AxiosInst
   instance.interceptors.request.use(
     async (config) => {
       const token = type === 'admin' ? getAdminToken() : getUserToken();
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+      if (!token) {
+        return Promise.reject(new Error('NO_AUTH_TOKEN'));
       }
+      config.headers.Authorization = `Bearer ${token}`;
       return config;
     },
     (error) => Promise.reject(error)

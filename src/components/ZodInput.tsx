@@ -17,10 +17,11 @@ type InputProps<T extends FieldValues> = {
     required?: boolean;
     otherClass?: string;
     autoComplete?: string;
+    disabled?: boolean;
 };
 
 const ZodInput = <T extends FieldValues>({ type, placeholder, label, id, value, onChange, pattern, title,
-    widthClass = 'w-full', register, name, otherClass, required, autoComplete = 'off' }: InputProps<T>) => {
+    widthClass = 'w-full', register, name, otherClass, required, autoComplete = 'off', disabled }: InputProps<T>) => {
     return (
         <main className="flex flex-col gap-y-1">
             {label && (
@@ -33,7 +34,7 @@ const ZodInput = <T extends FieldValues>({ type, placeholder, label, id, value, 
                 id={id} value={value} onChange={onChange} pattern={pattern}
                 title={title} autoComplete={autoComplete}
                 className={`px-4 py-3 bg-background rounded-lg border border-border duration-300 focus:caret-primary focus:border-primary focus:outline-none  ${widthClass} ${otherClass}`}
-                required={required}
+                required={required} disabled={disabled}
             />
         </main>
     );

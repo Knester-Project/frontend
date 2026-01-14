@@ -11,9 +11,10 @@ type StateSelectProps = {
     value: string;
     onChange: (value: string) => void;
     error?: string;
+    disabled?: boolean;
 }
 
-const StateSelect = ({ value, onChange, error }: StateSelectProps) => {
+const StateSelect = ({ value, onChange, error, disabled }: StateSelectProps) => {
 
     const states: { name: string, capital: string }[] = NIGERIAN_STATES;
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -33,7 +34,7 @@ const StateSelect = ({ value, onChange, error }: StateSelectProps) => {
             </label>
 
             <div className="relative mt-1">
-                <button type="button" onClick={() => setIsOpen((prev) => !prev)} className={`flex justify-between items-center bg-inherit px-4 py-3 border rounded-lg focus:outline-none w-full duration-300 cursor-pointer ${error ? "border-red-500" : "focus:border-primary"}`}>
+                <button type="button" disabled={disabled} onClick={() => setIsOpen((prev) => !prev)} className={`flex justify-between items-center bg-inherit px-4 py-3 border rounded-lg focus:outline-none w-full duration-300 cursor-pointer ${error ? "border-red-500" : "focus:border-primary"}`}>
                     <p>{value ?? "Select State"}</p>
                     <span className={`ml-auto transition-transform duration-300 ${isOpen ? "rotate-180" : "rotate-0"}`}>
                         <ArrowDown2 size={16} variant="Bold" />
@@ -42,7 +43,7 @@ const StateSelect = ({ value, onChange, error }: StateSelectProps) => {
 
                 {isOpen && (
                     <div className="absolute bg-background shadow-md mt-2 border rounded-lg w-full max-h-72 overflow-hidden">
-                        <div className="flex items-center gap-2 p-2 border-b">
+                        <div className="flex items-center gap-2 bg-white dark:bg-black p-2 border-b">
                             <SearchNormal1 size={16} />
                             <input type="text" placeholder="Search State..." value={searchState} onChange={(e) => setSearchState(e.target.value)} className="px-2 py-1 focus:outline-none w-full" />
                         </div>

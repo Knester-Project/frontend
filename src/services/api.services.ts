@@ -33,7 +33,13 @@ export const authenticateUser = async (data: AuthInput) => {
 }
 
 // Presigned URL Request
-export const requestPresignedUrls = async (kind: string, files: { fileName: string }[]) => {
+export const requestPresignedUrls = async (kind: string, files: { fileName: string, contentType: string }[]) => {
     const response = await userAxios.post("general/presigned", { kind, files });
+    return response.data;
+}
+
+// Create a Safety Post
+export const createSafetyPost = async (data: SafetyInput) => {
+    const response = await userAxios.post(`safety/create`, data);
     return response.data;
 }
