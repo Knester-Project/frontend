@@ -44,9 +44,8 @@ export default function Create() {
 
     // Submit Function
     const { uploadFiles, allSuccessful } = usePresignedUpload();
+    
     const newPost = useCreateSafetyPost();
-
-    console.log("The errors", errors)
     const onSubmit: SubmitHandler<SafetyInput> = async (data) => {
         try {
             if (files.length < 2) {
@@ -75,6 +74,11 @@ export default function Create() {
                     reset();
                     setFiles([]);
                     setIsOpen(false);
+                },
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                onError: (error: any) => {
+                    const message = error?.response?.data?.message || "Couldn't create post now, kindly try again later.";
+                    toast.error(message);
                 },
             });
         } catch {
@@ -141,7 +145,7 @@ export default function Create() {
                                             <ZodInput disabled={newPost.isPending} type="datetime-local" register={register} name="dateOfIncident" label="Date of Incident" required />
                                             {errors.dateOfIncident && <ErrorText message={errors.dateOfIncident.message} />}
 
-                                            <label className="block mb-1 font-medium cursor-pointer">Description <span className="text-destructive">*</span></label>
+                                            <label className="block mb-1 font-medium cursor-pointer">The Incident (How it went down) <span className="text-destructive">*</span></label>
                                             <textarea {...register("content")} rows={4} maxLength={800} className="bg-background px-4 py-3 border border-border focus:border-primary rounded-lg focus:outline-none w-full duration-300 focus:caret-primary resize-none"></textarea>
                                             <p className="text-neutral-500 text-xs">{content?.trim().length || 0}/800</p>
                                             {errors.content && <ErrorText message={errors.content.message} />}
