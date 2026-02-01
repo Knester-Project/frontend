@@ -30,7 +30,7 @@ const StateSelect = ({ value, onChange, error, disabled }: StateSelectProps) => 
     return (
         <main className="relative">
             <label className="text-foreground cursor-pointer">
-                Country <span className="text-red-500"> *</span>
+                State <span className="text-red-500"> *</span>
             </label>
 
             <div className="relative mt-1">

@@ -73,9 +73,6 @@ export function usePresignedUpload() {
 
     formData.append("file", file);
 
-    console.log("The file type", file.type)
-    console.log("The presigned", presigned)
-
     setUploads((prev) =>
       prev.map((u, i) =>
         i === index ? { ...u, status: "uploading" } : u
