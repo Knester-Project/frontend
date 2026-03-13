@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent } from 'react';
-import { toast } from "react-fox-toast";
+import { sileo } from "sileo";
 import { Link } from '@tanstack/react-router';
 
 //Hooks, Stores and Utils
@@ -53,7 +53,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
     const handleCopy = async (phrase: string) => {
         await navigator.clipboard.writeText(phrase);
         setCopied(true);
-        toast.success("Your Recovery Phrase Was Copied Successfully.")
+        sileo.success({ title: "Your Recovery Phrase Was Copied Successfully." })
         setTimeout(() => setCopied(false), 10000);
     };
 
@@ -64,11 +64,11 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (invitationCode.length !== 10) return toast.error("Invalid Referral Link");
+        if (invitationCode.length !== 10) return sileo.error({ title: "Invalid Referral Link" });
 
         validateInvite.mutate({ invitationCode }, {
             onSuccess: (response) => {
-                toast.success(response.data.message || "Referral Validation was successfully!");
+                sileo.success({ title: response.data.message || "Referral Validation was successfully!" });
                 setReferrer(response.data.referrer)
                 setIndexPage(false);
                 setPasswordPage(true);
@@ -76,7 +76,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onError: (error: any) => {
                 const message = error?.response?.data?.message || "Referral Validation failed. Kindly restart the process.";
-                toast.error(message);
+                sileo.error({ title: message });
             },
         });
     }
@@ -84,10 +84,10 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        toast("Creating your account", { isCloseBtn: true })
+        sileo.show({ title: "Creating your account" })
         createUser.mutate({ username: enteredUsername, password, referrer }, {
             onSuccess: (response) => {
-                toast.success(response.data.message || "Your account was created successfully!");
+                sileo.success({ title: response.data.message || "Your account was created successfully!" });
                 setRecoveryPhrase(response.data.recoveryUsername)
                 setPasswordPage(false);
                 setRecoveryPage(true);
@@ -95,7 +95,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onError: (error: any) => {
                 const message = error?.response?.data?.message || "Account creation failed. Kindly restart the process.";
-                toast.error(message);
+                sileo.error({ title: message });
             },
         });
     }

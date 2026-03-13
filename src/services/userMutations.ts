@@ -6,9 +6,6 @@ import { authenticateUser, createSafetyPost, createUser, validateInvite } from "
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
 
-// Libs
-import { setUserToken } from "@/lib/token";
-
 
 // Validate Users
 export function useValidateUser() {
@@ -41,8 +38,7 @@ export function useAuthUser() {
         onError: (error) => {
             console.error("User Authentication failed:", error);
         },
-        onSuccess: async (response) => {
-            setUserToken(response.data.accessToken);
+        onSuccess: async () => {
             queryClient.invalidateQueries();
         }
     })

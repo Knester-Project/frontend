@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { toast } from "react-fox-toast";
+import { sileo } from "sileo";
 
 type Props = {
     multiple?: boolean;
@@ -63,7 +63,7 @@ export default function FileUploader({ multiple = false, disabled, value, onChan
         for (const file of files) {
             const ext = file.name.split(".").pop()?.toLowerCase();
             if (!ext || !allowedExts.includes(ext)) {
-                toast.error("Only images and videos are allowed");
+                sileo.error({ title: "Only images and videos are allowed" });
                 return;
             }
         }

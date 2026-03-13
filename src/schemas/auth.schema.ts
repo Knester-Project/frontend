@@ -13,8 +13,6 @@ export const loginSchema = z.object({
             : "Not a string"
     }).min(8, { error: "Password too short - should be 8 Chars minimum" }),
 
-    ipHash: z.string().optional().nullable(),
-
     device: z.object({
         ua: z.string().optional(),
         type: z.enum(["desktop", "mobile", "tablet", "console", "embedded", "smarttv", "wearable", "xr"]).optional(),

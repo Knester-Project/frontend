@@ -1,12 +1,11 @@
 import { useState, type ChangeEvent } from 'react';
 import { UAParser } from 'ua-parser-js';
-import { toast } from 'react-fox-toast';
+import { sileo } from "sileo";
 import { useNavigate } from '@tanstack/react-router';
 
 //Schemas, Services and Utils
 import { loginSchema, type AuthInput } from '@/schemas/auth.schema';
 import { useAuthUser } from '@/services/userMutations';
-import { getPublicIp } from '@/utils/getPublicIp';
 import { flattenZodErrors } from '@/utils/zod';
 
 //Component
@@ -14,7 +13,7 @@ import Button from '@/components/Button';
 import ErrorText from '@/components/ErrorText';
 
 //Icons
-import { Check, Eye, EyeOff, KeyRound, ScanFace } from 'lucide-react';
+import { Eye, EyeOff, KeyRound, Rocket, ScanFace } from 'lucide-react';
 import { Information } from 'iconsax-reactjs';
 
 
@@ -46,6 +45,8 @@ const Index = () => {
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        if(!allRequirementsMet) return sileo.error({ title: "Login failed. Please check your credentials." });
+
         const parser = new UAParser();
         const result = parser.getResult();
 
@@ -56,12 +57,9 @@ const Index = () => {
             browser: result.browser.name,
         };
 
-        const ip = await getPublicIp();
-
         const payload: AuthInput = {
             username: enteredUsername,
             password,
-            ipHash: ip ? ip : null,
             device,
         };
 
@@ -73,13 +71,13 @@ const Index = () => {
             setErrors({});
             authUser.mutate(parsed.data, {
                 onSuccess: (response) => {
-                    toast.success(response.message);
+                    sileo.success({ title: response.message, icon: <Rocket className="size-3.5" />, });
                     navigate({ to: "/feed" });
                 },
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onError: (error: any) => {
                     const message = error?.response?.data?.message || "Login failed. Please check your credentials.";
-                    toast.error(message);
+                    sileo.error({ title: message });
                 },
             });
         }
@@ -111,22 +109,9 @@ const Index = () => {
                             {showPassword ? <EyeOff className="size-4 md:size-5" /> : <Eye className="size-4 md:size-5" />}
                         </button>
                     </div>
-                    <div className="space-y-2 mt-1">
-                        <p className="font-medium montserrat">Password Requirements:</p>
-                        <div className="space-y-1">
-                            {passwordRequirements.map((req, index) => (
-                                <div key={index} className="flex items-center space-x-2">
-                                    <Check className={`size-4 ${req.met ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-500'}`} />
-                                    <span className={`${req.met ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-500'}`}>
-                                        {req.text}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
                     {errors.password && <ErrorText message={errors.password[0]} />}
                 </div>
-                <Button text="Join the Party." loadingText={"Joining..."} disabled={authUser.isPending || (!allRequirementsMet)} loading={authUser.isPending} icon={<ScanFace className='size-4 md:size-5' />} variant='primary' />
+                <Button text="Join the Party." loadingText={"Joining..."} disabled={authUser.isPending} loading={authUser.isPending} icon={<ScanFace className='size-4 md:size-5' />} variant='primary' />
             </form>
         </main >
     );

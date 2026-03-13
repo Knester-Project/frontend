@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion, AnimatePresence } from "framer-motion";
-import { toast } from "react-fox-toast";
+import { sileo } from "sileo";
 
 // Schemas, Hooks and Utils
 import { createSafetyPostSchema, type SafetyInput } from "@/schemas/safety.schema";
@@ -18,7 +18,7 @@ import StateSelect from "./StateSelect";
 import ZodInput from "@/components/ZodInput";
 
 // Icons
-import { AlertCircle, Loader } from "lucide-react";
+import { AlertCircle, Loader, Rocket } from "lucide-react";
 import FileUploader from "@/components/FileUploader";
 
 
@@ -53,7 +53,7 @@ export default function Create() {
 
             // Validate minimum files
             if (files.length < 2) {
-                toast.error("Minimum of 2 media required");
+                sileo.error({ title : "Minimum of 2 media required" });
                 return;
             }
 
@@ -67,16 +67,16 @@ export default function Create() {
             }));
 
             // Make sure the file exists with a status state of success
-            if (!allSuccessful) return toast.error("Couldn't create post now, kindly try again later.")
+            if (!allSuccessful) return sileo.error({ title: "Couldn't create post now, kindly try again later." })
 
             const isoDate = isoDateTime(data.dateOfIncident)
-            if (!isoDate) return toast.error("Kindly reselect the Incident date and time.")
+            if (!isoDate) return sileo.error({ title: "Kindly reselect the Incident date and time." })
             setIsUploading(false);
 
             // Create Safety Post
             newPost.mutate({ ...data, dateOfIncident: isoDate, media }, {
                 onSuccess: () => {
-                    toast.success("Safety post created");
+                    sileo.success({ title: "Safety post created", icon: <Rocket className="size-3.5" />, });
                     reset();
                     setFiles([]);
                     setIsOpen(false);
@@ -84,11 +84,11 @@ export default function Create() {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onError: (error: any) => {
                     const message = error?.response?.data?.message || "Couldn't create post now, kindly try again later.";
-                    toast.error(message);
+                    sileo.error(message);
                 },
             });
         } catch {
-            toast.error("Couldn't create post now, kindly try again later.");
+            sileo.error({ title: "Couldn't create post now, kindly try again later." });
         }
     };
 
