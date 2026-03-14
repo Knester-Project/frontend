@@ -17,9 +17,8 @@ export const useSecurityStore = create<SecurityStore>((set, get) => ({
     // Check if the CSRF token is null
     if (!get().csrfToken) {
       const response = await fetchToken();
-      console.log("The csrf response", response);
-      set({ csrfToken: response.csrfToken });
-      return response.csrfToken; 
+      set({ csrfToken: response.data });
+      return response.data; 
     }
     // Return the existing token if it's already set
     return get().csrfToken!;

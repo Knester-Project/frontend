@@ -13,12 +13,12 @@ export const getAxiosAuthInstance = (): AxiosInstance => {
   });
 
   // Add a request interceptor
-  instance.interceptors.request.use((config) => {
+  instance.interceptors.request.use(async (config) => {
     const method = config.method?.toUpperCase();
 
     // Check if the method is POST, PUT, PATCH, or DELETE
     if (["POST", "PUT", "PATCH", "DELETE"].includes(method!)) {
-      const token = getCsrfToken();
+      const token = await getCsrfToken();
 
       // Attach the CSRF token to the request headers if available
       if (token) {

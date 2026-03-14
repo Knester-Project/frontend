@@ -45,7 +45,8 @@ const Index = () => {
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if(!allRequirementsMet) return sileo.error({ title: "Login failed. Please check your credentials." });
+        if (!allRequirementsMet)
+            return sileo.error({ title: "Authentication failed.", description: "Your Login Attempt Failed, Please check your credentials." });
 
         const parser = new UAParser();
         const result = parser.getResult();
@@ -71,13 +72,13 @@ const Index = () => {
             setErrors({});
             authUser.mutate(parsed.data, {
                 onSuccess: (response) => {
-                    sileo.success({ title: response.message, icon: <Rocket className="size-3.5" />, });
+                    sileo.success({ title: "Authentication Successful", description: response.message, icon: <Rocket className="size-3.5" />, });
                     navigate({ to: "/feed" });
                 },
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onError: (error: any) => {
-                    const message = error?.response?.data?.message || "Login failed. Please check your credentials.";
-                    sileo.error({ title: message });
+                    const message = error?.response?.data?.message || "Your Login Attempt Failed, Please check your credentials.";
+                    sileo.error({ title: "Authentication Failed", description: message });
                 },
             });
         }
@@ -97,7 +98,7 @@ const Index = () => {
                     <label htmlFor="username" className='font-medium cursor-pointer'>Username</label>
                     <input type="text" id="username" className='bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none text-sm md:text-base xl:text-lg duration-300 focus:caret-primary' onChange={handleUsername} value={enteredUsername} title="Please enter only letters, numbers, and underscores (spaces will be replaced with underscores)" minLength={5} placeholder="Inclusive.Iguana" required />
                     {errors.username && <ErrorText message={errors.username[0]} />}
-                    <p className='text-[11px] text-primary md:text-xs xl:text-sm'><Information className="inline size-4 xl:size-5" variant='Bold' /> Usernames are case-sensitive (e.g., "Remy" is not the same as "remy").</p>
+                    <p className='text-[11px] text-primary md:text-xs xl:text-sm'><Information className="inline size-4 xl:size-5" variant='Bold' /> Case-sensitive (e.g., "Remy" is not the same as "remy").</p>
                 </div>
                 <div className="flex flex-col gap-y-1">
                     <label htmlFor="password" className='font-medium cursor-pointer'>
