@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // Functions
-import { authenticateUser, createSafetyPost, createUser, validateInvite } from "./api.services";
+import { authenticateUser, createSafetyPost, createUser, toggleVibe, validateInvite } from "./api.services";
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
@@ -53,4 +53,59 @@ export function useCreateSafetyPost() {
             console.error("Safety Post Creation Failed:", error);
         },
     })
+}
+
+// Toggle Vibe for a Post
+export function useSafetyPostVibe(postId: string, queries: SafetyQueries) {
+
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: { postId: string, postModel: string }) => toggleVibe(data),
+
+        onMutate: async () => {
+            await queryClient.cancelQueries({ queryKey: ["safety-posts"] });
+
+            const previousData = queryClient.getQueryData(["safety-posts", queries]);
+
+            queryClient.setQueryData(["safety-posts", queries], (old: unknown) => {
+                if (!old) return old;
+
+                const data = old as { pages: Array<{ data: { data: SafetyPost[] } }> };
+
+                return {
+                    ...data,
+                    pages: data.pages.map((page: { data: { data: SafetyPost[] } }) => ({
+                        ...page,
+                        data: {
+                            ...page.data,
+                            data: page.data.data.map((p: SafetyPost) =>
+                                p._id === postId
+                                    ? {
+                                        ...p,
+                                        hasVibed: !p.hasVibed,
+                                        vibes: p.hasVibed ? p.vibes - 1 : p.vibes + 1,
+                                    }
+                                    : p
+                            ),
+                        },
+                    })),
+                };
+            });
+
+            return { previousData };
+        },
+
+        onError: (_err, _vars, context) => {
+            queryClient.setQueryData(
+                ["safety-posts", queries],
+                context?.previousData
+            );
+        },
+
+        onSettled: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["safety-posts", queries],
+            });
+        },
+    });
 }

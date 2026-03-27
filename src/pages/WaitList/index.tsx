@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 
-//Components
+// UIs
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 
-//Icons
+// Icons
 import { CirclePlus } from "lucide-react";
 
 const Index = () => {

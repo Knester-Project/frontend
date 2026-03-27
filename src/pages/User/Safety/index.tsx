@@ -1,17 +1,20 @@
-// Components
+// UIs
+import Main from "@/components/Main";
 import Create from "./Create";
 import Filter from "./Filter";
+import Posts from "./Posts";
 
 const index = () => {
     return (
-        <main className="flex lg:flex-row flex-col gap-5 px-[1rem] sm:px-8 md:px-[3rem] lg:px-[4rem] 2xl:px-[6rem] xl:px-[5rem] py-6">
-            <section className="lg:w-[30%]">
+        <Main classNames="flex lg:flex-row flex-col lg:justify-between gap-5">
+            <div className="lg:w-[30%]">
                 <Filter />
-            </section>
-            <section className="w-full lg:w-[70%]">
+            </div>
+            <div className="w-full lg:w-[65%]">
                 <Create />
-            </section>
-        </main>
+                <Posts />
+            </div>
+        </Main>
     );
 }
 

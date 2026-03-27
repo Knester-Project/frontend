@@ -1,4 +1,4 @@
-//Components
+// UIs
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {

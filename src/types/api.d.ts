@@ -1,3 +1,4 @@
+// For Safety Post Creation
 declare type SafetyInput = {
     dateOfIncident: string;
     location: {
@@ -18,4 +19,14 @@ declare type SafetyInput = {
         username: string;
         profileLink?: string | undefined;
     }[];
+}
+
+// For Fetching Safety Post
+declare type SafetyQueries = {
+    state?: string | undefined;
+    city?: string | undefined;
+    name?: string | undefined;
+    street?: string | undefined;
+    cursor?: string | undefined;
+    limit?: number | undefined;
 }

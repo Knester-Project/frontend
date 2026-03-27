@@ -53,6 +53,17 @@ body {
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+
+  --color-safety: var(--safety);
+  --color-premium: var(--premium);
+  --color-moderator: var(--moderator);
+  --color-core: var(--core);
+  --color-vibe: var(--vibe);
+  --color-vibe-active: var(--vibe-active);
+  --color-comment: var(--comment);
+  --color-comment-active: var(--comment-active);
+  --color-share: var(--share);
+  --color-share-active: var(--share-active);
 }
 
 :root {
@@ -88,6 +99,17 @@ body {
   --chart-3: var(--muted);
   --chart-4: oklch(0.603 0.153 46.681);          /* slightly darker pumpkin */
   --chart-5: oklch(0.346 0.043 236.812);        /* charcoal */
+
+  --safety: #00897B;
+  --premium: #F57F17;
+  --moderator: 	#2E7D32;
+  --core: #6A1B9A;
+  --vibe: #E53935;
+  --comment: #43A047;
+  --share: #1E88E5;
+  --vibe-active: #C62828;
+  --comment-active: #2E7D32;
+  --share-active: #1565C0;
 }
 
 
@@ -119,6 +141,17 @@ body {
   --chart-3: var(--muted);
   --chart-4: oklch(0.888 0.076 63.379);          /* light accent as chart tone */
   --chart-5: oklch(0.346 0.043 236.812);        /* charcoal */
+
+  --safety: #4DB6AC;
+  --premium: #FFD54F;
+  --moderator: #81C784;
+  --core: #BA68C8;
+  --vibe: #FF6B6B;
+  --comment: #66CD66;
+  --share: #66B2FF;
+  --vibe-active: #FF4D4D;
+  --comment-active: #4DD54D;
+  --share-active: #3399FF;
 }
 
 

@@ -1,4 +1,4 @@
-//Fancy Button
+// Fancy Button
 declare type FancyButtonProps = {
     text: string;
     loadingText?: string;
@@ -11,8 +11,37 @@ declare type FancyButtonProps = {
     classNames?: string;
 }
 
-//Validation Store
+// Validation Store
 declare type ValidationStore = {
     referrer: string;
     setReferrer: (newReferrer: string) => void;
 }
+
+// Safety Post
+declare type SafetyPost = {
+    _id: string;
+    postId: string;
+    fullName: string;
+    createdAt: string;
+    dateOfIncident: string;
+    content: string;
+    verified: boolean;
+    vibes: number;
+    views: number;
+    flags: number;
+    comments: number;
+    hasVibed: boolean,
+    hasFlagged: boolean,
+    location: {
+        street?: string;
+        town?: string;
+        city?: string;
+        state?: string;
+    };
+    media: { url: string }[];
+    socialMedia: {
+        platform: string;
+        username: string;
+        profileLink: string;
+    }[];
+};

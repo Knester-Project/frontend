@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useLocation, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 
-//Libs
+// Libs
 import { cn } from "@/lib/utils";
 
-//Components
+// UIs
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";

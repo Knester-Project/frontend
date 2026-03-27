@@ -23,9 +23,9 @@ export const Route = createRootRoute({
 function RootComponent() {
     return (
         <QueryClientProvider client={queryClient}>
-            <Toaster position="top-center" theme="system" />
-            <ThemeProviderEffect />
             <Outlet />
+            <ThemeProviderEffect />
+            <Toaster position="top-center" theme="system" />
         </QueryClientProvider>
     )
 }

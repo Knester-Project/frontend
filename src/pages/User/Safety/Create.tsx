@@ -10,7 +10,7 @@ import { useCreateSafetyPost } from "@/services/userMutations";
 import { usePresignedUpload } from "@/Hooks/usePresignedUpload";
 import { isoDateTime } from "@/utils/format";
 
-// Components
+// UIs
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import ErrorText from '@/components/ErrorText';

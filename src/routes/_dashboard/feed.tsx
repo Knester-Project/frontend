@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-//Components
+// UIs
 import Feed from '@/pages/User/Feed';
 
 export const Route = createFileRoute('/_dashboard/feed')({

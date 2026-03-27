@@ -1,19 +1,18 @@
-import { useState } from "react"
-import { useNavigate } from "@tanstack/react-router"
-import { Route } from "@/routes/_dashboard/safety"
+import { useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import { Route } from "@/routes/_dashboard/safety";
 
-// Data
-import { NIGERIAN_STATES } from "@/assets/states"
+// Data and Stores
+import { NIGERIAN_STATES } from "@/assets/states";
 
 // UI
-import { Card } from "@/components/ui/card"
+import { Card } from "@/components/ui/card";
 
 // Icons
 import { ChevronDown, X, MapPin } from "lucide-react"
 import { AlignVertically, DocumentFilter, Map, TagUser } from "iconsax-reactjs"
 
 export default function StateFilter() {
-
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [advanced, setAdvanced] = useState<boolean>(false);
@@ -41,7 +40,7 @@ export default function StateFilter() {
     )
 
     return (
-        <Card className="relative bg-accent/20 dark:bg-accent/5 shadow-sm p-4 border-border rounded-3xl">
+        <Card className="lg:fixed relative bg-accent/20 dark:bg-accent/5 shadow-sm p-4 border-border rounded-3xl lg:w-[30%]">
             <div className="space-y-4">
 
                 {/* ===== STATE FILTER ===== */}

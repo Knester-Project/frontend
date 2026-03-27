@@ -2,12 +2,12 @@ import { useState, type ChangeEvent } from 'react';
 import { sileo } from "sileo";
 import { Link } from '@tanstack/react-router';
 
-//Hooks, Stores and Utils
+// Hooks, Stores and Utils
 import { useCreateUser, useValidateUser } from "@/services/userMutations";
-import { CheckUsername } from '@/services/userQueries';
+import { useCheckUsername } from '@/services/userQueries';
 import { generateCustomUsernames } from '@/utils/generate';
 
-//Components
+// UIs
 import Button from '@/components/Button';
 
 //Icons
@@ -21,7 +21,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
     const [referrer, setReferrer] = useState<string>("");
     const [passwordPage, setPasswordPage] = useState<boolean>(false);
     const [recoveryPage, setRecoveryPage] = useState<boolean>(false);
-    const { data, isFetching, isError, isLoading, error } = CheckUsername(enteredUsername);
+    const { data, isFetching, isError, isLoading, error } = useCheckUsername(enteredUsername);
     const generatedUsernames = generateCustomUsernames(enteredUsername);
 
     const [password, setPassword] = useState<string>('');

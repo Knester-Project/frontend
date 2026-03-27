@@ -49,3 +49,24 @@ export const createSafetyPost = async (data: SafetyInput) => {
     const response = await userAxios.post(`safety/create`, data);
     return response.data;
 }
+
+// Fetch a Safety Post
+export const fetchSafetyPosts = async (queries: SafetyQueries) => {
+    const params = new URLSearchParams();
+
+    if (queries.cursor) params.append("cursor", queries.cursor);
+    if (queries.name) params.append("fullName", queries.name);
+    if (queries.state) params.append("state", queries.state);
+    if (queries.street) params.append("street", queries.street);
+    if (queries.city) params.append("city", queries.city);
+    if (queries.limit) params.append("limit", String(queries.limit));
+
+    const response = await userAxios.get(`safety/fetch?${params.toString()}`);
+    return response.data;
+};
+
+// Vibe/Unvibe a Post
+export const toggleVibe = async (data: { postId: string, postModel: string }) => {
+    const response = await userAxios.post(`vibe/toggle`, data);
+    return response.data;
+}

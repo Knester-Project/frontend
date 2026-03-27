@@ -98,7 +98,7 @@ const Index = () => {
                     <label htmlFor="username" className='font-medium cursor-pointer'>Username</label>
                     <input type="text" id="username" className='bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none text-sm md:text-base xl:text-lg duration-300 focus:caret-primary' onChange={handleUsername} value={enteredUsername} title="Please enter only letters, numbers, and underscores (spaces will be replaced with underscores)" minLength={5} placeholder="Inclusive.Iguana" required />
                     {errors.username && <ErrorText message={errors.username[0]} />}
-                    <p className='text-[11px] text-primary md:text-xs xl:text-sm'><Information className="inline size-4 xl:size-5" variant='Bold' /> Case-sensitive (e.g., "Remy" is not the same as "remy").</p>
+                    <p className='mt-1 text-[11px] text-primary md:text-xs xl:text-sm'><Information className="inline mb-0.25 size-4 xl:size-5" variant='Bold' /> Case-sensitive (e.g., "Remy" is not the same as "remy").</p>
                 </div>
                 <div className="flex flex-col gap-y-1">
                     <label htmlFor="password" className='font-medium cursor-pointer'>

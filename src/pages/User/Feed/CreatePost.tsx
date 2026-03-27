@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-//Components
+// UIs
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-//Icons
+// Icons
 import { Image, Video } from "iconsax-reactjs";
 import { CircleCheckBig, Loader } from "lucide-react";
 
@@ -34,7 +34,9 @@ export default function CreatePost() {
                     <AvatarFallback>You</AvatarFallback>
                 </Avatar>
                 <Textarea placeholder="What's the vibe today?" maxLength={characterLimit} value={content}
-                    onChange={(e) => setContent(e.target.value)} className="border border-primary/20 min-h-[120px] text-sm md:text-base xl:text-lg resize-none" />
+                    onChange={(e) => setContent(e.target.value)}
+                    className="border border-primary/20 min-h-[120px] placeholder:text-[11px] md:placeholder:text-xs xl:placeholder:text-sm resize-none"
+                />
             </section>
             <section className="flex justify-between items-center py-4 border-border border-t">
                 <div className="flex items-center gap-2">

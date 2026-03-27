@@ -1,14 +1,14 @@
 import { Link } from "@tanstack/react-router";
 
-//Components
+// UIs
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
-//Utils
+// Utils
 import { truncate } from "@/utils/format";
 
-//Icons
+// Icons
 import { GlobalEdit, MessageText1 } from "iconsax-reactjs";
 
 const PeopleAround = () => {
