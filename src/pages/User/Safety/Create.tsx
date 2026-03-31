@@ -44,16 +44,20 @@ export default function Create() {
     const removeSocial = (i: number) => setValue("socialMedia", socialMedia.filter((_, idx) => idx !== i), { shouldValidate: true });
 
     // Submit Function
-    const { uploadFiles, allSuccessful } = usePresignedUpload();
-    
+    const { uploadFiles } = usePresignedUpload();
+
     const newPost = useCreateSafetyPost();
     const onSubmit: SubmitHandler<SafetyInput> = async (data) => {
+
+        const isoDate = isoDateTime(data.dateOfIncident)
+        if (!isoDate) return sileo.error({ title: "Kindly reselect the Incident date and time." });
+
         try {
             setIsUploading(true);
 
             // Validate minimum files
             if (files.length < 2) {
-                sileo.error({ title : "Minimum of 2 media required" });
+                sileo.error({ title: "Minimum of 2 media required" });
                 return;
             }
 
@@ -66,11 +70,6 @@ export default function Create() {
                 key: u.key,
             }));
 
-            // Make sure the file exists with a status state of success
-            if (!allSuccessful) return sileo.error({ title: "Couldn't create post now, kindly try again later." })
-
-            const isoDate = isoDateTime(data.dateOfIncident)
-            if (!isoDate) return sileo.error({ title: "Kindly reselect the Incident date and time." })
             setIsUploading(false);
 
             // Create Safety Post
@@ -88,6 +87,7 @@ export default function Create() {
                 },
             });
         } catch {
+            setIsUploading(false);
             sileo.error({ title: "Couldn't create post now, kindly try again later." });
         }
     };

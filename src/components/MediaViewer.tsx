@@ -1,5 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 
+// Icons
+import { ArrowLeft2, ArrowRight2 } from "iconsax-reactjs";
+
 type MediaItem = {
     url: string;
     type: "image" | "video";
@@ -27,7 +30,7 @@ export const MediaViewer = ({ media, activeIndex, setActiveIndex, onClose }: Pro
 
     return (
         <AnimatePresence mode="wait">
-            <motion.div className="z-50 fixed inset-0 flex justify-center items-center bg-black/90"
+            <motion.div className="z-50 fixed inset-0 flex justify-center items-center bg-background"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
 
                 {/* Close */}
@@ -58,20 +61,20 @@ export const MediaViewer = ({ media, activeIndex, setActiveIndex, onClose }: Pro
                 </motion.div>
 
                 {/* Counter */}
-                <div className="bottom-4 absolute text-white text-sm">
+                <div className="bottom-4 absolute montserrat">
                     {activeIndex + 1} / {media.length}
                 </div>
 
                 {/* Navigation buttons (desktop fallback) */}
                 {activeIndex > 0 && (
-                    <button onClick={() => paginate(-1)} className="left-4 absolute text-white text-3xl">
-                        ‹
+                    <button onClick={() => paginate(-1)} className="left-4 absolute cursor-pointer">
+                        <ArrowLeft2 className="size-4" /> 
                     </button>
                 )}
 
                 {activeIndex < media.length - 1 && (
-                    <button onClick={() => paginate(1)} className="right-4 absolute text-white text-3xl" >
-                        ›
+                    <button onClick={() => paginate(1)} className="right-4 absolute cursor-pointer" >
+                        <ArrowRight2 className="size-4" />
                     </button>
                 )}
             </motion.div>

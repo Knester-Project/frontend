@@ -13,6 +13,15 @@ body {
   font-optical-sizing: auto;
 }
 
+.hide-scrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  scrollbar-width: none;
+}
+
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {

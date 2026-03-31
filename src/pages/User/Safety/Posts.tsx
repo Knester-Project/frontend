@@ -70,7 +70,7 @@ const Posts = () => {
 
             {/* No more data */}
             {!hasNextPage && posts.length > 0 && (
-                <p className="py-4 text-muted-foreground text-sm text-center">
+                <p className="py-4 text-primary text-center">
                     No more posts to show
                 </p>
             )}

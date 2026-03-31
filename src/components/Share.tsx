@@ -52,12 +52,12 @@ const ShareMenu = ({ route, title, text }: { route: string; title: string; text:
             <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={handleShareClick}
-                className={` flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer
+                className={` flex items-center gap-2 px-3 py-1 rounded-xl cursor-pointer
                     backdrop-blur-md transition-all duration-300 shadow-sm bg-white/30 dark:bg-white/10 
                     border border-white/20 dark:border-white/5  hover:text-share-active hover:bg-white/40 dark:hover:bg-white/15 `}>
 
                 <Share variant="Bold" className="size-5" />
-                <span className="font-medium montserrat">Share</span>
+                <span className="font-medium text-sm md:text-base xl:text-lg montserrat">Share</span>
 
             </motion.button>
 

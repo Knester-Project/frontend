@@ -1,7 +1,7 @@
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 
 // API endpoints
-import { checkUsername, fetchSafetyPosts } from "./api.services";
+import { checkUsername, fetchComments, fetchSafetyPosts } from "./api.services";
 
 
 // Check UserName Details
@@ -25,6 +25,27 @@ export const useSafetyPosts = (queries: SafetyQueries) => {
             }),
 
         initialPageParam: undefined,
+
+        getNextPageParam: (lastPage) => {
+            return lastPage.data.nextCursor ?? undefined;
+        },
+    });
+};
+
+// Fetch Comments for a Post
+export const useComments = (commentQueries: CommentQueries, enabled: boolean) => {
+    return useInfiniteQuery({
+        queryKey: ["comments", commentQueries],
+
+        queryFn: ({ pageParam }) =>
+            fetchComments({
+                ...commentQueries,
+                ...(pageParam ?? {}),
+            }),
+
+        enabled,
+
+        initialPageParam: {},
 
         getNextPageParam: (lastPage) => {
             return lastPage.data.nextCursor ?? undefined;

@@ -37,7 +37,7 @@ const Nav = () => {
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <Link to="/feed" className="shrink-0">
-                            <img src={logo} alt="Knester Logo" className="mr-2 rounded-[50%] size-8 md:size-9 xl:size-10" />
+                            <img src={logo} alt="Knester Logo" className="mr-2 rounded-[50%] size-8" />
                         </Link>
 
                         <nav className="hidden lg:flex items-center gap-4">
@@ -73,7 +73,7 @@ const Nav = () => {
 
                         {/* Profile */}
                         <Link to="/profile" search={{ profile: "me" }}>
-                            <Avatar className="size-8 cursor-pointer">
+                            <Avatar className="size-8! cursor-pointer">
                                 <AvatarImage src="https://github.com/evilrabbit.png" />
                                 <AvatarFallback>You</AvatarFallback>
                             </Avatar>

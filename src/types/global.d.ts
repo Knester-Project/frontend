@@ -45,3 +45,14 @@ declare type SafetyPost = {
         profileLink: string;
     }[];
 };
+
+type ToastVariant = "error" | "success";
+
+// Error Inline
+declare type ToastInline = {
+    title?: string;
+    message: string;
+    variant?: ToastVariant;
+    duration?: number; // in ms (default: 15000)
+    handleClose: () => void;
+};

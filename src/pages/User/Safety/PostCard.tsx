@@ -9,17 +9,19 @@ import { useSafetyPostVibe } from "@/services/userMutations";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ShareMenu from "@/components/Share";
 import Vibe from "@/components/Vibe";
+import { MediaGrid } from "@/components/MediaGrid";
+import Comment from "@/components/Comment";
+import Views from "@/components/Views";
 
 // Icons
-import { Verify, Flag, Location, Calendar1, Messages1 } from "iconsax-reactjs"
-import { MediaGrid } from "@/components/MediaGrid";
+import { Verify, Flag, Location, Calendar1 } from "iconsax-reactjs"
 
 
 const PostCard = ({ post }: { post: SafetyPost }) => {
 
     const { state, city, street, name } = Route.useSearch();
     const [expanded, setExpanded] = useState<boolean>(false);
-    const { fullName, createdAt, dateOfIncident, content, verified, vibes, comments, hasFlagged, hasVibed, location, media, socialMedia, postId } = post;
+    const { fullName, createdAt, dateOfIncident, content, verified, vibes, comments, hasFlagged, hasVibed, views, location, media, socialMedia, postId } = post;
     const [userVibed, setUserVibed] = useState<boolean>(hasVibed);
     const [userFlagged, setUserFlagged] = useState<boolean>(hasFlagged);
 
@@ -74,7 +76,7 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
                     </div>
                 </div>
 
-                <button onClick={handleFlagged} className={`flex items-center gap-1 bg-white/40 dark:bg-white/10 backdrop-blur-md px-3 py-2 rounded-xl 
+                <button onClick={handleFlagged} className={`flex items-center gap-1 bg-white/40 dark:bg-white/10 backdrop-blur-md px-3 py-1 rounded-xl 
                     ${userFlagged ? "text-destructive" : "hover:text-destructive"} cursor-pointer`}>
                     <Flag variant="Bold" className={`size-5`} />
                     <span>Flag</span>
@@ -128,14 +130,14 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
                 </div>
             )}
 
+            {/* Views */}
+            <Views views={views} />
+
             {/* Actions */}
             <footer className="flex justify-between items-center pt-3 border-t text-muted">
                 <Vibe handleToggle={handleToggle} userVibed={userVibed} vibes={vibes} />
 
-                <button className="flex items-center gap-1 bg-white/40 dark:bg-white/10 backdrop-blur-md px-3 py-2 rounded-xl hover:text-comment-active cursor-pointer">
-                    <Messages1 variant="Bold" className="size-5" />
-                    <span className="text-lg montserrat">{comments}</span>
-                </button>
+                <Comment postId={post._id} comments={comments} postModel={"SafetyPost"} />
 
                 <ShareMenu title="Safety Post" text="Check out this safety report" route={`/safety/${postId}`} />
             </footer>

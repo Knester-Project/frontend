@@ -1,4 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
+
+// Icons
 import { Heart } from "iconsax-reactjs";
 
 const Vibe = ({ handleToggle, userVibed, vibes }: { handleToggle: () => void, userVibed: boolean, vibes: number }) => {
@@ -22,7 +24,7 @@ const Vibe = ({ handleToggle, userVibed, vibes }: { handleToggle: () => void, us
                 <AnimatePresence mode="wait" initial={false}>
                     <motion.span key={vibes} initial={{ y: 15, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -15, opacity: 0 }} transition={{ duration: 0.15 }}
-                        className="block font-medium text-lg montserrat">
+                        className="block font-medium text-sm md:text-base xl:text-lg montserrat">
                         {vibes}
                     </motion.span>
                 </AnimatePresence>

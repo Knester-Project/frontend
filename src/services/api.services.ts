@@ -70,3 +70,29 @@ export const toggleVibe = async (data: { postId: string, postModel: string }) =>
     const response = await userAxios.post(`vibe/toggle`, data);
     return response.data;
 }
+
+// Comment on a Post
+export const commentOnPost = async (data: { postId: string, postModel: string, content: string, media?: string }) => {
+    const response = await userAxios.post(`comment/create`, data);
+    return response.data;
+}
+
+// Fetch Comments
+export const fetchComments = async (queries: CommentQueries) => {
+    const params = new URLSearchParams();
+
+    if (queries.postId) params.append("postId", queries.postId);
+    if (queries.limit) params.append("limit", String(queries.limit));
+    if (queries.lastId) params.append("lastId", queries.lastId);
+    if (queries.lastVibes !== undefined) params.append("lastVibes", String(queries.lastVibes));
+    if (queries.lastFlags !== undefined) params.append("lastFlags", String(queries.lastFlags));
+
+    const response = await userAxios.get(`comment/get?${params.toString()}`);
+    return response.data;
+};
+
+// Flag Post
+export const flagPost = async (data: { postId: string, postModel: string, reason?: string }) => {
+    const response = await userAxios.post(`flag/create`, data);
+    return response.data;
+}

@@ -1,3 +1,4 @@
+// UIs
 import { Skeleton } from "@/components/ui/skeleton";
 
 const PostCardSkeleton = () => {

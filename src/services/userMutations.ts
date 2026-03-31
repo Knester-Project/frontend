@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // Functions
-import { authenticateUser, createSafetyPost, createUser, toggleVibe, validateInvite } from "./api.services";
+import { authenticateUser, commentOnPost, createSafetyPost, createUser, flagPost, toggleVibe, validateInvite } from "./api.services";
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
@@ -108,4 +108,71 @@ export function useSafetyPostVibe(postId: string, queries: SafetyQueries) {
             });
         },
     });
+}
+
+// Add Comment
+export function useAddComment(commentQueries: CommentQueries) {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (data: { postId: string; postModel: string; content: string; media?: string }) => commentOnPost(data),
+
+        onSuccess: (response) => {
+            console.log("Comment Added:", response);
+            const newComment = response.data;
+
+            queryClient.setQueryData(
+                ["comments", commentQueries],
+                (old: unknown) => {
+                    if (!old) return old;
+
+                    const data = old as {
+                        pages: Array<{ data: { comments: PostComment[] } }>;
+                        pageParams: unknown[];
+                    };
+
+                    return {
+                        ...data,
+                        pages: data.pages.map((page, index) => {
+                            if (index === 0) {
+                                return {
+                                    ...page,
+                                    data: {
+                                        ...page.data,
+                                        comments: [newComment, ...page.data.comments],
+                                    },
+                                };
+                            }
+                            return page;
+                        }),
+                    };
+                }
+            );
+        },
+
+        onError: (error) => {
+            console.error("Adding Comment Failed:", error);
+        },
+
+        onSettled: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["comments", commentQueries],
+            });
+        },
+    });
+}
+
+// Flag Post
+export function useFlagPost() {
+
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: { postId: string, postModel: string, reason?: string }) => flagPost(data),
+        onError: (error) => {
+            console.error("Flagging Post Failed:", error);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries();
+        }
+    })
 }
