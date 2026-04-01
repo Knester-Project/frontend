@@ -65,7 +65,7 @@ export const fetchSafetyPosts = async (queries: SafetyQueries) => {
     return response.data;
 };
 
-// Vibe/Unvibe a Post
+// Vibe/Unvibe
 export const toggleVibe = async (data: { postId: string, postModel: string }) => {
     const response = await userAxios.post(`vibe/toggle`, data);
     return response.data;
@@ -91,7 +91,7 @@ export const fetchComments = async (queries: CommentQueries) => {
     return response.data;
 };
 
-// Flag Post
+// Flag
 export const flagPost = async (data: { postId: string, postModel: string, reason?: string }) => {
     const response = await userAxios.post(`flag/create`, data);
     return response.data;

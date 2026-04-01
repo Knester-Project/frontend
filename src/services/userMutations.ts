@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // Functions
@@ -5,6 +6,84 @@ import { authenticateUser, commentOnPost, createSafetyPost, createUser, flagPost
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
+
+// Helper Functions
+type InfiniteData<T> = {
+    pages: Array<{ data: T }>;
+};
+
+// Helper to update Infinite Query Data
+function updateInfiniteData<TItem>(old: unknown, updater: (item: TItem) => TItem) {
+
+    if (!old) return old;
+
+    const data = old as InfiniteData<{ data?: TItem[]; comments?: TItem[] }>;
+
+    return {
+        ...data,
+        pages: data.pages.map((page) => ({
+            ...page,
+            data: {
+                ...page.data,
+                ...(page.data.data && {
+                    data: page.data.data.map(updater),
+                }),
+                ...(page.data.comments && {
+                    comments: page.data.comments.map(updater),
+                }),
+            },
+        })),
+    };
+}
+
+// Helper for Optimistic Mutations
+function useCreateOptimisticMutation<TVars>
+    ({ queryKey, mutationFn, updater }: {
+        queryKey: unknown[];
+        mutationFn: (vars: TVars) => Promise<any>;
+        updater: (item: any) => any;
+    }) {
+
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn,
+
+        onMutate: async () => {
+            await queryClient.cancelQueries({ queryKey });
+
+            const previousData = queryClient.getQueryData(queryKey);
+
+            queryClient.setQueryData(queryKey, (old: unknown) =>
+                updateInfiniteData(old, updater)
+            );
+
+            return { previousData };
+        },
+
+        onError: (_err, _vars, ctx) => {
+            queryClient.setQueryData(queryKey, ctx?.previousData);
+        },
+
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey });
+        },
+    });
+}
+
+// Helper to toggle vibe
+export const toggleVibeField = <T extends { hasVibed: boolean; vibes: number }>(item: T): T => ({
+    ...item,
+    hasVibed: !item.hasVibed,
+    vibes: item.hasVibed ? item.vibes - 1 : item.vibes + 1,
+});
+
+// Helper to flag item
+export const flagItemField = <T extends { hasFlagged: boolean; flags: number }>(item: T): T => ({
+    ...item,
+    hasFlagged: true,
+    flags: item.hasFlagged ? item.flags : item.flags + 1,
+});
 
 
 // Validate Users
@@ -55,58 +134,23 @@ export function useCreateSafetyPost() {
     })
 }
 
-// Toggle Vibe for a Post
+// Toggle Vibe for a Safety Post
 export function useSafetyPostVibe(postId: string, queries: SafetyQueries) {
+    return useCreateOptimisticMutation({
+        queryKey: ["safety-posts", queries],
+        mutationFn: toggleVibe,
+        updater: (p: SafetyPost) =>
+            p._id === postId ? toggleVibeField(p) : p,
+    });
+}
 
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: (data: { postId: string, postModel: string }) => toggleVibe(data),
-
-        onMutate: async () => {
-            await queryClient.cancelQueries({ queryKey: ["safety-posts"] });
-
-            const previousData = queryClient.getQueryData(["safety-posts", queries]);
-
-            queryClient.setQueryData(["safety-posts", queries], (old: unknown) => {
-                if (!old) return old;
-
-                const data = old as { pages: Array<{ data: { data: SafetyPost[] } }> };
-
-                return {
-                    ...data,
-                    pages: data.pages.map((page: { data: { data: SafetyPost[] } }) => ({
-                        ...page,
-                        data: {
-                            ...page.data,
-                            data: page.data.data.map((p: SafetyPost) =>
-                                p._id === postId
-                                    ? {
-                                        ...p,
-                                        hasVibed: !p.hasVibed,
-                                        vibes: p.hasVibed ? p.vibes - 1 : p.vibes + 1,
-                                    }
-                                    : p
-                            ),
-                        },
-                    })),
-                };
-            });
-
-            return { previousData };
-        },
-
-        onError: (_err, _vars, context) => {
-            queryClient.setQueryData(
-                ["safety-posts", queries],
-                context?.previousData
-            );
-        },
-
-        onSettled: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["safety-posts", queries],
-            });
-        },
+// Flag Safety Post
+export function useFlagPost(postId: string, queries: SafetyQueries) {
+    return useCreateOptimisticMutation({
+        queryKey: ["safety-posts", queries],
+        mutationFn: flagPost,
+        updater: (p: SafetyPost) =>
+            p._id === postId ? flagItemField(p) : p,
     });
 }
 
@@ -118,7 +162,6 @@ export function useAddComment(commentQueries: CommentQueries) {
         mutationFn: (data: { postId: string; postModel: string; content: string; media?: string }) => commentOnPost(data),
 
         onSuccess: (response) => {
-            console.log("Comment Added:", response);
             const newComment = response.data;
 
             queryClient.setQueryData(
@@ -162,17 +205,22 @@ export function useAddComment(commentQueries: CommentQueries) {
     });
 }
 
-// Flag Post
-export function useFlagPost() {
+// Toggle Vibe for Comment
+export function useCommentVibe(commentId: string, queries: CommentQueries) {
+    return useCreateOptimisticMutation({
+        queryKey: ["comments", queries],
+        mutationFn: toggleVibe,
+        updater: (c: PostComment) =>
+            c._id === commentId ? toggleVibeField(c) : c,
+    });
+}
 
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: (data: { postId: string, postModel: string, reason?: string }) => flagPost(data),
-        onError: (error) => {
-            console.error("Flagging Post Failed:", error);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries();
-        }
-    })
+// Flag Comment
+export function useFlagComment(commentId: string, queries: CommentQueries) {
+    return useCreateOptimisticMutation({
+        queryKey: ["comments", queries],
+        mutationFn: flagPost,
+        updater: (c: PostComment) =>
+            c._id === commentId ? flagItemField(c) : c,
+    });
 }

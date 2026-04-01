@@ -1,19 +1,47 @@
 import { useState } from "react";
 
-// Utils
+// Utils and Services
 import { dateConverter, detectMediaType } from "@/utils/format";
+import { useCommentVibe, useFlagComment } from "@/services/userMutations";
 
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MediaGrid } from "./MediaGrid";
 import Views from "./Views";
+import CommentVibe from "./CommentVibe";
 
 // Icons
-import { ArrowDown2, Flag, Heart, Messages2 } from "iconsax-reactjs";
+import { ArrowDown2, Messages2 } from "iconsax-reactjs";
+import CommentFlag from "./CommentFlag";
 
 const CommentCard = ({ comment }: { comment: PostComment }) => {
 
     const [showReplies, setShowReplies] = useState<boolean>(false);
+    const [userVibed, setUserVibed] = useState<boolean>(comment.hasVibed);
+    const [userFlagged, setUserFlagged] = useState<boolean>(comment.hasFlagged);
+
+    // Functions
+
+    const toggleVibe = useCommentVibe(comment._id, { postId: comment.post, limit: 4 });
+    const handleToggle = () => {
+        setUserVibed((prev) => !prev);
+        toggleVibe.mutate({ postId: comment._id, postModel: "Comment" }, {
+            onError: () => {
+                setUserVibed((prev) => !prev);
+            },
+        });
+    }
+
+    const flagComment = useFlagComment(comment._id, { postId: comment.post, limit: 4 })
+    const handleFlagged = () => {
+        if (userFlagged) return;
+        setUserFlagged(true);
+        flagComment.mutate({ postId: comment._id, postModel: "Comment" }, {
+            onError: () => {
+                setUserFlagged(false);
+            },
+        });
+    }
 
     return (
         <main className="bg-accent/20 shadow-sm mb-2 p-4 md:p-5 xl:p-6 border border-border rounded-3xl">
@@ -50,12 +78,7 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
             <div className="flex items-center gap-2 mt-3 -ml-1">
 
                 {/* Vibe */}
-                <button className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full 
-                    backdrop-blur-md transition-all duration-200 cursor-pointer 
-                    ${comment.hasVibed ? 'text-vibe bg-vibe/10' : 'bg-white/7 border border-border hover:bg-vibe-active/5 hover:border-vibe-active hover:text-vibe-active'} `}>
-                    <Heart className="size-4" variant={comment.hasVibed ? "Bold" : "Outline"} />
-                    <span className="font-medium montserrat">{comment.vibes}</span>
-                </button>
+                <CommentVibe handleToggle={handleToggle} userVibed={userVibed} vibes={comment.vibes} />
 
                 {/* Replies */}
                 <button className={`flex items-center gap-1.5 bg-white/7 rounded-full cursor-pointer border border-border hover:bg-comment-active/5 hover:border-comment-active backdrop-blur-md px-3 py-1.5 hover:text-comment-active transition-all duration-200`}>
@@ -63,10 +86,8 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
                     <span className="font-medium montserrat">{comment.replies}</span>
                 </button>
 
-                {/* Report */}
-                <button title="Report this comment" className="flex justify-center items-center bg-white/7 hover:bg-destructive/5 backdrop-blur-md px-3 py-1.5 border border-border hover:border-destructive rounded-full hover:text-destructive transition-all duration-200 cursor-pointer">
-                    <Flag className="size-4" />
-                </button>
+                {/* Flag */}
+                <CommentFlag handleFlagging={handleFlagged} userFlagged={userFlagged} />
             </div>
 
             {/* Replies */}

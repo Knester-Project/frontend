@@ -3,7 +3,7 @@ import { Route } from "@/routes/_dashboard/safety";
 
 // Utils and Services
 import { dateConverter, detectMediaType } from "@/utils/format";
-import { useSafetyPostVibe } from "@/services/userMutations";
+import { useSafetyPostVibe, useFlagPost } from "@/services/userMutations";
 
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -33,7 +33,7 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
     }));
 
     // Functions
-    const toggleVibe = useSafetyPostVibe(post._id, { state, city, street, name })
+    const toggleVibe = useSafetyPostVibe(post._id, { state, city, street, name, limit: 2 })
     const handleToggle = () => {
         setUserVibed((prev) => !prev);
         toggleVibe.mutate({ postId: post._id, postModel: "SafetyPost" }, {
@@ -43,8 +43,15 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
         });
     }
 
+    const flagPost = useFlagPost(post._id, { state, city, street, name, limit: 2 })
     const handleFlagged = () => {
-        setUserFlagged((prev) => !prev)
+        if (userFlagged) return;
+        setUserFlagged(true);
+        flagPost.mutate({ postId: post._id, postModel: "SafetyPost" }, {
+            onError: () => {
+                setUserFlagged(false);
+            },
+        });
     }
 
     return (
@@ -77,7 +84,7 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
                 </div>
 
                 <button onClick={handleFlagged} className={`flex items-center gap-1 bg-white/40 dark:bg-white/10 backdrop-blur-md px-3 py-1 rounded-xl 
-                    ${userFlagged ? "text-destructive" : "hover:text-destructive"} cursor-pointer`}>
+                    ${userFlagged ? "text-destructive cursor-not-allowed" : "hover:text-destructive cursor-pointer"}`}>
                     <Flag variant="Bold" className={`size-5`} />
                     <span>Flag</span>
                 </button>
