@@ -21,8 +21,8 @@ const PeopleAround = () => {
             <section className="flex justify-between items-center">
                 <section className="flex items-center gap-x-2">
                     <Link to="/profile" search={{ profile: "food" }}>
-                        <Avatar className="rounded-full">
-                            <AvatarImage src="https://github.com/evilrabbit.png" alt="default profile" />
+                        <Avatar>
+                            <AvatarImage src="/default.svg" alt="default profile" />
                             <AvatarFallback>You</AvatarFallback>
                         </Avatar>
                     </Link>

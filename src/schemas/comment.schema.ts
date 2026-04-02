@@ -3,6 +3,7 @@ import { z } from "zod";
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ACCEPTED_MEDIA_TYPES = ["image/jpeg", "image/png", "image/webp", "image/apng", "image/gif", "video/mp4"];
 
+// For Comments
 export const commentSchema = z.object({
     content: z.string().min(1, "Comment cannot be empty").max(200, "Max 200 characters"),
     media: z
@@ -15,4 +16,11 @@ export const commentSchema = z.object({
         .optional(),
 });
 
+// For Replies
+export const replySchema = z.object({
+    content: z.string().min(1, "Reply cannot be empty").max(200, "Max 200 characters"),
+})
+
 export type CommentInput = z.infer<typeof commentSchema>
+export type ReplyInput = z.infer<typeof replySchema>
+

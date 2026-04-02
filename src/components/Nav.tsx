@@ -74,7 +74,7 @@ const Nav = () => {
                         {/* Profile */}
                         <Link to="/profile" search={{ profile: "me" }}>
                             <Avatar className="size-8! cursor-pointer">
-                                <AvatarImage src="https://github.com/evilrabbit.png" />
+                                <AvatarImage src="/default.svg" />
                                 <AvatarFallback>You</AvatarFallback>
                             </Avatar>
                         </Link>

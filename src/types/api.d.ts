@@ -31,6 +31,12 @@ declare type SafetyQueries = {
     limit?: number | undefined;
 }
 
+type Profile = null | {
+    profilePicture?: string;
+    profileLock: boolean;
+    chatLock: boolean;
+};
+
 // For Comment Queries
 declare type CommentQueries = {
     postId: string;
@@ -41,12 +47,6 @@ declare type CommentQueries = {
 };
 
 // Comments
-type Profile = null | {
-    profilePicture?: string;
-    profileLock: boolean;
-    chatLock: boolean;
-};
-
 declare type PostComment = {
     content: string;
     createdAt: string;
@@ -55,6 +55,7 @@ declare type PostComment = {
     hasFlagged: boolean;
     hasVibed: boolean;
     isDeleted: boolean;
+    owner: boolean;
     media: string;
     post: string;
     postModel: string;
@@ -71,3 +72,37 @@ declare type PostComment = {
     };
     _id: string;
 };
+
+// For Reply Queries
+declare type ReplyQueries = {
+    id: string;
+    type: "comment" | "reply";
+    limit?: number;
+    lastVibes?: string;
+    lastId?: string;
+    lastFlags?: string;
+};
+
+declare type Reply = {
+    content: string;
+    createdAt: string;
+    edited: boolean;
+    flags: number;
+    hasFlagged: boolean;
+    hasVibed: boolean;
+    owner: boolean;
+    isDeleted: boolean;
+    comment: string;
+    parentReply: string;
+    replies: number;
+    updatedAt: string;
+    vibes: number;
+    user: {
+        isPremium: boolean;
+        isSuspended: boolean;
+        profile: Profile;
+        username: string;
+        _id: string;
+    };
+    _id: string;
+}

@@ -30,7 +30,7 @@ export default function CreatePost() {
         <Card className="px-4">
             <section className="flex gap-x-2">
                 <Avatar className="cursor-pointer">
-                    <AvatarImage src={"https://github.com/evilrabbit.png"} />
+                    <AvatarImage src={"/default.svg"} />
                     <AvatarFallback>You</AvatarFallback>
                 </Avatar>
                 <Textarea placeholder="What's the vibe today?" maxLength={characterLimit} value={content}

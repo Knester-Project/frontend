@@ -39,4 +39,5 @@ const useInfiniteScroll = ({
 
     return ref;
 };
+
 export default useInfiniteScroll;

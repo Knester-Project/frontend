@@ -1,7 +1,7 @@
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 
 // API endpoints
-import { checkUsername, fetchComments, fetchSafetyPosts } from "./api.services";
+import { checkUsername, fetchComments, fetchReplies, fetchSafetyPosts } from "./api.services";
 
 
 // Check UserName Details
@@ -17,6 +17,8 @@ export function useCheckUsername(username: string) {
 export const useSafetyPosts = (queries: SafetyQueries) => {
     return useInfiniteQuery({
         queryKey: ["safety-posts", queries],
+        refetchOnWindowFocus: false,
+        maxPages: 5,
 
         queryFn: ({ pageParam }) =>
             fetchSafetyPosts({
@@ -36,15 +38,36 @@ export const useSafetyPosts = (queries: SafetyQueries) => {
 export const useComments = (commentQueries: CommentQueries, enabled: boolean) => {
     return useInfiniteQuery({
         queryKey: ["comments", commentQueries],
+        refetchOnWindowFocus: false,
+        maxPages: 5,
 
         queryFn: ({ pageParam }) =>
             fetchComments({
                 ...commentQueries,
                 ...(pageParam ?? {}),
             }),
-
         enabled,
+        initialPageParam: {},
 
+        getNextPageParam: (lastPage) => {
+            return lastPage.data.nextCursor ?? undefined;
+        },
+    });
+};
+
+// Fetch Reply for a Comment or Reply
+export const useReplies = (replyQueries: ReplyQueries, enabled: boolean) => {
+    return useInfiniteQuery({
+        queryKey: ["replies", replyQueries],
+        refetchOnWindowFocus: false,
+        maxPages: 5,
+
+        queryFn: ({ pageParam }) =>
+            fetchReplies({
+                ...replyQueries,
+                ...(pageParam ?? {}),
+            }),
+        enabled,
         initialPageParam: {},
 
         getNextPageParam: (lastPage) => {

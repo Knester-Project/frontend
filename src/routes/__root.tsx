@@ -8,9 +8,13 @@ import { ThemeProviderEffect } from '@/components/ThemeProvider';
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            retry: 5,
-            retryDelay: 1000,
-            refetchOnWindowFocus: false,
+            retry: 2,
+            retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 10000),
+            staleTime: 1 * 60000,
+            refetchOnMount: false,
+            refetchOnReconnect: true,
+            refetchOnWindowFocus: true,
+            gcTime: 7 * 60000,
         }
     }
 })

@@ -65,7 +65,7 @@ export const fetchSafetyPosts = async (queries: SafetyQueries) => {
     return response.data;
 };
 
-// Vibe/Unvibe
+// Vibe/Unvibe (Post/Comment/Reply)
 export const toggleVibe = async (data: { postId: string, postModel: string }) => {
     const response = await userAxios.post(`vibe/toggle`, data);
     return response.data;
@@ -91,8 +91,41 @@ export const fetchComments = async (queries: CommentQueries) => {
     return response.data;
 };
 
-// Flag
+// Flag/Comment/Reply
 export const flagPost = async (data: { postId: string, postModel: string, reason?: string }) => {
     const response = await userAxios.post(`flag/create`, data);
+    return response.data;
+}
+
+// Reply a comment or a reply
+export const createReply = async (data: { commentId?: string, parentReplyId?: string, content: string }) => {
+    const response = await userAxios.post(`reply/create`, data);
+    return response.data;
+}
+
+// Fetch Reply
+export const fetchReplies = async (queries: ReplyQueries) => {
+    const params = new URLSearchParams();
+
+    if (queries.id) params.append("id", queries.id);
+    if (queries.type) params.append("type", queries.type);
+    if (queries.limit) params.append("limit", String(queries.limit));
+    if (queries.lastId) params.append("lastId", queries.lastId);
+    if (queries.lastVibes !== undefined) params.append("lastVibes", String(queries.lastVibes));
+    if (queries.lastFlags !== undefined) params.append("lastFlags", String(queries.lastFlags));
+
+    const response = await userAxios.get(`reply/get?${params.toString()}`);
+    return response.data;
+}
+
+// Delete Comment
+export const deleteComment = async (commentId: string) => {
+    const response = await userAxios.delete(`comment/delete/${commentId}`);
+    return response.data;
+}
+
+// Delete Reply
+export const deleteReply = async (replyId: string) => {
+    const response = await userAxios.delete(`reply/delete/${replyId}`);
     return response.data;
 }

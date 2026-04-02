@@ -120,7 +120,7 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
     const { data, fetchNextPage, isLoading: isCommentLoading, hasNextPage, isFetchingNextPage } = useComments({ postId, limit: 4 }, isOpen)
 
     const scrollRef = useRef<HTMLDivElement | null>(null);
-    const loadMoreRef = useInfiniteScroll({ hasNextPage, isFetchingNextPage, fetchNextPage, root: scrollRef.current, })
+    const loadMoreRef = useInfiniteScroll({ hasNextPage, isFetchingNextPage, fetchNextPage, root: scrollRef.current })
 
     const fetchedComments = data?.pages.flatMap((page) => page.data.comments) ?? [];
 
@@ -136,9 +136,9 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
 
             <Drawer.Portal>
                 <Drawer.Overlay className="z-50 fixed inset-0 bg-background" />
-                <Drawer.Content className="right-0 bottom-0 left-0 z-[60] fixed flex flex-col rounded-t-[32px] outline-none h-[90vh]">
+                <Drawer.Content className="right-0 bottom-0 left-0 z-[60] fixed flex flex-col border border-border rounded-t-[32px] outline-none h-[90vh]">
                     <Drawer.Description className="sr-only">Comment Section</Drawer.Description>
-                    <div className="flex-shrink-0 bg-gray-100 dark:bg-gray-600 mx-auto my-4 rounded-full w-12 h-1.5" />
+                    <div className="flex-shrink-0 bg-gray-300 dark:bg-gray-600 mx-auto my-4 rounded-full w-12 h-1.5 cursor-grab" />
 
                     <section ref={scrollRef} className="flex-1 p-4 overflow-y-auto hide-scrollbar">
 
@@ -229,6 +229,7 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
                                     {contentValue.length}/200
                                 </span>
                                 {errors.media && <ErrorText message={errors.media.message as string} />}
+                                {errors.content && <ErrorText message={errors.content.message} />}
                             </div>
                         </form>
                     </div>
