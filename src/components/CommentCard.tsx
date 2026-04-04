@@ -36,6 +36,7 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
         if (userDeleted) return;
         setReplyForm((prev) => !prev);
     }
+    
     const handleNewReply = (newReplies: Reply[]) => {
         setNewReply(newReplies);
         setReplyForm(false);

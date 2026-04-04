@@ -22,7 +22,7 @@ const CommentReply = ({ id, type, username, handleNewReply }: { id: string, type
     const contentValue = watch("content") || "";
 
     // Functions
-    const addReply = useAddReply({ commentId: id, limit: 4 });
+    const addReply = useAddReply({ id, type, limit: 4 });
     const onSubmit = async (data: ReplyInput) => {
 
         // Generate Payload
@@ -41,6 +41,7 @@ const CommentReply = ({ id, type, username, handleNewReply }: { id: string, type
             onError: (error: any) => {
                 const message = error?.response?.data?.message || `Couldn't add reply to ${username}'s ${type} now, kindly try again later.`;
                 setReplyError(message);
+                setTimeout(() => setReplyError(null), 15000);
                 reset();
             },
         });
