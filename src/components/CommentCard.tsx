@@ -36,7 +36,7 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
         if (userDeleted) return;
         setReplyForm((prev) => !prev);
     }
-    
+
     const handleNewReply = (newReplies: Reply[]) => {
         setNewReply(newReplies);
         setReplyForm(false);
@@ -132,7 +132,7 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
             {/* Actions */}
             <div className="flex justify-between mt-3">
 
-                <div className="flex items-start gap-2">
+                <div className="flex items-center gap-2">
                     <CommentVibe handleToggle={handleToggle} userVibed={userVibed} vibes={comment.vibes} />
 
                     <CommentReplyBtn toggleForm={toggleForm} replyForm={replyForm} replies={comment.replies}  />
@@ -169,7 +169,7 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
                     </div>
                 }
                 {showReplies && (
-                    <div className="mt-2 pl-2 max-h-96 overflow-y-auto hide-scrollbar" ref={scrollRef}>
+                    <div className="mt-2 pl-2 max-h-[30rem] overflow-y-auto hide-scrollbar" ref={scrollRef}>
                         {isLoading && (
                             <div className="space-y-4">
                                 {Array.from({ length: 2 }).map((_, i) => (

@@ -160,7 +160,7 @@ const ReplyCard = ({ reply }: { reply: Reply }) => {
                     </div>
                 }
                 {showReplies && (
-                    <div className="mt-2 pl-2 max-h-96 overflow-y-auto hide-scrollbar" ref={scrollRef}>
+                    <div className="mt-2 pl-2 max-h-[30rem] overflow-y-auto hide-scrollbar" ref={scrollRef}>
                         {isLoading && (
                             <div className="space-y-4">
                                 {Array.from({ length: 2 }).map((_, i) => (
