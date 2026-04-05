@@ -109,6 +109,12 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
                             {comment.user.isPremium && (
                                 <Verify variant="Bold" className="size-4 md:size-4.5 xl:size-5 text-premium" />
                             )}
+                            {comment.user.isModerator && (
+                                <Verify variant="Bold" className="size-4 md:size-4.5 xl:size-5 text-moderator" />
+                            )}
+                            {comment.user.isCore && (
+                                <Verify variant="Bold" className="size-4 md:size-4.5 xl:size-5 text-core" />
+                            )}
                         </div>
 
                         <p className="mt-0.5 font-medium text-[10px] text-gray-400 md:text-xs tracking-wide">

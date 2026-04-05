@@ -37,6 +37,16 @@ type Profile = null | {
     chatLock: boolean;
 };
 
+type User = {
+    isPremium: boolean;
+    isCore: boolean;
+    isModerator: boolean;
+    isSuspended: boolean;
+    profile: Profile;
+    username: string;
+    _id: string;
+};
+
 // For Comment Queries
 declare type CommentQueries = {
     postId: string;
@@ -63,13 +73,7 @@ declare type PostComment = {
     updatedAt: string;
     vibes: number;
     views: number;
-    user: {
-        isPremium: boolean;
-        isSuspended: boolean;
-        profile: Profile;
-        username: string;
-        _id: string;
-    };
+    user: User;
     _id: string;
 };
 
@@ -97,12 +101,6 @@ declare type Reply = {
     replies: number;
     updatedAt: string;
     vibes: number;
-    user: {
-        isPremium: boolean;
-        isSuspended: boolean;
-        profile: Profile;
-        username: string;
-        _id: string;
-    };
+    user: User;
     _id: string;
 }

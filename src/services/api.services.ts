@@ -129,3 +129,15 @@ export const deleteReply = async (replyId: string) => {
     const response = await userAxios.delete(`reply/delete/${replyId}`);
     return response.data;
 }
+
+// Fetch User Profile
+export const getCurrentUser = async () => {
+    const response = await userAxios.get(`users/me`);
+    return response.data;
+}
+
+// Fetch Any User Profile
+export const getUserDetails = async (username: string) => {
+    const response = await userAxios.get(`users/fetch/${username}`);
+    return response.data;
+}

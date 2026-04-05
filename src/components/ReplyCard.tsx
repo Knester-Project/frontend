@@ -106,6 +106,12 @@ const ReplyCard = ({ reply }: { reply: Reply }) => {
                             {reply.user.isPremium && (
                                 <Verify variant="Bold" className="size-3.5 md:size-4 xl:size-4.5 text-premium" />
                             )}
+                            {reply.user.isModerator && (
+                                <Verify variant="Bold" className="size-3.5 md:size-4 xl:size-4.5 text-moderator" />
+                            )}
+                            {reply.user.isCore && (
+                                <Verify variant="Bold" className="size-3.5 md:size-4 xl:size-4.5 text-core" />
+                            )}
                         </div>
 
                         <p className="font-medium text-[10px] text-gray-400 md:text-xs tracking-wide">
