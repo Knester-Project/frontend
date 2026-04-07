@@ -1,7 +1,8 @@
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
+import { queryOptions } from '@tanstack/react-query';
 
 // API endpoints
-import { checkUsername, fetchComments, fetchReplies, fetchSafetyPosts } from "./api.services";
+import { checkUsername, fetchComments, fetchReplies, fetchSafetyPosts, getCurrentUser, getUserDetails } from "./api.services";
 
 
 // Check UserName Details
@@ -75,3 +76,12 @@ export const useReplies = (replyQueries: ReplyQueries, enabled: boolean) => {
         },
     });
 };
+
+// Fetch User Profile
+export const userProfileOptions = (username: string) => {
+    return queryOptions({
+        queryKey: ['profile', username],
+        queryFn: () => (username === "me" ? getCurrentUser() : getUserDetails(username)),
+        staleTime: 1000 * 60 * 5,
+    });
+}

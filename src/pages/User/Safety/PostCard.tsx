@@ -86,7 +86,7 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
                 <button onClick={handleFlagged} className={`flex items-center gap-1 bg-white/40 dark:bg-white/10 backdrop-blur-md px-3 py-1 rounded-xl 
                     ${userFlagged ? "text-destructive cursor-not-allowed" : "hover:text-destructive cursor-pointer"}`}>
                     <Flag variant="Bold" className={`size-5`} />
-                    <span>Flag</span>
+                    <span>{userFlagged ? "Flagged" : "Flag"}</span>
                 </button>
             </header>
 
@@ -138,7 +138,16 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
             )}
 
             {/* Views */}
-            <Views views={views} />
+            <div className="flex justify-between">
+                {vibes === 1 && hasVibed ? (
+                    <p>You vibed with this</p>
+                ) : vibes > 0 && hasVibed ? (
+                    <p>You and {vibes} people vibed with this</p>
+                ) : vibes > 0 ? (
+                    <p>{vibes} people vibed with this</p>
+                ) : null}
+                <Views views={views} />
+            </div>
 
             {/* Actions */}
             <footer className="flex justify-between items-center pt-3 border-t text-muted">

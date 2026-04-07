@@ -91,7 +91,7 @@ const Index = () => {
                     <KeyRound className="size-8 text-primary" />
                 </div>
                 <h2 className="mb-2 font-bold text-lg md:text-xl xl:text-2xl montserrat">Authentication</h2>
-                <p className="-mt-2 text-neutral-700 dark:text-neutral-400">Kindly enter your email and password to continue.</p>
+                <p className="-mt-2 text-neutral-700 dark:text-neutral-400">Kindly enter your username and password to continue.</p>
             </div>
             <form onSubmit={onSubmit} className="space-y-6">
                 <div className="relative flex flex-col gap-y-1">

@@ -1,10 +1,10 @@
-//Truncating of Texts
+// Truncating of Texts
 export function truncate(text: string, limit = 20): string {
     if (text.length <= limit) return text;
     return text.slice(0, limit) + '…';
 }
 
-//Trending Count
+// Trending Count
 export const formatTrendingCount = (num: number) => {
     if (num >= 1000000) {
         return (num / 1000000).toFixed(1) + 'M';
@@ -75,3 +75,10 @@ export const detectMediaType = (url: string): "image" | "video" => {
 
   return videoExtensions.some((ext) => lower.endsWith(ext)) ? "video" : "image";
 };
+
+// Format currency
+export const formatAmount = (value: number, max = 2) => {
+    return new Intl.NumberFormat("en-US", {
+        style: "currency", currency: "USD", minimumFractionDigits: 2, maximumFractionDigits: max,
+    }).format(value)
+}

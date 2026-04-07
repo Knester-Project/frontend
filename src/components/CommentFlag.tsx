@@ -3,7 +3,7 @@ import { Flag } from "iconsax-reactjs";
 
 const CommentFlag = ({ handleFlagging, userFlagged }: { handleFlagging: () => void, userFlagged: boolean }) => {
     return (
-        <button disabled={userFlagged} onClick={handleFlagging} title="Flag this comment"
+        <button disabled={userFlagged} onClick={handleFlagging} title={userFlagged ? "Flagged the comment" : "Flag this comment"}
             className={`flex justify-center items-center 
             ${userFlagged ? "bg-destructive/10 text-destructive cursor-not-allowed"
                     : "bg-white/7 hover:text-destructive  hover:border-destructive hover:bg-destructive/5 border border-border cursor-pointer"} 

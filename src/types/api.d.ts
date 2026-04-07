@@ -35,6 +35,7 @@ type Profile = null | {
     profilePicture?: string;
     profileLock: boolean;
     chatLock: boolean;
+    circleMembers: number;
 };
 
 type User = {
@@ -103,4 +104,35 @@ declare type Reply = {
     vibes: number;
     user: User;
     _id: string;
+}
+
+// Profile
+type OwnProfile = {
+    bio: string;
+    details?: string[];
+    dateOfBirth?: string | Date;
+    profilePicture?: string;
+    media?: string[];
+    lastSeen?: string | Date;
+    isOnline: boolean;
+    balance: number;
+    flagged: boolean;
+    circleMembers: number;
+    profileLock: boolean;
+    chatLock: boolean;
+}
+
+declare type UserProfile = {
+    _id: string;
+    invitedUser: User[];
+    isEmailVerified: boolean;
+    isPremium: boolean;
+    isModerator: boolean;
+    isCore: boolean;
+    isSuspended: boolean;
+    profile: null | OwnProfile;
+    referralPrivilege: number;
+    suspendedDuration: number;
+    suspensionStartDate: null | string | Date;
+    username: string;
 }

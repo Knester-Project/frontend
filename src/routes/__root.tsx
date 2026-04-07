@@ -1,4 +1,5 @@
-import { Outlet, createRootRoute } from '@tanstack/react-router';
+import { Outlet } from '@tanstack/react-router';
+import { createRootRouteWithContext } from '@tanstack/react-router';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 //Toast and Theme
@@ -19,8 +20,12 @@ const queryClient = new QueryClient({
     }
 })
 
+// Define the type for your context
+interface MyRouterContext {
+    queryClient: QueryClient;
+}
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<MyRouterContext>()({
     component: RootComponent,
 })
 
