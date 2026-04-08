@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 
 // Icons
 import { Share2 } from 'lucide-react';
-import { Profile2User, Slash, Verify, Wallet1, type IconProps } from 'iconsax-reactjs';
+import { Flag2, MessageText1, People, ReceiptText, Slash, UserAdd, Verify, Wallet1, type IconProps } from 'iconsax-reactjs';
 
 type HeaderProps = {
     profilePicture: string;
@@ -20,12 +20,14 @@ type HeaderProps = {
     isModerator: boolean;
     isCore: boolean;
     circleMembers: number;
+    circlesJoined: number;
+    totalPosts: number;
     balance: number;
     isOwner: boolean;
     isSuspended: boolean;
 }
 
-const Header = ({ profilePicture, isOnline, username, bio, isPremium, isModerator, isCore, circleMembers, balance, isOwner, isSuspended }: HeaderProps) => {
+const Header = ({ profilePicture, isOnline, username, bio, isPremium, isModerator, isCore, circleMembers, circlesJoined, totalPosts, balance, isOwner, isSuspended }: HeaderProps) => {
 
     const [colors, setColors] = useState({ primary: '#f0f0f0', secondary: '#e0e0e0' });
     const [isDark, setIsDark] = useState<boolean>(false);
@@ -97,10 +99,28 @@ const Header = ({ profilePicture, isOnline, username, bio, isPremium, isModerato
                 </div>
                 <p className='font-medium text-foreground/80'>{bio}</p>
             </section>
-            <section className='gap-2 grid grid-cols-4 mt-4'>
-                <HeaderCard isDark={isDark} color={colors.primary} title='Circle Members' Icon={Profile2User} amount={formatTrendingCount(circleMembers)} />
-                <HeaderCard isDark={isDark} color={colors.primary} title='Balance' Icon={Wallet1} amount={formatAmount(balance)} />
+            {isOwner ?
+                <section className='gap-2 grid grid-cols-4 mt-4'>
+                    <HeaderCard isDark={isDark} color={colors.primary} title='Circle Members' Icon={People} amount={formatTrendingCount(circleMembers)} />
+                    <HeaderCard isDark={isDark} color={colors.primary} title='Posts' Icon={ReceiptText} amount={totalPosts} />
+                    <HeaderCard isDark={isDark} color={colors.primary} title='Balance' Icon={Wallet1} amount={formatAmount(balance)} />
+                    <HeaderCard isDark={isDark} color={colors.primary} title='Circles Joined' Icon={UserAdd} amount={circlesJoined} />
+                </section>
+                :
+                <div className='relative flex gap-x-2 my-2 text-[11px] md:text-xs xl:text-sm'>
+                    <p><span className="font-semibold montserrat">1.4k</span> Circle Members</p>
+                    <p><span className='font-semibold montserrat'>212</span> Circles Joined</p>
+                    <p><span className='font-semibold montserrat'>503</span> Posts</p>
+                </div>
+            }
+
+            {!isOwner && <section className="flex justify-between gap-2 p-4">
+                <ActionButton color={colors.primary} icon={MessageText1} label="Message" />
+                <ActionButton color={colors.primary} icon={Slash} label="Block" />
+                <ActionButton color={colors.primary} icon={UserAdd} label="Join Circle" />
+                <ActionButton color={colors.primary} icon={Flag2} label="Report" />
             </section>
+            }
         </main>
     );
 }
@@ -127,6 +147,17 @@ const HeaderCard = ({ isDark, color, Icon, title, amount }: HeaderCardProps) => 
             <h1 className="mt-1 font-bold text-base md:text-lg xl:text-xl truncate montserrat">
                 {amount}
             </h1>
+        </div>
+    );
+};
+
+const ActionButton = ({ icon: Icon, color, label }: { icon: React.ComponentType<IconProps>; color: string; label: string }) => {
+    return (
+        <div className="flex flex-col items-center gap-1">
+            <button style={{ color }} className="bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 hover:shadow-sm backdrop-blur-md p-2.5 border border-border rounded-xl active:scale-95 transition-all duration-200 cursor-pointer">
+                <Icon variant="Bold" className="size-4 md:size-4.5 xl:size-5" />
+            </button>
+            <span className="font-medium text-[10px] md:text-[11px] xl:text-xs">{label}</span>
         </div>
     );
 };

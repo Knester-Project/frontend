@@ -32,6 +32,8 @@ export default function Index() {
                 balance={user.profile?.balance ?? 0}
                 isOwner={isOwner}
                 isSuspended={user.isSuspended}
+                circlesJoined={user.circlesJoined ?? 0}
+                totalPosts={user.totalPosts ?? 0}
             />
         </Main>
     );

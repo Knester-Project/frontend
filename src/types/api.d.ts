@@ -130,9 +130,14 @@ declare type UserProfile = {
     isModerator: boolean;
     isCore: boolean;
     isSuspended: boolean;
+    circlesJoined: number;
+    totalPosts: number;
     profile: null | OwnProfile;
     referralPrivilege: number;
     suspendedDuration: number;
     suspensionStartDate: null | string | Date;
     username: string;
 }
+
+// hasBlocked
+// hasReported
