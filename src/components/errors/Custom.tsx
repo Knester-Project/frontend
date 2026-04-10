@@ -8,7 +8,21 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, AlertTriangle } from "lucide-react";
 import { Home, Refresh } from "iconsax-reactjs";
 
-const defaults = {
+type ErrorPageProps = {
+    code?: string;
+    title?: string;
+    description?: string;
+    showHomeButton?: boolean;
+    showBackButton?: boolean;
+    showRetryButton?: boolean;
+    homeRoute?: string;
+    homeLabel?: string;
+    backLabel?: string;
+    retryLabel?: string;
+    onRetry?: () => void;
+};
+
+const defaults: ErrorPageProps & { code: string; title: string } = {
     code: "500",
     title: "Something went wrong",
     description: "We encountered an unexpected error. Our team has been notified and is working on it.",
@@ -22,7 +36,7 @@ const defaults = {
     onRetry: () => window.location.reload(),
 };
 
-export default function ErrorPage(props = {}) {
+export default function ErrorPage(props: ErrorPageProps = {}) {
 
     const config = { ...defaults, ...props };
     const navigate = useNavigate();
@@ -57,8 +71,8 @@ export default function ErrorPage(props = {}) {
                 {/* Icon */}
                 <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }} className="flex justify-center mb-6">
-                    <div className="flex justify-center items-center bg-primary/10 rounded-xl size-10 md:size-12 xl:size-14">
-                        <AlertTriangle className="size-5 md:size-6 xl:size-7 text-primary" strokeWidth={1.8} />
+                    <div className="flex justify-center items-center bg-primary/10 rounded-xl size-14 md:size-16 xl:size-18">
+                        <AlertTriangle className="size-7 md:size-8 xl:size-9 text-primary" strokeWidth={1.8} />
                     </div>
                 </motion.div>
 

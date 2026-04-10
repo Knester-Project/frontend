@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Link } from "@tanstack/react-router";
 
 // Utils and Services
 import { dateConverter, detectMediaType } from "@/utils/format";
@@ -90,12 +91,14 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
             <header className="flex justify-between items-center">
                 <div className="flex items-center gap-x-3">
                     {/* Avatar Section */}
-                    <Avatar className="shadow-sm border border-white/10 size-10 md:size-11 xl:size-12">
-                        <AvatarImage src={comment.user.profile?.profilePicture ?? "/default.svg"} />
-                        <AvatarFallback className="bg-primary/10 font-bold text-primary">
-                            {comment.user.username.slice(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                    </Avatar>
+                    <Link disabled={comment.user.profile?.profileLock} to="/profile" search={{ profile: comment.owner ? "me" : comment.user.username }}>
+                        <Avatar className="shadow-sm border border-white/10 size-10 md:size-11 xl:size-12">
+                            <AvatarImage src={comment.user.profile?.profilePicture ?? "/default.svg"} />
+                            <AvatarFallback className="bg-primary/10 font-bold text-primary">
+                                {comment.user.username.slice(0, 2).toUpperCase()}
+                            </AvatarFallback>
+                        </Avatar>
+                    </Link>
 
                     {/* Text & Badges Section */}
                     <div className="flex flex-col">
@@ -141,7 +144,7 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
                 <div className="flex items-center gap-2">
                     <CommentVibe handleToggle={handleToggle} userVibed={userVibed} vibes={comment.vibes} />
 
-                    <CommentReplyBtn toggleForm={toggleForm} replyForm={replyForm} replies={comment.replies}  />
+                    <CommentReplyBtn toggleForm={toggleForm} replyForm={replyForm} replies={comment.replies} />
 
                     <CommentFlag handleFlagging={handleFlagged} userFlagged={userFlagged} />
                 </div>

@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Link } from "@tanstack/react-router";
 
 // Utils, Services and Hooks
 import { dateConverter } from "@/utils/format";
@@ -87,12 +88,14 @@ const ReplyCard = ({ reply }: { reply: Reply }) => {
             <header>
                 <div className="flex items-center gap-x-2">
                     {/* Avatar Section */}
-                    <Avatar className="shadow-sm border border-white/10 size-8 md:size-9 xl:size-10">
-                        <AvatarImage src={reply.user.profile?.profilePicture ?? "/default.svg"} />
-                        <AvatarFallback className="bg-primary/10 font-bold text-primary">
-                            {reply.user.username.slice(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                    </Avatar>
+                    <Link disabled={reply.user.profile?.profileLock} to="/profile" search={{ profile: reply.owner ? "me" : reply.user.username }}>
+                        <Avatar className="shadow-sm border border-white/10 size-8 md:size-9 xl:size-10">
+                            <AvatarImage src={reply.user.profile?.profilePicture ?? "/default.svg"} />
+                            <AvatarFallback className="bg-primary/10 font-bold text-primary">
+                                {reply.user.username.slice(0, 2).toUpperCase()}
+                            </AvatarFallback>
+                        </Avatar>
+                    </Link>
 
                     {/* Text & Badges Section */}
                     <div className="flex flex-col">

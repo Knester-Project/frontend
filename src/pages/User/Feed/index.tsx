@@ -1,10 +1,23 @@
+import { useEffect } from "react";
+
+// Libs
+import { useLocationManager } from "@/lib/location/manager";
+
 // UIs
 import Main from "@/components/Main";
 import Trending from "./Trending";
 import CreatePost from "./CreatePost";
 import PeopleAround from "./PeopleAround";
 
-const index = () => {
+const Index = () => {
+
+    const { ensureFreshLocation } = useLocationManager()
+
+    useEffect(() => {
+        ensureFreshLocation();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <Main classNames="flex gap-x-5">
             <section className="hidden xl:block xl:w-[25%]">
@@ -20,4 +33,4 @@ const index = () => {
     );
 }
 
-export default index;
+export default Index;

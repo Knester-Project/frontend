@@ -22,7 +22,7 @@ const Input = ({ type, placeholder, label, name, value, onChange, pattern, title
             {label && (
                 <label className="text-foreground text-xs md:text-sm xl:text-base cursor-pointer" htmlFor={name}>
                     {label}
-                    {required && <span className="text-red-500"> *</span>}
+                    {required && <span className="text-destructive"> *</span>}
                 </label>
             )}
             <input type={type} placeholder={placeholder}

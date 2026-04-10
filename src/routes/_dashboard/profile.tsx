@@ -22,8 +22,20 @@ export const Route = createFileRoute('/_dashboard/profile')({
   component: Profile,
 
   // Handle errors at the route level
-  errorComponent: () => (
-    <ErrorPage />
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  errorComponent: (error: any) => (
+    <>
+      {error.error.status === 404
+        ?
+        <ErrorPage 
+          code="404" 
+          title="Profile Not Found"
+          description="We couldn't find a profile matching that username. Try checking the spelling or searching for a different name." 
+        />
+        :
+        <ErrorPage />
+      }
+    </>
   ),
 
   // Show a skeleton while the loader is running

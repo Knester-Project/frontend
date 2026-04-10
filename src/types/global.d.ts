@@ -56,3 +56,13 @@ declare type ToastInline = {
     duration?: number; // in ms (default: 15000)
     handleClose: () => void;
 };
+
+declare type Coordinates = {
+    longitude: number;
+    latitude: number;
+};
+
+declare type StoredLocation = {
+    coords: Coordinates;
+    timestamp: number;
+};

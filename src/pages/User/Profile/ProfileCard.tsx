@@ -44,20 +44,6 @@ export const ProfileCard = ({ user }: { user: User }) => {
                         )}
                     </div>
                 </div>
-
-                {/* Meta */}
-                <div className="flex items-center gap-3 mt-1 text-muted-foreground text-xs">
-                    {profile && (
-                        <span>{profile.circleMembers} in circle</span>
-                    )}
-
-                    {profile?.chatLock && (
-                        <span className="flex items-center gap-1">
-                            <Lock className="size-3" />
-                            Chat locked
-                        </span>
-                    )}
-                </div>
             </div>
 
             {/* Status */}
