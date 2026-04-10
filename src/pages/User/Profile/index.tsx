@@ -16,8 +16,14 @@ export default function Index() {
 
     // useSuspenseQuery assumes the data is already being loaded by the loader
     const { data } = useSuspenseQuery(userProfileOptions(profile.trim()));
-    const user: UserProfile = data.data;
+    const user: Me | UserDetails = data.data;
 
+    const relationshipDefault = {
+        inCircle: false,
+        hasReported: false,
+        hasBlocked: false,
+        isBlocked: false,
+    }
     return (
         <Main>
             <Header
@@ -29,12 +35,17 @@ export default function Index() {
                 isModerator={user.isModerator}
                 isCore={user.isCore}
                 circleMembers={user.profile?.circleMembers ?? 0}
-                balance={user.profile?.balance ?? 0}
+                balance={('balance' in user) ? (user.balance as number) : 0}
                 isOwner={isOwner}
                 isSuspended={user.isSuspended}
-                circlesJoined={user.circlesJoined ?? 0}
-                totalPosts={user.totalPosts ?? 0}
+                circlesJoined={('circlesJoined' in user) ? user.circlesJoined : 0}
+                totalPosts={('totalPosts' in user) ? user.totalPosts : 0}
+                details={user.profile?.details ?? []}
+                relationship={('relationship' in user) ? user.relationship : relationshipDefault}
             />
         </Main>
     );
 }
+
+// "Product designer & creative technologist. Building beautiful things at the intersection of design and code. ✦ Based in San Francisco."
+// "foodie", "developer", "big dick", "materialistic"

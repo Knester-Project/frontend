@@ -34,8 +34,6 @@ declare type SafetyQueries = {
 type Profile = null | {
     profilePicture?: string;
     profileLock: boolean;
-    chatLock: boolean;
-    circleMembers: number;
 };
 
 type User = {
@@ -107,7 +105,7 @@ declare type Reply = {
 }
 
 // Profile
-type OwnProfile = {
+type MyProfile = {
     bio: string;
     details?: string[];
     dateOfBirth?: string | Date;
@@ -122,7 +120,7 @@ type OwnProfile = {
     chatLock: boolean;
 }
 
-declare type UserProfile = {
+declare type Me = {
     _id: string;
     invitedUser: User[];
     isEmailVerified: boolean;
@@ -132,12 +130,38 @@ declare type UserProfile = {
     isSuspended: boolean;
     circlesJoined: number;
     totalPosts: number;
-    profile: null | OwnProfile;
+    profile: null | MyProfile;
     referralPrivilege: number;
     suspendedDuration: number;
     suspensionStartDate: null | string | Date;
     username: string;
 }
 
-// hasBlocked
-// hasReported
+type UserProfile = {
+    bio: string;
+    details?: string[];
+    dateOfBirth?: string | Date;
+    profilePicture?: string;
+    circleMembers: number;
+    profileLock: boolean;
+    chatLock: boolean;
+    lastSeen?: string | Date;
+    isOnline: boolean;
+}
+
+declare type UserDetails = {
+    username: string;
+    email: string;
+    isEmailVerified: boolean;
+    isPremium: boolean;
+    isModerator: boolean;
+    isCore: boolean;
+    isSuspended: boolean;
+    relationship: {
+        inCircle: boolean;
+        hasReported: boolean;
+        hasBlocked: boolean;
+        isBlocked: boolean;
+    }
+    profile: null | UserProfile;
+}

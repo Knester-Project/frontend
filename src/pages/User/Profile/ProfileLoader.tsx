@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export default function ProfileLoader() {
     return (
-        <div className="space-y-6 mx-auto p-4 max-w-4xl">
+        <div className="space-y-6 mx-auto p-4 max-w-7xl">
             {/* Header Banner & Profile Section */}
             <div className="relative shadow-sm border border-border rounded-xl overflow-hidden">
                 {/* Banner Skeleton */}

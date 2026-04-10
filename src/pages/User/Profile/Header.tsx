@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { getPaletteSync } from 'colorthief';
+import { Link } from '@tanstack/react-router';
 
 // Utils
 import { formatAmount, formatTrendingCount } from '@/utils/format';
@@ -8,8 +9,7 @@ import { formatAmount, formatTrendingCount } from '@/utils/format';
 import { Badge } from '@/components/ui/badge';
 
 // Icons
-import { Share2 } from 'lucide-react';
-import { Flag2, MessageText1, People, ReceiptText, Slash, UserAdd, Verify, Wallet1, type IconProps } from 'iconsax-reactjs';
+import { Flag2, MessageText1, People, ReceiptText, Slash, Setting2, Share, UserAdd, Verify, Wallet1, type IconProps, MedalStar, Crown1, Star1 } from 'iconsax-reactjs';
 
 type HeaderProps = {
     profilePicture: string;
@@ -25,9 +25,20 @@ type HeaderProps = {
     balance: number;
     isOwner: boolean;
     isSuspended: boolean;
+    details: string[];
+    relationship?: {
+        inCircle: boolean;
+        hasReported: boolean;
+        hasBlocked: boolean;
+        isBlocked: boolean;
+    }
 }
 
-const Header = ({ profilePicture, isOnline, username, bio, isPremium, isModerator, isCore, circleMembers, circlesJoined, totalPosts, balance, isOwner, isSuspended }: HeaderProps) => {
+const Header = ({
+    profilePicture, isOnline, username, bio, isPremium, isModerator,
+    isCore, circleMembers, circlesJoined, totalPosts, balance,
+    isOwner, isSuspended, details, relationship,
+}: HeaderProps) => {
 
     const [colors, setColors] = useState({ primary: '#f0f0f0', secondary: '#e0e0e0' });
     const [isDark, setIsDark] = useState<boolean>(false);
@@ -48,8 +59,8 @@ const Header = ({ profilePicture, isOnline, username, bio, isPremium, isModerato
     };
 
     return (
-        <main className='p-2 md:p-3 xl:p-4 border border-border rounded-3xl'>
-            <div className="relative rounded-3xl h-24 md:h-28 xl:h-32 overflow-hidden"
+        <main className='mx-auto border border-border rounded-3xl max-w-7xl'>
+            <div className="relative rounded-3xl h-32 md:h-36 xl:h-40 overflow-hidden"
                 style={{ backgroundColor: colors.primary, transition: 'all 0.8s ease' } as React.CSSProperties}>
 
                 {/* DUAL COLOR GLOW */}
@@ -63,64 +74,75 @@ const Header = ({ profilePicture, isOnline, username, bio, isPremium, isModerato
 
                 <img ref={imgRef} src={profilePicture} onLoad={handleLoad} crossOrigin="anonymous" className="hidden" />
 
-            </div>
-            <section className='flex justify-between items-start -mt-12 md:-mt-14 xl:-mt-16 px-4 w-full'>
-                <div className="relative">
-                    <div className={`${isDark ? "bg-white" : "bg-[#121212]"} shadow-lg border-2 border-accent/30 rounded-2xl size-20 sm:size-24 md:size-28 xl:size-32 overflow-hidden`}>
-                        <img src={profilePicture} alt={"profile picture"} className="object-cover" />
-                        {/* Online Status */}
-                        {isOnline && (
-                            <div className="right-2 bottom-2 absolute bg-green-500 rounded-full size-3 md:size-3.5 xl:size-4" />
-                        )}
-                    </div>
-                </div>
                 {isOwner &&
-                    <div className='relative flex gap-x-2'>
-                        <button className={`outline-0 ${isDark ? "bg-white text-[#121212]" : "bg-[#121212] text-white"} py-2 px-4 font-medium duration-300 rounded-3xl cursor-pointer hover:bg-accent hover:text-accent-foreground`}>
-                            Customise
+                    <div className='top-4 right-4 absolute flex gap-x-2'>
+                        <button className={`outline-0 ${isDark ? "bg-white text-[#121212]" : "bg-[#121212] text-white"} p-1 duration-300 rounded-lg cursor-pointer hover:bg-accent hover:text-accent-foreground`}>
+                            <Setting2 variant='Bold' className='size-5 md:size-6 xl:size-7' />
                         </button>
-                        <button className={`outline-0 ${isDark ? "bg-white text-[#121212]" : "bg-[#121212] text-white"} py-2 px-4 font-medium duration-300 rounded-3xl cursor-pointer hover:bg-accent hover:text-accent-foreground flex items-center gap-x-1`}>
-                            <Share2 className='size-4' />
-                            Invite
+                        <button className={`outline-0 ${isDark ? "bg-white text-[#121212]" : "bg-[#121212] text-white"} p-1 duration-300 rounded-lg cursor-pointer hover:bg-accent hover:text-accent-foreground flex items-center gap-x-1`}>
+                            <Share variant='Bold' className='size-5 md:size-6 xl:size-7' />
                         </button>
                     </div>
                 }
+            </div>
+            <section className='-mt-12 md:-mt-14 xl:-mt-16 px-4'>
+                <div className={`${isDark ? "bg-white" : "bg-[#121212]"} relative shadow-lg border-2 border-accent/30 rounded-2xl size-20 sm:size-24 md:size-28 xl:size-32 overflow-hidden`}>
+                    <img src={profilePicture} alt={"profile picture"} className="object-cover" />
+                    {/* Online Status */}
+                    {isOnline && (
+                        <div className="right-2 bottom-2 absolute bg-green-500 rounded-full size-3 md:size-3.5 xl:size-4" />
+                    )}
+                </div>
             </section>
-            <section className='mt-4'>
-                <div className="flex items-center gap-x-2">
+            <section className='mt-2 p-2 md:p-3 xl:p-4'>
+                <div className="flex items-center gap-x-1">
                     <h1 className='font-bold text-xl md:text-2xl xl:text-3xl'>{username}</h1>
                     {isPremium && <Verify className='size-5 md:size-6 xl:size-7 text-premium' variant='Bold' />}
                     {isModerator && <Verify className='size-5 md:size-6 xl:size-7 text-moderator' variant='Bold' />}
                     {isCore && <Verify className='size-5 md:size-6 xl:size-7 text-core' variant='Bold' />}
-                    {isSuspended && <Badge variant="destructive">
-                        <Slash data-icon="inline-start" />
-                        Suspended
-                    </Badge>}
                 </div>
-                <p className='font-medium text-foreground/80'>{bio}</p>
-            </section>
-            {isOwner ?
-                <section className='gap-2 grid grid-cols-4 mt-4'>
-                    <HeaderCard isDark={isDark} color={colors.primary} title='Circle Members' Icon={People} amount={formatTrendingCount(circleMembers)} />
-                    <HeaderCard isDark={isDark} color={colors.primary} title='Posts' Icon={ReceiptText} amount={totalPosts} />
-                    <HeaderCard isDark={isDark} color={colors.primary} title='Balance' Icon={Wallet1} amount={formatAmount(balance)} />
-                    <HeaderCard isDark={isDark} color={colors.primary} title='Circles Joined' Icon={UserAdd} amount={circlesJoined} />
-                </section>
-                :
-                <div className='relative flex gap-x-2 my-2 text-[11px] md:text-xs xl:text-sm'>
-                    <p><span className="font-semibold montserrat">1.4k</span> Circle Members</p>
-                    <p><span className='font-semibold montserrat'>212</span> Circles Joined</p>
-                    <p><span className='font-semibold montserrat'>503</span> Posts</p>
+                <div className='flex gap-x-1'>
+                    {isCore && <Badge className="bg-core/10 mt-2 border-core text-core"><MedalStar variant="Bold" /> Core Member</Badge>}
+                    {isPremium && <Badge className="bg-premium/10 mt-2 border-premium text-premium"><Crown1 variant="Bold" /> Premium Member</Badge>}
+                    {isModerator && <Badge className="bg-moderator/10 mt-2 border-moderator text-moderator"><Star1 variant="Bold" /> Moderator</Badge>}
+                    {isSuspended &&
+                        <Badge variant="destructive" className='mt-2'>
+                            <Slash /> Suspended
+                        </Badge>
+                    }
                 </div>
-            }
+                <p className='mt-2 font-medium text-[11px] text-foreground/80 md:text-xs xl:text-sm'>{bio}</p>
+                {(details && details.length > 0) &&
+                    details.map((detail) => (
+                        <Badge variant="outline" className='mt-2 mr-1 capitalize'>{detail}</Badge>
+                    ))
+                }
+                {isOwner ?
+                    <section className='gap-2 grid grid-cols-2 sm:grid-cols-4 mt-2'>
+                        <HeaderCard isDark={isDark} color={colors.primary} title='Circle Members' Icon={People} amount={formatTrendingCount(circleMembers)} />
+                        <HeaderCard isDark={isDark} color={colors.primary} title='Posts' Icon={ReceiptText} amount={totalPosts} />
+                        <HeaderCard isDark={isDark} color={colors.primary} title='Balance' Icon={Wallet1} amount={formatAmount(balance)} />
+                        <HeaderCard isDark={isDark} color={colors.primary} title='Circles Joined' Icon={UserAdd} amount={circlesJoined} />
+                    </section>
+                    :
+                    <div className='relative flex gap-x-3 my-2 text-[11px] md:text-xs xl:text-sm'>
+                        <p><span style={{ color: colors.primary }} className="font-semibold montserrat">1.4k</span> Circle Members</p>
+                        <p><span style={{ color: colors.primary }} className='font-semibold montserrat'>212</span> Circles Joined</p>
+                        <p><span style={{ color: colors.primary }} className='font-semibold montserrat'>503</span> Posts</p>
+                    </div>
+                }
 
-            {!isOwner && <section className="flex justify-between gap-2 p-4">
-                <ActionButton color={colors.primary} icon={MessageText1} label="Message" />
-                <ActionButton color={colors.primary} icon={Slash} label="Block" />
-                <ActionButton color={colors.primary} icon={UserAdd} label="Join Circle" />
-                <ActionButton color={colors.primary} icon={Flag2} label="Report" />
+                {!isOwner &&
+                    <section className="flex justify-between gap-2 p-4">
+                        <Link to="/messages" search={{ username }} disabled={(relationship?.isBlocked || relationship?.hasBlocked) ?? false}>
+                            <ActionButton disabled={(relationship?.isBlocked || relationship?.hasBlocked) ?? false} color={colors.primary} icon={MessageText1} label="Message" />
+                        </Link>
+                        <ActionButton disabled={relationship?.hasBlocked ?? false} color={colors.primary} icon={Slash} label="Block" />
+                        <ActionButton disabled={relationship?.inCircle ?? false} color={colors.primary} icon={UserAdd} label="Join Circle" />
+                        <ActionButton disabled={relationship?.hasBlocked ?? false} color={colors.primary} icon={Flag2} label="Report" />
+                    </section>
+                }
             </section>
-            }
         </main>
     );
 }
@@ -140,24 +162,24 @@ const HeaderCard = ({ isDark, color, Icon, title, amount }: HeaderCardProps) => 
         <div style={{ background: color, borderColor: color, color: isDark ? "white" : "#121212" }}
             className="flex flex-col justify-between p-2 border rounded-xl w-full min-w-0">
             <div className="flex items-center gap-1 truncate">
-                <Icon className="size-4 shrink-0" variant="Bold" />
-                <p className="font-medium text-[10px] md:text-[11px] xl:text-xs truncate">{title}</p>
+                <Icon className="size-4.5 shrink-0" variant="Bold" />
+                <p className="font-medium text-[11px] md:text-xs xl:text-sm truncate">{title}</p>
             </div>
 
-            <h1 className="mt-1 font-bold text-base md:text-lg xl:text-xl truncate montserrat">
+            <h1 className="mt-1 font-bold text-lg md:text-xl xl:text-2xl truncate montserrat">
                 {amount}
             </h1>
         </div>
     );
 };
 
-const ActionButton = ({ icon: Icon, color, label }: { icon: React.ComponentType<IconProps>; color: string; label: string }) => {
+const ActionButton = ({ icon: Icon, color, label, disabled }: { icon: React.ComponentType<IconProps>; color: string; label: string, disabled: boolean }) => {
     return (
         <div className="flex flex-col items-center gap-1">
-            <button style={{ color }} className="bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 hover:shadow-sm backdrop-blur-md p-2.5 border border-border rounded-xl active:scale-95 transition-all duration-200 cursor-pointer">
+            <button disabled={disabled} style={{ color: disabled ? "#6B7280" : color }} className="bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 hover:shadow-sm backdrop-blur-md p-2.5 border border-border rounded-xl active:scale-95 transition-all duration-200 cursor-pointer">
                 <Icon variant="Bold" className="size-4 md:size-4.5 xl:size-5" />
             </button>
-            <span className="font-medium text-[10px] md:text-[11px] xl:text-xs">{label}</span>
+            <span style={{ color: disabled ? "#6B7280" : color }} className={`font-medium text-[10px] md:text-[11px] xl:text-xs`}>{label}</span>
         </div>
     );
 };

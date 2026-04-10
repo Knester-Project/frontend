@@ -37,7 +37,7 @@ export default function InstallBtn() {
           </motion.button>
 
           {/* Close Button */}
-          <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} onClick={handleClose} className="bg-red-500 shadow-md mx-auto p-1 rounded-full w-fit text-white cursor-pointer">
+          <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} onClick={handleClose} className="bg-destructive shadow-md mx-auto p-1 rounded-full w-fit text-destructive-foreground cursor-pointer">
             <X className="size-4" />
           </motion.button>
         </motion.div>

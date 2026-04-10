@@ -136,7 +136,7 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
 
             <Drawer.Portal>
                 <Drawer.Overlay className="z-50 fixed inset-0 bg-background" />
-                <Drawer.Content className="right-0 bottom-0 left-0 z-[60] fixed flex flex-col border border-border rounded-t-[32px] outline-none h-[90vh]">
+                <Drawer.Content className="right-0 bottom-0 left-0 z-[60] fixed flex flex-col mx-auto border border-border rounded-t-[32px] outline-none max-w-7xl h-[90vh]">
                     <Drawer.Description className="sr-only">Comment Section</Drawer.Description>
                     <div className="flex-shrink-0 bg-gray-300 dark:bg-gray-600 mx-auto my-4 rounded-full w-12 h-1.5 cursor-grab" />
 

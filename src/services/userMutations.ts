@@ -2,10 +2,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // Functions
-import { authenticateUser, commentOnPost, createReply, createSafetyPost, createUser, deleteComment, deleteReply, flagPost, toggleVibe, validateInvite } from "./api.services";
+import { authenticateUser, commentOnPost, createReply, createSafetyPost, createUser, deleteComment, deleteReply, flagPost, toggleVibe, updateProfile, validateInvite } from "./api.services";
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
+import type { EditProfileInput } from "@/schemas/profile.schema";
 
 // Helper Functions
 type InfiniteData<T> = {
@@ -315,4 +316,17 @@ export function useDeleteReply(replyId: string, queries: ReplyQueries) {
         updater: (r: Reply) =>
             r._id === replyId ? { ...r, isDeleted: true, content: "This reply has been deleted" } : r,
     });
+}
+
+// Sync/Update/Create Profile
+export function useSyncProfile() {
+    return useMutation({
+        mutationFn: (data: EditProfileInput) => updateProfile(data),
+        onSuccess: () => {
+
+        },
+        onError: (error) => {
+            console.error("Profile Sync failed:", error);
+        },
+    })
 }

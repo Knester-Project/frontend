@@ -8,7 +8,7 @@ import ProfileLoader from '@/pages/User/Profile/ProfileLoader';
 
 export const Route = createFileRoute('/_dashboard/profile')({
 
-  validateSearch: (search: Record<string, unknown>) => ({
+  validateSearch: (search: Record<string, string>) => ({
     profile: search.profile as string,
   }),
 

@@ -2,7 +2,7 @@
 import { ShieldTick, Lock, UserTag, Verify } from "iconsax-reactjs";
 
 export const ProfileCard = ({ user }: { user: User }) => {
-    
+
     const profile = user.profile;
 
     return (
@@ -11,11 +11,7 @@ export const ProfileCard = ({ user }: { user: User }) => {
             {/* Avatar */}
             <div className="relative">
                 {profile?.profilePicture ? (
-                    <img
-                        src={profile.profilePicture}
-                        alt={user.username}
-                        className="border rounded-full size-12 object-cover"
-                    />
+                    <img src={profile.profilePicture} alt={user.username} className="border rounded-full size-12 object-cover" />
                 ) : (
                     <div className="flex justify-center items-center bg-muted rounded-full size-12">
                         <UserTag className="size-5 text-muted-foreground" />

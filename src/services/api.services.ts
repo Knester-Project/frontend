@@ -7,6 +7,7 @@ const userAxios = getAxiosAuthInstance();
 
 //Schemas
 import type { AuthInput } from '@/schemas/auth.schema';
+import type { EditProfileInput } from '@/schemas/profile.schema';
 
 // Get the CSRF Token
 export const fetchToken = async () => {
@@ -139,5 +140,11 @@ export const getCurrentUser = async () => {
 // Fetch Any User Profile
 export const getUserDetails = async (username: string) => {
     const response = await userAxios.get(`users/fetch/${username}`);
+    return response.data;
+}
+
+// Sync profile details
+export const updateProfile = async (data: EditProfileInput) => {
+    const response = await userAxios.post(`profile/sync`, data);
     return response.data;
 }
