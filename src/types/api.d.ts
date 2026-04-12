@@ -31,6 +31,35 @@ declare type SafetyQueries = {
     limit?: number | undefined;
 }
 
+// Safety Post
+declare type SafetyPost = {
+    _id: string;
+    postId: string;
+    fullName: string;
+    createdAt: string;
+    dateOfIncident: string;
+    content: string;
+    verified: boolean;
+    vibes: number;
+    views: number;
+    flags: number;
+    comments: number;
+    hasVibed: boolean,
+    hasFlagged: boolean,
+    location: {
+        street?: string;
+        town?: string;
+        city?: string;
+        state?: string;
+    };
+    media: { url: string }[];
+    socialMedia: {
+        platform: string;
+        username: string;
+        profileLink: string;
+    }[];
+};
+
 type Profile = null | {
     profilePicture?: string;
     profileLock: boolean;
@@ -142,6 +171,7 @@ type UserProfile = {
     details?: string[];
     dateOfBirth?: string | Date;
     profilePicture?: string;
+    media: string[];
     circleMembers: number;
     profileLock: boolean;
     chatLock: boolean;
@@ -164,4 +194,19 @@ declare type UserDetails = {
         isBlocked: boolean;
     }
     profile: null | UserProfile;
+}
+
+// Edit Profile Payload
+declare type EditProfilePayload = {
+    bio?: string | undefined;
+    details?: string[];
+    dateOfBirth?: string | undefined;
+    profilePicture?: string | undefined;
+    media?: string[] | undefined;
+    location?: {
+        longitude: number;
+        latitude: number;
+    } | undefined;
+    profileLock?: boolean | undefined;
+    chatLock?: boolean | undefined;
 }

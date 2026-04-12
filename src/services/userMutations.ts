@@ -6,7 +6,7 @@ import { authenticateUser, commentOnPost, createReply, createSafetyPost, createU
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
-import type { EditProfileInput } from "@/schemas/profile.schema";
+
 
 // Helper Functions
 type InfiniteData<T> = {
@@ -321,9 +321,9 @@ export function useDeleteReply(replyId: string, queries: ReplyQueries) {
 // Sync/Update/Create Profile
 export function useSyncProfile() {
     return useMutation({
-        mutationFn: (data: EditProfileInput) => updateProfile(data),
-        onSuccess: () => {
-
+        mutationFn: (data: EditProfilePayload) => updateProfile(data),
+        onSuccess: (response) => {
+            console.log("The profile sync response", response);
         },
         onError: (error) => {
             console.error("Profile Sync failed:", error);

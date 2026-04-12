@@ -30,7 +30,7 @@ export default function Index() {
                 profilePicture={user.profile?.profilePicture ?? "/default.svg"}
                 isOnline={user.profile?.isOnline ?? true}
                 username={user.username}
-                bio={user.profile?.bio ?? "No Bio Yet"}
+                bio={user.profile?.bio ?? ""}
                 isPremium={user.isPremium}
                 isModerator={user.isModerator}
                 isCore={user.isCore}
@@ -42,10 +42,11 @@ export default function Index() {
                 totalPosts={('totalPosts' in user) ? user.totalPosts : 0}
                 details={user.profile?.details ?? []}
                 relationship={('relationship' in user) ? user.relationship : relationshipDefault}
+                mediaLength={user.profile?.media?.length ?? 0}
+                dateOfBirth={user.profile?.dateOfBirth ?? ""}
+                profileLock={user.profile?.profileLock ?? false}
+                chatLock={user.profile?.chatLock ?? false}
             />
         </Main>
     );
 }
-
-// "Product designer & creative technologist. Building beautiful things at the intersection of design and code. ✦ Based in San Francisco."
-// "foodie", "developer", "big dick", "materialistic"

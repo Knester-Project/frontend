@@ -37,12 +37,19 @@ type HeaderProps = {
         hasBlocked: boolean;
         isBlocked: boolean;
     }
+    mediaLength: number;
+    dateOfBirth: string | Date;
+    profileLock: boolean;
+    chatLock: boolean;
 }
+
+const DETAILS_LENGTH = 4;
+const MEDIA_LENGTH = 10;
 
 const Header = ({
     profilePicture, isOnline, username, bio, isPremium, isModerator,
-    isCore, circleMembers, circlesJoined, totalPosts, balance,
-    isOwner, isSuspended, details, relationship,
+    isCore, circleMembers, circlesJoined, totalPosts, balance, profileLock, chatLock,
+    isOwner, isSuspended, details, relationship, mediaLength, dateOfBirth
 }: HeaderProps) => {
 
     const [colors, setColors] = useState({ primary: '#f0f0f0', secondary: '#e0e0e0' });
@@ -129,7 +136,7 @@ const Header = ({
                             </Badge>
                         }
                     </div>
-                    <p className='mt-2 font-medium text-[11px] text-foreground/80 md:text-xs xl:text-sm'>{bio}</p>
+                    <p className='mt-2 font-medium text-[11px] text-foreground/80 md:text-xs xl:text-sm'>{bio.trim() ? bio : "No Bio Yet"}</p>
                     {(details && details.length > 0) &&
                         details.map((detail) => (
                             <Badge variant="outline" className='mt-2 mr-1 capitalize'>{detail}</Badge>
@@ -164,7 +171,17 @@ const Header = ({
             </main >
             {profileForm &&
                 <Overlay open={profileForm} onClose={toggleProfileForm}>
-                    <ProfileForm />
+                    <ProfileForm
+                        remainingMedia={MEDIA_LENGTH - mediaLength}
+                        remainingDetails={DETAILS_LENGTH - details.length}
+                        defaultValues={{
+                            bio,
+                            details: details.map(d => ({ value: d })),
+                            dateOfBirth: dateOfBirth ? dateOfBirth.toString() : "",
+                            profileLock,
+                            chatLock
+                        }}
+                    />
                 </Overlay>
             }
             {updateProfilePic &&

@@ -14,9 +14,16 @@ const Index = () => {
     const { ensureFreshLocation } = useLocationManager()
 
     useEffect(() => {
-        ensureFreshLocation();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        const handleLocation = async () => {
+            try {
+                await ensureFreshLocation();
+            } catch (error) {
+                console.error("Location check failed", error);
+            }
+        };
+
+        handleLocation();
+    }, [ensureFreshLocation])
 
     return (
         <Main classNames="flex gap-x-5">

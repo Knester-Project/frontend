@@ -17,35 +17,6 @@ declare type ValidationStore = {
     setReferrer: (newReferrer: string) => void;
 }
 
-// Safety Post
-declare type SafetyPost = {
-    _id: string;
-    postId: string;
-    fullName: string;
-    createdAt: string;
-    dateOfIncident: string;
-    content: string;
-    verified: boolean;
-    vibes: number;
-    views: number;
-    flags: number;
-    comments: number;
-    hasVibed: boolean,
-    hasFlagged: boolean,
-    location: {
-        street?: string;
-        town?: string;
-        city?: string;
-        state?: string;
-    };
-    media: { url: string }[];
-    socialMedia: {
-        platform: string;
-        username: string;
-        profileLink: string;
-    }[];
-};
-
 type ToastVariant = "error" | "success";
 
 // Error Inline
@@ -57,6 +28,7 @@ declare type ToastInline = {
     handleClose: () => void;
 };
 
+// Location Update Store
 declare type Coordinates = {
     longitude: number;
     latitude: number;

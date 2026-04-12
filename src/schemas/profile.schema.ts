@@ -32,7 +32,11 @@ export const mediaFileSchema = z.array(
 
 export const editProfileSchema = z.object({
     bio: z.string().min(3).max(300).optional(),
-    details: z.array(z.string().min(5).max(20)).max(4).optional(),
+    details: z.array(
+        z.object({
+            value: z.string().min(5).max(20)
+        })
+    ).max(4).optional(),
     dateOfBirth: z.string().optional(),
     profilePicture: z.string().optional(),
     media: z.array(z.url()).max(10).optional(),

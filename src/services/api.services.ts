@@ -5,9 +5,8 @@ const axiosUnauthInstance = getAxiosAuthInstance();
 const userAxios = getAxiosAuthInstance();
 
 
-//Schemas
+// Schemas
 import type { AuthInput } from '@/schemas/auth.schema';
-import type { EditProfileInput } from '@/schemas/profile.schema';
 
 // Get the CSRF Token
 export const fetchToken = async () => {
@@ -144,7 +143,13 @@ export const getUserDetails = async (username: string) => {
 }
 
 // Sync profile details
-export const updateProfile = async (data: EditProfileInput) => {
+export const updateProfile = async (data: EditProfilePayload) => {
     const response = await userAxios.post(`profile/sync`, data);
+    return response.data;
+}
+
+// Delete Media from profile
+export const updateMedia = async (url: string) => {
+    const response = await userAxios.delete(`profile/media/${url}`);
     return response.data;
 }

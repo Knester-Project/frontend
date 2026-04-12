@@ -43,7 +43,11 @@ export default function Create() {
     const addSocial = () => setValue("socialMedia", [...socialMedia, { platform: "", username: "", profileLink: "" }], { shouldValidate: true });
     const removeSocial = (i: number) => setValue("socialMedia", socialMedia.filter((_, idx) => idx !== i), { shouldValidate: true });
 
-    // Submit Function
+    // Function
+    const onFileChange = (newFiles: File[]) => {
+        setFiles(newFiles);
+    };
+
     const { uploadFiles } = usePresignedUpload();
 
     const newPost = useCreateSafetyPost();
@@ -208,7 +212,7 @@ export default function Create() {
                                             <p className="font-semibold text-base md:text-lg xl:text-xl">Pictures and Videos</p>
                                             <p className="text-[11px] text-yellow-600 dark:text-yellow-400 md:text-xs xl:text-sm">A Minimum of Two (2) and a Maximum of Eight (8) Pictures and Videos</p>
                                             <div className="mt-10">
-                                                <FileUploader multiple disabled={newPost.isPending || isUploading} value={files} onChange={setFiles} />
+                                                <FileUploader multiple disabled={newPost.isPending || isUploading} value={files} onChange={onFileChange} />
                                                 <p className="mt-1 text-[11px] text-yellow-600 dark:text-yellow-400 md:text-xs xl:text-sm">Posts with high-quality images are approved more quickly</p>
                                             </div>
                                             <div className="flex justify-end mt-4">

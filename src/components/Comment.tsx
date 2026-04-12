@@ -10,6 +10,7 @@ import { useAddComment } from "@/services/userMutations";
 import { usePresignedUpload } from "@/Hooks/usePresignedUpload";
 import { useComments } from "@/services/userQueries";
 import useInfiniteScroll from "@/Hooks/useInfiniteScroll";
+import { makeFilesUnique } from "@/utils/format";
 
 // UIs
 import ErrorText from "./ErrorText";
@@ -48,16 +49,20 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
             let mediaUrl: string | null = null;
 
             // Upload media if exists
-            if (selectedMedia && selectedMedia[0] instanceof File) {
-                const uploads = await uploadFiles(Array.from(selectedMedia), "post");
+            if (selectedMedia && selectedMedia.length > 0 && selectedMedia[0] instanceof File) {
+
+                // Process and give the files unique names BEFORE uploading
+                const uniqueFiles = makeFilesUnique(Array.from(selectedMedia) as File[]);
+
+                // Pass the unique files to your upload service
+                const uploads = await uploadFiles(uniqueFiles, "post");
 
                 const failedUpload = uploads.some(u => !u.uploadUrl);
 
                 if (failedUpload) {
                     throw new Error("Upload failed");
                 }
-
-                // Assuming single file
+                
                 mediaUrl = uploads[0]?.publicUrl || null;
             }
 

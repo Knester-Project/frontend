@@ -1,6 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
 import { sileo } from "sileo";
 
+// Utils
+import { makeFilesUnique } from "@/utils/format";
+
+
 type Props = {
     multiple?: boolean;
     disabled?: boolean;
@@ -24,11 +28,11 @@ export default function FileUploader({ multiple = false, disabled, value, onChan
     const [items, setItems] = useState<SelectedItem[]>([]);
 
     const allowedExts = [
-        "jpg", "jpeg", "png", "gif", "webp",
-        "mp4", "mov", "avi", "mkv", "webm",
+        "jpg", "jpeg", "png", "gif", "webp", "heic", "heif", // Images
+        "mp4", "mov", "avi", "mkv", "webm", "m4v"            // Videos
     ];
 
-    // 🔁 Sync File[] → UI items
+    // Sync File[] → UI items
     useEffect(() => {
         const mapped: SelectedItem[] = value.map((file) => {
             const existing = items.find((i) => i.file === file);
@@ -57,10 +61,11 @@ export default function FileUploader({ multiple = false, disabled, value, onChan
     }, [value]);
 
     function handleSelectFile(e: React.ChangeEvent<HTMLInputElement>) {
-        const files = Array.from(e.target.files || []);
-        if (!files.length) return;
+        const incomingFiles = Array.from(e.target.files || []);
+        if (!incomingFiles.length) return;
 
-        for (const file of files) {
+        // Validate Extensions
+        for (const file of incomingFiles) {
             const ext = file.name.split(".").pop()?.toLowerCase();
             if (!ext || !allowedExts.includes(ext)) {
                 sileo.error({ title: "Only images and videos are allowed" });
@@ -68,7 +73,26 @@ export default function FileUploader({ multiple = false, disabled, value, onChan
             }
         }
 
-        onChange(multiple ? [...value, ...files] : files);
+        // Check Capacity (Max 8)
+        const currentCount = value.length;
+        const availableSlots = 8 - currentCount;
+
+        if (multiple && availableSlots <= 0) {
+            sileo.error({ title: "Maximum of 8 media files allowed" });
+            return;
+        }
+
+        // Slice incoming files to fit available slots and make them unique
+        const allowedIncoming = multiple
+            ? incomingFiles.slice(0, availableSlots)
+            : incomingFiles.slice(0, 1);
+
+        const uniqueFiles = makeFilesUnique(allowedIncoming);
+
+        // Update via onChange
+        onChange(multiple ? [...value, ...uniqueFiles] : uniqueFiles);
+
+        // Reset input so same file can be picked again if deleted
         e.target.value = "";
     }
 

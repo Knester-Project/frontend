@@ -10,18 +10,19 @@ type OverlayProps = {
     closeOnOutsideClick?: boolean;
 };
 
-const getVariantClass = (variant: string) => {
+// Variants
+const getVariantClass = (variant: OverlayProps["variant"]) => {
     switch (variant) {
         case "bottom":
-            return "absolute bottom-0 w-full max-w-md mx-auto";
+            return "absolute bottom-0 w-full max-w-5xl mx-auto flex flex-col max-h-[90vh]";
         case "fullscreen":
-            return "absolute inset-0 w-full h-full";
+            return "absolute inset-0 w-full h-full max-w-7xl mx-auto flex flex-col";
         default:
-            return "relative w-full max-w-lg mx-auto";
+            return "relative w-full max-w-7xl mx-auto flex flex-col max-h-[calc(100vh-2rem)]";
     }
 };
 
-const getInitial = (variant: string) => {
+const getInitial = (variant: OverlayProps["variant"]) => {
     switch (variant) {
         case "bottom":
             return { y: "100%", opacity: 0 };
@@ -38,7 +39,7 @@ const getAnimate = () => ({
     opacity: 1,
 });
 
-const getExit = (variant: string) => {
+const getExit = (variant: OverlayProps["variant"]) => {
     switch (variant) {
         case "bottom":
             return { y: "100%", opacity: 0 };
@@ -51,14 +52,20 @@ const getExit = (variant: string) => {
 
 export const Overlay = ({ open, onClose, children, variant = "center", showBackdrop = true, closeOnOutsideClick = true }: OverlayProps) => {
 
-    // ESC key close
     useEffect(() => {
         const handleKey = (e: KeyboardEvent) => {
             if (e.key === "Escape") onClose();
         };
 
-        if (open) window.addEventListener("keydown", handleKey);
-        return () => window.removeEventListener("keydown", handleKey);
+        if (open) {
+            window.addEventListener("keydown", handleKey);
+            document.body.style.overflow = "hidden";
+        }
+
+        return () => {
+            window.removeEventListener("keydown", handleKey);
+            document.body.style.overflow = "unset";
+        };
     }, [open, onClose]);
 
     return (
@@ -68,14 +75,25 @@ export const Overlay = ({ open, onClose, children, variant = "center", showBackd
 
                     {/* Backdrop */}
                     {showBackdrop && (
-                        <motion.div className="absolute inset-0 bg-background/40 backdrop-blur-sm" initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={closeOnOutsideClick ? onClose : undefined} />
+                        <motion.div
+                            className="absolute inset-0 bg-background/40 backdrop-blur-sm"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={closeOnOutsideClick ? onClose : undefined}
+                        />
                     )}
 
                     {/* Content Wrapper */}
-                    <motion.div initial={getInitial(variant)} animate={getAnimate()} exit={getExit(variant)}
-                        transition={{ duration: 0.2 }} className={getVariantClass(variant)} onClick={(e) => e.stopPropagation()}>
-                        <div className="bg-card shadow-lg p-4 md:p-6 xl:p-8 border rounded-2xl w-full max-w-7xl text-card-foreground">
+                    <motion.div
+                        initial={getInitial(variant)}
+                        animate={getAnimate()}
+                        exit={getExit(variant)}
+                        transition={{ duration: 0.2 }}
+                        className={getVariantClass(variant)}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="bg-card shadow-lg mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full overflow-y-auto text-card-foreground hide-scrollbar">
                             {children}
                         </div>
                     </motion.div>
