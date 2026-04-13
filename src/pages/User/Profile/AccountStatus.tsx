@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 
-// Utils
+// Utils and Stores
 import { cn } from "@/lib/utils";
 import { formatAgeCategorized } from "@/utils/format";
+import { useProfileTheme } from "@/stores/profileTheme.store";
 
 // Icons
 import { Sms, Lock, MessageRemove, Flag, Slash, Calendar1 } from "iconsax-reactjs";
@@ -19,6 +20,8 @@ type accountProps = {
 }
 
 export default function AccountStatus({ isEmailVerified, profileLock, chatLock, flagged, isSuspended, referralPrivilege, isOwner, dateOfBirth }: accountProps) {
+
+    const { colors } = useProfileTheme();
 
     const items = [
         {
@@ -94,12 +97,12 @@ export default function AccountStatus({ isEmailVerified, profileLock, chatLock, 
                         </div>
                     }
                     <div className="flex items-center gap-2.5">
-                        <div className={cn("flex justify-center items-center rounded-lg size-8", dateOfBirth.trim() ? "bg-accent/20" : "bg-accent/10")}>
-                            <Calendar1 className={cn("size-4 md:size-4.5 xl:size-5", dateOfBirth.trim() ? "text-accent" : "text-[#6B7280]")} />
+                        <div style={{ backgroundColor: dateOfBirth.trim() ? colors.primary + 20 : colors.primary + 10 }} className={cn("flex justify-center items-center rounded-lg size-8", dateOfBirth.trim() ? "bg-accent/20" : "bg-accent/10")}>
+                            <Calendar1 style={{ color: dateOfBirth.trim() ? colors.primary : "#6B7280" }} className={cn("size-4 md:size-4.5 xl:size-5")} />
                         </div>
                         <div>
                             <p className="font-medium text-xs">Age Range</p>
-                            <p className={cn("font-medium text-[10px] md:text-[11px] xl:text-xs", dateOfBirth.trim() ? "text-accent" : "text-[#6B7280]")}>
+                            <p style={{ color: dateOfBirth.trim() ? colors.primary : "#6B7280" }} className={cn("font-medium text-[10px] md:text-[11px] xl:text-xs")}>
                                 {dateOfBirth.trim() ? formatAgeCategorized(dateOfBirth) : "Agelessaurus"}
                             </p>
                         </div>

@@ -1,12 +1,16 @@
+import { Link } from "@tanstack/react-router";
+
 // Stores
 import { useProfileTheme } from "@/stores/profileTheme.store";
 
 // UIs
 import MediaGallery from "./MediaGallery";
 import AccountStatus from "./AccountStatus";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
 // Icons
-import { TagUser, ShieldSecurity, Gallery } from "iconsax-reactjs";
+import { TagUser, ShieldSecurity, Gallery, Slash, MedalStar, Crown1, Star1 } from "iconsax-reactjs";
 
 type bodyProps = {
     media: string[];
@@ -47,6 +51,29 @@ const Body = ({
                         <p className="font-medium">Invited Users</p>
                         <p>{invitedUser.length}</p>
                     </div>
+                    {invitedUser.length > 0 ? (
+                        invitedUser.map((user) => (
+                            <Link style={{ backgroundColor: colors.primary + 20 }} to="/profile" search={{ profile: user.username }} key={user._id} className="flex items-center gap-x-2 my-4 p-2 md:p-3 xl:p-4 border border-border rounded-2xl">
+                                <Avatar>
+                                    <AvatarImage src={user.profile?.profilePicture || "/default.svg"} />
+                                    <AvatarFallback>{user.username.charAt(0).toUpperCase()}</AvatarFallback>
+                                </Avatar>
+                                <div>
+                                    <p style={{ color: colors.primary }} className="font-medium text-base md:text-lg xl:text-xl">{user.username}</p>
+                                    {user.isCore && <Badge className="bg-core/10 -mt-1 border-core text-core"><MedalStar variant="Bold" /> Core Member</Badge>}
+                                    {user.isPremium && <Badge className="bg-premium/10 -mt-1 border-premium text-premium"><Crown1 variant="Bold" /> Premium Member</Badge>}
+                                    {user.isModerator && <Badge className="bg-moderator/10 -mt-1 border-moderator text-moderator"><Star1 variant="Bold" /> Moderator</Badge>}
+                                    {user.isSuspended &&
+                                        <Badge variant="destructive" className='-mt-1'>
+                                            <Slash /> Suspended
+                                        </Badge>
+                                    }
+                                </div>
+                            </Link>
+                        ))
+                    ) : (
+                        <p style={{ color: colors.primary }} className="my-4">No invited users yet.</p>
+                    )}
                 </section>
             }
             <section className="mt-8">

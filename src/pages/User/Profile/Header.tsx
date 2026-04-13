@@ -136,7 +136,7 @@ const Header = ({
                             </Badge>
                         }
                     </div>
-                    <p className='mt-2 font-medium text-[11px] text-foreground/80 md:text-xs xl:text-sm'>{bio.trim() ? bio : "No Bio Yet"}</p>
+                    <p className='mt-2 font-medium text-foreground/80'>{bio.trim() ? bio : "No Bio Yet"}</p>
                     {(details && details.length > 0) &&
                         details.map((detail, index) => (
                             <Badge key={`detail-${index}`} variant="outline" className='mt-2 mr-1 capitalize'>{detail}</Badge>
