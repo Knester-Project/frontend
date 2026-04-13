@@ -319,14 +319,42 @@ export function useDeleteReply(replyId: string, queries: ReplyQueries) {
 }
 
 // Sync/Update/Create Profile
-export function useSyncProfile() {
+export function useSyncProfile(username: string = "me") {
+    const queryClient = useQueryClient();
+    const queryKey = ['profile', username];
+
     return useMutation({
         mutationFn: (data: EditProfilePayload) => updateProfile(data),
-        onSuccess: (response) => {
-            console.log("The profile sync response", response);
+
+        onMutate: async (newValues) => {
+            await queryClient.cancelQueries({ queryKey });
+
+            const previousData = queryClient.getQueryData<Me>(queryKey);
+
+            if (previousData) {
+                queryClient.setQueryData<Me>(queryKey, {
+                    ...previousData,
+                    profile: previousData.profile ? {
+                        ...previousData.profile,
+                        ...newValues,
+                    } : null
+                });
+            }
+
+            return { previousData };
         },
-        onError: (error) => {
-            console.error("Profile Sync failed:", error);
+
+        // If the mutation fails, use the context we returned above
+        onError: (err, _, context) => {
+            if (context?.previousData) {
+                queryClient.setQueryData(queryKey, context.previousData);
+            }
+            console.error("Profile Sync failed:", err);
         },
-    })
+
+        // Always refetch after error or success to ensure server sync
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey });
+        },
+    });
 }

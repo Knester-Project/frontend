@@ -8,7 +8,7 @@ import { sileo } from "sileo";
 import { cn } from "@/lib/utils";
 import { editProfileSchema, mediaFileSchema, type EditProfileInput } from "@/schemas/profile.schema";
 import { useSyncProfile } from "@/services/userMutations";
-import { makeFilesUnique } from "@/utils/format";
+import { cleanUpdateData, makeFilesUnique } from "@/utils/format";
 import { usePresignedUpload } from "@/Hooks/usePresignedUpload";
 
 // UIs
@@ -24,12 +24,13 @@ import {
 import { Rocket } from "lucide-react";
 
 interface ProfileFormProps {
+    close: () => void;
     remainingMedia?: number;
-    remainingDetails?: number;
+    MAX_DETAILS?: number;
     defaultValues?: Partial<EditProfileInput>;
 }
 
-export default function ProfileForm({ remainingMedia = 10, remainingDetails = 4, defaultValues = {} }: ProfileFormProps) {
+export default function ProfileForm({ close, remainingMedia = 10, MAX_DETAILS = 4, defaultValues = {} }: ProfileFormProps) {
 
     const [mediaFiles, setMediaFiles] = useState<File[]>([]);
     const [mediaError, setMediaError] = useState<string | null>(null);
@@ -55,7 +56,7 @@ export default function ProfileForm({ remainingMedia = 10, remainingDetails = 4,
     const profileLock = watch("profileLock");
     const chatLock = watch("chatLock");
 
-    const canAddDetail = detailFields.length < remainingDetails;
+    const canAddDetail = detailFields.length < MAX_DETAILS;
     const canAddMedia = mediaFiles.length < remainingMedia;
 
     const handleMediaChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -99,36 +100,41 @@ export default function ProfileForm({ remainingMedia = 10, remainingDetails = 4,
 
         try {
             setIsSubmitting(true);
+            let media;
 
-            // Validate minimum files
-            if (mediaFiles.length > remainingMedia) {
-                sileo.error({
-                    title: "Too many files selected",
-                    description: `Only ${remainingMedia} remaining — please remove excess media files to reduce your selection`
-                });
-                return;
+            if (mediaFiles && mediaFiles.length > 0) {
+
+                // Validate files
+                if (mediaFiles.length > remainingMedia) {
+                    sileo.error({
+                        title: "Too many files selected",
+                        description: `Only ${remainingMedia} remaining — please remove excess media files to reduce your selection`
+                    });
+                    return;
+                }
+
+                // Generate Presigned URL and Upload files
+                const uploads = await uploadFiles(mediaFiles, "profile");
+
+                // Attach uploaded media
+                media = uploads.map((u) => (u.publicUrl));
+
+                setIsSubmitting(false);
             }
 
-            // Generate Presigned URL and Upload files
-            const uploads = await uploadFiles(mediaFiles, "profile");
-
-            // Attach uploaded media
-            const media = uploads.map((u) => (u.publicUrl));
-
-            setIsSubmitting(false);
-
+            const cleanedData = cleanUpdateData(data);
             // Update Profile
             const payload = {
-                ...data,
+                ...cleanedData,
                 details: data.details?.map(d => d.value),
-                media
+                ...(media && { media }),
             };
 
             syncProfile.mutate(payload, {
                 onSuccess: () => {
-                    sileo.success({ title: "Profile Update Successful", icon: <Rocket className="size-3.5" />, });
-                    reset();
+                    sileo.success({ title: "Profile Update !!!", icon: <Rocket className="size-3.5" />, });
                     setMediaFiles([]);
+                    close();
                 },
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onError: (error: any) => {
@@ -137,8 +143,10 @@ export default function ProfileForm({ remainingMedia = 10, remainingDetails = 4,
                 },
             });
         } catch {
-            setIsSubmitting(false);
             sileo.error({ title: "Couldn't create post now, kindly try again later." });
+        } finally {
+            reset();
+            setIsSubmitting(false);
         }
     };
 
@@ -158,7 +166,7 @@ export default function ProfileForm({ remainingMedia = 10, remainingDetails = 4,
             </Section>
 
             {/* ── Details ── */}
-            <Section icon={Tag} title="Details" badge={`${detailFields.length}/${remainingDetails}`}>
+            <Section icon={Tag} title="Details" badge={`${detailFields.length}/${MAX_DETAILS}`}>
                 <div className="space-y-2">
                     <AnimatePresence initial={false}>
                         {detailFields.map((field, i) => (
@@ -196,7 +204,7 @@ export default function ProfileForm({ remainingMedia = 10, remainingDetails = 4,
                         canAddDetail ? "text-primary hover:bg-primary/8" : "text-gray-600 dark:text-gray-300/40 cursor-not-allowed"
                     )}>
                     <AddSquare className="size-4 md:size-4.5 xl:size-5" />
-                    Add detail {!canAddDetail && `(${remainingDetails} max reached)`}
+                    Add detail {!canAddDetail && `(${MAX_DETAILS} max reached)`}
                 </button>
             </Section>
 

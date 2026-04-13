@@ -80,7 +80,6 @@ export default function Create() {
             newPost.mutate({ ...data, dateOfIncident: isoDate, media }, {
                 onSuccess: () => {
                     sileo.success({ title: "Safety post created", icon: <Rocket className="size-3.5" />, });
-                    reset();
                     setFiles([]);
                     setIsOpen(false);
                 },
@@ -91,8 +90,10 @@ export default function Create() {
                 },
             });
         } catch {
-            setIsUploading(false);
             sileo.error({ title: "Couldn't create post now, kindly try again later." });
+        }finally {
+            reset();
+            setIsUploading(false);
         }
     };
 

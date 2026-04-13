@@ -70,10 +70,15 @@ export const dateConverter = (timestamp: string): string => {
 
 // Detect media type
 export const detectMediaType = (url: string): "image" | "video" => {
-  const videoExtensions = [".mp4", ".mov", ".webm", ".ogg", ".mkv"];
+
+  if (!url) return "image";
+  const videoExtensions = [".mp4", ".mov", ".webm", ".ogg", ".mkv", ".m4v", ".qt", ".hevc"];
   const lower = url.toLowerCase();
 
-  return videoExtensions.some((ext) => lower.endsWith(ext)) ? "video" : "image";
+  // Check if the URL contains any of the video extensions 
+  const isVideo = videoExtensions.some((ext) => lower.includes(ext));
+
+  return isVideo ? "video" : "image";
 };
 
 // Format currency
@@ -101,3 +106,49 @@ export const makeFilesUnique = (files: File[]): File[] => {
     });
   });
 };
+
+// Clean Up Data
+export const cleanUpdateData = <T extends object>(data: T): Partial<T> => {
+  return Object.entries(data).reduce((acc, [key, value]) => {
+    // Only keep values that aren't null, undefined, or empty strings
+    if (value !== undefined && value !== null && value !== "") {
+      acc[key as keyof T] = value;
+    }
+    return acc;
+  }, {} as Partial<T>);
+};
+
+// Format Age 
+export function formatAgeCategorized(dateString: string | Date): string {
+  const birthDate = new Date(dateString);
+  const today = new Date();
+
+  // Calculate Age
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+
+  // 18+ Safety Check
+  if (age < 18) {
+    return "Under 18";
+  }
+
+  // Extract the decade (e.g., 20, 30, 40)
+  const decade = Math.floor(age / 10) * 10;
+  const lastDigit = age % 10;
+
+  // Determine prefix
+  let prefix = "";
+  if (lastDigit <= 4) {
+    prefix = "Early";
+  } else if (lastDigit >= 5 && lastDigit <= 6) {
+    prefix = "Mid";
+  } else {
+    prefix = "Late";
+  }
+
+  return `${prefix} ${decade}s`;
+}

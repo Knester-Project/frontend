@@ -7,6 +7,7 @@ import { userProfileOptions } from '@/services/userQueries';
 // UIs
 import Main from '@/components/Main';
 import Header from './Header';
+import Body from './Body';
 
 export default function Index() {
 
@@ -46,6 +47,11 @@ export default function Index() {
                 dateOfBirth={user.profile?.dateOfBirth ?? ""}
                 profileLock={user.profile?.profileLock ?? false}
                 chatLock={user.profile?.chatLock ?? false}
+            />
+            <Body
+                media={user.profile?.media ?? []}
+                isOwner={isOwner}
+                username={user.username}
             />
         </Main>
     );

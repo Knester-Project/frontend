@@ -2,8 +2,9 @@ import { useState, useRef } from 'react';
 import { getPaletteSync } from 'colorthief';
 import { Link } from '@tanstack/react-router';
 
-// Utils
+// Utils and Stores
 import { formatAmount, formatTrendingCount } from '@/utils/format';
+import { useProfileTheme } from '@/stores/profileTheme.store';
 
 // UIs
 import { Badge } from '@/components/ui/badge';
@@ -37,10 +38,10 @@ type HeaderProps = {
         hasBlocked: boolean;
         isBlocked: boolean;
     }
-    mediaLength: number;
     dateOfBirth: string | Date;
     profileLock: boolean;
     chatLock: boolean;
+    mediaLength: number;
 }
 
 const DETAILS_LENGTH = 4;
@@ -49,11 +50,10 @@ const MEDIA_LENGTH = 10;
 const Header = ({
     profilePicture, isOnline, username, bio, isPremium, isModerator,
     isCore, circleMembers, circlesJoined, totalPosts, balance, profileLock, chatLock,
-    isOwner, isSuspended, details, relationship, mediaLength, dateOfBirth
+    isOwner, isSuspended, details, relationship, dateOfBirth, mediaLength
 }: HeaderProps) => {
 
-    const [colors, setColors] = useState({ primary: '#f0f0f0', secondary: '#e0e0e0' });
-    const [isDark, setIsDark] = useState<boolean>(false);
+    const { colors, replaceColors } = useProfileTheme();
     const [shareInvite, setShareInvite] = useState<boolean>(false);
     const [profileForm, setProfileForm] = useState<boolean>(false);
     const [updateProfilePic, setUpdateProfilePic] = useState<boolean>(false);
@@ -64,11 +64,11 @@ const Header = ({
         if (imgRef.current) {
             const palette = getPaletteSync(imgRef.current, { colorCount: 3 });
             if (palette && palette.length >= 2) {
-                setColors({
+                replaceColors({
                     primary: palette[0].css(),
-                    secondary: palette[1].css()
-                });
-                setIsDark(palette[0].isDark);
+                    secondary: palette[1].css(),
+                    isDark: palette[0].isDark
+                })
             }
         }
     };
@@ -89,29 +89,29 @@ const Header = ({
                             background: `
                         radial-gradient(circle at 30% 30%, ${colors.primary} 0%, transparent 60%),
                         radial-gradient(circle at 70% 70%, ${colors.secondary} 0%, transparent 60%) `,
-                            opacity: isDark ? 0.4 : 0.2
+                            opacity: colors.isDark ? 0.4 : 0.2
                         }} />
 
                     <img ref={imgRef} src={profilePicture} onLoad={handleLoad} crossOrigin="anonymous" className="hidden" />
 
                     {isOwner &&
                         <div className='top-4 right-4 absolute flex gap-x-2'>
-                            <button onClick={toggleProfilePictureUpdate} className={`outline-0 ${isDark ? "bg-white text-[#121212]" : "bg-[#121212] text-white"} p-1 duration-300 rounded-lg cursor-pointer hover:bg-accent hover:text-accent-foreground`}>
+                            <button onClick={toggleProfilePictureUpdate} className={`outline-0 ${colors.isDark ? "bg-white text-[#121212]" : "bg-[#121212] text-white"} p-1 duration-300 rounded-lg cursor-pointer hover:bg-accent hover:text-accent-foreground`}>
                                 <Image variant='Bold' className='size-5 md:size-6 xl:size-7' />
                             </button>
 
-                            <button onClick={toggleProfileForm} className={`outline-0 ${isDark ? "bg-white text-[#121212]" : "bg-[#121212] text-white"} p-1 duration-300 rounded-lg cursor-pointer hover:bg-accent hover:text-accent-foreground`}>
+                            <button onClick={toggleProfileForm} className={`outline-0 ${colors.isDark ? "bg-white text-[#121212]" : "bg-[#121212] text-white"} p-1 duration-300 rounded-lg cursor-pointer hover:bg-accent hover:text-accent-foreground`}>
                                 <Setting2 variant='Bold' className='size-5 md:size-6 xl:size-7' />
                             </button>
 
-                            <button onClick={toggleInvite} className={`outline-0 ${isDark ? "bg-white text-[#121212]" : "bg-[#121212] text-white"} p-1 duration-300 rounded-lg cursor-pointer hover:bg-accent hover:text-accent-foreground flex items-center gap-x-1`}>
+                            <button onClick={toggleInvite} className={`outline-0 ${colors.isDark ? "bg-white text-[#121212]" : "bg-[#121212] text-white"} p-1 duration-300 rounded-lg cursor-pointer hover:bg-accent hover:text-accent-foreground flex items-center gap-x-1`}>
                                 <Share variant='Bold' className='size-5 md:size-6 xl:size-7' />
                             </button>
                         </div>
                     }
                 </div>
                 <section className='-mt-12 md:-mt-14 xl:-mt-16 px-4'>
-                    <div className={`${isDark ? "bg-white" : "bg-[#121212]"} relative shadow-lg border-2 border-accent/30 rounded-2xl size-20 sm:size-24 md:size-28 xl:size-32 overflow-hidden`}>
+                    <div className={`${colors.isDark ? "bg-white" : "bg-[#121212]"} relative shadow-lg border-2 border-accent/30 rounded-2xl size-20 sm:size-24 md:size-28 xl:size-32 overflow-hidden`}>
                         <img src={profilePicture} alt={"profile picture"} className="object-cover" />
                         {/* Online Status */}
                         {isOnline && (
@@ -144,10 +144,10 @@ const Header = ({
                     }
                     {isOwner ?
                         <section className='gap-2 grid grid-cols-2 sm:grid-cols-4 mt-2'>
-                            <HeaderCard isDark={isDark} color={colors.primary} title='Circle Members' Icon={People} amount={formatTrendingCount(circleMembers)} />
-                            <HeaderCard isDark={isDark} color={colors.primary} title='Posts' Icon={ReceiptText} amount={totalPosts} />
-                            <HeaderCard isDark={isDark} color={colors.primary} title='Balance' Icon={Wallet1} amount={formatAmount(balance)} />
-                            <HeaderCard isDark={isDark} color={colors.primary} title='Circles Joined' Icon={UserAdd} amount={formatTrendingCount(circlesJoined)} />
+                            <HeaderCard isDark={colors.isDark} color={colors.primary} title='Circle Members' Icon={People} amount={formatTrendingCount(circleMembers)} />
+                            <HeaderCard isDark={colors.isDark} color={colors.primary} title='Posts' Icon={ReceiptText} amount={totalPosts} />
+                            <HeaderCard isDark={colors.isDark} color={colors.primary} title='Balance' Icon={Wallet1} amount={formatAmount(balance)} />
+                            <HeaderCard isDark={colors.isDark} color={colors.primary} title='Circles Joined' Icon={UserAdd} amount={formatTrendingCount(circlesJoined)} />
                         </section>
                         :
                         <div className='relative flex gap-x-3 my-2 text-[11px] md:text-xs xl:text-sm'>
@@ -172,8 +172,9 @@ const Header = ({
             {profileForm &&
                 <Overlay open={profileForm} onClose={toggleProfileForm}>
                     <ProfileForm
+                        close={toggleProfileForm}
                         remainingMedia={MEDIA_LENGTH - mediaLength}
-                        remainingDetails={DETAILS_LENGTH - details.length}
+                        MAX_DETAILS={DETAILS_LENGTH}
                         defaultValues={{
                             bio,
                             details: details.map(d => ({ value: d })),
