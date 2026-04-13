@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQueryClient, type QueryKey } from "@tanstack/react-query";
 
 // Functions
-import { authenticateUser, commentOnPost, createReply, createSafetyPost, createUser, deleteComment, deleteReply, flagPost, toggleVibe, updateProfile, validateInvite } from "./api.services";
+import { authenticateUser, commentOnPost, createReply, createSafetyPost, createUser, deleteComment, deleteMedia, deleteReply, flagPost, toggleVibe, updateProfile, validateInvite } from "./api.services";
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
 
 
 // Helper Functions
+
+// Type
 type InfiniteData<T> = {
     pages: Array<{ data: T }>;
 };
@@ -94,6 +96,7 @@ type PrependInfiniteData<T> = {
     pageParams: unknown[];
 };
 
+// Helper for Infinite Queries
 function prependToInfiniteQuery<TItem, TKey extends string>(
     old: unknown,
     key: TKey,
@@ -132,6 +135,21 @@ function prependToInfiniteQuery<TItem, TKey extends string>(
     };
 }
 
+// Helper function for profile cache
+export const updateProfileCache = async (queryClient: QueryClient, queryKey: QueryKey, updater: (oldData: Me) => Me) => {
+    // Cancel outgoing refetch
+    await queryClient.cancelQueries({ queryKey });
+
+    // Snapshot the previous value
+    const previousData = queryClient.getQueryData<Me>(queryKey);
+
+    // Optimistically update to the new value
+    if (previousData) {
+        queryClient.setQueryData<Me>(queryKey, updater(previousData));
+    }
+
+    return { previousData };
+};
 
 // Validate Users
 export function useValidateUser() {
@@ -320,41 +338,52 @@ export function useDeleteReply(replyId: string, queries: ReplyQueries) {
 
 // Sync/Update/Create Profile
 export function useSyncProfile(username: string = "me") {
+  const queryClient = useQueryClient();
+  const queryKey = ['profile', username];
+
+  return useMutation({
+    mutationFn: (data: Partial<MyProfile>) => updateProfile(data),
+
+    onMutate: async (newValues) => {
+      return await updateProfileCache(queryClient, queryKey, (old) => ({
+        ...old,
+        profile: old.profile ? { ...old.profile, ...newValues } : null
+      }));
+    },
+
+    onError: (_err, _, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(queryKey, context.previousData);
+      }
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey }),
+  });
+}
+
+// Delete Media From Profile
+export function useDeleteMedia(username: string = "me") {
     const queryClient = useQueryClient();
     const queryKey = ['profile', username];
 
     return useMutation({
-        mutationFn: (data: EditProfilePayload) => updateProfile(data),
+        mutationFn: (url: string) => deleteMedia(url),
 
-        onMutate: async (newValues) => {
-            await queryClient.cancelQueries({ queryKey });
-
-            const previousData = queryClient.getQueryData<Me>(queryKey);
-
-            if (previousData) {
-                queryClient.setQueryData<Me>(queryKey, {
-                    ...previousData,
-                    profile: previousData.profile ? {
-                        ...previousData.profile,
-                        ...newValues,
-                    } : null
-                });
-            }
-
-            return { previousData };
+        onMutate: async (deletedUrl) => {
+            return await updateProfileCache(queryClient, queryKey, (old) => ({
+                ...old,
+                profile: old.profile ? {
+                    ...old.profile,
+                    // Filter out the deleted URL from the array
+                    media: old.profile.media ? old.profile.media.filter(url => url !== deletedUrl) : []
+                } : null
+            }));
         },
 
-        // If the mutation fails, use the context we returned above
-        onError: (err, _, context) => {
+        onError: (_err, _, context) => {
             if (context?.previousData) {
                 queryClient.setQueryData(queryKey, context.previousData);
             }
-            console.error("Profile Sync failed:", err);
         },
-
-        // Always refetch after error or success to ensure server sync
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey });
-        },
+        onSettled: () => queryClient.invalidateQueries({ queryKey }),
     });
 }

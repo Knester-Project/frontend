@@ -132,7 +132,7 @@ export default function ProfileForm({ close, remainingMedia = 10, MAX_DETAILS = 
 
             syncProfile.mutate(payload, {
                 onSuccess: () => {
-                    sileo.success({ title: "Profile Update !!!", icon: <Rocket className="size-3.5" />, });
+                    sileo.success({ title: "Profile Updated !!!", icon: <Rocket className="size-3.5" />, });
                     setMediaFiles([]);
                     close();
                 },

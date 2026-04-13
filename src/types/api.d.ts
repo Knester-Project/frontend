@@ -151,6 +151,7 @@ type MyProfile = {
 
 declare type Me = {
     _id: string;
+    email: string;
     invitedUser: User[];
     isEmailVerified: boolean;
     isPremium: boolean;
@@ -164,6 +165,7 @@ declare type Me = {
     suspendedDuration: number;
     suspensionStartDate: null | string | Date;
     username: string;
+    createdAt: string;
 }
 
 type UserProfile = {
@@ -197,6 +199,7 @@ declare type UserDetails = {
         isBlocked: boolean;
     }
     profile: null | UserProfile;
+    createdAt: string;
 }
 
 // Edit Profile Payload

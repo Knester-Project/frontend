@@ -59,7 +59,9 @@ export default function Index() {
                 flagged={user.profile?.flagged ?? false}
                 isSuspended={user.isSuspended}
                 referralPrivilege={user.referralPrivilege ?? 0}
-                dateOfBirth={"12/7/1999"}
+                dateOfBirth={user.profile?.dateOfBirth ?? ""}
+                email={user.email ?? ""}
+                createdAt={user.createdAt}
             />
         </Main>
     );

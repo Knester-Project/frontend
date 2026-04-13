@@ -149,7 +149,9 @@ export const updateProfile = async (data: EditProfilePayload) => {
 }
 
 // Delete Media from profile
-export const updateMedia = async (url: string) => {
-    const response = await userAxios.delete(`profile/media/${url}`);
+export const deleteMedia = async (url: string) => {
+    const response = await userAxios.delete(`profile/media`, {
+        data: { url: url }
+    });
     return response.data;
 }

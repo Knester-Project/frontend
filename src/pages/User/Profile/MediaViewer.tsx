@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { sileo } from "sileo";
 
-// Libs and Utils
+// Utils and Services
 import { detectMediaType } from "@/utils/format";
+import { useDeleteMedia } from "@/services/userMutations";
 
 // Icons
 import { CloseSquare, Trash, PlayCircle } from "iconsax-reactjs";
+import { Rocket } from "lucide-react";
 
 interface MediaViewerProps {
     src: string;
@@ -17,8 +20,24 @@ export default function MediaViewer({ src, alt = "User media", isOwner = false }
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const mediaType = detectMediaType(src);
 
+    const deleteMedia = useDeleteMedia();
     const handleDelete = (url: string) => {
-        console.log("The URL", url)
+
+        const ok = confirm("Delete this media?");
+        if (ok) {
+            deleteMedia.mutate((url), {
+                onSuccess: () => {
+                    sileo.success({ title: "Media Deleted !!!", icon: <Rocket className="size-3.5" />, });
+                },
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                onError: (error: any) => {
+                    const message = error?.response?.data?.message || "Couldn't delete media now, kindly try again later.";
+                    sileo.error(message);
+                },
+            })
+        } else {
+            sileo.error({ title: "You cancelled the deletion" })
+        }
     };
 
     return (
@@ -33,7 +52,11 @@ export default function MediaViewer({ src, alt = "User media", isOwner = false }
                         </div>
                     </div>
                 ) : (
-                    <img src={src} alt={alt} className="block w-full h-auto object-cover" />
+                    <img src={src || "/error.png"} onError={(e) => {
+                        const img = e.currentTarget as HTMLImageElement;
+                        img.onerror = null;
+                        img.src = "/error.png";
+                    }} alt={alt} className="block w-full h-auto object-cover" />
                 )}
 
                 {isOwner && (

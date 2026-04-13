@@ -25,11 +25,13 @@ type bodyProps = {
     isSuspended: boolean;
     referralPrivilege: number;
     dateOfBirth: string;
+    email: string;
+    createdAt: string;
 }
 
 const Body = ({
     media, isOwner, username, invitedUser, isEmailVerified, profileLock, chatLock,
-    flagged, isSuspended, referralPrivilege, dateOfBirth
+    flagged, isSuspended, referralPrivilege, dateOfBirth,email, createdAt
 }: bodyProps) => {
 
     const { colors } = useProfileTheme();
@@ -80,7 +82,10 @@ const Body = ({
                             </Link>
                         ))
                     ) : (
-                        <p style={{ color: colors.primary }} className="my-4">No invited users yet.</p>
+                        <div className="flex flex-col items-center gap-y-2 my-4">
+                            <Cobweb color={colors.primary} />
+                            <p style={{ color: colors.primary }}>No invited users yet.</p>
+                        </div>
                     )}
                 </section>
             }
@@ -98,6 +103,8 @@ const Body = ({
                     referralPrivilege={referralPrivilege}
                     isOwner={isOwner}
                     dateOfBirth={dateOfBirth}
+                    email={email}
+                    createdAt={createdAt}
                 />
             </section>
         </main>
