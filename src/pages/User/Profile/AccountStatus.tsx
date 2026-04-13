@@ -97,12 +97,12 @@ export default function AccountStatus({ isEmailVerified, profileLock, chatLock, 
                         </div>
                     }
                     <div className="flex items-center gap-2.5">
-                        <div style={{ backgroundColor: dateOfBirth.trim() ? colors.primary + 20 : colors.primary + 10 }} className={cn("flex justify-center items-center rounded-lg size-8", dateOfBirth.trim() ? "bg-accent/20" : "bg-accent/10")}>
+                        <div style={{ backgroundColor: dateOfBirth.trim() ? colors.primary + 40 : colors.primary + 20 }} className={cn("flex justify-center items-center rounded-lg size-8", dateOfBirth.trim() ? "bg-accent/20" : "bg-accent/10")}>
                             <Calendar1 style={{ color: dateOfBirth.trim() ? colors.primary : "#6B7280" }} className={cn("size-4 md:size-4.5 xl:size-5")} />
                         </div>
                         <div>
                             <p className="font-medium text-xs">Age Range</p>
-                            <p style={{ color: dateOfBirth.trim() ? colors.primary : "#6B7280" }} className={cn("font-medium text-[10px] md:text-[11px] xl:text-xs")}>
+                            <p style={{ color: dateOfBirth.trim() ? colors.primary : "#6B7280" }} className={cn("font-medium text-[10px] md:text-[11px] xl:text-xs montserrat")}>
                                 {dateOfBirth.trim() ? formatAgeCategorized(dateOfBirth) : "Agelessaurus"}
                             </p>
                         </div>

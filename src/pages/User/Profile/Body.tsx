@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 
 // Icons
 import { TagUser, ShieldSecurity, Gallery, Slash, MedalStar, Crown1, Star1 } from "iconsax-reactjs";
+import Cobweb from "@/components/Cobweb";
 
 type bodyProps = {
     media: string[];
@@ -42,7 +43,14 @@ const Body = ({
                     <p className="font-medium">Media</p>
                     <p>{media.length}</p>
                 </div>
-                <MediaGallery media={media} username={username} isOwner={isOwner} />
+                {media.length > 0 ?
+                    <MediaGallery media={media} username={username} isOwner={isOwner} />
+                    :
+                    <div className="flex flex-col items-center gap-y-2 my-4">
+                        <Cobweb color={colors.primary} />
+                        <p style={{ color: colors.primary }} className="capitalize montserrat">{username}'s Cobweb-filled media shelf.</p>
+                    </div>
+                }
             </section>
             {isOwner &&
                 <section className="mt-8">
