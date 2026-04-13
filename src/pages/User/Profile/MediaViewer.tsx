@@ -42,8 +42,8 @@ export default function MediaViewer({ src, alt = "User media", isOwner = false }
                             e.stopPropagation();
                             handleDelete(src);
                         }}
-                        className="top-2 right-2 z-10 absolute bg-background/90 backdrop-blur-md p-2 rounded-lg text-destructive hover:scale-110 transition-all cursor-pointer">
-                        <Trash className="size-4 md:size-4.5 xl:size-5" variant="Bold" />
+                        className="top-2 right-2 z-10 absolute bg-background/90 backdrop-blur-md p-1 rounded-sm text-destructive hover:scale-110 transition-all cursor-pointer">
+                        <Trash className="size-3.5 md:size-4 xl:size-4.5" variant="Bold" />
                     </button>
                 )}
             </motion.div>
@@ -52,7 +52,7 @@ export default function MediaViewer({ src, alt = "User media", isOwner = false }
             <AnimatePresence>
                 {isExpanded && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        className="z-[50] fixed inset-0 flex justify-center items-center bg-black/95 backdrop-blur-lg p-4"
+                        className="z-[50] fixed inset-0 flex justify-center items-center bg-background/95 backdrop-blur-lg p-4"
                         onClick={() => setIsExpanded(false)}>
 
                         <motion.button initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}

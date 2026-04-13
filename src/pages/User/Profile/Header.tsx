@@ -138,8 +138,8 @@ const Header = ({
                     </div>
                     <p className='mt-2 font-medium text-[11px] text-foreground/80 md:text-xs xl:text-sm'>{bio.trim() ? bio : "No Bio Yet"}</p>
                     {(details && details.length > 0) &&
-                        details.map((detail) => (
-                            <Badge variant="outline" className='mt-2 mr-1 capitalize'>{detail}</Badge>
+                        details.map((detail, index) => (
+                            <Badge key={`detail-${index}`} variant="outline" className='mt-2 mr-1 capitalize'>{detail}</Badge>
                         ))
                     }
                     {isOwner ?

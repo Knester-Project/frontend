@@ -17,7 +17,7 @@ export default function Index() {
 
     // useSuspenseQuery assumes the data is already being loaded by the loader
     const { data } = useSuspenseQuery(userProfileOptions(profile.trim()));
-    const user: Me | UserDetails = data.data;
+    const user = data.data;
 
     const relationshipDefault = {
         inCircle: false,
@@ -36,13 +36,13 @@ export default function Index() {
                 isModerator={user.isModerator}
                 isCore={user.isCore}
                 circleMembers={user.profile?.circleMembers ?? 0}
-                balance={('balance' in user) ? (user.balance as number) : 0}
+                balance={user.profile?.balance ?? 0}
                 isOwner={isOwner}
                 isSuspended={user.isSuspended}
-                circlesJoined={('circlesJoined' in user) ? user.circlesJoined : 0}
-                totalPosts={('totalPosts' in user) ? user.totalPosts : 0}
+                circlesJoined={user.circlesJoined}
+                totalPosts={user.totalPosts}
                 details={user.profile?.details ?? []}
-                relationship={('relationship' in user) ? user.relationship : relationshipDefault}
+                relationship={user?.relationship ?? relationshipDefault}
                 mediaLength={user.profile?.media?.length ?? 0}
                 dateOfBirth={user.profile?.dateOfBirth ?? ""}
                 profileLock={user.profile?.profileLock ?? false}
@@ -52,6 +52,14 @@ export default function Index() {
                 media={user.profile?.media ?? []}
                 isOwner={isOwner}
                 username={user.username}
+                invitedUser={('invitedUser' in user) ? user.invitedUser : []}
+                isEmailVerified={user.isEmailVerified}
+                profileLock={user.profile?.profileLock ?? false}
+                chatLock={user.profile?.chatLock ?? false}
+                flagged={user.profile?.flagged ?? false}
+                isSuspended={user.isSuspended}
+                referralPrivilege={user.referralPrivilege ?? 0}
+                dateOfBirth={user.profile?.dateOfBirth ?? ""}
             />
         </Main>
     );

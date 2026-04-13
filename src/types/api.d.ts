@@ -137,10 +137,10 @@ declare type Reply = {
 type MyProfile = {
     bio: string;
     details?: string[];
-    dateOfBirth?: string | Date;
+    dateOfBirth?: string;
     profilePicture?: string;
     media?: string[];
-    lastSeen?: string | Date;
+    lastSeen?: string;
     isOnline: boolean;
     balance: number;
     flagged: boolean;
@@ -169,14 +169,15 @@ declare type Me = {
 type UserProfile = {
     bio: string;
     details?: string[];
-    dateOfBirth?: string | Date;
+    dateOfBirth?: string;
     profilePicture?: string;
     media: string[];
     circleMembers: number;
     profileLock: boolean;
     chatLock: boolean;
-    lastSeen?: string | Date;
+    lastSeen?: string;
     isOnline: boolean;
+    flagged: boolean;
 }
 
 declare type UserDetails = {
@@ -187,6 +188,8 @@ declare type UserDetails = {
     isModerator: boolean;
     isCore: boolean;
     isSuspended: boolean;
+    circlesJoined: number;
+    totalPosts: number;
     relationship: {
         inCircle: boolean;
         hasReported: boolean;

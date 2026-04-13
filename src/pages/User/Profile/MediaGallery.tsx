@@ -11,7 +11,7 @@ export default function MediaGallery({ media, username, isOwner }: MediaGalleryP
 
     return (
         <div className="py-4 w-full">
-            <div className="gap-3 space-y-3 columns-2 md:columns-3">
+            <div className="gap-3 space-y-3 columns-3 md:columns-4 xl:columns-5">
                 {media.map((url) => (
                     <div key={url} className="break-inside-avoid">
                         <MediaViewer
