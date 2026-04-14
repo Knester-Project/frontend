@@ -9,7 +9,7 @@ import { useProfileTheme } from "@/stores/profileTheme.store";
 // Icons
 import { Sms, Lock, MessageRemove, Flag, Slash, Calendar1, Calendar } from "iconsax-reactjs";
 
-type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
+export type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 
 type AccountProps = {
     isEmailVerified: boolean;

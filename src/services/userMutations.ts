@@ -2,7 +2,7 @@
 import { QueryClient, useMutation, useQueryClient, type QueryKey } from "@tanstack/react-query";
 
 // Functions
-import { authenticateUser, commentOnPost, createReply, createSafetyPost, createUser, deleteComment, deleteMedia, deleteReply, flagPost, toggleVibe, updateProfile, validateInvite } from "./api.services";
+import { authenticateUser, blockUser, commentOnPost, createReply, createSafetyPost, createUser, deleteComment, deleteMedia, deleteReply, flagPost, joinCircle, leaveCircle, reportUser, toggleVibe, unblockUser, updateProfile, validateInvite } from "./api.services";
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
@@ -136,7 +136,7 @@ function prependToInfiniteQuery<TItem, TKey extends string>(
 }
 
 // Helper function for profile cache
-export const updateProfileCache = async (queryClient: QueryClient, queryKey: QueryKey, updater: (oldData: Me) => Me) => {
+const updateProfileCache = async (queryClient: QueryClient, queryKey: QueryKey, updater: (oldData: Me) => Me) => {
     // Cancel outgoing refetch
     await queryClient.cancelQueries({ queryKey });
 
@@ -338,26 +338,26 @@ export function useDeleteReply(replyId: string, queries: ReplyQueries) {
 
 // Sync/Update/Create Profile
 export function useSyncProfile(username: string = "me") {
-  const queryClient = useQueryClient();
-  const queryKey = ['profile', username];
+    const queryClient = useQueryClient();
+    const queryKey = ['profile', username];
 
-  return useMutation({
-    mutationFn: (data: Partial<MyProfile>) => updateProfile(data),
+    return useMutation({
+        mutationFn: (data: Partial<MyProfile>) => updateProfile(data),
 
-    onMutate: async (newValues) => {
-      return await updateProfileCache(queryClient, queryKey, (old) => ({
-        ...old,
-        profile: old.profile ? { ...old.profile, ...newValues } : null
-      }));
-    },
+        onMutate: async (newValues) => {
+            return await updateProfileCache(queryClient, queryKey, (old) => ({
+                ...old,
+                profile: old.profile ? { ...old.profile, ...newValues } : null
+            }));
+        },
 
-    onError: (_err, _, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(queryKey, context.previousData);
-      }
-    },
-    onSettled: () => queryClient.invalidateQueries({ queryKey }),
-  });
+        onError: (_err, _, context) => {
+            if (context?.previousData) {
+                queryClient.setQueryData(queryKey, context.previousData);
+            }
+        },
+        onSettled: () => queryClient.invalidateQueries({ queryKey }),
+    });
 }
 
 // Delete Media From Profile
@@ -386,4 +386,64 @@ export function useDeleteMedia(username: string = "me") {
         },
         onSettled: () => queryClient.invalidateQueries({ queryKey }),
     });
+}
+
+export function useRelationshipActions(targetUsername: string) {
+
+    const queryClient = useQueryClient();
+    const queryKey = ['profile', targetUsername];
+
+    // Helper for optimistic updates
+    const updateCache = async (updater: (old: UserDetails) => UserDetails) => {
+        await queryClient.cancelQueries({ queryKey });
+        const previousData = queryClient.getQueryData<UserDetails>(queryKey);
+        if (previousData) {
+            queryClient.setQueryData<UserDetails>(queryKey, updater(previousData));
+        }
+        return { previousData };
+    };
+
+    const onError = (context: any) => {
+        if (context?.previousData) queryClient.setQueryData(queryKey, context.previousData);
+    };
+
+    const onSettled = () => queryClient.invalidateQueries({ queryKey });
+
+    // Join/Leave Circle
+    const toggleCircle = useMutation({
+        mutationFn: (inCircle: boolean) => inCircle ? leaveCircle(targetUsername) : joinCircle(targetUsername),
+        onMutate: async (currentlyInCircle) =>
+            updateCache((old) => ({
+                ...old,
+                relationship: { ...old.relationship, inCircle: !currentlyInCircle }
+            })),
+        onError: (_, __, ctx) => onError(ctx),
+        onSettled
+    });
+
+    // Block/Unblock
+    const toggleBlock = useMutation({
+        mutationFn: (isBlocked: boolean) => isBlocked ? unblockUser(targetUsername) : blockUser(targetUsername),
+        onMutate: async (currentlyBlocked) =>
+            updateCache((old) => ({
+                ...old,
+                relationship: { ...old.relationship, hasBlocked: !currentlyBlocked }
+            })),
+        onError: (_, __, ctx) => onError(ctx),
+        onSettled
+    });
+
+    // Report
+    const report = useMutation({
+        mutationFn: (data: { reason: string, shouldBlock?: boolean }) => reportUser({ ...data, reportedUser: targetUsername }),
+        onMutate: async () =>
+            updateCache((old) => ({
+                ...old,
+                relationship: { ...old.relationship, hasReported: true }
+            })),
+        onError: (_, __, ctx) => onError(ctx),
+        onSettled
+    });
+
+    return { toggleCircle, toggleBlock, report };
 }

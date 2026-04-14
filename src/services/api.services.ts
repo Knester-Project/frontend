@@ -155,3 +155,33 @@ export const deleteMedia = async (url: string) => {
     });
     return response.data;
 }
+
+// Join Circle
+export const joinCircle = async (username: string) => {
+    const response = await userAxios.post(`circle/join/${username}`)
+    return response.data;
+}
+
+// Leave Circle
+export const leaveCircle = async (username: string) => {
+    const response = await userAxios.post(`circle/leave/${username}`)
+    return response.data;
+}
+
+// Block User
+export const blockUser = async (username: string) => {
+    const response = await userAxios.post(`block/new/${username}`);
+    return response.data;
+}
+
+// Unblock User
+export const unblockUser = async (username: string) => {
+    const response = await userAxios.delete(`block/remove/${username}`);
+    return response.data;
+}
+
+// Report User
+export const reportUser = async (data: ReportPayload) => {
+    const response = await userAxios.post(`report/new`, data);
+    return response.data;
+}

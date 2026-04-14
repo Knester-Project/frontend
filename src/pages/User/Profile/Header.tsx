@@ -2,19 +2,22 @@ import { useState, useRef } from 'react';
 import { getPaletteSync } from 'colorthief';
 import { Link } from '@tanstack/react-router';
 
-// Utils and Stores
+// Utils, Stores and Services
 import { formatAmount, formatTrendingCount } from '@/utils/format';
 import { useProfileTheme } from '@/stores/profileTheme.store';
+import { useRelationshipActions } from '@/services/userMutations';
 
 // UIs
 import { Badge } from '@/components/ui/badge';
 import { Overlay } from '@/components/Overlay';
 import ProfileForm from './ProfileForm';
+import { ReportDialog } from './ReportDialog';
 
 // Icons
 import {
     Flag2, MessageText1, People, ReceiptText, Slash, Setting2, Share, UserAdd,
-    Verify, Wallet1, type IconProps, MedalStar, Crown1, Star1, Image
+    Verify, Wallet1, type IconProps, MedalStar, Crown1, Star1, Image,
+    UserTick
 } from 'iconsax-reactjs';
 
 type HeaderProps = {
@@ -32,7 +35,7 @@ type HeaderProps = {
     isOwner: boolean;
     isSuspended: boolean;
     details: string[];
-    relationship?: {
+    relationship: {
         inCircle: boolean;
         hasReported: boolean;
         hasBlocked: boolean;
@@ -58,6 +61,9 @@ const Header = ({
     const [profileForm, setProfileForm] = useState<boolean>(false);
     const [updateProfilePic, setUpdateProfilePic] = useState<boolean>(false);
     const imgRef = useRef<HTMLImageElement>(null);
+
+    const { toggleCircle, toggleBlock, report } = useRelationshipActions(username);
+    const rel = relationship;
 
     // Functions
     const handleLoad = () => {
@@ -162,9 +168,23 @@ const Header = ({
                             <Link to="/messages" search={{ username }} disabled={(relationship?.isBlocked || relationship?.hasBlocked) ?? false}>
                                 <ActionButton disabled={(relationship?.isBlocked || relationship?.hasBlocked) ?? false} color={colors.primary} icon={MessageText1} label="Message" />
                             </Link>
-                            <ActionButton disabled={relationship?.hasBlocked ?? false} color={colors.primary} icon={Slash} label="Block" />
-                            <ActionButton disabled={relationship?.inCircle ?? false} color={colors.primary} icon={UserAdd} label="Join Circle" />
-                            <ActionButton disabled={relationship?.hasBlocked ?? false} color={colors.primary} icon={Flag2} label="Report" />
+                            {/* Block/Unblock Toggle */}
+                            <ActionButton onClick={() => toggleBlock.mutate(rel.hasBlocked)} isLoading={toggleBlock.isPending}
+                                color={rel.hasBlocked ? "#EF4444" : colors.primary} icon={Slash}
+                                label={rel.hasBlocked ? "Unblock" : "Block"} />
+
+                            {/* Join/Leave Circle Toggle */}
+                            <ActionButton onClick={() => toggleCircle.mutate(rel.inCircle)} isLoading={toggleCircle.isPending}
+                                disabled={rel.hasBlocked} color={rel.inCircle ? "#10B981" : colors.primary}
+                                icon={rel.inCircle ? UserTick : UserAdd} label={rel.inCircle ? "In Circle" : "Join Circle"} />
+
+                            {/* Report with Dialog */}
+                            <ReportDialog isLoading={report.isPending}
+                                onReport={(reason, isBlocked) => report.mutate({ reason, shouldBlock: isBlocked })}
+                                trigger={
+                                    <ActionButton disabled={rel.hasReported} color={rel.hasReported ? "#F59E0B" : colors.primary}
+                                        icon={Flag2} label={rel.hasReported ? "Reported" : "Report"} />
+                                } />
                         </section>
                     }
                 </section>
@@ -225,13 +245,18 @@ const HeaderCard = ({ isDark, color, Icon, title, amount }: HeaderCardProps) => 
     );
 };
 
-const ActionButton = ({ icon: Icon, color, label, disabled }: { icon: React.ComponentType<IconProps>; color: string; label: string, disabled: boolean }) => {
+const ActionButton = ({ icon: Icon, color, label, disabled, onClick, isLoading }: {
+    icon: React.ComponentType<IconProps>; color: string; label: string; disabled?: boolean; onClick?: () => void; isLoading?: boolean
+}) => {
     return (
         <div className="flex flex-col items-center gap-1">
-            <button disabled={disabled} style={{ color: disabled ? "#6B7280" : color }} className="bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 hover:shadow-sm backdrop-blur-md p-2.5 border border-border rounded-xl active:scale-95 transition-all duration-200 cursor-pointer">
-                <Icon variant="Bold" className="size-4 md:size-4.5 xl:size-5" />
+            <button onClick={onClick} disabled={disabled || isLoading} style={{ color: disabled ? "#6B7280" : color }}
+                className="bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 disabled:opacity-50 p-2.5 border border-border rounded-xl active:scale-95 transition-all duration-200 cursor-pointer">
+                <Icon variant="Bold" className={`size-4 md:size-5 ${isLoading ? 'animate-pulse' : ''}`} />
             </button>
-            <span style={{ color: disabled ? "#6B7280" : color }} className={`font-medium text-[10px] md:text-[11px] xl:text-xs`}>{label}</span>
+            <span style={{ color: disabled ? "#6B7280" : color }} className="font-medium text-[10px] md:text-xs">
+                {label}
+            </span>
         </div>
     );
 };

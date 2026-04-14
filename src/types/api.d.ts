@@ -216,3 +216,10 @@ declare type EditProfilePayload = {
     profileLock?: boolean | undefined;
     chatLock?: boolean | undefined;
 }
+
+// New Report
+declare type ReportPayload = {
+    reportedUser: string,
+    reason: string,
+    shouldBlock?: boolean
+}
