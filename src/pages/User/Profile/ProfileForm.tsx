@@ -4,12 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { sileo } from "sileo";
 
-// Utils, Schemas and Services
+// Utils, Schemas, Services and Stores
 import { cn } from "@/lib/utils";
 import { editProfileSchema, mediaFileSchema, type EditProfileInput } from "@/schemas/profile.schema";
 import { useSyncProfile } from "@/services/userMutations";
 import { cleanUpdateData, makeFilesUnique } from "@/utils/format";
 import { usePresignedUpload } from "@/Hooks/usePresignedUpload";
+import { useProfileTheme } from "@/stores/profileTheme.store";
 
 // UIs
 import { Button } from "@/components/ui/button";
@@ -315,11 +316,14 @@ interface SectionProps {
 }
 
 function Section({ icon: IconComponent, title, badge, children }: SectionProps) {
+
+    const { colors } = useProfileTheme();
+
     return (
         <div>
             <div className="flex items-center gap-2 mb-3">
-                <div className="flex justify-center items-center bg-primary/8 rounded-lg size-8 md:size-9 xl:size-10">
-                    <IconComponent variant="Bold" className="size-4 md:size-4.5 xl:size-5 text-primary/70" />
+                <div style={{ backgroundColor: colors.primary }} className="flex justify-center items-center rounded-lg size-8 md:size-9 xl:size-10">
+                    <IconComponent variant="Bold" style={{ color: colors.isDark ? "white" : "#121212" }} className={`size-4 md:size-4.5 xl:size-5`} />
                 </div>
                 <span className="font-medium text-[11px] md:text-xs xl:text-sm montserrat">{title}</span>
                 {badge != null && (
@@ -342,9 +346,12 @@ interface ToggleRowProps {
 }
 
 function ToggleRow({ icon: IconComponent, label, description, checked, onChange }: ToggleRowProps) {
+
     const id = label.replace(/\s/g, "-").toLowerCase();
+    const { colors } = useProfileTheme();
+
     return (
-        <div className="flex items-center gap-4 bg-accent/20 hover:bg-accent/40 p-3 rounded-xl transition-colors">
+        <div style={{ backgroundColor: colors.primary }} className="flex items-center gap-4 p-3 rounded-xl">
             <div className="flex justify-center items-center bg-background shadow-sm rounded-lg size-8 md:size-9 xl:size-10 shrink-0">
                 <IconComponent className="size-4 md:size-4.5 xl:size-5" />
             </div>
@@ -354,7 +361,7 @@ function ToggleRow({ icon: IconComponent, label, description, checked, onChange 
                 </Label>
                 <p className="mt-0.5 text-[10px] text-gray-600 md:text-[11px] dark:text-gray-400 xl:text-xs">{description}</p>
             </div>
-            <Switch id={id} checked={!!checked} onCheckedChange={onChange} />
+            <Switch style={{ backgroundColor: colors.isDark ? "white" : "#121212" }} id={id} checked={!!checked} onCheckedChange={onChange} />
         </div>
     );
 }

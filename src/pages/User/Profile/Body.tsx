@@ -43,7 +43,7 @@ const Body = ({
                 <div className="flex gap-x-1 text-sm md:text-base xl:text-lg items montserrat">
                     <Gallery variant="Bold" className="size-5 md:size-5.5 xl:size-6" style={{ color: colors.primary }} />
                     <p className="font-medium">Media</p>
-                    <p>{media.length}</p>
+                    <p className="font-bold">{media.length}</p>
                 </div>
                 {media.length > 0 ?
                     <MediaGallery media={media} username={username} isOwner={isOwner} />

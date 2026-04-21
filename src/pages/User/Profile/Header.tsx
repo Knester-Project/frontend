@@ -118,7 +118,7 @@ const Header = ({
                     }
                 </div>
                 <section className='-mt-12 md:-mt-14 xl:-mt-16 px-4'>
-                    <div className={`${colors.isDark ? "bg-white" : "bg-[#121212]"} relative shadow-lg border-2 border-accent/30 rounded-2xl size-20 sm:size-24 md:size-28 xl:size-32 overflow-hidden`}>
+                    <div className={`${colors.isDark ? "bg-white border-white" : "bg-[#121212] border-[#121212]"} relative shadow-lg border rounded-2xl size-20 sm:size-24 md:size-28 xl:size-32 overflow-hidden`}>
                         <img src={profilePicture} alt={"profile picture"} className="object-cover" />
                         {/* Online Status */}
                         {isOnline && (
@@ -146,7 +146,7 @@ const Header = ({
                     <p className='mt-2 font-medium text-foreground/80'>{bio.trim() ? bio : "No Bio Yet"}</p>
                     {(details && details.length > 0) &&
                         details.map((detail, index) => (
-                            <Badge key={`detail-${index}`} variant="outline" className='mt-2 mr-1 capitalize'>{detail}</Badge>
+                            <Badge style={{ borderColor: colors.primary }} key={`detail-${index}`} variant="outline" className='mt-2 mr-1 capitalize'>{detail}</Badge>
                         ))
                     }
                     {isOwner ?
@@ -158,9 +158,9 @@ const Header = ({
                         </section>
                         :
                         <div className='relative flex gap-x-3 my-2 text-[11px] md:text-xs xl:text-sm'>
-                            <p><span style={{ color: colors.primary }} className="font-semibold montserrat">{formatTrendingCount(circleMembers)}</span> Circle Members</p>
-                            <p><span style={{ color: colors.primary }} className='font-semibold montserrat'>{formatTrendingCount(circlesJoined)}</span> Circles Joined</p>
-                            <p><span style={{ color: colors.primary }} className='font-semibold montserrat'>{totalPosts}</span> Posts</p>
+                            <p><span style={{ color: colors.primary }} className="font-semibold text-sm md:text-base xl:text-lg montserrat">{formatTrendingCount(circleMembers)}</span> Circle Members</p>
+                            <p><span style={{ color: colors.primary }} className='font-semibold text-sm md:text-base xl:text-lg montserrat'>{formatTrendingCount(circlesJoined)}</span> Circles Joined</p>
+                            <p><span style={{ color: colors.primary }} className='font-semibold text-sm md:text-base xl:text-lg montserrat'>{totalPosts}</span> Posts</p>
                         </div>
                     }
 

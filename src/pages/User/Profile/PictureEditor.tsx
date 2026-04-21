@@ -11,7 +11,7 @@ import { useSyncProfile } from "@/services/userMutations";
 import { Button } from "@/components/ui/button";
 
 // Icons
-import { DirectDown, DirectUp, DirectLeft, GalleryTick, Shuffle, Slash } from "iconsax-reactjs";
+import { DirectDown, DirectUp, DirectLeft, GalleryTick, Shuffle, Slash, Refresh } from "iconsax-reactjs";
 import { Rocket, X } from "lucide-react";
 
 
@@ -367,9 +367,9 @@ export default function ProfilePictureEditor({ onClose, isPremium }: ProfilePict
                         <Button variant="outline" className="flex-1 rounded-xl" onClick={() => setStep(1)}>
                             Back
                         </Button>
-                        <Button className="flex-1 gap-2 shadow-lg shadow-primary/20 rounded-xl" onClick={handleConfirm}>
-                            <GalleryTick className="size-4" />
-                            Use this avatar
+                        <Button disabled={syncProfile.isPending} className="flex-1 gap-2 shadow-lg shadow-primary/20 rounded-xl" onClick={handleConfirm}>
+                            {syncProfile.isPending ? <Refresh className="size-4 animate-spin" /> : <GalleryTick className="size-4" />}
+                            {syncProfile.isPending ? "Saving..." : "Use this avatar"}
                         </Button>
                     </>
                 )}
