@@ -17,7 +17,8 @@ import { ReportDialog } from './ReportDialog';
 import {
     Flag2, MessageText1, People, ReceiptText, Slash, Setting2, Share, UserAdd,
     Verify, Wallet1, type IconProps, MedalStar, Crown1, Star1, Image,
-    UserTick
+    UserTick,
+    GalleryEdit
 } from 'iconsax-reactjs';
 import ProfilePictureEditor from './PictureEditor';
 
@@ -118,12 +119,18 @@ const Header = ({
                     }
                 </div>
                 <section className='-mt-12 md:-mt-14 xl:-mt-16 px-4'>
-                    <div className={`${colors.isDark ? "bg-white border-white" : "bg-[#121212] border-[#121212]"} relative shadow-lg border rounded-2xl size-20 sm:size-24 md:size-28 xl:size-32 overflow-hidden`}>
+                    <div className={`${colors.isDark ? "bg-white border-white" : "bg-[#121212] border-[#121212]"} group relative shadow-lg border rounded-2xl size-20 sm:size-24 md:size-28 xl:size-32 overflow-hidden`}>
                         <img src={profilePicture} alt={"profile picture"} className="object-cover" />
                         {/* Online Status */}
                         {isOnline && (
                             <div className="right-2 bottom-2 absolute bg-green-500 rounded-full size-3 md:size-3.5 xl:size-4" />
                         )}
+                        <div className="absolute inset-0 flex justify-center items-center bg-background/40 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-500">
+                            <div onClick={toggleProfilePictureUpdate} className="flex items-center gap-1.5 bg-foreground/90 px-2.5 py-1.5 rounded-lg text-background cursor-pointer">
+                                <GalleryEdit className="size-3" />
+                                <span className="font-semibold text-[10px] md:text-[11px] text-xs">Edit</span>
+                            </div>
+                        </div>
                     </div>
                 </section>
                 <section className='mt-2 p-2 md:p-3 xl:p-4'>

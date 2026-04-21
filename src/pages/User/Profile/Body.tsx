@@ -59,7 +59,7 @@ const Body = ({
                     <div className="flex gap-x-1 text-sm md:text-base xl:text-lg items montserrat">
                         <TagUser variant="Bold" className="size-5 md:size-5.5 xl:size-6" style={{ color: colors.primary }} />
                         <p className="font-medium">Invited Users</p>
-                        <p>{invitedUser.length}</p>
+                        <p>{invitedUser.length}/{referralPrivilege}</p>
                     </div>
                     {invitedUser.length > 0 ? (
                         invitedUser.map((user) => (
