@@ -19,6 +19,7 @@ import {
     Verify, Wallet1, type IconProps, MedalStar, Crown1, Star1, Image,
     UserTick
 } from 'iconsax-reactjs';
+import ProfilePictureEditor from './PictureEditor';
 
 type HeaderProps = {
     profilePicture: string;
@@ -207,7 +208,10 @@ const Header = ({
             }
             {updateProfilePic &&
                 <Overlay open={updateProfilePic} onClose={toggleProfilePictureUpdate}>
-                    <h2 className="font-semibold text-base md:text-lg xl:text-xl">Customise Your Avatar</h2>
+                    <ProfilePictureEditor
+                        isPremium={isPremium || isModerator || isCore}
+                        onClose={toggleProfilePictureUpdate}
+                    />
                 </Overlay>
             }
             {shareInvite &&

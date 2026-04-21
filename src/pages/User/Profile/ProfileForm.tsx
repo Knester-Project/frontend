@@ -19,7 +19,8 @@ import ErrorText from "@/components/ErrorText";
 
 // Icons
 import {
-    AddSquare, Trash, DirectSend, CloseSquare, Image, Lock, MessageRemove, Calendar1, AlignLeft, Tag, GridLock
+    AddSquare, Trash, DirectSend, CloseSquare, Image, Lock, MessageRemove, Calendar1, AlignLeft, Tag, GridLock,
+    ProfileTick
 } from "iconsax-reactjs";
 import { Rocket } from "lucide-react";
 
@@ -290,7 +291,8 @@ export default function ProfileForm({ close, remainingMedia = 10, MAX_DETAILS = 
             </Section>
 
             {/* ── Submit ── */}
-            <Button type="submit" disabled={isSubmitting || syncProfile.isPending} className="shadow-lg shadow-primary/20 rounded-xl w-full h-11 font-semibold text-sm">
+            <Button type="submit" disabled={isSubmitting || syncProfile.isPending} className="shadow-lg shadow-primary/20 rounded-xl w-full h-10 font-semibold text-sm">
+                <ProfileTick variant="Bold" />
                 {isSubmitting ? (
                     <span className="flex items-center gap-2">
                         <span className="border-2 border-primary-foreground/40 border-t-primary-foreground rounded-full size-4 animate-spin" />
@@ -317,7 +319,7 @@ function Section({ icon: IconComponent, title, badge, children }: SectionProps) 
         <div>
             <div className="flex items-center gap-2 mb-3">
                 <div className="flex justify-center items-center bg-primary/8 rounded-lg size-8 md:size-9 xl:size-10">
-                    <IconComponent className="size-4 md:size-4.5 xl:size-5 text-primary/70" />
+                    <IconComponent variant="Bold" className="size-4 md:size-4.5 xl:size-5 text-primary/70" />
                 </div>
                 <span className="font-medium text-[11px] md:text-xs xl:text-sm montserrat">{title}</span>
                 {badge != null && (
