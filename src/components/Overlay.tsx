@@ -75,24 +75,13 @@ export const Overlay = ({ open, onClose, children, variant = "center", showBackd
 
                     {/* Backdrop */}
                     {showBackdrop && (
-                        <motion.div
-                            className="absolute inset-0 bg-background/40 backdrop-blur-sm"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={closeOnOutsideClick ? onClose : undefined}
-                        />
+                        <motion.div className="absolute inset-0 bg-background/40 backdrop-blur-sm" initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={closeOnOutsideClick ? onClose : undefined} />
                     )}
 
                     {/* Content Wrapper */}
-                    <motion.div
-                        initial={getInitial(variant)}
-                        animate={getAnimate()}
-                        exit={getExit(variant)}
-                        transition={{ duration: 0.2 }}
-                        className={getVariantClass(variant)}
-                        onClick={(e) => e.stopPropagation()}
-                    >
+                    <motion.div initial={getInitial(variant)} animate={getAnimate()} exit={getExit(variant)}
+                        transition={{ duration: 0.2 }} className={getVariantClass(variant)} onClick={(e) => e.stopPropagation()}>
                         <div className="bg-card shadow-lg mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full overflow-y-auto text-card-foreground hide-scrollbar">
                             {children}
                         </div>

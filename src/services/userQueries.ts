@@ -2,7 +2,7 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { queryOptions } from '@tanstack/react-query';
 
 // API endpoints
-import { checkUsername, fetchComments, fetchReplies, fetchSafetyPosts, getCurrentUser, getUserDetails } from "./api.services";
+import { checkUsername, fetchComments, fetchReplies, fetchSafetyPosts, getCurrentUser, getUserDetails, inviteUser } from "./api.services";
 
 
 // Check UserName Details
@@ -10,7 +10,7 @@ export function useCheckUsername(username: string) {
     return useQuery({
         queryKey: ['checkedUsername'],
         queryFn: () => checkUsername(username),
-        enabled: username.trim().length > 5,
+        enabled: username.trim().length >= 3,
     })
 }
 
@@ -84,4 +84,13 @@ export const userProfileOptions = (username: string) => {
         queryFn: () => (username === "me" ? getCurrentUser() : getUserDetails(username)),
         staleTime: 1000 * 60 * 5,
     });
+}
+
+// Fetch Referral Code
+export const useReferralLink = (enabled: boolean) => {
+    return useQuery({
+        queryKey: ['userReferral'],
+        queryFn: () => inviteUser(),
+        enabled,
+    })
 }

@@ -185,3 +185,9 @@ export const reportUser = async (data: ReportPayload) => {
     const response = await userAxios.post(`report/new`, data);
     return response.data;
 }
+
+// Invite User
+export const inviteUser = async () => {
+    const response = await userAxios.get(`users/generateReferral`);
+    return response.data;
+}

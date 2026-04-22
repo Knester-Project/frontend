@@ -47,6 +47,7 @@ export default function Index() {
                 dateOfBirth={user.profile?.dateOfBirth ?? ""}
                 profileLock={user.profile?.profileLock ?? false}
                 chatLock={user.profile?.chatLock ?? false}
+                referralPrivilege={user.referralPrivilege ?? 0}
             />
             <Body
                 media={user.profile?.media ?? []}

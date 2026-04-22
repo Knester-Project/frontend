@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { getPaletteSync } from 'colorthief';
 import { Link } from '@tanstack/react-router';
+import { sileo } from 'sileo';
 
 // Utils, Stores and Services
 import { formatAmount, formatTrendingCount } from '@/utils/format';
@@ -12,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Overlay } from '@/components/Overlay';
 import ProfileForm from './ProfileForm';
 import { ReportDialog } from './ReportDialog';
+import Invite from './Invite';
 
 // Icons
 import {
@@ -47,6 +49,7 @@ type HeaderProps = {
     profileLock: boolean;
     chatLock: boolean;
     mediaLength: number;
+    referralPrivilege: number;
 }
 
 const DETAILS_LENGTH = 4;
@@ -55,7 +58,7 @@ const MEDIA_LENGTH = 10;
 const Header = ({
     profilePicture, isOnline, username, bio, isPremium, isModerator,
     isCore, circleMembers, circlesJoined, totalPosts, balance, profileLock, chatLock,
-    isOwner, isSuspended, details, relationship, dateOfBirth, mediaLength
+    isOwner, isSuspended, details, relationship, dateOfBirth, mediaLength, referralPrivilege
 }: HeaderProps) => {
 
     const { colors, replaceColors } = useProfileTheme();
@@ -81,7 +84,10 @@ const Header = ({
         }
     };
 
-    const toggleInvite = () => setShareInvite((prev) => !prev);
+    const toggleInvite = () => {
+        if (referralPrivilege <= 0) return sileo.error({ title: "Limit Reached", description: "Sorry, You have reached your invitation limit." })
+        setShareInvite((prev) => !prev)
+    }
     const toggleProfileForm = () => setProfileForm((prev) => !prev);
     const toggleProfilePictureUpdate = () => setUpdateProfilePic((prev) => !prev);
 
@@ -223,7 +229,7 @@ const Header = ({
             }
             {shareInvite &&
                 <Overlay open={shareInvite} onClose={toggleInvite}>
-                    <h2 className="font-semibold text-base md:text-lg xl:text-xl">Invite Friends</h2>
+                    <Invite />
                 </Overlay>
             }
         </>

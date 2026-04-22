@@ -356,10 +356,10 @@ function ToggleRow({ icon: IconComponent, label, description, checked, onChange 
                 <IconComponent className="size-4 md:size-4.5 xl:size-5" />
             </div>
             <div className="flex-1 min-w-0">
-                <Label htmlFor={id} className="font-medium text-[11px] md:text-xs xl:text-sm cursor-pointer montserrat">
+                <Label style={{ color: colors.isDark ? "white" : "#121212" }} htmlFor={id} className="font-medium text-[11px] md:text-xs xl:text-sm cursor-pointer montserrat">
                     {label}
                 </Label>
-                <p className="mt-0.5 text-[10px] text-gray-600 md:text-[11px] dark:text-gray-400 xl:text-xs">{description}</p>
+                <p style={{ color: colors.isDark ? "white" : "#121212" }} className="mt-0.5 text-[10px] md:text-[11px] xl:text-xs">{description}</p>
             </div>
             <Switch style={{ backgroundColor: colors.isDark ? "white" : "#121212" }} id={id} checked={!!checked} onCheckedChange={onChange} />
         </div>

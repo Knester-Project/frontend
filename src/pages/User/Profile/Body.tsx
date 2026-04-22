@@ -8,10 +8,11 @@ import MediaGallery from "./MediaGallery";
 import AccountStatus from "./AccountStatus";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import Cobweb from "@/components/Cobweb";
+import Invite from "./Invite";
 
 // Icons
 import { TagUser, ShieldSecurity, Gallery, Slash, MedalStar, Crown1, Star1 } from "iconsax-reactjs";
-import Cobweb from "@/components/Cobweb";
 
 type bodyProps = {
     media: string[];
@@ -31,7 +32,7 @@ type bodyProps = {
 
 const Body = ({
     media, isOwner, username, invitedUser, isEmailVerified, profileLock, chatLock,
-    flagged, isSuspended, referralPrivilege, dateOfBirth,email, createdAt
+    flagged, isSuspended, referralPrivilege, dateOfBirth, email, createdAt
 }: bodyProps) => {
 
     const { colors } = useProfileTheme();
@@ -59,7 +60,7 @@ const Body = ({
                     <div className="flex gap-x-1 text-sm md:text-base xl:text-lg items montserrat">
                         <TagUser variant="Bold" className="size-5 md:size-5.5 xl:size-6" style={{ color: colors.primary }} />
                         <p className="font-medium">Invited Users</p>
-                        <p>{invitedUser.length}/{referralPrivilege}</p>
+                        <p className="font-bold"><span style={{ color: colors.primary }}>{invitedUser.length}</span>/{referralPrivilege}</p>
                     </div>
                     {invitedUser.length > 0 ? (
                         invitedUser.map((user) => (
@@ -87,6 +88,7 @@ const Body = ({
                             <p style={{ color: colors.primary }}>No invited users yet.</p>
                         </div>
                     )}
+                    {referralPrivilege > 0 && <Invite />}
                 </section>
             }
             <section className="mt-8">
