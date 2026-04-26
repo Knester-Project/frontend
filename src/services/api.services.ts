@@ -191,3 +191,14 @@ export const inviteUser = async () => {
     const response = await userAxios.get(`users/generateReferral`);
     return response.data;
 }
+
+// Create a new post
+export const newPost = async (data: PostPayload[]) => {
+    const response = await userAxios.post(`post/create`, data);
+    return response.data;
+}
+
+// Fetch New Post
+export const fetchPost = async () => {
+    
+}

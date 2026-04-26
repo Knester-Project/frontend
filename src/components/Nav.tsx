@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useLocation, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Libs
+// Libs and Stores
 import { cn } from "@/lib/utils";
+import { meStore } from "@/stores/me.store";
 
 // UIs
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ import { Home, Video, Profile2User, Message, Notification, SearchNormal, Securit
 
 const Nav = () => {
 
+    const user = meStore((state) => state.user);
     const loc = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
@@ -74,7 +76,7 @@ const Nav = () => {
                         {/* Profile */}
                         <Link to="/profile" search={{ profile: "me" }}>
                             <Avatar className="size-8! cursor-pointer">
-                                <AvatarImage src="/default.svg" />
+                                <AvatarImage src={user?.profile?.profilePicture || "/default.svg"} />
                                 <AvatarFallback>You</AvatarFallback>
                             </Avatar>
                         </Link>

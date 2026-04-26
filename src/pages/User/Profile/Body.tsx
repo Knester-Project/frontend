@@ -9,7 +9,6 @@ import AccountStatus from "./AccountStatus";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import Cobweb from "@/components/Cobweb";
-import Invite from "./Invite";
 
 // Icons
 import { TagUser, ShieldSecurity, Gallery, Slash, MedalStar, Crown1, Star1 } from "iconsax-reactjs";
@@ -88,7 +87,6 @@ const Body = ({
                             <p style={{ color: colors.primary }}>No invited users yet.</p>
                         </div>
                     )}
-                    {referralPrivilege > 0 && <Invite />}
                 </section>
             }
             <section className="mt-8">

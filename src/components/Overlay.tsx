@@ -18,7 +18,7 @@ const getVariantClass = (variant: OverlayProps["variant"]) => {
         case "fullscreen":
             return "absolute inset-0 w-full h-full max-w-7xl mx-auto flex flex-col";
         default:
-            return "relative w-full max-w-7xl mx-auto flex flex-col max-h-[calc(100vh-2rem)]";
+            return "relative w-full max-w-7xl mx-auto flex flex-col max-h-[calc(100vh-4rem)]";
     }
 };
 

@@ -220,7 +220,7 @@ const Header = ({
                 </Overlay>
             }
             {updateProfilePic &&
-                <Overlay open={updateProfilePic} onClose={toggleProfilePictureUpdate}>
+                <Overlay open={updateProfilePic} onClose={toggleProfilePictureUpdate} variant='bottom'>
                     <ProfilePictureEditor
                         isPremium={isPremium || isModerator || isCore}
                         onClose={toggleProfilePictureUpdate}
@@ -228,7 +228,7 @@ const Header = ({
                 </Overlay>
             }
             {shareInvite &&
-                <Overlay open={shareInvite} onClose={toggleInvite}>
+                <Overlay open={shareInvite} onClose={toggleInvite} variant='bottom'>
                     <Invite />
                 </Overlay>
             }

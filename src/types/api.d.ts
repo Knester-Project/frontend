@@ -223,3 +223,11 @@ declare type ReportPayload = {
     reason: string,
     shouldBlock?: boolean
 }
+
+// New Post
+declare type PostPayload = {
+    content: string,
+    hashtags: string[],
+    media: string[],
+    isPrivate: boolean,
+}

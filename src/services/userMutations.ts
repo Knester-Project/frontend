@@ -2,10 +2,13 @@
 import { QueryClient, useMutation, useQueryClient, type QueryKey } from "@tanstack/react-query";
 
 // Functions
-import { authenticateUser, blockUser, commentOnPost, createReply, createSafetyPost, createUser, deleteComment, deleteMedia, deleteReply, flagPost, joinCircle, leaveCircle, reportUser, toggleVibe, unblockUser, updateProfile, validateInvite } from "./api.services";
+import { authenticateUser, blockUser, commentOnPost, createReply, createSafetyPost, createUser, deleteComment, deleteMedia, deleteReply, flagPost, joinCircle, leaveCircle, newPost, reportUser, toggleVibe, unblockUser, updateProfile, validateInvite } from "./api.services";
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
+
+// Stores
+import { meStore } from "@/stores/me.store";
 
 
 // Helper Functions
@@ -184,6 +187,7 @@ export function useAuthUser() {
         },
         onSuccess: async () => {
             queryClient.invalidateQueries();
+            meStore.getState().fetchUser();
         }
     })
 }
@@ -388,6 +392,7 @@ export function useDeleteMedia(username: string = "me") {
     });
 }
 
+// Join/Leave Circle, Block/Unblock and Report
 export function useRelationshipActions(targetUsername: string) {
 
     const queryClient = useQueryClient();
@@ -446,4 +451,15 @@ export function useRelationshipActions(targetUsername: string) {
     });
 
     return { toggleCircle, toggleBlock, report };
+}
+
+// Create New Post
+export function useNewPost() {
+
+    return useMutation({
+        mutationFn: (data: PostPayload[]) => newPost(data),
+        onError: (error) => {
+            console.error("Post Creation failed:", error);
+        },
+    })
 }
