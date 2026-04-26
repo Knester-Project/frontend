@@ -4,6 +4,9 @@ import { queryOptions } from '@tanstack/react-query';
 // API endpoints
 import { checkUsername, fetchComments, fetchReplies, fetchSafetyPosts, getCurrentUser, getUserDetails, inviteUser } from "./api.services";
 
+// Stores
+import { meStore } from "@/stores/me.store";
+
 
 // Check UserName Details
 export function useCheckUsername(username: string) {
@@ -80,11 +83,22 @@ export const useReplies = (replyQueries: ReplyQueries, enabled: boolean) => {
 // Fetch User Profile
 export const userProfileOptions = (username: string) => {
     return queryOptions({
-        queryKey: ['profile', username],
-        queryFn: () => (username === "me" ? getCurrentUser() : getUserDetails(username)),
+        queryKey: ["profile", username],
+        queryFn: async () => {
+            if (username === "me") {
+                const data = await getCurrentUser();
+
+                // Sync Zustand
+                meStore.getState().setUser(data.data);
+
+                return data;
+            }
+
+            return getUserDetails(username);
+        },
         staleTime: 1000 * 60 * 5,
     });
-}
+};
 
 // Fetch Referral Code
 export const useReferralLink = (enabled: boolean) => {

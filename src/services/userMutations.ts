@@ -187,7 +187,7 @@ export function useAuthUser() {
         },
         onSuccess: async () => {
             queryClient.invalidateQueries();
-            meStore.getState().fetchUser();
+            meStore.getState().ensureUser(queryClient);
         }
     })
 }
