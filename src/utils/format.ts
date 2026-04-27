@@ -1,9 +1,3 @@
-// Truncating of Texts
-export function truncate(text: string, limit = 20): string {
-  if (text.length <= limit) return text;
-  return text.slice(0, limit) + '…';
-}
-
 // Trending Count
 export const formatTrendingCount = (num: number) => {
   if (num >= 1000000) {
@@ -152,3 +146,13 @@ export function formatAgeCategorized(dateString: string | Date): string {
 
   return `${prefix} ${decade}s`;
 }
+
+// Shuffle Array of String
+export const shuffle = <T,>(array: T[]): T[] => {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+};

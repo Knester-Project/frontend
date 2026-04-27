@@ -16,32 +16,32 @@ import { Rocket, X } from "lucide-react";
 
 
 // Represents the configuration for a specific feature (like hair or eyes)
-export interface FeatureConfig {
+interface FeatureConfig {
     label: string;
     type: "color" | "swatch";
     values: string[];
 }
 
 // Represents a complete DiceBear style configuration
-export interface StyleConfig {
+interface StyleConfig {
     id: string;
     label: string;
     options: Record<string, FeatureConfig>;
 }
 
 // Represents the user's selected parameters
-export interface AvatarParams {
+interface AvatarParams {
     [key: string]: string;
 }
 
 // Props for the StylePicker component
-export interface StylePickerProps {
+interface StylePickerProps {
     selected: StyleConfig | null;
     onSelect: (style: StyleConfig) => void;
 }
 
 // Props for the FeatureOption component
-export interface FeatureOptionProps {
+interface FeatureOptionProps {
     optionKey: string;
     config: FeatureConfig;
     value: string;
@@ -52,7 +52,7 @@ export interface FeatureOptionProps {
 }
 
 // Props for the FeatureCustomizer component
-export interface FeatureCustomizerProps {
+interface FeatureCustomizerProps {
     style: StyleConfig;
     seed: string;
     onSeedChange: (seed: string) => void;
@@ -61,7 +61,7 @@ export interface FeatureCustomizerProps {
 }
 
 // Props for the Main ProfilePictureEditor component
-export interface ProfilePictureEditorProps {
+interface ProfilePictureEditorProps {
     onClose: () => void;
     isPremium: boolean;
 }

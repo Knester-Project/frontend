@@ -22,10 +22,9 @@ export default function Invite() {
     const [expanded, setExpanded] = useState<boolean>(false);
     const [timeLeft, setTimeLeft] = useState<number>(600)
     const [copied, setCopied] = useState<boolean>(false);
-    const { data, isPending, isFetching, isError, refetch } = useReferralLink(expanded);
+    const { data, isLoading, isError, refetch } = useReferralLink(expanded);
 
-
-    const isLoading = isPending || isFetching;
+    
     const referralCode = data?.data?.referralLink;
 
 

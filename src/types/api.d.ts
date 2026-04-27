@@ -5,7 +5,7 @@ declare type SafetyInput = {
         state: string;
         city: string;
         town: string;
-        street?: string | undefined;
+        street?: string;
     };
     content: string;
     media: {
@@ -17,18 +17,18 @@ declare type SafetyInput = {
     socialMedia: {
         platform: string;
         username: string;
-        profileLink?: string | undefined;
+        profileLink?: string;
     }[];
 }
 
 // For Fetching Safety Post
 declare type SafetyQueries = {
-    state?: string | undefined;
-    city?: string | undefined;
-    name?: string | undefined;
-    street?: string | undefined;
-    cursor?: string | undefined;
-    limit?: number | undefined;
+    state?: string;
+    city?: string;
+    name?: string;
+    street?: string;
+    cursor?: string;
+    limit?: number;
 }
 
 // Safety Post
@@ -204,17 +204,17 @@ declare type UserDetails = {
 
 // Edit Profile Payload
 declare type EditProfilePayload = {
-    bio?: string | undefined;
+    bio?: string;
     details?: string[];
-    dateOfBirth?: string | undefined;
-    profilePicture?: string | undefined;
-    media?: string[] | undefined;
+    dateOfBirth?: string;
+    profilePicture?: string;
+    media?: string[];
     location?: {
         longitude: number;
         latitude: number;
-    } | undefined;
-    profileLock?: boolean | undefined;
-    chatLock?: boolean | undefined;
+    };
+    profileLock?: boolean;
+    chatLock?: boolean;
 }
 
 // New Report
@@ -230,4 +230,40 @@ declare type PostPayload = {
     hashtags: string[],
     media: string[],
     isPrivate: boolean,
+}
+
+// Cursor and Limit
+declare type CursorQueries = {
+    cursor?: string;
+    limit?: number;
+}
+
+// Tags
+declare type Tags = {
+    tag: string,
+    count: number,
+    formattedCount: string
+}
+
+// Post
+declare type Post = {
+  _id: string;
+  postId: string;
+  user: User;
+  createdAt: string;
+  edited: boolean;
+  content: string;
+  media: string[];
+  hashtags: string[];
+  vibes: number;
+  comments: number;
+  views: number;
+  isThread: boolean;
+  threadRoot: string;
+  threadParent: string;
+  flags: number;
+  hasFlagged: boolean;
+  hasVibed: boolean;
+  isPrivate: boolean;
+  thread?: Post[]
 }

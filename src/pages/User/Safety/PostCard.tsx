@@ -83,7 +83,7 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
                     </div>
                 </div>
 
-                <button onClick={handleFlagged} className={`flex items-center gap-1 bg-white/40 dark:bg-white/10 backdrop-blur-md px-3 py-1 rounded-xl 
+                <button onClick={handleFlagged} className={`flex items-center gap-1 bg-white/40 dark:bg-white/10 duration-500 backdrop-blur-md px-3 py-1 rounded-xl 
                     ${userFlagged ? "text-destructive cursor-not-allowed" : "hover:text-destructive cursor-pointer"}`}>
                     <Flag variant="Bold" className={`size-5`} />
                     <span>{userFlagged ? "Flagged" : "Flag"}</span>
@@ -142,7 +142,7 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
                 {vibes === 1 && hasVibed ? (
                     <p>You vibed with this</p>
                 ) : vibes > 0 && hasVibed ? (
-                    <p>You and {vibes} people vibed with this</p>
+                    <p>You and {vibes - 1} people vibed with this</p>
                 ) : vibes > 0 ? (
                     <p>{vibes} people vibed with this</p>
                 ) : null}

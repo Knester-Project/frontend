@@ -16,7 +16,7 @@ import logo from "/logo.svg";
 
 //Icons
 import { Search, Menu, X } from "lucide-react";
-import { Home, Video, Profile2User, Message, Notification, SearchNormal, SecuritySafe } from "iconsax-reactjs";
+import { Home, Shop, Profile2User, Message, Notification, SearchNormal, SecuritySafe } from "iconsax-reactjs";
 
 
 const Nav = () => {
@@ -27,7 +27,7 @@ const Nav = () => {
 
     const navigationItems = [
         { href: "/feed", icon: Home, label: "Feed" },
-        { href: "/videos", icon: Video, label: "Videos" },
+        { href: "/market", icon: Shop, label: "Market Place" },
         { href: "/people", icon: Profile2User, label: "People" },
         { href: "/messages", icon: Message, label: "Messages" },
         { href: "/safety", icon: SecuritySafe, label: "Safety" }
@@ -51,7 +51,7 @@ const Nav = () => {
                                     <Link key={item.href} to={item.href}>
                                         <Button variant="ghost" size="sm" className={cn("gap-2 transition-colors", isActive && "bg-primary text-primary-foreground")}>
                                             <Icon className="size-4" variant={isActive ? "Bold" : "Outline"} />
-                                            {item.label}
+                                            <span className="text-xs md:text-sm">{item.label}</span>
                                         </Button>
                                     </Link>
                                 )

@@ -198,7 +198,19 @@ export const newPost = async (data: PostPayload[]) => {
     return response.data;
 }
 
-// Fetch New Post
-export const fetchPost = async () => {
-    
+// Feed
+export const feed = async (queries: CursorQueries) => {
+    const params = new URLSearchParams();
+
+    if (queries.cursor) params.append("cursor", queries.cursor);
+    if (queries.limit) params.append("limit", String(queries.limit));
+
+    const response = await userAxios.get(`post/feed?${params.toString()}`);
+    return response.data;
+}
+
+// Trending Tags
+export const trendingTags = async () => {
+    const response = await userAxios.get(`post/trending/tags`);
+    return response.data;
 }

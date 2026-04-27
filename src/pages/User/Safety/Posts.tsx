@@ -50,7 +50,7 @@ const Posts = () => {
 
     if (posts.length === 0) {
         return <NoPostsFound title="No Safety Post Found"
-            text="It looks like there are no safety posts in this area yet. Be the first to report or try adjusting your filters." />
+            text="It looks like there are no more safety posts. Be the first to report one or try adjusting your filters." />
     }
 
     return (

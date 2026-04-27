@@ -167,11 +167,16 @@ export function useValidateUser() {
 
 // Create User
 export function useCreateUser() {
-
+    
+    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: { username: string, password: string, referrer: string }) => createUser(data),
         onError: (error) => {
             console.error("Create User failed:", error);
+        },
+        onSuccess: async () => {
+            queryClient.invalidateQueries();
+            meStore.getState().ensureUser(queryClient);
         }
     })
 }

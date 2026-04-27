@@ -2,7 +2,7 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { queryOptions } from '@tanstack/react-query';
 
 // API endpoints
-import { checkUsername, fetchComments, fetchReplies, fetchSafetyPosts, getCurrentUser, getUserDetails, inviteUser } from "./api.services";
+import { checkUsername, feed, fetchComments, fetchReplies, fetchSafetyPosts, getCurrentUser, getUserDetails, inviteUser, trendingTags } from "./api.services";
 
 // Stores
 import { meStore } from "@/stores/me.store";
@@ -106,5 +106,33 @@ export const useReferralLink = (enabled: boolean) => {
         queryKey: ['userReferral'],
         queryFn: () => inviteUser(),
         enabled,
+    })
+}
+
+// User Feed
+export const useFeed = (feedQueries: CursorQueries) => {
+    return useInfiniteQuery({
+        queryKey: ["feed", feedQueries],
+        refetchOnWindowFocus: false,
+        maxPages: 5,
+
+        queryFn: ({ pageParam }) =>
+            feed({
+                ...feedQueries,
+                cursor: pageParam,
+            }),
+        initialPageParam: undefined,
+
+        getNextPageParam: (lastPage) => {
+            return lastPage.data.nextCursor ?? undefined;
+        },
+    });
+};
+
+// Trending Tags
+export const useTrendingTags = () => {
+    return useQuery({
+        queryKey: ['trendingTags'],
+        queryFn: () => trendingTags(),
     })
 }

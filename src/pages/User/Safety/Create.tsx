@@ -59,9 +59,14 @@ export default function Create() {
         try {
             setIsUploading(true);
 
-            // Validate minimum files
+            // Validate minimum files and Maximum Files
             if (files.length < 2) {
                 sileo.error({ title: "Minimum of 2 media required" });
+                return;
+            }
+
+            if(files.length > 8) {
+                sileo.error({ title: "Maximum of 8 media required" });
                 return;
             }
 

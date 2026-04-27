@@ -21,7 +21,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
     const [referrer, setReferrer] = useState<string>("");
     const [passwordPage, setPasswordPage] = useState<boolean>(false);
     const [recoveryPage, setRecoveryPage] = useState<boolean>(false);
-    const { data, isFetching, isError, isLoading, error } = useCheckUsername(enteredUsername);
+    const { data, isLoading, isError, error } = useCheckUsername(enteredUsername);
     const generatedUsernames = generateCustomUsernames(enteredUsername);
 
     const [password, setPassword] = useState<string>('');
@@ -116,7 +116,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                             <label htmlFor="username" className='font-medium cursor-pointer'>Username</label>
                             <input type="text" id="username" className='bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none text-sm md:text-base xl:text-lg duration-300 focus:caret-primary' onChange={handleUsername} value={enteredUsername} title="Please enter only letters, numbers, and underscores (spaces will be replaced with underscores)" minLength={5} placeholder="Inclusive.Iguana" required />
                             <div className="right-3 bottom-4 absolute cursor-pointer transform">
-                                {(isLoading && isFetching) && <Loader className="size-3 md:size-4 xl:size-5 text-foreground animate-spin" />}
+                                {(isLoading) && <Loader className="size-3 md:size-4 xl:size-5 text-foreground animate-spin" />}
                             </div>
                         </div>
                         {isError &&
@@ -130,7 +130,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                             <CircleCheckBig className='inline size-3 md:size-4 xl:size-5' />
                             {data.message} press continue to enter password.
                         </div>}
-                        <Button text="Continue" loadingText={"Validating Invitation..."} disabled={validateInvite.isPending || (isFetching || isError || isLoading)} loading={validateInvite.isPending} icon={<LogIn className='size-4 md:size-5' />} variant='primary' />
+                        <Button text="Continue" loadingText={"Validating Invitation..."} disabled={validateInvite.isPending || (isLoading || isError)} loading={validateInvite.isPending} icon={<LogIn className='size-4 md:size-5' />} variant='primary' />
                     </form>
                 </div>}
             {passwordPage &&

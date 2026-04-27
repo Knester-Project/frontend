@@ -1,49 +1,42 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { sileo } from "sileo";
 
-// Utils and Stores
+// Utils, Stores and Services
 import { cn } from "@/lib/utils";
 import { meStore } from "@/stores/me.store";
+import { useNewPost } from "@/services/userMutations";
+import { usePresignedUpload } from "@/Hooks/usePresignedUpload";
+import { useTrendingTags } from "@/services/userQueries";
+import { shuffle } from "@/utils/format";
 
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
 // Icons
-import { Hash, X, Send, Plus, GitBranch } from "lucide-react";
+import { Hash, X, Send, Plus, GitBranch, Rocket } from "lucide-react";
 import { GalleryEdit, Hashtag, Global, Trash, Lock } from "iconsax-reactjs";
 
 const MAX_CHARS = import.meta.env.VITE_POST_LENGTH;
+const THREAD_LENGTH = import.meta.env.VITE_THREAD_LENGTH;
+
 const SUGGESTED_TAGS = [
     "design", "tech", "selflove", "queerlove", "art", "photography", "music", "chess",
     "writing", "film", "gaming", "code", "queerdating", "inspiration", "life",
     "queer", "porn"
 ];
 
-
 // Type Declarations
-export interface User {
-    username?: string;
-    profile?: {
-        profilePicture?: string;
-    };
-}
-
-export interface MediaFile {
+interface MediaFile {
     file: File;
     url: string;
 }
 
-export interface SlotData {
+interface SlotData {
     content: string;
     hashtags: string[];
     mediaFiles: MediaFile[];
-}
-
-export interface PostPayload {
-    content: string;
-    hashtags: string[];
-    media: string[];
 }
 
 interface CharRingProps {
@@ -79,12 +72,6 @@ interface ToolbarBtnProps {
     active?: boolean;
 }
 
-export interface PostComposerProps {
-    user: User | null;
-    onPost?: (payload: { posts: PostPayload[]; isThread: boolean; isPrivate: boolean }) => void;
-}
-
-
 // Character Count
 function CharRing({ content }: CharRingProps) {
 
@@ -117,6 +104,7 @@ function CharRing({ content }: CharRingProps) {
 function HashtagPanel({ hashtags, setHashtags }: HashtagPanelProps) {
 
     const [input, setInput] = useState("");
+    const { data, isLoading, isError } = useTrendingTags();
 
     const addTag = (tag: string) => {
         const clean = tag.replace(/^#/, "").toLowerCase().trim();
@@ -172,12 +160,23 @@ function HashtagPanel({ hashtags, setHashtags }: HashtagPanelProps) {
                 <div>
                     <p className="mb-1.5 text-[10px] text-gray-600 dark:text-gray-400">Suggestions</p>
                     <div className="flex flex-wrap gap-1.5">
-                        {SUGGESTED_TAGS.filter((t) => !hashtags.includes(t)).slice(0, 8).map((tag) => (
-                            <button key={tag} disabled={remaining === 0} onClick={() => addTag(tag)}
-                                className="hover:bg-primary/5 disabled:opacity-30 px-2.5 py-1 border border-border hover:border-primary rounded-lg text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] hover:text-primary dark:text-gray-400 transition-all cursor-pointer disabled:pointer-events-none">
-                                #{tag}
-                            </button>
-                        ))}
+                        {!isLoading && !isError && data && data?.data.length > 0 ?
+                            data.data.map((tag: Tags) => (
+                                <button key={`hash_${tag.tag}`} disabled={remaining === 0} onClick={() => addTag(tag.tag)}
+                                    className="hover:bg-primary/5 disabled:opacity-30 px-2.5 py-1 border border-border hover:border-primary rounded-lg text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] hover:text-primary dark:text-gray-400 transition-all cursor-pointer disabled:pointer-events-none">
+                                    #{tag.tag}
+                                </button>
+                            ))
+                            :
+                            shuffle(SUGGESTED_TAGS.filter((t) => !hashtags.includes(t)))
+                                .slice(0, 5)
+                                .map((tag) => (
+                                    <button key={tag} disabled={remaining === 0} onClick={() => addTag(tag)}
+                                        className="hover:bg-primary/5 disabled:opacity-30 px-2.5 py-1 border border-border hover:border-primary rounded-lg text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] hover:text-primary dark:text-gray-400 transition-all cursor-pointer disabled:pointer-events-none">
+                                        #{tag}
+                                    </button>
+                                ))
+                        }
                     </div>
                 </div>
             </div>
@@ -193,7 +192,7 @@ function PostSlot({ avatar, username, content, setContent, mediaFiles,
     const [showTags, setShowTags] = useState(false);
     const remaining = MAX_CHARS - content.length;
     const isOverLimit = remaining < 0;
-    
+
     // Functions
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files || e.target.files.length === 0) return;
@@ -240,7 +239,7 @@ function PostSlot({ avatar, username, content, setContent, mediaFiles,
                 </div>
 
                 <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder={isFirst ? "What's on your mind?" : "Continue your thread…"}
-                    rows={isFirst ? 3 : 2} className={cn(
+                    rows={isFirst ? 4 : 3} className={cn(
                         "bg-transparent focus:outline-none w-full text-[11px] placeholder:text-gray-600 md:text-xs xl:text-sm leading-relaxed resize-none hide-scrollbar", isOverLimit && "text-destructive")} />
 
                 <AnimatePresence>
@@ -248,7 +247,7 @@ function PostSlot({ avatar, username, content, setContent, mediaFiles,
                         <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
                             className={cn("gap-1.5 grid mt-2 rounded-xl overflow-hidden", mediaFiles.length === 1 ? "grid-cols-1" : "grid-cols-3")}>
                             {mediaFiles.map((m, i) => (
-                                <div key={i} className="group relative rounded-xl aspect-video overflow-hidden">
+                                <div key={i} className="group relative rounded-xl aspect-square overflow-hidden">
                                     <img src={m.url} alt="" className="w-full h-full object-cover" />
                                     <button onClick={() => removeMedia(i)}
                                         className="top-1.5 right-1.5 absolute flex justify-center items-center bg-background rounded-full size-6 md:size-7 xl:size-8 cursor-pointer">
@@ -303,31 +302,91 @@ export default function PostComposer() {
     const user = meStore((state) => state.user);
     const [slots, setSlots] = useState<SlotData[]>([emptySlot()]);
     const [isPrivate, setIsPrivate] = useState<boolean>(false);
+    const [isUploading, setIsUploading] = useState<boolean>(false);
     const isThread = slots.length > 1;
+    const { uploadFiles } = usePresignedUpload();
 
+
+    // Functions
     const updateSlot = (idx: number, patch: Partial<SlotData>) =>
         setSlots((prev) => prev.map((s, i) => (i === idx ? { ...s, ...patch } : s)));
 
     const addSlot = () => {
-        if (slots.length < 10) setSlots((prev) => [...prev, emptySlot()]);
+        if (slots.length < THREAD_LENGTH) setSlots((prev) => [...prev, emptySlot()]);
     };
 
     const removeSlot = (idx: number) =>
         setSlots((prev) => prev.filter((_, i) => i !== idx));
 
-    const allEmpty = slots.every((s) => !s.content.trim());
+    const allEmpty = slots.every((s) => !s.content.trim() || s.mediaFiles.length === 0);
     const anyOverLimit = slots.some((s) => s.content.length > MAX_CHARS);
 
-    const handleSubmit = () => {
+    const newPost = useNewPost()
+
+    // Helper Function
+    async function buildPayload(slots: SlotData[], isPrivate: boolean) {
+
+        setIsUploading(true);
+
+        const validSlots = slots.filter(
+            (s) => s.content.trim() || s.mediaFiles.length > 0
+        );
+
+        const processedSlots = await Promise.all(
+            validSlots.map(async (slot) => {
+                let mediaUrls: string[] = [];
+
+                if (slot.mediaFiles.length > 0) {
+                    // Upload all files in this slot in ONE request
+                    const uploads = await uploadFiles(
+                        slot.mediaFiles.map((m) => m.file),
+                        "post"
+                    );
+
+                    // Save Uploads
+                    mediaUrls = uploads.map((u) => u.publicUrl);
+                }
+
+                return {
+                    content: slot.content,
+                    hashtags: slot.hashtags,
+                    media: mediaUrls,
+                    isPrivate,
+                };
+            })
+        );
+
+        setIsUploading(false);
+        return processedSlots;
+    }
+
+    const handleSubmit = async () => {
+
         if (allEmpty || anyOverLimit) return;
-        // const postsToCreate = slots.filter((s) => s.content.trim()).map((s) => ({
-        //     content: s.content,
-        //     hashtags: s.hashtags,
-        //     media: s.mediaFiles.map((m) => m.url),
-        // }));
-        // ({ posts: postsToCreate, isThread, isPrivate });
-        setSlots([emptySlot()]);
-        setIsPrivate(false);
+
+        try {
+
+            const payload = await buildPayload(slots, isPrivate);
+            console.log("The Payload", payload)
+
+            // Create Post
+            newPost.mutate(payload, {
+                onSuccess: () => {
+                    sileo.success({ title: "New Post !!!", icon: <Rocket className="size-3.5" />, });
+                    setSlots([emptySlot()]);
+                    setIsPrivate(false);
+                },
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                onError: (error: any) => {
+                    const message = error?.response?.data?.message || "Failed to create post, kindly try again later.";
+                    sileo.error(message);
+                },
+            });
+        } catch {
+            sileo.error({ title: "Failed to create post, kindly try again later." });
+        } finally {
+            setIsUploading(false);
+        }
     };
 
     return (
@@ -347,7 +406,7 @@ export default function PostComposer() {
             <div className="px-4 pt-4">
                 {slots.map((slot, idx) => (
                     <PostSlot key={idx} avatar={user?.profile?.profilePicture} username={user?.username}
-                        content={slot.content} setContent={(v) => updateSlot(idx, { content: v })} mediaFiles={slot.mediaFiles}
+                        content={slot.content} setContent={(v) => updateSlot(idx, { content: v.trim() })} mediaFiles={slot.mediaFiles}
                         setMediaFiles={(val) => updateSlot(idx, { mediaFiles: typeof val === "function" ? val(slot.mediaFiles) : val })}
                         hashtags={slot.hashtags}
                         setHashtags={(val) => updateSlot(idx, { hashtags: typeof val === "function" ? val(slot.hashtags) : val })}
@@ -358,7 +417,7 @@ export default function PostComposer() {
             </div>
 
             <div className="px-4 pb-2">
-                <button onClick={addSlot} disabled={slots.length >= 10}
+                <button onClick={addSlot} disabled={slots.length >= THREAD_LENGTH}
                     className="group flex items-center gap-2 disabled:opacity-30 py-1 text-gray-600 hover:text-primary dark:text-gray-400 text-xs transition-colors cursor-pointer disabled:pointer-events-none">
                     <div className="flex justify-center items-center border border-border group-hover:border-primary/50 border-dashed rounded-full size-5 transition-colors">
                         <Plus className="size-3" />
@@ -373,7 +432,7 @@ export default function PostComposer() {
                 <p className="text-[11px] text-gray-600 dark:text-gray-400 montserrat">
                     {isThread ? `${slots.length} posts in thread` : "Single post"}
                 </p>
-                <Button size="sm" disabled={allEmpty || anyOverLimit} onClick={handleSubmit} className="gap-1.5 shadow-primary/20 shadow-sm px-4 rounded-lg h-8 font-semibold text-xs">
+                <Button size="sm" disabled={allEmpty || anyOverLimit || newPost.isPending || isUploading} onClick={handleSubmit} className="gap-1.5 shadow-primary/20 shadow-sm px-4 rounded-lg h-8 font-semibold text-xs">
                     <Send className="size-3.5" />
                     {isThread ? "Post thread" : "Post"}
                 </Button>

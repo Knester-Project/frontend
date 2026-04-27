@@ -86,7 +86,7 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
     const loadMoreRef = useInfiniteScroll({ hasNextPage, isFetchingNextPage, fetchNextPage, root: scrollRef.current });
 
     return (
-        <main className={`${comment.owner ? "border-accent" : "border-border"} bg-accent/20 shadow-sm mb-2 p-4 md:p-5 xl:p-6 border rounded-3xl`}>
+        <main className={` bg-accent/20 shadow-sm mb-2 p-4 md:p-5 xl:p-6 border rounded-3xl`}>
             {/* Header */}
             <header className="flex justify-between items-center">
                 <div className="flex items-center gap-x-3">

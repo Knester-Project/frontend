@@ -83,7 +83,7 @@ const ReplyCard = ({ reply }: { reply: Reply }) => {
     const loadMoreRef = useInfiniteScroll({ hasNextPage, isFetchingNextPage, fetchNextPage, root: scrollRef.current });
 
     return (
-        <main className={`${reply.owner ? "border-accent border" : ""} mb-2 p-2 md:p-3 xl:p-4 rounded-3xl`}>
+        <main className={`mb-2 p-2 md:p-3 xl:p-4 rounded-3xl`}>
             {/* Header */}
             <header>
                 <div className="flex items-center gap-x-2">
