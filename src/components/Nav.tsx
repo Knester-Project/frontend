@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useLocation, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Libs and Stores
+// Libs, Stores and Services
 import { cn } from "@/lib/utils";
 import { meStore } from "@/stores/me.store";
+import { useTrendingTags } from "@/services/userQueries";
 
 // UIs
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,8 @@ import logo from "/logo.svg";
 //Icons
 import { Search, Menu, X } from "lucide-react";
 import { Home, Shop, Profile2User, Message, Notification, SearchNormal, SecuritySafe } from "iconsax-reactjs";
+import { SUGGESTED_TAGS } from "@/assets/tags";
+import { shuffle } from "@/utils/format";
 
 
 const Nav = () => {
@@ -24,6 +27,9 @@ const Nav = () => {
     const user = meStore((state) => state.user);
     const loc = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+
+    const { data, isLoading, isError } = useTrendingTags();
+
 
     const navigationItems = [
         { href: "/feed", icon: Home, label: "Feed" },
@@ -62,7 +68,7 @@ const Nav = () => {
                     {/* Search and Actions */}
                     <div className="flex items-center gap-3">
                         <Button variant="ghost" size="sm" className="hidden sm:block">
-                            <Link to="/search">
+                            <Link to="/search" search={{ tags: "" }}>
                                 <SearchNormal className="size-4" />
                             </Link>
                         </Button>
@@ -116,6 +122,22 @@ const Nav = () => {
                                     <Input placeholder="Search Knester..." className="pl-10" />
                                 </motion.div>
                             </nav>
+                            <div className="flex flex-wrap gap-1.5 mt-4">
+                                {(!isLoading && !isError && data && data?.data.length > 0) ?
+                                    data.data.map((tag: Tags) => (
+                                        <Link to="/search" search={{ tags: tag.tag }} key={`hash_${tag.tag}`}
+                                            className="block hover:bg-primary/5 disabled:opacity-30 px-2.5 py-1 border border-border hover:border-primary rounded-lg text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] hover:text-primary dark:text-gray-400 transition-all cursor-pointer disabled:pointer-events-none">
+                                            #{tag.tag}
+                                        </Link>
+                                    ))
+                                    :
+                                    shuffle(SUGGESTED_TAGS.slice(0, 5).map((tag) => (
+                                        <Link to="/search" search={{ tags: tag }} key={tag} className="block hover:bg-primary/5 disabled:opacity-30 px-2.5 py-1 border border-border hover:border-primary rounded-lg text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] hover:text-primary dark:text-gray-400 transition-all cursor-pointer disabled:pointer-events-none">
+                                            #{tag}
+                                        </Link>
+                                    ))
+                                )}
+                            </div>
                         </motion.div>
                     )}
                 </AnimatePresence>

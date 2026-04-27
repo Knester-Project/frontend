@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 // Utils and Services
 import { cn } from "@/lib/utils";
 import { dateConverter, detectMediaType } from "@/utils/format";
-import { useFlagPost } from "@/services/userMutations";
+import { usePostVibe, usePostFlag } from "@/services/userMutations";
 
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -28,7 +28,7 @@ function ThreadBubble({ post }: { post: Post }) {
                 <div className="flex-1 bg-border/50 w-px" />
             </div>
             <div className="flex-1 pb-1 min-w-0">
-                <p className="text-foreground/85 leading-relaxed whitespace-pre-wrap">
+                <p className="text-[11px] text-foreground/85 md:text-xs xl:text-sm leading-relaxed whitespace-pre-wrap">
                     {post.content}
                 </p>
                 <div className="flex justify-between items-center mt-2">
@@ -46,8 +46,6 @@ function ThreadBubble({ post }: { post: Post }) {
 // Main PostCard 
 export default function PostCard({ post, index = 0 }: { post: Post; index?: number }) {
 
-
-    // State initialization derived directly from the post data
     const [vibed, setVibed] = useState<boolean>(post.hasVibed);
     const [userFlagged, setUserFlagged] = useState<boolean>(post.hasFlagged);
     const [threadExpanded, setThreadExpanded] = useState<boolean>(false);
@@ -61,18 +59,21 @@ export default function PostCard({ post, index = 0 }: { post: Post; index?: numb
     }));
 
     // Functions
+    const toggleVibe = usePostVibe(post._id, { limit: 20 })
     const handleVibe = () => {
-        setVibed((v) => !v);
-
-        // TODO: Add your React Query mutation here (e.g., usePostVibe)
-        // just like you did in the SafetyPost component!
+        setVibed((prev) => !prev);
+        toggleVibe.mutate({ postId: post._id, postModel: "Post" }, {
+            onError: () => {
+                setVibed((prev) => !prev);
+            }
+        });
     };
 
-    const flagPost = useFlagPost(post._id, { state: "", city: "", street: "", name: "", limit: 2 })
+    const flagPost = usePostFlag(post._id, { limit: 20 })
     const handleFlagged = () => {
         if (userFlagged) return;
         setUserFlagged(true);
-        flagPost.mutate({ postId: post._id, postModel: "SafetyPost" }, {
+        flagPost.mutate({ postId: post._id, postModel: "Post" }, {
             onError: () => {
                 setUserFlagged(false);
             },

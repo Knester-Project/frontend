@@ -10,7 +10,7 @@ const Vibe = ({ handleToggle, userVibed, vibes }: { handleToggle: () => void, us
             className={`flex items-center gap-1 px-3 py-1 rounded-xl cursor-pointer backdrop-blur-md transition-colors duration-300
                 bg-white/30 dark:bg-white/10 border border-white/20 dark:border-white/5 shadow-sm
                 ${userVibed ? "text-vibe shadow-[0_0_15px_rgba(255,0,100,0.3)] bg-white/40 dark:bg-white/20"
-                    : "text-gray-600 dark:text-gray-300 hover:text-vibe-active hover:bg-white/50 dark:hover:bg-white/15"}`}>
+                    : "text-gray-600 dark:text-gray-300 hover:text-vibe-active dark:hover:text-vibe-active hover:bg-white/50 dark:hover:bg-white/15"}`}>
                         
             {/* Heart Animation */}
             <motion.div key={userVibed ? "vibed" : "not-vibed"} initial={{ scale: 0.8, rotate: -15, opacity: 0.5 }}

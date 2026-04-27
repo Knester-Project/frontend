@@ -134,7 +134,7 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
             {/* Trigger Button */}
             <Drawer.Trigger asChild>
                 <button className="flex items-center gap-2 bg-white/30 dark:bg-white/10 shadow-sm backdrop-blur-md px-3 py-1 border border-border rounded-xl hover:text-comment-active transition-all cursor-pointer">
-                    <Messages1 variant="Bold" className="size-5" />
+                    <Messages1 className="size-5" />
                     <span className="font-medium text-sm md:text-base xl:text-lg montserrat">{comments}</span>
                 </button>
             </Drawer.Trigger>

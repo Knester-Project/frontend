@@ -24,7 +24,7 @@ export default function InstallBtn() {
   }
 
   const handleInstallClick = () => {
-    navigate({ to: "/feed" })
+    navigate({ to: "/install" })
   }
 
   return (

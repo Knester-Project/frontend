@@ -68,7 +68,7 @@ const Trending = () => {
                         </div>
                     ) : (
                         data?.data?.map((tag: Tags, index: number) => (
-                            <Link to="/search" key={`tag_${index}`} className="group block hover:bg-accent/10 px-3 py-1.5 rounded-xl transition-all duration-200 cursor-pointer">
+                            <Link to="/search" search={{ tags: tag.tag }} key={`tag_${index}`} className="group block hover:bg-accent/10 px-3 py-1.5 rounded-xl transition-all duration-200 cursor-pointer">
                                 <div className="flex justify-between items-center">
                                     <h3 className="flex items-center gap-1 font-semibold text-sm">
                                         <Hashtag className="size-4 text-primary" />

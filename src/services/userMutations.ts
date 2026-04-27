@@ -167,7 +167,7 @@ export function useValidateUser() {
 
 // Create User
 export function useCreateUser() {
-    
+
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: { username: string, password: string, referrer: string }) => createUser(data),
@@ -467,4 +467,41 @@ export function useNewPost() {
             console.error("Post Creation failed:", error);
         },
     })
+}
+
+// Toggle Vibe for Feed Post
+export function usePostVibe(postId: string, feedQueries: CursorQueries) {
+    return useCreateOptimisticMutation({
+        queryKey: ["feed", feedQueries],
+        mutationFn: toggleVibe,
+        updater: (p: Post) => {
+            // If it is the main parent post
+            if (p._id === postId) {
+                return toggleVibeField(p);
+            }
+
+            // If it is the nested post
+            if (p.thread && p.thread.length > 0) {
+                return {
+                    ...p,
+                    thread: p.thread.map((child) =>
+                        child._id === postId ? toggleVibeField(child) : child
+                    )
+                };
+            }
+
+            // Otherwise, return the post untouched
+            return p;
+        },
+    });
+}
+
+// Flag a Feed Post
+export function usePostFlag(postId: string, feedQueries: CursorQueries) {
+    return useCreateOptimisticMutation({
+        queryKey: ["feed", feedQueries],
+        mutationFn: flagPost,
+        updater: (p: Post) =>
+            p._id === postId ? flagItemField(p) : p,
+    });
 }

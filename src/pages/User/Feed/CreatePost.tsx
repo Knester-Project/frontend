@@ -2,13 +2,14 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { sileo } from "sileo";
 
-// Utils, Stores and Services
+// Utils, Stores, Services and Constants
 import { cn } from "@/lib/utils";
 import { meStore } from "@/stores/me.store";
 import { useNewPost } from "@/services/userMutations";
 import { usePresignedUpload } from "@/Hooks/usePresignedUpload";
 import { useTrendingTags } from "@/services/userQueries";
 import { shuffle } from "@/utils/format";
+import { SUGGESTED_TAGS } from "@/assets/tags";
 
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -21,11 +22,6 @@ import { GalleryEdit, Hashtag, Global, Trash, Lock } from "iconsax-reactjs";
 const MAX_CHARS = import.meta.env.VITE_POST_LENGTH;
 const THREAD_LENGTH = import.meta.env.VITE_THREAD_LENGTH;
 
-const SUGGESTED_TAGS = [
-    "design", "tech", "selflove", "queerlove", "art", "photography", "music", "chess",
-    "writing", "film", "gaming", "code", "queerdating", "inspiration", "life",
-    "queer", "porn"
-];
 
 // Type Declarations
 interface MediaFile {
@@ -160,7 +156,7 @@ function HashtagPanel({ hashtags, setHashtags }: HashtagPanelProps) {
                 <div>
                     <p className="mb-1.5 text-[10px] text-gray-600 dark:text-gray-400">Suggestions</p>
                     <div className="flex flex-wrap gap-1.5">
-                        {!isLoading && !isError && data && data?.data.length > 0 ?
+                        {(!isLoading && !isError && data && data?.data.length > 0) ?
                             data.data.map((tag: Tags) => (
                                 <button key={`hash_${tag.tag}`} disabled={remaining === 0} onClick={() => addTag(tag.tag)}
                                     className="hover:bg-primary/5 disabled:opacity-30 px-2.5 py-1 border border-border hover:border-primary rounded-lg text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] hover:text-primary dark:text-gray-400 transition-all cursor-pointer disabled:pointer-events-none">

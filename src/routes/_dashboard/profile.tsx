@@ -27,11 +27,8 @@ export const Route = createFileRoute('/_dashboard/profile')({
     <>
       {error.error.status === 404
         ?
-        <ErrorPage 
-          code="404" 
-          title="Profile Not Found"
-          description="We couldn't find a profile matching that username. Try checking the spelling or searching for a different name." 
-        />
+        <ErrorPage code="404" title="Profile Not Found"
+          description="We couldn't find a profile matching that username. Try checking the spelling or searching for a different name." />
         :
         <ErrorPage />
       }
