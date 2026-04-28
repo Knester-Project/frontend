@@ -106,6 +106,7 @@ export const useReferralLink = (enabled: boolean) => {
         queryKey: ['userReferral'],
         queryFn: () => inviteUser(),
         enabled,
+        staleTime: 8 * 60000, // 8 minutes
     })
 }
 

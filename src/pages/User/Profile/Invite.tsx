@@ -19,7 +19,7 @@ import { Copy, Check, QrCode, Download, Share2, Sparkles } from "lucide-react";
 export default function Invite() {
 
     const [expanded, setExpanded] = useState<boolean>(false);
-    const [timeLeft, setTimeLeft] = useState<number>(480)
+    const [timeLeft, setTimeLeft] = useState<number>(480) // 8 minutes in seconds
     const [copied, setCopied] = useState<boolean>(false);
     const { data, isLoading, isError, refetch } = useReferralLink(expanded);
 
