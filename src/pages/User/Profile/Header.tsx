@@ -32,6 +32,7 @@ type HeaderProps = {
     isPremium: boolean;
     isModerator: boolean;
     isCore: boolean;
+    discoverable: boolean;
     circleMembers: number;
     circlesJoined: number;
     totalPosts: number;
@@ -56,7 +57,7 @@ const DETAILS_LENGTH = 4;
 const MEDIA_LENGTH = 10;
 
 const Header = ({
-    profilePicture, isOnline, username, bio, isPremium, isModerator,
+    profilePicture, isOnline, username, bio, isPremium, isModerator, discoverable,
     isCore, circleMembers, circlesJoined, totalPosts, balance, profileLock, chatLock,
     isOwner, isSuspended, details, relationship, dateOfBirth, mediaLength, referralPrivilege
 }: HeaderProps) => {
@@ -215,7 +216,8 @@ const Header = ({
                             details: details.map(d => ({ value: d })),
                             dateOfBirth: dateOfBirth ? dateOfBirth.toString() : "",
                             profileLock,
-                            chatLock
+                            chatLock,
+                            discoverable
                         }}
                     />
                 </Overlay>

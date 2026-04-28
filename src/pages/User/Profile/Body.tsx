@@ -21,6 +21,7 @@ type bodyProps = {
     isEmailVerified: boolean;
     profileLock: boolean;
     chatLock: boolean;
+    discoverable: boolean;
     flagged: boolean;
     isSuspended: boolean;
     referralPrivilege: number;
@@ -30,7 +31,7 @@ type bodyProps = {
 }
 
 const Body = ({
-    media, isOwner, username, invitedUser, isEmailVerified, profileLock, chatLock,
+    media, isOwner, username, invitedUser, isEmailVerified, profileLock, chatLock, discoverable,
     flagged, isSuspended, referralPrivilege, dateOfBirth, email, createdAt
 }: bodyProps) => {
 
@@ -98,6 +99,7 @@ const Body = ({
                     isEmailVerified={isEmailVerified}
                     profileLock={profileLock}
                     chatLock={chatLock}
+                    discoverable={discoverable}
                     flagged={flagged}
                     isSuspended={isSuspended}
                     referralPrivilege={referralPrivilege}

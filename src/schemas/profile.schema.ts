@@ -43,6 +43,7 @@ export const editProfileSchema = z.object({
     location: locationSchema.optional(),
     profileLock: z.boolean().optional(),
     chatLock: z.boolean().optional(),
+    discoverable: z.boolean().optional(),
 })
 
 export type EditProfileInput = z.infer<typeof editProfileSchema>;

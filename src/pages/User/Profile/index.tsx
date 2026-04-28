@@ -35,6 +35,7 @@ export default function Index() {
                 isPremium={user.isPremium}
                 isModerator={user.isModerator}
                 isCore={user.isCore}
+                discoverable={user.discoverable ?? true}
                 circleMembers={user.profile?.circleMembers ?? 0}
                 balance={user.profile?.balance ?? 0}
                 isOwner={isOwner}
@@ -57,6 +58,7 @@ export default function Index() {
                 isEmailVerified={user.isEmailVerified}
                 profileLock={user.profile?.profileLock ?? false}
                 chatLock={user.profile?.chatLock ?? false}
+                discoverable={user.discoverable ?? true}
                 flagged={user.profile?.flagged ?? false}
                 isSuspended={user.isSuspended}
                 referralPrivilege={user.referralPrivilege ?? 0}

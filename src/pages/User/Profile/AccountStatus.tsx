@@ -7,7 +7,7 @@ import { dateConverter, formatAgeCategorized } from "@/utils/format";
 import { useProfileTheme } from "@/stores/profileTheme.store";
 
 // Icons
-import { Sms, Lock, MessageRemove, Flag, Slash, Calendar1, Calendar } from "iconsax-reactjs";
+import { Sms, Lock, MessageRemove, Flag, Slash, Calendar1, Calendar, GlobalSearch } from "iconsax-reactjs";
 
 export type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 
@@ -15,6 +15,7 @@ type AccountProps = {
     isEmailVerified: boolean;
     profileLock: boolean;
     chatLock: boolean;
+    discoverable: boolean;
     flagged: boolean;
     isSuspended: boolean;
     referralPrivilege: number;
@@ -88,7 +89,7 @@ function InfoItem({
 
 export default function AccountStatus(props: AccountProps) {
 
-    const { isEmailVerified, profileLock, chatLock, flagged, isSuspended,
+    const { isEmailVerified, profileLock, chatLock, flagged, isSuspended, discoverable,
         referralPrivilege, isOwner, dateOfBirth, email, createdAt } = props;
 
     const { colors } = useProfileTheme();
@@ -99,6 +100,7 @@ export default function AccountStatus(props: AccountProps) {
         { label: "Chat Lock", value: chatLock, Icon: MessageRemove, color: "text-amber-500" },
         { label: "Flagged", value: flagged, Icon: Flag, color: "text-red-500" },
         { label: "Suspended", value: isSuspended, Icon: Slash, color: "text-red-500" },
+        { label: "Discoverable", value: discoverable, Icon: GlobalSearch, color: "text-fuchsia-500" },
     ];
 
     const hasDOB = Boolean(dateOfBirth.trim());

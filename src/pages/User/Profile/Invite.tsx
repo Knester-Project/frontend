@@ -18,15 +18,13 @@ import { Copy, Check, QrCode, Download, Share2, Sparkles } from "lucide-react";
 // Apply the interface to your component
 export default function Invite() {
 
-    // Explicitly type your state as booleans
     const [expanded, setExpanded] = useState<boolean>(false);
-    const [timeLeft, setTimeLeft] = useState<number>(600)
+    const [timeLeft, setTimeLeft] = useState<number>(480)
     const [copied, setCopied] = useState<boolean>(false);
     const { data, isLoading, isError, refetch } = useReferralLink(expanded);
 
     
     const referralCode = data?.data?.referralLink;
-
 
     const inviteUrl = `https://knester.com?invite=${referralCode}`;
 

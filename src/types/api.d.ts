@@ -158,6 +158,7 @@ declare type Me = {
     isModerator: boolean;
     isCore: boolean;
     isSuspended: boolean;
+    discoverable: boolean;
     circlesJoined: number;
     totalPosts: number;
     profile: null | MyProfile;
@@ -190,6 +191,7 @@ declare type UserDetails = {
     isModerator: boolean;
     isCore: boolean;
     isSuspended: boolean;
+    discoverable: boolean;
     circlesJoined: number;
     totalPosts: number;
     relationship: {
@@ -214,6 +216,7 @@ declare type EditProfilePayload = {
         latitude: number;
     };
     profileLock?: boolean;
+    discoverable?: boolean;
     chatLock?: boolean;
 }
 

@@ -21,7 +21,8 @@ import ErrorText from "@/components/ErrorText";
 // Icons
 import {
     AddSquare, Trash, DirectSend, CloseSquare, GalleryFavorite, Lock, MessageRemove, Calendar1, AlignLeft, Tag, GridLock,
-    ProfileTick
+    ProfileTick,
+    GlobalSearch
 } from "iconsax-reactjs";
 import { Rocket } from "lucide-react";
 
@@ -47,6 +48,7 @@ export default function ProfileForm({ isPremium, close, remainingMedia = 10, MAX
             dateOfBirth: defaultValues.dateOfBirth ?? "",
             profileLock: defaultValues.profileLock ?? false,
             chatLock: defaultValues.chatLock ?? false,
+            discoverable: defaultValues.discoverable ?? true,
         },
         mode: "onBlur"
     });
@@ -58,6 +60,7 @@ export default function ProfileForm({ isPremium, close, remainingMedia = 10, MAX
 
     const profileLock = watch("profileLock");
     const chatLock = watch("chatLock");
+    const discoverable = watch("discoverable");
 
     const canAddDetail = detailFields.length < MAX_DETAILS;
     const canAddMedia = mediaFiles.length < remainingMedia;
@@ -279,6 +282,8 @@ export default function ProfileForm({ isPremium, close, remainingMedia = 10, MAX
             {/* ── Privacy Toggles ── */}
             <Section icon={Lock} title="Privacy">
                 <div className="space-y-3">
+                    <ToggleRow icon={GlobalSearch} label="Discoverable" description="Allow others to find and send you random chat requests"
+                        checked={discoverable!} onChange={(v) => setValue("discoverable", v)} />
                     {isPremium ?
                         <>
                             <ToggleRow icon={GridLock} label="Profile Lock" description="No one can view your profile"
