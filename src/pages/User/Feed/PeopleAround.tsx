@@ -39,7 +39,7 @@ const PeopleAround = () => {
                 <div className="shrink-0">
                     <Link to="/messages" search={{ username: "" }}>
                         <Button size="sm" className="bg-primary hover:bg-transparent border border-transparent hover:border-primary hover:text-primary transition-all duration-300">
-                            <MessageText1 className="size-4" variant="Bold" />
+                            <MessageText1 className="size-3 md:size-3.5 xl:size-4" variant="Bold" />
                             <span className="ml-0.5 text-xs xl:text-sm">Chat</span>
                         </Button>
                     </Link>

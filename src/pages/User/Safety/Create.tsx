@@ -65,7 +65,7 @@ export default function Create() {
                 return;
             }
 
-            if(files.length > 8) {
+            if (files.length > 8) {
                 sileo.error({ title: "Maximum of 8 media required" });
                 return;
             }
@@ -91,12 +91,12 @@ export default function Create() {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onError: (error: any) => {
                     const message = error?.response?.data?.message || "Couldn't create post now, kindly try again later.";
-                    sileo.error(message);
+                    sileo.error({ title: "Error", description: message });
                 },
             });
         } catch {
             sileo.error({ title: "Couldn't create post now, kindly try again later." });
-        }finally {
+        } finally {
             reset();
             setIsUploading(false);
         }

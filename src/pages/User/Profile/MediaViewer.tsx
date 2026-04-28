@@ -32,7 +32,7 @@ export default function MediaViewer({ src, alt = "User media", isOwner = false }
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onError: (error: any) => {
                     const message = error?.response?.data?.message || "Couldn't delete media now, kindly try again later.";
-                    sileo.error(message);
+                    sileo.error({ title: "Error", description: message });
                 },
             })
         } else {

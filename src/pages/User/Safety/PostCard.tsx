@@ -85,7 +85,7 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
 
                 <button onClick={handleFlagged} className={`flex items-center gap-1 bg-white/40 dark:bg-white/10 duration-500 backdrop-blur-md px-3 py-1 rounded-xl 
                     ${userFlagged ? "text-destructive cursor-not-allowed" : "hover:text-destructive cursor-pointer"}`}>
-                    <Flag variant="Bold" className={`size-5`} />
+                    <Flag variant="Bold" className={`size-3.5 md:size-4 xl:size-5`} />
                     <span>{userFlagged ? "Flagged" : "Flag"}</span>
                 </button>
             </header>

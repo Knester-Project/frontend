@@ -214,3 +214,49 @@ export const trendingTags = async () => {
     const response = await userAxios.get(`post/trending/tags`);
     return response.data;
 }
+
+// Fetch In-Circle Posts
+export const circlePosts = async (queries: CursorQueries) => {
+    const params = new URLSearchParams();
+
+    if (queries.cursor) params.append("cursor", queries.cursor);
+    if (queries.limit) params.append("limit", String(queries.limit));
+
+    const response = await userAxios.get(`post/fetch/circle?${params.toString()}`);
+    return response.data;
+}
+
+// Fetch Trending Posts
+export const trendingPosts = async (queries: CursorQueries) => {
+    const params = new URLSearchParams();
+
+    if (queries.cursor) params.append("cursor", queries.cursor);
+    if (queries.limit) params.append("limit", String(queries.limit));
+
+    const response = await userAxios.get(`post/fetch/trending?${params.toString()}`);
+    return response.data;
+}
+
+// Fetch Profile Posts
+export const profilePosts = async (queries: CursorQueries, username: string) => {
+    const params = new URLSearchParams();
+
+    if (queries.cursor) params.append("cursor", queries.cursor);
+    if (queries.limit) params.append("limit", String(queries.limit));
+    if (username) params.append("username", username);
+
+    const response = await userAxios.get(`post/fetch/profile/${username}?${params.toString()}`);
+    return response.data;
+}
+
+// Fetch Posts Based On Tags
+export const postsByTags = async (tags: string[], queries: CursorQueries) => {
+    const params = new URLSearchParams();
+
+    if (queries.cursor) params.append("cursor", queries.cursor);
+    if (queries.limit) params.append("limit", String(queries.limit));
+    if (tags.length > 0) params.append("tags", tags.join(","));
+
+    const response = await userAxios.get(`post/fetch/tags?${params.toString()}`);
+    return response.data;
+}

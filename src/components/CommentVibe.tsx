@@ -13,7 +13,7 @@ const CommentVibe = ({ handleToggle, userVibed, vibes }: { handleToggle: () => v
             <motion.div key={userVibed ? "vibed" : "not-vibed"} initial={{ scale: 0.8, rotate: -15, opacity: 0.5 }}
                 animate={{ scale: 1, rotate: 0, opacity: 1 }} exit={{ scale: 0.8, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 400, damping: 12 }}>
-                <Heart className="size-4" variant={userVibed ? "Bold" : "Outline"} />
+                <Heart className="size-3 md:size-3.5 xl:size-4" variant={userVibed ? "Bold" : "Outline"} />
             </motion.div>
 
             <div className="overflow-hidden">

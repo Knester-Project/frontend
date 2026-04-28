@@ -287,7 +287,7 @@ export default function ProfilePictureEditor({ onClose, isPremium }: ProfilePict
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onError: (error: any) => {
                     const message = error?.response?.data?.message || "Couldn't update profile now, kindly try again later.";
-                    sileo.error(message);
+                    sileo.error({ title: "Error", description: message });
                 },
             });
         }

@@ -206,6 +206,7 @@ const Header = ({
             {profileForm &&
                 <Overlay open={profileForm} onClose={toggleProfileForm}>
                     <ProfileForm
+                        isPremium={isPremium || isModerator || isCore}
                         close={toggleProfileForm}
                         remainingMedia={MEDIA_LENGTH - mediaLength}
                         MAX_DETAILS={DETAILS_LENGTH}

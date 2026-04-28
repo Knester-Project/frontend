@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 // Services
-import { useFeed } from "@/services/userQueries";
+import { useFeed, useCirclePosts, useTrendingPosts } from "@/services/userQueries";
 import useInfiniteScroll from "@/Hooks/useInfiniteScroll";
 
 // Utils
@@ -26,53 +26,64 @@ const Posts = () => {
 
     const [activeTab, setActiveTab] = useState("latest");
 
+    const emptyText =
+        activeTab === "latest"
+            ? "No posts available — Try different filters or create a new post."
+            : activeTab === "trending"
+                ? "No trending posts yet — Try following more topics or creators."
+                : "No posts found for you — Try refreshing or exploring new circles.";
+
+    // Call all queries unconditionally (This obeys React Hook rules)
+    // This pre-fetches the other tabs in the background, 
+    // making tab-switching feel instantaneous for the user!
+    const feedQuery = useFeed({ limit: 20 });
+    const trendingQuery = useTrendingPosts({ limit: 20 });
+    const circleQuery = useCirclePosts({ limit: 20 });
+
+    // Determine which query object is currently active
+    const activeQuery =
+        activeTab === "latest" ? feedQuery :
+            activeTab === "trending" ? trendingQuery :
+                circleQuery;
+
+    // Extract the variables from the currently active query
     const {
         data,
         fetchNextPage,
         isLoading,
         hasNextPage,
         isFetchingNextPage,
-    } = useFeed({ limit: 20 });
+    } = activeQuery;
 
+    // Pass the active fetch function to your scroll hook
     const loadMoreRef = useInfiniteScroll({
         hasNextPage,
         isFetchingNextPage,
         fetchNextPage,
     });
 
-    if (isLoading) {
-        <div className="space-y-4 mt-5">
-            {Array.from({ length: 3 }).map((_, i) => (
-                <PostLoader key={i} />
-            ))}
-        </div>
-    }
-
     const posts = data?.pages.flatMap((page) => page.data.posts) ?? [];
-
-    if (posts.length === 0) {
-        return <NoPostsFound title="No Posts found"
-            text="No posts available — Try different filters or create a new post." />
-    }
 
     return (
         <main className="space-y-4 py-10">
             {/* Section header */}
-            <div className="flex justify-between items-center">
-                <h2 className="font-semibold text-[11px] md:text-xs xl:text-sm uppercase tracking-wide">Posts</h2>
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="font-semibold text-[11px] md:text-xs xl:text-sm uppercase tracking-wide">
+                    Posts
+                </h2>
                 <div className="flex items-center gap-0.5 bg-muted p-0.5 rounded-xl">
                     {TABS.map((tab) => {
                         const Icon = tab.icon;
                         return (
                             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                                className={cn(
-                                    "relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-medium text-xs transition-all duration-200 cursor-pointer",
-                                    activeTab === tab.id ? "" : "text-gray-200 dark:text-gray-600 hover:text-accent")}>
+                                className={cn("relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-medium text-xs transition-all duration-200 cursor-pointer",
+                                    activeTab === tab.id ? "" : "text-gray-400 dark:text-gray-600 hover:text-accent dark:hover:text-accent")}>
                                 {activeTab === tab.id && (
-                                    <motion.div layoutId="feed-tab-indicator" className="absolute inset-0 bg-accent shadow-sm rounded-xl"
+                                    <motion.div layoutId="feed-tab-indicator"
+                                        className="absolute inset-0 bg-background shadow-sm border border-border/50 rounded-xl"
                                         transition={{ type: "spring", stiffness: 400, damping: 30 }} />
                                 )}
-                                <Icon className="z-10 relative size-3.5" />
+                                <Icon className={cn("z-10 relative size-3.5", activeTab === tab.id ? "text-primary" : "")} />
                                 <span className="hidden sm:inline z-10 relative">{tab.label}</span>
                             </button>
                         );
@@ -80,28 +91,47 @@ const Posts = () => {
                 </div>
             </div>
 
-            {posts.map((post, index) => (
-                <PostCard key={post._id} post={post} index={index} />
-            ))}
-
-            {/* Loading next page */}
-            {isFetchingNextPage && (
-                <div className="space-y-4">
-                    {Array.from({ length: 2 }).map((_, i) => (
+            {/* Content Area (Rendered below the tabs so tabs never disappear) */}
+            {isLoading ? (
+                <div className="space-y-4 mt-5">
+                    {Array.from({ length: 3 }).map((_, i) => (
                         <PostLoader key={i} />
                     ))}
                 </div>
-            )}
+            ) : posts.length === 0 ? (
+                <NoPostsFound
+                    title="No Posts found"
+                    text={emptyText}
+                />
+            ) : (
+                <>
+                    <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }} className="space-y-4">
+                        {posts.map((post, index) => (
+                            <PostCard key={post._id} post={post} index={index} />
+                        ))}
+                    </motion.div>
 
-            {/* No more data */}
-            {!hasNextPage && posts.length > 0 && (
-                <p className="py-4 text-primary text-center">
-                    No more posts to show
-                </p>
-            )}
+                    {/* Loading next page */}
+                    {isFetchingNextPage && (
+                        <div className="space-y-4">
+                            {Array.from({ length: 2 }).map((_, i) => (
+                                <PostLoader key={i} />
+                            ))}
+                        </div>
+                    )}
 
-            {/* Intersection trigger */}
-            <div ref={loadMoreRef} />
+                    {/* No more data */}
+                    {!hasNextPage && posts.length > 0 && (
+                        <p className="py-4 font-medium text-muted-foreground text-xs text-center">
+                            You've caught up on all posts!
+                        </p>
+                    )}
+
+                    {/* Intersection trigger */}
+                    <div ref={loadMoreRef} className="w-full h-4" />
+                </>
+            )}
         </main>
     );
 }

@@ -469,10 +469,10 @@ export function useNewPost() {
     })
 }
 
-// Toggle Vibe for Feed Post
-export function usePostVibe(postId: string, feedQueries: CursorQueries) {
+// Toggle Vibe for Feed Post/Trending Post/Circle Post
+export function usePostVibe(postId: string, queryKey: string, feedQueries: CursorQueries) {
     return useCreateOptimisticMutation({
-        queryKey: ["feed", feedQueries],
+        queryKey: [queryKey, feedQueries],
         mutationFn: toggleVibe,
         updater: (p: Post) => {
             // If it is the main parent post
@@ -496,10 +496,10 @@ export function usePostVibe(postId: string, feedQueries: CursorQueries) {
     });
 }
 
-// Flag a Feed Post
-export function usePostFlag(postId: string, feedQueries: CursorQueries) {
+// Flag a Feed Post/Trending Post/Circle Post
+export function usePostFlag(postId: string, queryKey: string, feedQueries: CursorQueries) {
     return useCreateOptimisticMutation({
-        queryKey: ["feed", feedQueries],
+        queryKey: [queryKey, feedQueries],
         mutationFn: flagPost,
         updater: (p: Post) =>
             p._id === postId ? flagItemField(p) : p,

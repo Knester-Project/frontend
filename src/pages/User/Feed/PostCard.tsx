@@ -59,7 +59,7 @@ export default function PostCard({ post, index = 0 }: { post: Post; index?: numb
     }));
 
     // Functions
-    const toggleVibe = usePostVibe(post._id, { limit: 20 })
+    const toggleVibe = usePostVibe(post._id, "feed", { limit: 20 })
     const handleVibe = () => {
         setVibed((prev) => !prev);
         toggleVibe.mutate({ postId: post._id, postModel: "Post" }, {
@@ -69,7 +69,7 @@ export default function PostCard({ post, index = 0 }: { post: Post; index?: numb
         });
     };
 
-    const flagPost = usePostFlag(post._id, { limit: 20 })
+    const flagPost = usePostFlag(post._id, "feed", { limit: 20 })
     const handleFlagged = () => {
         if (userFlagged) return;
         setUserFlagged(true);
@@ -139,7 +139,7 @@ export default function PostCard({ post, index = 0 }: { post: Post; index?: numb
                         )}
                         <button onClick={handleFlagged} className={`flex items-center gap-1 duration-500 bg-white/40 dark:bg-white/10 backdrop-blur-md px-3 py-1 rounded-xl 
                                             ${userFlagged ? "text-destructive cursor-not-allowed" : "hover:text-destructive cursor-pointer"}`}>
-                            <Flag variant="Bold" className={`size-5`} />
+                            <Flag variant="Bold" className={`size-3.5 md:size-4 xl:size-5`} />
                             <span>{userFlagged ? "Flagged" : "Flag"}</span>
                         </button>
                     </div>

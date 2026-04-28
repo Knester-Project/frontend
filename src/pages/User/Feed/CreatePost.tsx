@@ -375,7 +375,7 @@ export default function PostComposer() {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onError: (error: any) => {
                     const message = error?.response?.data?.message || "Failed to create post, kindly try again later.";
-                    sileo.error(message);
+                    sileo.error({ title: "Error", description: message });
                 },
             });
         } catch {

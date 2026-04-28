@@ -16,7 +16,7 @@ const Vibe = ({ handleToggle, userVibed, vibes }: { handleToggle: () => void, us
             <motion.div key={userVibed ? "vibed" : "not-vibed"} initial={{ scale: 0.8, rotate: -15, opacity: 0.5 }}
                 animate={{ scale: 1, rotate: 0, opacity: 1 }} exit={{ scale: 0.8, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 400, damping: 12 }}>
-                <Heart variant={userVibed ? "Bold" : "Outline"} className="size-5" />
+                <Heart variant={userVibed ? "Bold" : "Outline"} className="size-3.5 md:size-4 xl:size-5" />
             </motion.div>
 
             {/* Count Animation */}

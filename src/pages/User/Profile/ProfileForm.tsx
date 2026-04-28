@@ -20,19 +20,20 @@ import ErrorText from "@/components/ErrorText";
 
 // Icons
 import {
-    AddSquare, Trash, DirectSend, CloseSquare, Image, Lock, MessageRemove, Calendar1, AlignLeft, Tag, GridLock,
+    AddSquare, Trash, DirectSend, CloseSquare, GalleryFavorite, Lock, MessageRemove, Calendar1, AlignLeft, Tag, GridLock,
     ProfileTick
 } from "iconsax-reactjs";
 import { Rocket } from "lucide-react";
 
 interface ProfileFormProps {
+    isPremium: boolean;
     close: () => void;
     remainingMedia?: number;
     MAX_DETAILS?: number;
     defaultValues?: Partial<EditProfileInput>;
 }
 
-export default function ProfileForm({ close, remainingMedia = 10, MAX_DETAILS = 4, defaultValues = {} }: ProfileFormProps) {
+export default function ProfileForm({ isPremium, close, remainingMedia = 10, MAX_DETAILS = 4, defaultValues = {} }: ProfileFormProps) {
 
     const [mediaFiles, setMediaFiles] = useState<File[]>([]);
     const [mediaError, setMediaError] = useState<string | null>(null);
@@ -100,6 +101,10 @@ export default function ProfileForm({ close, remainingMedia = 10, MAX_DETAILS = 
     const syncProfile = useSyncProfile()
     const handleFormSubmit = async (data: EditProfileInput) => {
 
+        // Make sure there is an actual change 
+        if (mediaFiles?.length === 0 && JSON.stringify(defaultValues) === JSON.stringify(data)) {
+            return sileo.error({ title: "No Update Found", description: "Kindly Make Some Changes To Continue" })
+        }
         try {
             setIsSubmitting(true);
             let media;
@@ -141,7 +146,7 @@ export default function ProfileForm({ close, remainingMedia = 10, MAX_DETAILS = 
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onError: (error: any) => {
                     const message = error?.response?.data?.message || "Couldn't update profile now, kindly try again later.";
-                    sileo.error(message);
+                    sileo.error({ title: "Error", description: message });
                 },
             });
         } catch {
@@ -221,7 +226,7 @@ export default function ProfileForm({ close, remainingMedia = 10, MAX_DETAILS = 
             }
 
             {/* ── Media ── */}
-            <Section icon={Image} title="Media" badge={`${mediaFiles.length}/${remainingMedia}`}>
+            <Section icon={GalleryFavorite} title="Media" badge={`${mediaFiles.length}/${remainingMedia}`}>
                 {mediaFiles.length > 0 && (
                     <div className="gap-2 grid grid-cols-4 sm:grid-cols-6 mb-3">
                         <AnimatePresence>
@@ -274,20 +279,19 @@ export default function ProfileForm({ close, remainingMedia = 10, MAX_DETAILS = 
             {/* ── Privacy Toggles ── */}
             <Section icon={Lock} title="Privacy">
                 <div className="space-y-3">
-                    <ToggleRow
-                        icon={GridLock}
-                        label="Profile Lock"
-                        description="No one can view your profile"
-                        checked={profileLock!}
-                        onChange={(v) => setValue("profileLock", v)}
-                    />
-                    <ToggleRow
-                        icon={MessageRemove}
-                        label="Chat Lock"
-                        description="Only previous connections can send you a new message"
-                        checked={chatLock!}
-                        onChange={(v) => setValue("chatLock", v)}
-                    />
+                    {isPremium ?
+                        <>
+                            <ToggleRow icon={GridLock} label="Profile Lock" description="No one can view your profile"
+                                checked={profileLock!} onChange={(v) => setValue("profileLock", v)} />
+
+                            <ToggleRow icon={MessageRemove} label="Chat Lock" description="Only previous connections can send you a new message"
+                                checked={chatLock!} onChange={(v) => setValue("chatLock", v)} />
+                        </>
+                        :
+                        <div className="py-2 text-[11px] text-primary md:text-xs xl:text-sm montserrat">
+                            <p>This Field Is Only Available To Premium/Core/Moderating Users</p>
+                        </div>
+                    }
                 </div>
             </Section>
 

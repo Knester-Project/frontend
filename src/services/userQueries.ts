@@ -2,7 +2,7 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { queryOptions } from '@tanstack/react-query';
 
 // API endpoints
-import { checkUsername, feed, fetchComments, fetchReplies, fetchSafetyPosts, getCurrentUser, getUserDetails, inviteUser, trendingTags } from "./api.services";
+import { checkUsername, circlePosts, feed, fetchComments, fetchReplies, fetchSafetyPosts, getCurrentUser, getUserDetails, inviteUser, profilePosts, trendingPosts, trendingTags } from "./api.services";
 
 // Stores
 import { meStore } from "@/stores/me.store";
@@ -116,11 +116,7 @@ export const useFeed = (feedQueries: CursorQueries) => {
         refetchOnWindowFocus: false,
         maxPages: 5,
 
-        queryFn: ({ pageParam }) =>
-            feed({
-                ...feedQueries,
-                cursor: pageParam,
-            }),
+        queryFn: ({ pageParam }) => feed({ ...feedQueries, cursor: pageParam }),
         initialPageParam: undefined,
 
         getNextPageParam: (lastPage) => {
@@ -136,3 +132,51 @@ export const useTrendingTags = () => {
         queryFn: () => trendingTags(),
     })
 }
+
+// In-Circle Posts
+export const useCirclePosts = (feedQueries: CursorQueries) => {
+    return useInfiniteQuery({
+        queryKey: ["in-circle", feedQueries],
+        refetchOnWindowFocus: false,
+        maxPages: 5,
+
+        queryFn: ({ pageParam }) => circlePosts({ ...feedQueries, cursor: pageParam }),
+        initialPageParam: undefined,
+
+        getNextPageParam: (lastPage) => {
+            return lastPage.data.nextCursor ?? undefined;
+        },
+    });
+};
+
+// Trending Posts
+export const useTrendingPosts = (feedQueries: CursorQueries) => {
+    return useInfiniteQuery({
+        queryKey: ["trending", feedQueries],
+        refetchOnWindowFocus: false,
+        maxPages: 5,
+
+        queryFn: ({ pageParam }) => trendingPosts({ ...feedQueries, cursor: pageParam }),
+        initialPageParam: undefined,
+
+        getNextPageParam: (lastPage) => {
+            return lastPage.data.nextCursor ?? undefined;
+        },
+    });
+};
+
+// Profile Posts
+export const useProfilePosts = (feedQueries: CursorQueries, username: string) => {
+    return useInfiniteQuery({
+        queryKey: ["trending", feedQueries],
+        refetchOnWindowFocus: false,
+        maxPages: 5,
+
+        queryFn: ({ pageParam }) => profilePosts({ ...feedQueries, cursor: pageParam }, username),
+        initialPageParam: undefined,
+
+        getNextPageParam: (lastPage) => {
+            return lastPage.data.nextCursor ?? undefined;
+        },
+    });
+};
