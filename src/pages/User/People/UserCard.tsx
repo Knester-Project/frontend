@@ -116,10 +116,14 @@ export default function UserCard({ user, index = 0 }: UserCardProps) {
                     )}
                 </div>
 
-                {/* Username */}
-                <p className="font-bold text-xs md:text-sm xl:text-base truncate tracking-tight">
-                    {user.user.username}
-                </p>
+                {/* Username and Bio */}
+                <div className="text-center truncate">
+                    <p className="font-bold text-xs md:text-sm xl:text-base tracking-tight">
+                        {user.user.username}
+                    </p>
+                    <p className="text-[10px] md:text-[11px] xl:text-xs">{user.bio}</p>
+                </div>
+
 
                 {/* Badges - Increased gap slightly for better readability */}
                 <div className="flex flex-wrap justify-center gap-1.5">
@@ -160,7 +164,7 @@ export default function UserCard({ user, index = 0 }: UserCardProps) {
 
             {/* Chat CTA - Transformed into a proper flex button layout */}
             <Link to="/messages" search={{ username: user.user.username }}
-                className="flex justify-center items-center gap-2 bg-primary/10 hover:bg-primary w-full h-9 font-semibold text-primary hover:text-primary-foreground text-xs md:text-sm transition-colors duration-300">
+                className="flex justify-center items-center gap-2 bg-primary/10 hover:bg-primary w-full h-9 font-semibold text-[11px] text-primary hover:text-primary-foreground md:text-xs xl:text-sm transition-colors duration-300">
                 <MessageCircle className="size-4" />
                 <span>Start Chat</span>
             </Link>
