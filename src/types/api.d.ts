@@ -299,7 +299,7 @@ declare type NearbyProfile = {
 };
 
 declare type PeopleQueries = {
-    radiumKm?: number;
+    radiusKm?: number;
     state?: string;
     limit?: number;
     cursor?: string;

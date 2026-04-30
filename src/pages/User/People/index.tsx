@@ -20,6 +20,7 @@ import StateSelector from "./StateSelector";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import UserChatLoader from "./ChatLoader";
+import PremiumGate from "./PremiumGate";
 
 // Icons
 import { Profile2User, ShieldSecurity, Location, Shuffle, Discover } from "iconsax-reactjs";
@@ -90,7 +91,7 @@ const Index = () => {
     }
 
     const queries = useMemo(() => ({
-        radiumKm: distance,
+        radiusKm: distance,
         state: selectedState || "",
         limit: NEARBY_LIMIT,
         premiumOnly: isPremiumOnly,
@@ -112,7 +113,6 @@ const Index = () => {
     });
 
     const users = nearbyUsers?.pages.flatMap((page) => page.data.profiles) ?? [];
-    console.log("Users", users)
 
     return (
         <Main classNames="max-w-7xl mx-auto">
@@ -220,58 +220,62 @@ const Index = () => {
                         </section>
                     </motion.div>
                 )}
-                {mode === "state" && (
-                    <motion.div key="state" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.28 }} className="space-y-4">
-                        {/* Controls */}
-                        <section className="space-y-3 bg-accent/10 p-4 border border-border rounded-2xl">
-                            <StateSelector selected={selectedState} setSelected={handleState} />
+                {mode === "state" ? (
+                    user?.isPremium || user?.isCore || user?.isModerator ? (
+                        <motion.div key="state" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.28 }} className="space-y-4">
+                            {/* Controls */}
+                            <section className="space-y-3 bg-accent/10 p-4 border border-border rounded-2xl">
+                                <StateSelector selected={selectedState} setSelected={handleState} />
 
-                            {/* Nearby toggle */}
-                            <button onClick={() => { setNearbyActive((v) => !v); setSelectedState(null); setDistance(15) }} className={cn("flex items-center gap-2.5 px-4 py-3 border rounded-2xl w-full font-medium text-[11px] md:text-xs xl:text-sm transition-all duration-300 cursor-pointer",
-                                nearbyActive ? "border-green-500 bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-400"
-                                    : "border-border bg-background text-gray-600 dark:text-gray-400 hover:border-green-400/40 hover:text-foreground dark:hover:text-foreground")}>
-                                <Discover className={cn("size-4", nearbyActive && "text-green-500")} />
-                                <span className="montserrat">{nearbyActive ? "Showing Nearby (within 15 km)" : "Use my location — Nearby"}</span>
-                                {nearbyActive && <span className="bg-green-500/15 ml-auto px-2 py-0.5 rounded-lg font-semibold text-[10px] text-green-600 md:text-[11px] xl:text-xs">Active</span>}
-                            </button>
-                        </section>
-                        <section className="space-y-4">
+                                {/* Nearby toggle */}
+                                <button onClick={() => { setNearbyActive((v) => !v); setSelectedState(null); setDistance(15) }} className={cn("flex items-center gap-2.5 px-4 py-3 border rounded-2xl w-full font-medium text-[11px] md:text-xs xl:text-sm transition-all duration-300 cursor-pointer",
+                                    nearbyActive ? "border-green-500 bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-400"
+                                        : "border-border bg-background text-gray-600 dark:text-gray-400 hover:border-green-400/40 hover:text-foreground dark:hover:text-foreground")}>
+                                    <Discover className={cn("size-4", nearbyActive && "text-green-500")} />
+                                    <span className="montserrat">{nearbyActive ? "Showing Nearby (within 15 km)" : "Use my location — Nearby"}</span>
+                                    {nearbyActive && <span className="bg-green-500/15 ml-auto px-2 py-0.5 rounded-lg font-semibold text-[10px] text-green-600 md:text-[11px] xl:text-xs">Active</span>}
+                                </button>
+                            </section>
+                            <section className="space-y-4">
 
-                            {/* Premium Filter */}
-                            <div className="flex justify-between items-start bg-accent/10 p-4 border border-border rounded-3xl">
-                                <div className="space-y-1">
-                                    <Label className="font-semibold text-[11px] md:text-xs xl:text-sm">
-                                        Premium users only
-                                    </Label>
-                                    <p className="text-[10px] text-foreground/80 md:text-[11px] xl:text-xs">
-                                        Show only users with premium access and exclusive features
-                                    </p>
+                                {/* Premium Filter */}
+                                <div className="flex justify-between items-start bg-accent/10 p-4 border border-border rounded-3xl">
+                                    <div className="space-y-1">
+                                        <Label className="font-semibold text-[11px] md:text-xs xl:text-sm">
+                                            Premium users only
+                                        </Label>
+                                        <p className="text-[10px] text-foreground/80 md:text-[11px] xl:text-xs">
+                                            Show only users with premium access and exclusive features
+                                        </p>
+                                    </div>
+
+                                    <Switch checked={isPremiumOnly} onCheckedChange={togglePremium} />
                                 </div>
 
-                                <Switch checked={isPremiumOnly} onCheckedChange={togglePremium} />
-                            </div>
+                                {/* Online Filter */}
+                                <div className="flex justify-between items-start bg-accent/10 p-4 border border-border rounded-3xl">
+                                    <div className="space-y-1">
+                                        <Label className="font-semibold text-[11px] md:text-xs xl:text-sm">
+                                            Online users only
+                                        </Label>
+                                        <p className="text-[10px] text-foreground/80 md:text-[11px] xl:text-xs">
+                                            Display only users who are currently active
+                                        </p>
+                                    </div>
 
-                            {/* Online Filter */}
-                            <div className="flex justify-between items-start bg-accent/10 p-4 border border-border rounded-3xl">
-                                <div className="space-y-1">
-                                    <Label className="font-semibold text-[11px] md:text-xs xl:text-sm">
-                                        Online users only
-                                    </Label>
-                                    <p className="text-[10px] text-foreground/80 md:text-[11px] xl:text-xs">
-                                        Display only users who are currently active
-                                    </p>
+                                    <Switch checked={isOnlineOnly} onCheckedChange={toggleOnline} />
                                 </div>
 
-                                <Switch checked={isOnlineOnly} onCheckedChange={toggleOnline} />
-                            </div>
-
-                        </section>
-                    </motion.div>
-                )}
-
+                            </section>
+                        </motion.div>
+                    )
+                        : (
+                            <PremiumGate />
+                        )
+                ) : null}
                 {/* Results */}
-                <React.Fragment key="random-mode">
+                {(mode === "state" || mode === "random") && <React.Fragment key="random-mode">
                     {isLoading && (
                         <div className="gap-4 grid grid-cols-2 md:grid-cols-4 py-4">
                             {Array.from({ length: 4 }).map((_, index) => (
@@ -313,6 +317,7 @@ const Index = () => {
                     {/* Intersection trigger */}
                     <div ref={loadMoreRef} className="w-full h-4" />
                 </React.Fragment>
+                }
             </AnimatePresence>
         </Main >
     );

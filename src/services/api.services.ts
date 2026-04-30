@@ -274,7 +274,7 @@ export const fetchPeople = async (queries: PeopleQueries) => {
     if (queries.cursor) params.append("cursor", queries.cursor);
     if (queries.limit) params.append("limit", String(queries.limit));
     if (queries.state?.trim()) params.append("state", queries.state);
-    if (queries.radiumKm) params.append("radiumKm", String(queries.radiumKm));
+    if (queries.radiusKm) params.append("radiusKm", String(queries.radiusKm));
     if (queries.premiumOnly) params.append("premiumOnly", String(queries.premiumOnly));
     if (queries.onlineOnly) params.append("onlineOnly", String(queries.onlineOnly));
 
