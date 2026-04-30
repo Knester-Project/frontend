@@ -78,7 +78,7 @@ export default function StateFilter() {
                                         <button key={s.name} onClick={() => { setSearchParam("state", s.name); setIsOpen(false); setSearchTerm("") }}
                                             className={`flex w-full flex-col px-4 py-3 text-left transition ${isSelected ? "bg-accent/40" : "hover:bg-accent/20"}`}>
                                             <span className="font-medium text-sm">{s.name}</span>
-                                            <span className={`text-xs ${isSelected ? "text-primary" : "text-muted"}`}>
+                                            <span className={`text-xs ${isSelected ? "text-primary" : "text-gray-600 dark:text-gray-400"}`}>
                                                 {s.capital}
                                             </span>
                                         </button>

@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 import { Route } from "@/routes/_dashboard/safety";
 
-// Services and Hooks
+// Services, Hooks and Constants
 import { useSafetyPosts } from "@/services/userQueries";
 import useInfiniteScroll from "@/Hooks/useInfiniteScroll";
+import { POST_LIMIT } from "@/assets/constants";
 
 // Components
 import PostCard from "./PostCard";
@@ -19,7 +20,7 @@ const Posts = () => {
         city,
         street,
         name,
-        limit: 2,
+        limit: POST_LIMIT,
     }), [state, city, street, name]);
 
     const {
@@ -76,7 +77,7 @@ const Posts = () => {
             )}
 
             {/* Intersection trigger */}
-            <div ref={loadMoreRef} />
+            <div ref={loadMoreRef} className="w-full h-4" />
         </main>
     );
 };

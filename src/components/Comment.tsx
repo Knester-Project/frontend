@@ -4,13 +4,14 @@ import { Drawer } from "vaul";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-// Schemas, Services and Hooks
+// Schemas, Services, Hooks and Assets
 import { commentSchema, type CommentInput } from "@/schemas/comment.schema";
 import { useAddComment } from "@/services/userMutations";
 import { usePresignedUpload } from "@/Hooks/usePresignedUpload";
 import { useComments } from "@/services/userQueries";
 import useInfiniteScroll from "@/Hooks/useInfiniteScroll";
 import { makeFilesUnique } from "@/utils/format";
+import { COMMENT_LIMIT } from "@/assets/constants";
 
 // UIs
 import ErrorText from "./ErrorText";
@@ -40,7 +41,7 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
 
     const { uploadFiles } = usePresignedUpload();
 
-    const newComment = useAddComment({ postId, limit: 4 });
+    const newComment = useAddComment({ postId, limit: COMMENT_LIMIT });
     const onSubmit = async (data: CommentInput) => {
 
         try {
@@ -122,7 +123,7 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
     const isLoading = isUploading || newComment.isPending;
 
     // Comments Query
-    const { data, fetchNextPage, isLoading: isCommentLoading, hasNextPage, isFetchingNextPage } = useComments({ postId, limit: 4 }, isOpen)
+    const { data, fetchNextPage, isLoading: isCommentLoading, hasNextPage, isFetchingNextPage } = useComments({ postId, limit: COMMENT_LIMIT }, isOpen)
 
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const loadMoreRef = useInfiniteScroll({ hasNextPage, isFetchingNextPage, fetchNextPage, root: scrollRef.current })
@@ -186,7 +187,7 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
                         )}
 
                         {/* Intersection trigger */}
-                        <div ref={loadMoreRef} />
+                        <div ref={loadMoreRef} className="w-full h-4" />
 
                     </section>
                     {/* Sticky Input Area */}

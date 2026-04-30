@@ -177,7 +177,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                             <p className="font-medium montserrat">Password Requirements:</p>
                             <div className="space-y-1">
                                 {passwordRequirements.map((req, index) => (
-                                    <div key={index} className="flex items-center space-x-2">
+                                    <div key={`passwordRequirements_${index}`} className="flex items-center space-x-2">
                                         <Check className={`size-4 ${req.met ? 'text-green-500' : 'text-gray-300'}`} />
                                         <span className={`${req.met ? 'text-green-600' : 'text-gray-500'}`}>
                                             {req.text}

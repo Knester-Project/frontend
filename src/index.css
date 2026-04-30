@@ -89,11 +89,11 @@ body {
 
   /* Brand colors */
   --primary: oklch(0.731 0.178 48.687);         /* #fe7f2d (pumpkin) */
-  --primary-foreground: oklch(1.000 0.000 90);   /* #ffffff */
+  --primary-foreground: oklch(18.71% 0.0066 17.582); 
   --accent: oklch(0.888 0.076 63.379);          /* #ffd0a6 (light) */
   --accent-foreground: var(--foreground);       /* use dark text on light accent */
-  --muted: oklch(0.518 0.023 245.912);          /* #5e6a75 (secondary text) */
-  --muted-foreground: var(--background);
+  --muted: oklch(16.5% 0.022 260);
+  --muted-foreground: oklch(46% 0.010 260);
   --destructive: oklch(0.6 0.22 25);
   /* industrial red-orange */
   --destructive-foreground: oklch(0.98 0.005 255);
@@ -137,8 +137,8 @@ body {
   --primary-foreground: oklch(1.000 0.000 90);   /* #ffffff */
   --accent: oklch(0.603 0.153 46.681);          /* #c85e1f (darker pumpkin) */
   --accent-foreground: var(--foreground);
-  --muted: oklch(96.755% 0.01105 226.389);          /* #b0bec5 */
-  --muted-foreground: var(--background);
+  --muted: oklch(88.5% 0.028 210);
+  --muted-foreground: oklch(11.0% 0.020 260);
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(0.98 0.005 255);
 

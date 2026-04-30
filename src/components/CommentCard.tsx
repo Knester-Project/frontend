@@ -1,11 +1,12 @@
 import { useState, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 
-// Utils and Services
+// Utils, Services and Constants
 import { dateConverter, detectMediaType } from "@/utils/format";
 import { useCommentVibe, useDeleteComment, useFlagComment } from "@/services/userMutations";
 import { useReplies } from "@/services/userQueries";
 import useInfiniteScroll from "@/Hooks/useInfiniteScroll";
+import { COMMENT_LIMIT, REPLIES_LIMIT } from "@/assets/constants";
 
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -43,7 +44,7 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
         setReplyForm(false);
     }
 
-    const toggleVibe = useCommentVibe(comment._id, { postId: comment.post, limit: 4 });
+    const toggleVibe = useCommentVibe(comment._id, { postId: comment.post, limit: COMMENT_LIMIT });
     const handleToggle = () => {
         if (userDeleted) return;
         setUserVibed((prev) => !prev);
@@ -54,7 +55,7 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
         });
     }
 
-    const flagComment = useFlagComment(comment._id, { postId: comment.post, limit: 4 })
+    const flagComment = useFlagComment(comment._id, { postId: comment.post, limit: COMMENT_LIMIT })
     const handleFlagged = () => {
         if (userDeleted) return;
         if (userFlagged) return;
@@ -66,7 +67,7 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
         });
     }
 
-    const deleteComment = useDeleteComment(comment._id, { postId: comment.post, limit: 4 });
+    const deleteComment = useDeleteComment(comment._id, { postId: comment.post, limit: COMMENT_LIMIT });
     const handleDeletion = () => {
         if (userDeleted) return;
         setUserDeleted(true);
@@ -78,7 +79,7 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
     }
 
     // Replies Query
-    const { data, fetchNextPage, isLoading, hasNextPage, isFetchingNextPage } = useReplies({ id: comment._id, type: "comment", limit: 4 }, showReplies);
+    const { data, fetchNextPage, isLoading, hasNextPage, isFetchingNextPage } = useReplies({ id: comment._id, type: "comment", limit: REPLIES_LIMIT }, showReplies);
     const replies = data?.pages.flatMap((page) => page.data.replies) ?? [];
 
     // Scroll Ref and Infinite Scroll for Replies
@@ -93,9 +94,9 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
                     {/* Avatar Section */}
                     <Link disabled={comment.user.profile?.profileLock} to="/profile" search={{ profile: comment.owner ? "me" : comment.user.username }}>
                         <Avatar className="shadow-sm border border-white/10 size-10 md:size-11 xl:size-12">
-                            <AvatarImage src={comment.user.profile?.profilePicture ?? "/default.svg"} />
+                            <AvatarImage src={comment.user.profile?.profilePicture} />
                             <AvatarFallback className="bg-primary/10 font-bold text-primary">
-                                {comment.user.username.slice(0, 2).toUpperCase()}
+                                {comment.user.username.slice(0, 2).toUpperCase() || "??"}
                             </AvatarFallback>
                         </Avatar>
                     </Link>
@@ -199,7 +200,7 @@ const CommentCard = ({ comment }: { comment: PostComment }) => {
 
 
                         {/* Intersection trigger */}
-                        <div ref={loadMoreRef} />
+                        <div ref={loadMoreRef} className="w-full h-4" />
                     </div>
                 )}
                 {showReplies &&

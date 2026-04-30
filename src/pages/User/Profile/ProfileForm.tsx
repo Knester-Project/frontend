@@ -21,8 +21,7 @@ import ErrorText from "@/components/ErrorText";
 // Icons
 import {
     AddSquare, Trash, DirectSend, CloseSquare, GalleryFavorite, Lock, MessageRemove, Calendar1, AlignLeft, Tag, GridLock,
-    ProfileTick,
-    GlobalSearch
+    ProfileTick, GlobalSearch
 } from "iconsax-reactjs";
 import { Rocket } from "lucide-react";
 

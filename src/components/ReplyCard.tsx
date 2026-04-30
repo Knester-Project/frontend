@@ -1,11 +1,12 @@
 import { useState, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 
-// Utils, Services and Hooks
+// Utils, Services, Hooks and Constants
 import { dateConverter } from "@/utils/format";
 import { useDeleteReply, useFlagReply, useReplyVibe } from "@/services/userMutations";
 import { useReplies } from "@/services/userQueries";
 import useInfiniteScroll from "@/Hooks/useInfiniteScroll";
+import { REPLIES_LIMIT } from "@/assets/constants";
 
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -40,7 +41,7 @@ const ReplyCard = ({ reply }: { reply: Reply }) => {
         setReplyForm(false);
     }
 
-    const toggleVibe = useReplyVibe(reply._id, { id: reply._id, type: "reply", limit: 4 });
+    const toggleVibe = useReplyVibe(reply._id, { id: reply._id, type: "reply", limit: REPLIES_LIMIT });
     const handleToggle = () => {
         if (userDeleted) return;
         setUserVibed((prev) => !prev);
@@ -51,7 +52,7 @@ const ReplyCard = ({ reply }: { reply: Reply }) => {
         });
     }
 
-    const flagReply = useFlagReply(reply._id, { id: reply._id, type: "reply", limit: 4 })
+    const flagReply = useFlagReply(reply._id, { id: reply._id, type: "reply", limit: REPLIES_LIMIT })
     const handleFlagged = () => {
         if (userDeleted) return;
         if (userFlagged) return;
@@ -63,7 +64,7 @@ const ReplyCard = ({ reply }: { reply: Reply }) => {
         });
     }
 
-    const deleteReply = useDeleteReply(reply._id, { id: reply._id, type: "reply", limit: 4 });
+    const deleteReply = useDeleteReply(reply._id, { id: reply._id, type: "reply", limit: REPLIES_LIMIT });
     const handleDeletion = () => {
         if (userDeleted) return;
         setUserDeleted(true);
@@ -75,7 +76,7 @@ const ReplyCard = ({ reply }: { reply: Reply }) => {
     }
 
     // Replies Query
-    const { data, fetchNextPage, isLoading, hasNextPage, isFetchingNextPage } = useReplies({ id: reply._id, type: "reply", limit: 4 }, showReplies);
+    const { data, fetchNextPage, isLoading, hasNextPage, isFetchingNextPage } = useReplies({ id: reply._id, type: "reply", limit: REPLIES_LIMIT }, showReplies);
     const replies = data?.pages.flatMap((page) => page.data.replies) ?? [];
 
     // Scroll Ref and Infinite Scroll for Replies
@@ -90,9 +91,9 @@ const ReplyCard = ({ reply }: { reply: Reply }) => {
                     {/* Avatar Section */}
                     <Link disabled={reply.user.profile?.profileLock} to="/profile" search={{ profile: reply.owner ? "me" : reply.user.username }}>
                         <Avatar className="shadow-sm border border-white/10 size-8 md:size-9 xl:size-10">
-                            <AvatarImage src={reply.user.profile?.profilePicture ?? "/default.svg"} />
+                            <AvatarImage src={reply.user.profile?.profilePicture} />
                             <AvatarFallback className="bg-primary/10 font-bold text-primary">
-                                {reply.user.username.slice(0, 2).toUpperCase()}
+                                {reply.user.username.slice(0, 2).toUpperCase() || "??"}
                             </AvatarFallback>
                         </Avatar>
                     </Link>
@@ -190,7 +191,7 @@ const ReplyCard = ({ reply }: { reply: Reply }) => {
 
 
                         {/* Intersection trigger */}
-                        <div ref={loadMoreRef} />
+                        <div ref={loadMoreRef} className="w-full h-4" />
                     </div>
                 )}
                 {showReplies &&

@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-// Schemas
+// Schemas and Constants
 import { replySchema, type ReplyInput } from "@/schemas/comment.schema";
 import { useAddReply } from "@/services/userMutations";
+import { REPLIES_LIMIT } from "@/assets/constants";
 
 // UIs
 import ErrorText from "./ErrorText";
@@ -22,7 +23,7 @@ const CommentReply = ({ id, type, username, handleNewReply }: { id: string, type
     const contentValue = watch("content") || "";
 
     // Functions
-    const addReply = useAddReply({ id, type, limit: 4 });
+    const addReply = useAddReply({ id, type, limit: REPLIES_LIMIT });
     const onSubmit = async (data: ReplyInput) => {
 
         // Generate Payload

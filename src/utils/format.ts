@@ -9,7 +9,7 @@ export const formatTrendingCount = (num: number) => {
 };
 
 // Convert to ISO Date and Time
-export function isoDateTime(value: string): string | null {
+export const isoDateTime = (value: string): string | null => {
   if (!value) return null;
 
   const date = new Date(value);
@@ -113,7 +113,7 @@ export const cleanUpdateData = <T extends object>(data: T): Partial<T> => {
 };
 
 // Format Age 
-export function formatAgeCategorized(dateString: string | Date): string {
+export const formatAgeCategorized = (dateString: string | Date): string => {
   const birthDate = new Date(dateString);
   const today = new Date();
 
@@ -156,3 +156,9 @@ export const shuffle = <T,>(array: T[]): T[] => {
   }
   return arr;
 };
+
+// Format Distance
+export const formatDist = (km: number): string => {
+    if (km < 1) return `${km * 1000}m`;
+    return `${km} km`;
+}

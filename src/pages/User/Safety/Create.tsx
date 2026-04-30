@@ -184,7 +184,7 @@ export default function Create() {
                                             <div className="space-y-2 max-h-80 overflow-y-auto">
                                                 <label className="block mb-1 font-medium">Phone Numbers</label>
                                                 {phoneNumbers.map((_: string, index: number) => (
-                                                    <div key={index}>
+                                                    <div key={`phoneNumbers_${index}`}>
                                                         <ZodInput disabled={newPost.isPending || isUploading} type="tel" register={register} name={`phoneNumbers.${index}`} placeholder="Enter phone number" required={index === 0} />
                                                         {index > 0 && <button type="button" className="text-destructive text-sm cursor-pointer" onClick={() => removePhone(index)}>Remove</button>}
                                                     </div>
@@ -194,7 +194,7 @@ export default function Create() {
 
                                             <div className="space-y-3 overflow-y-auto">
                                                 {socialMedia.map((_, index) => (
-                                                    <div key={index} className="relative space-y-3 bg-accent/60 dark:bg-accent/20 p-3 border rounded-xl">
+                                                    <div key={`social_media_${index}`} className="relative space-y-3 bg-accent/60 dark:bg-accent/20 p-3 border rounded-xl">
                                                         {index > 0 && (
                                                             <button type="button" className="top-2 right-2 absolute text-destructive text-xs cursor-pointer" onClick={() => removeSocial(index)}>Remove</button>
                                                         )}

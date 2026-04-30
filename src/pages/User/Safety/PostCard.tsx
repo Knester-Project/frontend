@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Route } from "@/routes/_dashboard/safety";
 
-// Utils and Services
+// Utils, Services and Constants
 import { dateConverter, detectMediaType } from "@/utils/format";
 import { useSafetyPostVibe, useFlagPost } from "@/services/userMutations";
+import { POST_LIMIT } from "@/assets/constants";
 
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -33,7 +34,7 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
     }));
 
     // Functions
-    const toggleVibe = useSafetyPostVibe(post._id, { state, city, street, name, limit: 2 })
+    const toggleVibe = useSafetyPostVibe(post._id, { state, city, street, name, limit: POST_LIMIT })
     const handleToggle = () => {
         setUserVibed((prev) => !prev);
         toggleVibe.mutate({ postId: post._id, postModel: "SafetyPost" }, {
@@ -43,7 +44,7 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
         });
     }
 
-    const flagPost = useFlagPost(post._id, { state, city, street, name, limit: 2 })
+    const flagPost = useFlagPost(post._id, { state, city, street, name, limit: POST_LIMIT })
     const handleFlagged = () => {
         if (userFlagged) return;
         setUserFlagged(true);

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Utils and Services
+// Utils, Services and Constants
 import { cn } from "@/lib/utils";
 import { dateConverter, detectMediaType } from "@/utils/format";
 import { usePostVibe, usePostFlag } from "@/services/userMutations";
+import { POST_LIMIT } from "@/assets/constants";
 
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -59,7 +60,7 @@ export default function PostCard({ post, index = 0 }: { post: Post; index?: numb
     }));
 
     // Functions
-    const toggleVibe = usePostVibe(post._id, "feed", { limit: 20 })
+    const toggleVibe = usePostVibe(post._id, "feed", { limit: POST_LIMIT })
     const handleVibe = () => {
         setVibed((prev) => !prev);
         toggleVibe.mutate({ postId: post._id, postModel: "Post" }, {
@@ -69,7 +70,7 @@ export default function PostCard({ post, index = 0 }: { post: Post; index?: numb
         });
     };
 
-    const flagPost = usePostFlag(post._id, "feed", { limit: 20 })
+    const flagPost = usePostFlag(post._id, "feed", { limit: POST_LIMIT })
     const handleFlagged = () => {
         if (userFlagged) return;
         setUserFlagged(true);

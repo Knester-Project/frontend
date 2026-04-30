@@ -250,23 +250,51 @@ declare type Tags = {
 
 // Post
 declare type Post = {
-  _id: string;
-  postId: string;
-  user: User;
-  createdAt: string;
-  edited: boolean;
-  content: string;
-  media: string[];
-  hashtags: string[];
-  vibes: number;
-  comments: number;
-  views: number;
-  isThread: boolean;
-  threadRoot: string;
-  threadParent: string;
-  flags: number;
-  hasFlagged: boolean;
-  hasVibed: boolean;
-  isPrivate: boolean;
-  thread?: Post[]
+    _id: string;
+    postId: string;
+    user: User;
+    createdAt: string;
+    edited: boolean;
+    content: string;
+    media: string[];
+    hashtags: string[];
+    vibes: number;
+    comments: number;
+    views: number;
+    isThread: boolean;
+    threadRoot: string;
+    threadParent: string;
+    flags: number;
+    hasFlagged: boolean;
+    hasVibed: boolean;
+    isPrivate: boolean;
+    thread?: Post[]
+}
+
+// People Page
+declare type PeopleUser = {
+    username: string,
+    isPremium: boolean,
+    isModerator: boolean,
+    isCore: boolean,
+    isSuspended: boolean,
+    profile: {
+        bio?: string,
+        profilePicture?: string,
+        profileLock: boolean,
+        isOnline: boolean,
+        location: string,
+        distance: number,
+        distanceKm: number,
+        user: string,
+    } | null
+}
+
+declare type PeopleQueries = {
+    radiumKm?: number;
+    state?: string;
+    limit?: number;
+    cursor?: string;
+    premiumOnly?: boolean;
+    onlineOnly?: boolean;
 }

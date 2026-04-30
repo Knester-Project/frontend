@@ -28,7 +28,7 @@ export default function Index() {
     return (
         <Main>
             <Header
-                profilePicture={user.profile?.profilePicture ?? "/default.svg"}
+                profilePicture={user.profile?.profilePicture}
                 isOnline={user.profile?.isOnline ?? true}
                 username={user.username}
                 bio={user.profile?.bio ?? ""}

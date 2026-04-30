@@ -5,8 +5,9 @@ import { motion } from "framer-motion";
 import { useFeed, useCirclePosts, useTrendingPosts } from "@/services/userQueries";
 import useInfiniteScroll from "@/Hooks/useInfiniteScroll";
 
-// Utils
+// Utils and Constants
 import { cn } from "@/lib/utils";
+import { POST_LIMIT } from "@/assets/constants";
 
 // UIs
 import PostLoader from "./PostLoader";
@@ -36,9 +37,9 @@ const Posts = () => {
     // Call all queries unconditionally (This obeys React Hook rules)
     // This pre-fetches the other tabs in the background, 
     // making tab-switching feel instantaneous for the user!
-    const feedQuery = useFeed({ limit: 20 });
-    const trendingQuery = useTrendingPosts({ limit: 20 });
-    const circleQuery = useCirclePosts({ limit: 20 });
+    const feedQuery = useFeed({ limit: POST_LIMIT });
+    const trendingQuery = useTrendingPosts({ limit: POST_LIMIT });
+    const circleQuery = useCirclePosts({ limit: POST_LIMIT });
 
     // Determine which query object is currently active
     const activeQuery =

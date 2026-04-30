@@ -64,10 +64,10 @@ const Body = ({
                     </div>
                     {invitedUser.length > 0 ? (
                         invitedUser.map((user) => (
-                            <Link style={{ backgroundColor: colors.primary + 20 }} to="/profile" search={{ profile: user.username }} key={user._id} className="flex items-center gap-x-2 my-4 p-2 md:p-3 xl:p-4 border border-border rounded-2xl">
+                            <Link style={{ backgroundColor: colors.primary + 20 }} to="/profile" search={{ profile: user.username }} key={`invitedUser_${user._id}`} className="flex items-center gap-x-2 my-4 p-2 md:p-3 xl:p-4 border border-border rounded-2xl">
                                 <Avatar>
-                                    <AvatarImage src={user.profile?.profilePicture || "/default.svg"} />
-                                    <AvatarFallback>{user.username.charAt(0).toUpperCase()}</AvatarFallback>
+                                    <AvatarImage src={user.profile?.profilePicture} />
+                                    <AvatarFallback>{user.username.charAt(0).toUpperCase() || "??"}</AvatarFallback>
                                 </Avatar>
                                 <div>
                                     <p style={{ color: colors.primary }} className="font-medium text-base md:text-lg xl:text-xl">{user.username}</p>

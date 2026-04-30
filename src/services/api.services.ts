@@ -260,3 +260,24 @@ export const postsByTags = async (tags: string[], queries: CursorQueries) => {
     const response = await userAxios.get(`post/fetch/tags?${params.toString()}`);
     return response.data;
 }
+
+// Fetch People Page Analytics
+export const fetchPeopleAnalytics = async () => {
+    const response = await userAxios.get(`analytics/fetch/people`);
+    return response.data;
+}
+
+// Fetch Nearby People
+export const fetchPeople = async (queries: PeopleQueries) => {
+    const params = new URLSearchParams();
+
+    if (queries.cursor) params.append("cursor", queries.cursor);
+    if (queries.limit) params.append("limit", String(queries.limit));
+    if (queries.state?.trim()) params.append("state", queries.state);
+    if (queries.radiumKm) params.append("radiumKm", String(queries.radiumKm));
+    if (queries.premiumOnly) params.append("premiumOnly", String(queries.premiumOnly));
+    if (queries.onlineOnly) params.append("onlineOnly", String(queries.onlineOnly));
+
+    const response = await userAxios.get(`profile/fetch/nearby?${params.toString()}`);
+    return response.data;
+}

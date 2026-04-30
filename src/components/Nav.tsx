@@ -34,7 +34,7 @@ const Nav = () => {
     const navigationItems = [
         { href: "/feed", icon: Home, label: "Feed" },
         { href: "/market", icon: Shop, label: "Market Place" },
-        { href: "/people", icon: Profile2User, label: "People" },
+        { href: "/people?mode=entry", icon: Profile2User, label: "People" },
         { href: "/messages", icon: Message, label: "Messages" },
         { href: "/safety", icon: SecuritySafe, label: "Safety" }
     ]
@@ -82,8 +82,8 @@ const Nav = () => {
                         {/* Profile */}
                         <Link to="/profile" search={{ profile: "me" }}>
                             <Avatar className="size-8! cursor-pointer">
-                                <AvatarImage src={user?.profile?.profilePicture || "/default.svg"} />
-                                <AvatarFallback>You</AvatarFallback>
+                                <AvatarImage src={user?.profile?.profilePicture} />
+                                <AvatarFallback>{user?.username.slice(0, 2).toUpperCase() || "??"}</AvatarFallback>
                             </Avatar>
                         </Link>
 

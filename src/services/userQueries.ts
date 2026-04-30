@@ -2,7 +2,7 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { queryOptions } from '@tanstack/react-query';
 
 // API endpoints
-import { checkUsername, circlePosts, feed, fetchComments, fetchReplies, fetchSafetyPosts, getCurrentUser, getUserDetails, inviteUser, profilePosts, trendingPosts, trendingTags } from "./api.services";
+import { checkUsername, circlePosts, feed, fetchComments, fetchPeople, fetchPeopleAnalytics, fetchReplies, fetchSafetyPosts, getCurrentUser, getUserDetails, inviteUser, profilePosts, trendingPosts, trendingTags } from "./api.services";
 
 // Stores
 import { meStore } from "@/stores/me.store";
@@ -42,7 +42,6 @@ export const useSafetyPosts = (queries: SafetyQueries) => {
 export const useComments = (commentQueries: CommentQueries, enabled: boolean) => {
     return useInfiniteQuery({
         queryKey: ["comments", commentQueries],
-        refetchOnWindowFocus: false,
         maxPages: 5,
 
         queryFn: ({ pageParam }) =>
@@ -63,7 +62,6 @@ export const useComments = (commentQueries: CommentQueries, enabled: boolean) =>
 export const useReplies = (replyQueries: ReplyQueries, enabled: boolean) => {
     return useInfiniteQuery({
         queryKey: ["replies", replyQueries],
-        refetchOnWindowFocus: false,
         maxPages: 5,
 
         queryFn: ({ pageParam }) =>
@@ -114,7 +112,6 @@ export const useReferralLink = (enabled: boolean) => {
 export const useFeed = (feedQueries: CursorQueries) => {
     return useInfiniteQuery({
         queryKey: ["feed", feedQueries],
-        refetchOnWindowFocus: false,
         maxPages: 5,
 
         queryFn: ({ pageParam }) => feed({ ...feedQueries, cursor: pageParam }),
@@ -138,7 +135,6 @@ export const useTrendingTags = () => {
 export const useCirclePosts = (feedQueries: CursorQueries) => {
     return useInfiniteQuery({
         queryKey: ["in-circle", feedQueries],
-        refetchOnWindowFocus: false,
         maxPages: 5,
 
         queryFn: ({ pageParam }) => circlePosts({ ...feedQueries, cursor: pageParam }),
@@ -154,7 +150,6 @@ export const useCirclePosts = (feedQueries: CursorQueries) => {
 export const useTrendingPosts = (feedQueries: CursorQueries) => {
     return useInfiniteQuery({
         queryKey: ["trending", feedQueries],
-        refetchOnWindowFocus: false,
         maxPages: 5,
 
         queryFn: ({ pageParam }) => trendingPosts({ ...feedQueries, cursor: pageParam }),
@@ -169,11 +164,35 @@ export const useTrendingPosts = (feedQueries: CursorQueries) => {
 // Profile Posts
 export const useProfilePosts = (feedQueries: CursorQueries, username: string) => {
     return useInfiniteQuery({
-        queryKey: ["trending", feedQueries],
-        refetchOnWindowFocus: false,
+        queryKey: ["profile-posts", feedQueries],
         maxPages: 5,
 
         queryFn: ({ pageParam }) => profilePosts({ ...feedQueries, cursor: pageParam }, username),
+        initialPageParam: undefined,
+
+        getNextPageParam: (lastPage) => {
+            return lastPage.data.nextCursor ?? undefined;
+        },
+    });
+};
+
+// People Page Analytics
+export const usePeoplePage = () => {
+    return useQuery({
+        queryKey: ['peopleAnalytics'],
+        queryFn: () => fetchPeopleAnalytics(),
+    })
+}
+
+// Nearby People
+export const useNearByPeople = (queries: PeopleQueries) => {
+    return useInfiniteQuery({
+        queryKey: ['nearby', queries],
+        refetchOnWindowFocus: false,
+        maxPages: 5,
+        staleTime: 10 * 60000,
+
+        queryFn: ({ pageParam }) => fetchPeople({ ...queries, cursor: pageParam }),
         initialPageParam: undefined,
 
         getNextPageParam: (lastPage) => {
