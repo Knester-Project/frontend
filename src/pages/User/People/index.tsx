@@ -112,6 +112,7 @@ const Index = () => {
     });
 
     const users = nearbyUsers?.pages.flatMap((page) => page.data.profiles) ?? [];
+    console.log("Users", users)
 
     return (
         <Main classNames="max-w-7xl mx-auto">
@@ -272,7 +273,7 @@ const Index = () => {
                 {/* Results */}
                 <React.Fragment key="random-mode">
                     {isLoading && (
-                        <div className="gap-4 grid grid-cols-2 md:grid-cols-4">
+                        <div className="gap-4 grid grid-cols-2 md:grid-cols-4 py-4">
                             {Array.from({ length: 4 }).map((_, index) => (
                                 <UserChatLoader key={`first_loader_${index}`} />
                             ))}
@@ -285,16 +286,19 @@ const Index = () => {
                     )}
 
                     {!isLoading && users.length > 0 && (
-                        <div className="gap-4 grid grid-cols-2 md:grid-cols-4">
-                            {users.map((user, index) => (
-                                <UserCard key={`chat_user_card_${user._id || index}`} user={user} index={index} />
-                            ))}
-                        </div>
+                        <>
+                            <h1 className="mt-8 font-semibold lining-nums">Found {users.length} {users.length > 1 ? "Accounts" : "Account"}</h1>
+                            <div className="gap-4 grid grid-cols-2 md:grid-cols-4 py-4">
+                                {users.map((user, index) => (
+                                    <UserCard key={`chat_user_card_${user._id || index}`} user={user} index={index} />
+                                ))}
+                            </div>
+                        </>
                     )}
 
                     {/* Loading next page */}
                     {isFetchingNextPage && (
-                        <div className="gap-4 grid grid-cols-2 md:grid-cols-4">
+                        <div className="gap-4 grid grid-cols-2 md:grid-cols-4 py-4">
                             {Array.from({ length: 4 }).map((_, index) => (
                                 <UserChatLoader key={`chat_loader_${index}`} />
                             ))}

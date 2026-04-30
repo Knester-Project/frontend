@@ -7,14 +7,39 @@ import { cn } from "@/lib/utils";
 
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 
 // Icons
 import { Lock, MapPin, MessageCircle } from "lucide-react";
 import { Verify } from "iconsax-reactjs";
 
+// Types
+export type GeoPoint = {
+    type: 'Point';
+    coordinates: [number, number];
+};
 
-// 2. Define props for the Badge sub-component
+export type UserMeta = {
+    isCore: boolean;
+    isPremium: boolean;
+    isSuspended: boolean;
+    isModerator: boolean;
+    username: string;
+    _id: string;
+};
+
+export declare type NearbyProfile = {
+    _id: string;
+    bio: string;
+    distance: number | null;
+    distanceKm: number | null;
+    isOnline: boolean;
+    location: GeoPoint;
+    profileLock: boolean;
+    profilePicture: string;
+    user: UserMeta;
+};
+
+// Define props for the Badge sub-component
 interface BadgeProps {
     children: ReactNode;
     className?: string;
@@ -22,98 +47,123 @@ interface BadgeProps {
 
 function Badge({ children, className }: BadgeProps) {
     return (
-        <span className={cn("inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md font-bold text-[9px] uppercase tracking-wider", className)}>
+        <span className={cn(
+            "inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-bold text-[9px] uppercase tracking-wider",
+            className
+        )}>
             {children}
         </span>
     );
 }
 
-// Define Props
+// Define Props for the main component
 export interface UserCardProps {
-    user: PeopleUser;
+    user: NearbyProfile;
     index?: number;
 }
 
 export default function UserCard({ user, index = 0 }: UserCardProps) {
-
-    const isLocked = user.profile?.profileLock;
-    const avatar = user.profile?.profilePicture;
+    const isLocked = user.profileLock;
+    const avatar = user.profilePicture;
 
     // Safe fallback just in case username is ever undefined from the backend
-    const initials = (user.username || "??").slice(0, 2).toUpperCase();
+    const initials = (user.user.username || "??").slice(0, 2).toUpperCase();
 
     return (
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.04, duration: 0.3 }}
-            className="group relative bg-card hover:shadow-black/5 hover:shadow-lg border border-border/60 hover:border-primary/20 rounded-2xl overflow-hidden transition-all duration-300">
-            {/* Suspended overlay */}
-            {user.isSuspended && (
-                <div className="z-10 absolute inset-0 flex justify-center items-center bg-background/80 backdrop-blur-sm rounded-2xl">
-                    <span className="font-semibold text-muted-foreground text-xs">Account suspended</span>
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.04, duration: 0.3, ease: "easeOut" }}
+            className="group relative flex flex-col justify-between bg-accent/10 hover:shadow-black/5 hover:shadow-xl border border-border/60 hover:border-primary/30 rounded-3xl overflow-hidden transition-all hover:-translate-y-1 duration-300 cursor-pointer">
+
+            {user.user.isSuspended && (
+                <div className="z-10 absolute inset-0 flex justify-center items-center bg-background/60 backdrop-blur-md rounded-2xl">
+                    <span className="bg-background/80 shadow-sm px-3 py-1.5 rounded-lg font-bold text-xs uppercase tracking-widest">
+                        Suspended
+                    </span>
                 </div>
             )}
 
-            {/* Avatar area */}
-            <div className="relative flex flex-col items-center p-4 pb-3">
+            {/* Avatar & User Info area */}
+            <div className="relative flex flex-col items-center gap-y-2 p-4 pb-4">
                 <div className="relative">
-                    <Avatar className={cn("ring-border rounded-2xl ring-2 size-12 md:size-14 xl:size-16", user.isPremium && "ring-isPremium/30")}>
-                        <AvatarImage src={isLocked ? undefined : avatar} className="object-cover" />
-                        <AvatarFallback className={cn("rounded-2xl font-bold text-sm", user.isPremium ? "bg-premium/10 text-premium" : "bg-muted text-muted-foreground")}>
-                            {isLocked ? <Lock className="size-5 text-muted-foreground" /> : initials}
+                    <Avatar className={cn(
+                        "ring-border rounded-2xl ring-2 size-14 md:size-16 xl:size-20 overflow-hidden group-hover:scale-105 transition-all duration-300",
+                        user.user.isPremium && "ring-primary/40 ring-offset-2 ring-offset-background"
+                    )}>
+                        {/* Load the image but apply a blur and dim it if locked */}
+                        <AvatarImage src={avatar} className={cn(
+                            "w-full h-full object-cover transition-all duration-300",
+                            isLocked && "blur-sm scale-110 brightness-75"
+                        )} />
+
+                        {/*  Shows initials if there is no image at all */}
+                        <AvatarFallback className={cn(
+                            "flex justify-center items-center rounded-2xl w-full h-full font-bold text-sm md:text-base",
+                            user.user.isPremium ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
+                        )}>
+                            {initials}
                         </AvatarFallback>
+
+                        {/* The Lock Overlay: Absolutely positioned over the blurred image */}
+                        {isLocked && (
+                            <div className="z-10 absolute inset-0 flex justify-center items-center bg-background/20">
+                                <Lock className="drop-shadow-lg size-4 md:size-5 xl:size-6 text-foreground/90" />
+                            </div>
+                        )}
                     </Avatar>
-                    {/* Online dot */}
-                    <div className="-right-0.5 -bottom-0.5 absolute bg-green-400 rounded-full ring-2 ring-card size-2.5 md:size-3 xl:size-3.5" />
+
+                    {/* Online Marker */}
+                    {user.isOnline && (
+                        <div className="-right-1 -bottom-1 z-20 absolute bg-green-500 rounded-full ring-4 ring-card size-3 md:size-3.5 xl:size-4" />
+                    )}
                 </div>
 
                 {/* Username */}
-                <p className="mt-2.5 px-1 max-w-full font-semibold text-[11px] text-foreground md:text-xs xl:text-sm truncate">
-                    {user.username}
+                <p className="font-bold text-xs md:text-sm xl:text-base truncate tracking-tight">
+                    {user.user.username}
                 </p>
 
-                {/* Badges */}
-                <div className="flex flex-wrap justify-center gap-1 mt-1.5">
-                    {user.isPremium && (
-                        <Badge className="bg-premium/10 text-premium">
-                            <Verify className="size-2.5" /> Premium
+                {/* Badges - Increased gap slightly for better readability */}
+                <div className="flex flex-wrap justify-center gap-1.5">
+                    {user.user.isPremium && (
+                        <Badge className="bg-primary/10 text-primary">
+                            <Verify className="size-3" /> Premium
                         </Badge>
                     )}
-                    {user.isCore && (
-                        <Badge className="bg-core/10 text-core">
-                            <Verify className="size-2.5" /> Core
+                    {user.user.isCore && (
+                        <Badge className="bg-amber-500/10 text-amber-600">
+                            <Verify className="size-3" /> Core
                         </Badge>
                     )}
-                    {user.isModerator && (
-                        <Badge className="bg-moderator/10 text-moderator">
-                            <Verify className="size-2.5" /> Mod
+                    {user.user.isModerator && (
+                        <Badge className="bg-blue-500/10 text-blue-600">
+                            <Verify className="size-3" /> Mod
                         </Badge>
                     )}
                     {isLocked && (
-                        <Badge className="bg-muted text-muted-foreground">
+                        <Badge className="bg-muted/50 text-muted-foreground">
                             <Lock className="size-2.5" /> Private
                         </Badge>
                     )}
                 </div>
 
-                {/* Distance / State */}
-                {/* <div className="flex items-center gap-1 mt-2 text-[11px] text-muted-foreground">
-                    <MapPin className="w-3 h-3" />
-                    <span>{user.state || "Unknown Location"}</span>
-                    {user.distance != null && (
-                        <>
-                            <span className="text-border">·</span>
-                            <span>{user.distance < 1 ? `${Math.round(user.distance * 1000)}m` : `${user.distance.toFixed(1)} km`}</span>
-                        </>
-                    )}
-                </div> */}
+                {/* Unified Distance display */}
+                {user.distance != null && (
+                    <div className="flex justify-center items-center gap-1.5 font-medium text-[10px] text-muted-foreground md:text-[11px] xl:text-xs">
+                        <MapPin className="size-3.5" />
+                        <span className="font-semibold montserrat">
+                            {user.distance < 1
+                                ? `${Math.round(user.distance * 1000)} m apart`
+                                : `${user.distance.toFixed(1)} km apart`}
+                        </span>
+                    </div>
+                )}
             </div>
 
-            {/* Chat CTA */}
-            <div className="px-4 pb-4">
-                <Link to="/messages" search={{ username: user.username }} className="gap-1.5 shadow-primary/20 shadow-sm rounded-xl w-full h-8 font-semibold text-[11px] md:text-xs xl:text-sm">
-                    <MessageCircle className="size-3.5" />
-                    Start Chat
-                </Link>
-            </div>
+            {/* Chat CTA - Transformed into a proper flex button layout */}
+            <Link to="/messages" search={{ username: user.user.username }}
+                className="flex justify-center items-center gap-2 bg-primary/10 hover:bg-primary w-full h-9 font-semibold text-primary hover:text-primary-foreground text-xs md:text-sm transition-colors duration-300">
+                <MessageCircle className="size-4" />
+                <span>Start Chat</span>
+            </Link>
         </motion.div>
     );
 }

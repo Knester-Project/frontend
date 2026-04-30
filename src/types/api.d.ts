@@ -271,24 +271,32 @@ declare type Post = {
     thread?: Post[]
 }
 
-// People Page
-declare type PeopleUser = {
-    username: string,
-    isPremium: boolean,
-    isModerator: boolean,
-    isCore: boolean,
-    isSuspended: boolean,
-    profile: {
-        bio?: string,
-        profilePicture?: string,
-        profileLock: boolean,
-        isOnline: boolean,
-        location: string,
-        distance: number,
-        distanceKm: number,
-        user: string,
-    } | null
-}
+// Nearby People
+type GeoPoint = {
+  type: 'Point';
+  coordinates: [number, number];
+};
+
+type UserMeta = {
+  isCore: boolean;
+  isPremium: boolean;
+  isSuspended: boolean;
+  isModerator: boolean;
+  username: string;
+  _id: string;
+};
+
+declare type NearbyProfile = {
+  _id: string;
+  bio: string;
+  distance: number | null;
+  distanceKm: number | null;
+  isOnline: boolean;
+  location: GeoPoint;
+  profileLock: boolean;
+  profilePicture: string;
+  user: UserMeta;
+};
 
 declare type PeopleQueries = {
     radiumKm?: number;

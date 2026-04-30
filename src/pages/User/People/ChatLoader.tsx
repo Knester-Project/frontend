@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function UserChatLoader() {
     return (
-        <div className="relative bg-card py-4 border border-border/60 rounded-2xl overflow-hidden">
+        <div className="relative bg-card border border-border/60 rounded-2xl overflow-hidden">
             {/* Avatar and Info Area */}
             <div className="relative flex flex-col items-center p-4 pb-3">
                 <Skeleton className="rounded-2xl size-12 md:size-14 xl:size-16" />
