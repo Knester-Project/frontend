@@ -83,7 +83,7 @@ const Nav = () => {
                         <Link to="/profile" search={{ profile: "me" }}>
                             <Avatar className="size-8! cursor-pointer">
                                 <AvatarImage src={user?.profile?.profilePicture} />
-                                <AvatarFallback>{user?.username.slice(0, 2).toUpperCase() || "??"}</AvatarFallback>
+                                <AvatarFallback className="bg-primary/30">{user?.username.slice(0, 2).toUpperCase() || "??"}</AvatarFallback>
                             </Avatar>
                         </Link>
 

@@ -17,6 +17,7 @@ import { GlobalEdit, MessageText1 } from "iconsax-reactjs";
 import { Lock } from "lucide-react";
 
 const PeopleAround = () => {
+
     const { data, isLoading, isError, refetch } = useNearByPeople({
         radiusKm: 25,
         limit: 5,
@@ -56,7 +57,7 @@ const PeopleAround = () => {
 
             {/* Error */}
             {isError && (
-                <div className="text-muted-foreground text-xs text-center">
+                <div className="text-foreground/80 text-xs text-center">
                     Failed to load nearby users.
                     <button onClick={() => refetch()} className="ml-1 text-primary hover:underline">
                         Retry
@@ -66,7 +67,7 @@ const PeopleAround = () => {
 
             {/* Empty */}
             {!isLoading && !isError && users.length === 0 && (
-                <p className="py-4 text-muted-foreground text-xs text-center">
+                <p className="py-4 text-foreground/80 text-xs text-center">
                     No people nearby right now
                 </p>
             )}
@@ -94,7 +95,7 @@ const PeopleAround = () => {
                                                     isLocked && "blur-sm scale-110 brightness-75")} />
 
                                                 <AvatarFallback className={cn("flex justify-center items-center rounded-2xl w-full h-full font-bold text-sm",
-                                                    user.user.isPremium ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>
+                                                    user.user.isPremium ? "bg-primary/10 text-primary" : "bg-muted text-foreground/80")}>
                                                     {initials}
                                                 </AvatarFallback>
 
@@ -124,7 +125,7 @@ const PeopleAround = () => {
                                         </p>
 
                                         {user.distanceKm !== null && (
-                                            <span className="mt-0.5 text-[10px] text-muted-foreground">
+                                            <span className="mt-0.5 text-[10px] text-foreground/80">
                                                 {user.distanceKm.toFixed(1)} km away
                                             </span>
                                         )}
