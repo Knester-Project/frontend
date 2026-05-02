@@ -2,7 +2,7 @@
 import { QueryClient, useMutation, useQueryClient, type QueryKey } from "@tanstack/react-query";
 
 // Functions
-import { authenticateUser, blockUser, commentOnPost, createReply, createSafetyPost, createUser, deleteComment, deleteMedia, deleteReply, flagPost, joinCircle, leaveCircle, newPost, reportUser, toggleVibe, unblockUser, updateProfile, validateInvite } from "./api.services";
+import { authenticateUser, blockUser, commentOnPost, createAdvert, createReply, createSafetyPost, createUser, deleteComment, deleteMedia, deleteReply, flagPost, joinCircle, leaveCircle, newPost, reportUser, toggleVibe, unblockUser, updateProfile, validateInvite } from "./api.services";
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
@@ -504,4 +504,20 @@ export function usePostFlag(postId: string, queryKey: string, feedQueries: Curso
         updater: (p: Post) =>
             p._id === postId ? flagItemField(p) : p,
     });
+}
+
+// Create New Advert
+export function useNewAdvert() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: AdvertPayload) => createAdvert(data),
+        onError: (error) => {
+            console.error("Advert Creation failed:", error);
+        },
+        onSuccess: async () => {
+            queryClient.invalidateQueries({
+                queryKey: ["myAdverts"],
+            });
+        }
+    })
 }

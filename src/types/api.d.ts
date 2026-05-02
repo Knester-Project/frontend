@@ -309,3 +309,28 @@ declare type PeopleQueries = {
     premiumOnly?: boolean;
     onlineOnly?: boolean;
 }
+
+// Advert
+declare type AdvertPayload = {
+    title: string;
+    description: string;
+    type: "good" | "service";
+    categories: string[];
+    averagePrice: number;
+    mediaUrls: string[];
+    status: "active" | "paused" | "sold_out";
+}
+
+declare type MyAdvert = {
+    _id: string;
+    vendorId: string;
+    title: string;
+    description: string;
+    type: "good" | "service";
+    categories: string[];
+    averagePrice: number;
+    mediaUrls: string[];
+    status: "active" | "paused" | "sold_out";
+    createdAt: string;
+    updatedAt: string;
+}

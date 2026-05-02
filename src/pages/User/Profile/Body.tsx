@@ -65,7 +65,7 @@ const Body = ({
 
     return (
         <main className="mx-auto max-w-7xl">
-            <section className="mt-8">
+            <section className="mt-10">
                 <div className="flex gap-x-1 text-sm md:text-base xl:text-lg items montserrat">
                     <Gallery variant="Bold" className="size-5 md:size-5.5 xl:size-6" style={{ color: colors.primary }} />
                     <p className="font-medium">Media</p>
@@ -74,14 +74,14 @@ const Body = ({
                 {media.length > 0 ?
                     <MediaGallery media={media} username={username} isOwner={isOwner} />
                     :
-                    <div className="flex flex-col items-center gap-y-2 my-4">
+                    <div className="flex flex-col items-center gap-y-2 py-8">
                         <Cobweb color={colors.primary} />
                         <p style={{ color: colors.primary }} className="capitalize montserrat">{username}'s Cobweb-filled media shelf.</p>
                     </div>
                 }
             </section>
             {isOwner &&
-                <section className="mt-8">
+                <section className="mt-10">
                     <div className="flex gap-x-1 text-sm md:text-base xl:text-lg items montserrat">
                         <TagUser variant="Bold" className="size-5 md:size-5.5 xl:size-6" style={{ color: colors.primary }} />
                         <p className="font-medium">Invited Users</p>
@@ -108,14 +108,14 @@ const Body = ({
                             </Link>
                         ))
                     ) : (
-                        <div className="flex flex-col items-center gap-y-2 my-4">
+                        <div className="flex flex-col items-center gap-y-2 py-8">
                             <Cobweb color={colors.primary} />
                             <p style={{ color: colors.primary }}>No invited users yet.</p>
                         </div>
                     )}
                 </section>
             }
-            <section className="mt-8">
+            <section className="mt-10">
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex gap-x-1 text-sm md:text-base xl:text-lg items montserrat">
                         {icons[activeTab] || null}

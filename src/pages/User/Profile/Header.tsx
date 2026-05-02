@@ -14,15 +14,16 @@ import { Overlay } from '@/components/Overlay';
 import ProfileForm from './ProfileForm';
 import { ReportDialog } from './ReportDialog';
 import Invite from './Invite';
+import ProfilePictureEditor from './PictureEditor';
 
-// Icons
+// Icons and Images
 import {
     Flag2, MessageText1, People, ReceiptText, Slash, Setting2, Share, UserAdd,
     Verify, Wallet1, type IconProps, MedalStar, Crown1, Star1, Image,
     UserTick,
     GalleryEdit
 } from 'iconsax-reactjs';
-import ProfilePictureEditor from './PictureEditor';
+import emptyPicture from "/blank.jpg";
 
 type HeaderProps = {
     profilePicture: string;
@@ -110,7 +111,7 @@ const Header = ({
                             opacity: colors.isDark ? 0.4 : 0.2
                         }} />
 
-                    <img ref={imgRef} src={profilePicture} onLoad={handleLoad} crossOrigin="anonymous" className="hidden" />
+                    <img ref={imgRef} src={profilePicture || emptyPicture} onLoad={handleLoad} crossOrigin="anonymous" className="hidden" />
 
                     {isOwner &&
                         <div className='top-4 right-4 absolute flex gap-x-2'>
@@ -130,17 +131,19 @@ const Header = ({
                 </div>
                 <section className='-mt-12 md:-mt-14 xl:-mt-16 px-4'>
                     <div className={`${colors.isDark ? "bg-white border-white" : "bg-[#121212] border-[#121212]"} group relative shadow-lg border rounded-2xl size-20 sm:size-24 md:size-28 xl:size-32 overflow-hidden`}>
-                        <img src={profilePicture} alt={"profile picture"} className="object-cover" />
+                        <img src={profilePicture || emptyPicture} alt={"profile picture"} className="object-cover" />
                         {/* Online Status */}
                         {isOnline && (
                             <div className="right-2 bottom-2 absolute bg-green-500 rounded-full size-3 md:size-3.5 xl:size-4" />
                         )}
-                        <div className="absolute inset-0 flex justify-center items-center bg-background/40 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-500">
-                            <div onClick={toggleProfilePictureUpdate} className="flex items-center gap-1.5 bg-foreground/90 px-2.5 py-1.5 rounded-lg text-background cursor-pointer">
-                                <GalleryEdit className="size-3" />
-                                <span className="font-semibold text-[10px] md:text-[11px] text-xs">Edit</span>
+                        {isOwner &&
+                            <div className="absolute inset-0 flex justify-center items-center bg-background/40 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-500">
+                                <div onClick={toggleProfilePictureUpdate} className="flex items-center gap-1.5 bg-foreground/90 px-2.5 py-1.5 rounded-lg text-background cursor-pointer">
+                                    <GalleryEdit className="size-3" />
+                                    <span className="font-semibold text-[10px] md:text-[11px] text-xs">Edit</span>
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 </section>
                 <section className='mt-2 p-2 md:p-3 xl:p-4'>
@@ -263,7 +266,7 @@ const HeaderCard = ({ isDark, color, Icon, title, amount, amount1 }: HeaderCardP
             </div>
 
             <h1 className="mt-1 font-bold text-lg md:text-xl xl:text-2xl truncate montserrat">
-                {amount} <sup className='text-[11px] md:text-xs xl:text-sm'>{amount1}</sup>
+                {amount} <sup className='opacity-80 text-[11px] md:text-xs xl:text-sm'>{amount1}</sup>
             </h1>
         </div>
     );
@@ -278,7 +281,7 @@ const ActionButton = ({ icon: Icon, color, label, disabled, onClick, isLoading }
                 className="bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 disabled:opacity-50 p-2.5 border border-border rounded-xl active:scale-95 transition-all duration-200 cursor-pointer">
                 <Icon variant="Bold" className={`size-4 md:size-5 ${isLoading ? 'animate-pulse' : ''}`} />
             </button>
-            <span style={{ color: disabled ? "#6B7280" : color }} className="font-medium text-[10px] md:text-xs">
+            <span style={{ color: disabled ? "#6B7280" : color }} className="font-medium text-[10px] md:text-[11px] xl:text-xs">
                 {label}
             </span>
         </div>
