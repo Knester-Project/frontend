@@ -120,7 +120,7 @@ export default function ErrorPage(props: ErrorPageProps = {}) {
 
                 {/* Error reference */}
                 <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.7 }}
-                    className="mt-4 font-raleway text-[10px] text-muted/60 md:text-[11px] xl:text-xs">
+                    className="mt-4 text-[10px] text-muted/60 md:text-[11px] xl:text-xs montserrat">
                     Error {config.code} · If this persists, please contact support
                 </motion.p>
             </div>

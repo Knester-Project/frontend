@@ -36,7 +36,10 @@ type HeaderProps = {
     circleMembers: number;
     circlesJoined: number;
     totalPosts: number;
-    balance: number;
+    wallet: {
+        availableBalance: number,
+        escrowedBalance: number,
+    };
     isOwner: boolean;
     isSuspended: boolean;
     details: string[];
@@ -58,7 +61,7 @@ const MEDIA_LENGTH = 10;
 
 const Header = ({
     profilePicture, isOnline, username, bio, isPremium, isModerator, discoverable,
-    isCore, circleMembers, circlesJoined, totalPosts, balance, profileLock, chatLock,
+    isCore, circleMembers, circlesJoined, totalPosts, wallet, profileLock, chatLock,
     isOwner, isSuspended, details, relationship, dateOfBirth, mediaLength, referralPrivilege
 }: HeaderProps) => {
 
@@ -167,7 +170,7 @@ const Header = ({
                         <section className='gap-2 grid grid-cols-2 sm:grid-cols-4 mt-2'>
                             <HeaderCard isDark={colors.isDark} color={colors.primary} title='Circle Members' Icon={People} amount={formatTrendingCount(circleMembers)} />
                             <HeaderCard isDark={colors.isDark} color={colors.primary} title='Posts' Icon={ReceiptText} amount={totalPosts} />
-                            <HeaderCard isDark={colors.isDark} color={colors.primary} title='Balance' Icon={Wallet1} amount={formatAmount(balance)} />
+                            <HeaderCard isDark={colors.isDark} color={colors.primary} title='Balance' Icon={Wallet1} amount={formatAmount(wallet.availableBalance)} amount1={formatAmount(wallet.escrowedBalance)} />
                             <HeaderCard isDark={colors.isDark} color={colors.primary} title='Circles Joined' Icon={UserAdd} amount={formatTrendingCount(circlesJoined)} />
                         </section>
                         :
@@ -247,9 +250,10 @@ type HeaderCardProps = {
     Icon: React.ComponentType<IconProps>;
     title: string;
     amount: number | string;
+    amount1?: number | string;
 }
 
-const HeaderCard = ({ isDark, color, Icon, title, amount }: HeaderCardProps) => {
+const HeaderCard = ({ isDark, color, Icon, title, amount, amount1 }: HeaderCardProps) => {
     return (
         <div style={{ background: color, borderColor: color, color: isDark ? "white" : "#121212" }}
             className="flex flex-col justify-between p-2 border rounded-xl w-full min-w-0">
@@ -259,7 +263,7 @@ const HeaderCard = ({ isDark, color, Icon, title, amount }: HeaderCardProps) => 
             </div>
 
             <h1 className="mt-1 font-bold text-lg md:text-xl xl:text-2xl truncate montserrat">
-                {amount}
+                {amount} <sup className='text-[11px] md:text-xs xl:text-sm'>{amount1}</sup>
             </h1>
         </div>
     );

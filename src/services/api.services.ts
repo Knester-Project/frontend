@@ -281,3 +281,9 @@ export const fetchPeople = async (queries: PeopleQueries) => {
     const response = await userAxios.get(`profile/fetch/nearby?${params.toString()}`);
     return response.data;
 }
+
+// Fetch User Advert
+export const fetchUserAdvert = async () => {
+    const response = await userAxios.get(`advert/fetch/me`);
+    return response.data;
+}

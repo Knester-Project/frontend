@@ -142,7 +142,10 @@ type MyProfile = {
     media?: string[];
     lastSeen?: string;
     isOnline: boolean;
-    balance: number;
+    wallet: {
+        availableBalance: number,
+        escrowedBalance: number,
+    };
     flagged: boolean;
     circleMembers: number;
     profileLock: boolean;
@@ -273,29 +276,29 @@ declare type Post = {
 
 // Nearby People
 type GeoPoint = {
-  type: 'Point';
-  coordinates: [number, number];
+    type: 'Point';
+    coordinates: [number, number];
 };
 
 type UserMeta = {
-  isCore: boolean;
-  isPremium: boolean;
-  isSuspended: boolean;
-  isModerator: boolean;
-  username: string;
-  _id: string;
+    isCore: boolean;
+    isPremium: boolean;
+    isSuspended: boolean;
+    isModerator: boolean;
+    username: string;
+    _id: string;
 };
 
 declare type NearbyProfile = {
-  _id: string;
-  bio: string;
-  distance: number | null;
-  distanceKm: number | null;
-  isOnline: boolean;
-  location: GeoPoint;
-  profileLock: boolean;
-  profilePicture: string;
-  user: UserMeta;
+    _id: string;
+    bio: string;
+    distance: number | null;
+    distanceKm: number | null;
+    isOnline: boolean;
+    location: GeoPoint;
+    profileLock: boolean;
+    profilePicture: string;
+    user: UserMeta;
 };
 
 declare type PeopleQueries = {

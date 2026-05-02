@@ -37,7 +37,7 @@ export default function Index() {
                 isCore={user.isCore}
                 discoverable={user.discoverable ?? true}
                 circleMembers={user.profile?.circleMembers ?? 0}
-                balance={user.profile?.balance ?? 0}
+                wallet={user.profile?.wallet ?? { availableBalance: 0, escrowedBalance: 0 }}
                 isOwner={isOwner}
                 isSuspended={user.isSuspended}
                 circlesJoined={user.circlesJoined}
