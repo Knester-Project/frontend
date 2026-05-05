@@ -124,7 +124,7 @@ const Posts = () => {
 
                     {/* No more data */}
                     {!hasNextPage && posts.length > 0 && (
-                        <p className="py-4 font-medium text-muted-foreground text-xs text-center">
+                        <p className="py-4 font-medium text-foreground/80 text-xs text-center">
                             You've caught up on all posts!
                         </p>
                     )}

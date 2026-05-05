@@ -105,6 +105,8 @@ const AdvertForm = ({ onClose }: { onClose: () => void; }) => {
             sileo.error({ title: "Couldn't publish advert now, kindly try again later." });
         } finally {
             reset();
+            setCategories([]);
+            setFiles([]);
             setIsUploading(false);
         }
     };
@@ -223,11 +225,11 @@ const AdvertForm = ({ onClose }: { onClose: () => void; }) => {
 
                 {/* Sticky Footer for Actions */}
                 <div className="flex justify-end gap-3 mt-4 pt-4 border-border/50 border-t shrink-0">
-                    <Button type="button" variant="ghost" onClick={onClose} className="rounded-xl text-xs">
+                    <Button type="button" variant="ghost" onClick={onClose} className="hover:bg-destructive/10 rounded-xl hover:text-destructive text-xs transition-colors">
                         Cancel
                     </Button>
-                    <Button type="submit" disabled={newAdvert.isPending} className="shadow-md shadow-primary/20 px-6 rounded-xl text-xs">
-                        {newAdvert.isPending ? (
+                    <Button type="submit" disabled={newAdvert.isPending || isUploading} className="shadow-md shadow-primary/20 px-6 rounded-xl text-xs">
+                        {newAdvert.isPending || isUploading ? (
                             <>
                                 <Loader2 className="mr-2 size-3.5 animate-spin" />
                                 Saving...

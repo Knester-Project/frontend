@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 // UIs
 import { Card } from "@/components/ui/card";
 import AdvertLoader from "@/components/AdvertLoader";
-import AdvertCard from "@/components/AdvertCard";
+import AdvertCard from "@/pages/User/Feed/AdvertCard";
 import { Overlay } from '@/components/Overlay';
 import AdvertForm from "./AdvertForm";
 
@@ -33,7 +33,7 @@ const Advert = () => {
     // Constants
     const adverts: MyAdvert[] = data?.data || [];
     const canCreate = adverts.length < MAX;
-    const isPremium = user?.isPremium || user?.isModerator || user?.isCore || true;
+    const isPremium = user?.isPremium || user?.isModerator || user?.isCore || false;
 
     const stackedAdverts = [
         adverts[activeIdx],
@@ -78,7 +78,7 @@ const Advert = () => {
             )}
 
             {(!isError && !isLoading && isPremium && adverts.length < MAX) && (
-                <button onClick={toggleNew} className="hover:font-semibold text-primary text-xs text-right hover:underline cursor-pointer">
+                <button onClick={toggleNew} className="bg-primary hover:bg-primary/90 ml-auto px-3 py-1 rounded-xl w-fit font-semibold text-primary-foreground text-xs transition-colors cursor-pointer">
                     New Advert
                 </button>
             )}
@@ -90,7 +90,7 @@ const Advert = () => {
                     {stackedAdverts.slice(1).reverse().map((advert, idx) => {
                         const depth = stackedAdverts.length - 1 - idx;
                         return (
-                            <div key={advert._id + "ghost" + depth} className="absolute inset-0 bg-card border border-border/40 rounded-3xl"
+                            <div key={advert._id + "ghost" + depth} className="absolute inset-0 bg-accent/10 border border-border rounded-3xl"
                                 style={{ transform: `scale(${1 - depth * 0.04}) translateY(${depth * -10}px)`, zIndex: 10 - depth }}
                             />
                         );
@@ -116,7 +116,7 @@ const Advert = () => {
                             {/* Left Arrow: calls handleNavigate with -1 */}
                             <button onClick={() => handleNavigate(-1)} disabled={activeIdx === 0}
                                 className={cn(
-                                    "top-1/2 left-2 z-30 absolute flex justify-center items-center bg-card shadow-md border border-border rounded-full size-8 text-muted-foreground hover:text-foreground hover:scale-110 transition-all -translate-y-1/2",
+                                    "top-1/2 left-2 z-30 absolute flex justify-center items-center bg-card shadow-md border border-border rounded-full size-8 text-foreground/80 hover:text-foreground hover:scale-110 transition-all -translate-y-1/2 cursor-pointer",
                                     activeIdx === 0 && "opacity-30 pointer-events-none"
                                 )}>
                                 <ChevronLeft className="size-4" />
@@ -125,7 +125,7 @@ const Advert = () => {
                             {/* Right Arrow: calls handleNavigate with 1 */}
                             <button onClick={() => handleNavigate(1)} disabled={activeIdx === adverts.length - 1}
                                 className={cn(
-                                    "top-1/2 right-2 z-30 absolute flex justify-center items-center bg-card shadow-md border border-border rounded-full size-8 text-muted-foreground hover:text-foreground hover:scale-110 transition-all -translate-y-1/2",
+                                    "top-1/2 right-2 z-30 absolute flex justify-center items-center bg-card shadow-md border border-border rounded-full size-8 text-foreground/80 hover:text-foreground hover:scale-110 transition-all -translate-y-1/2 cursor-pointer",
                                     activeIdx === adverts.length - 1 && "opacity-30 pointer-events-none"
                                 )}>
                                 <ChevronRight className="size-4" />
@@ -134,7 +134,7 @@ const Advert = () => {
                     )}
                 </div>
             )}
-            {!isLoading && adverts.length === 0 && (
+            {!isLoading && !isError && adverts.length === 0 && (
                 <div className="flex flex-col items-center gap-3 bg-accent/10 mx-auto px-5 py-6 border border-border rounded-xl w-full">
                     <Shop className="size-8 text-muted" />
                     <p className="text-foreground/80 text-xs text-center">You haven't created any adverts yet.</p>
@@ -150,7 +150,7 @@ const Advert = () => {
                     {adverts.map((_, i: number) => (
                         <button key={i} onClick={() => { setDirection(i > activeIdx ? 1 : -1); setActiveIdx(i); }}
                             className={cn("rounded-full transition-all duration-200",
-                                i === activeIdx ? "size-1.5 bg-primary" : "size-1.5 bg-muted-foreground/30"
+                                i === activeIdx ? "size-1.5 bg-primary" : "size-1.5 bg-foreground/30"
                             )} />
                     ))}
                 </div>
