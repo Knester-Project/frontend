@@ -17,7 +17,7 @@ const CommentReply = ({ id, type, username, handleNewReply }: { id: string, type
 
     const [replyError, setReplyError] = useState<string | null>(null);
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm({
-        resolver: zodResolver(replySchema), reValidateMode: "onBlur"
+        resolver: zodResolver(replySchema), mode: "onBlur"
     });
 
     const contentValue = watch("content") || "";

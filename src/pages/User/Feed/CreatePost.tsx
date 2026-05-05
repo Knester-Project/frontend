@@ -363,7 +363,6 @@ export default function PostComposer() {
         try {
 
             const payload = await buildPayload(slots, isPrivate);
-            console.log("The Payload", payload)
 
             // Create Post
             newPost.mutate(payload, {
@@ -389,8 +388,7 @@ export default function PostComposer() {
         <div className="bg-card shadow-sm border border-border rounded-2xl overflow-hidden">
             <AnimatePresence>
                 {isThread && (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }} className="px-4 pt-3">
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="px-4 pt-3">
                         <div className="flex items-center gap-1.5 bg-primary/8 px-3 py-2 rounded-xl">
                             <GitBranch className="size-3.5 text-primary" />
                             <span className="font-semibold text-[10px] text-primary md:text-[11px] xl:text-xs montserrat">Thread mode · {slots.length} posts</span>
@@ -401,13 +399,11 @@ export default function PostComposer() {
 
             <div className="px-4 pt-4">
                 {slots.map((slot, idx) => (
-                    <PostSlot key={idx} avatar={user?.profile?.profilePicture} username={user?.username}
+                    <PostSlot key={idx} avatar={user?.profile?.profilePicture} username={user?.username} hashtags={slot.hashtags}
                         content={slot.content} setContent={(v) => updateSlot(idx, { content: v.trim() })} mediaFiles={slot.mediaFiles}
                         setMediaFiles={(val) => updateSlot(idx, { mediaFiles: typeof val === "function" ? val(slot.mediaFiles) : val })}
-                        hashtags={slot.hashtags}
                         setHashtags={(val) => updateSlot(idx, { hashtags: typeof val === "function" ? val(slot.hashtags) : val })}
-                        isPrivate={isPrivate} setIsPrivate={setIsPrivate} isFirst={idx === 0}
-                        isThread={idx < slots.length - 1} onRemove={() => removeSlot(idx)}
+                        isPrivate={isPrivate} setIsPrivate={setIsPrivate} isFirst={idx === 0} isThread={idx < slots.length - 1} onRemove={() => removeSlot(idx)}
                     />
                 ))}
             </div>

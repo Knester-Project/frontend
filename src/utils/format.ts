@@ -1,3 +1,6 @@
+// Constants
+import { ALL_VALID_CATEGORIES } from "@/assets/categories";
+
 // Trending Count
 export const formatTrendingCount = (num: number) => {
   if (num >= 1000000) {
@@ -159,6 +162,16 @@ export const shuffle = <T,>(array: T[]): T[] => {
 
 // Format Distance
 export const formatDist = (km: number): string => {
-    if (km < 1) return `${km * 1000}m`;
-    return `${km} km`;
+  if (km < 1) return `${km * 1000}m`;
+  return `${km} km`;
 }
+
+// Validate Category
+export const areCategoriesValid = (selectedCategories: string[]): boolean => {
+  // Ensure it's an array and not empty
+  if (!Array.isArray(selectedCategories) || selectedCategories.length === 0) {
+    return false;
+  }
+
+  return selectedCategories.every(category => ALL_VALID_CATEGORIES.includes(category));
+};

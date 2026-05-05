@@ -59,7 +59,7 @@ const PeopleAround = () => {
             {isError && (
                 <div className="text-foreground/80 text-xs text-center">
                     Failed to load nearby users.
-                    <button onClick={() => refetch()} className="ml-1 text-primary hover:underline">
+                    <button onClick={() => refetch()} className="ml-1 text-primary hover:underline cursor-pointer">
                         Retry
                     </button>
                 </div>

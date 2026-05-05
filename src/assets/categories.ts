@@ -22,7 +22,17 @@ export const ADVERT_CATEGORIES = {
         "Furniture & Home Decor",
         "Real Estate & Rentals",
         "Automotive (Cars, Bikes, Parts)",
-        "Fitness & Sports Equipment"
+        "Fitness & Sports Equipment",
+        "Fitness Instructor"
+    ],
+    events: [
+        "Event Planners & Coordinators", 
+        "Caterers & Food Services",
+        "Bakers & Confectioners", 
+        "Photographers & Videographers",
+        "Event Decorators & Florists", 
+        "DJs, MCs & Entertainers",
+        "Party Rentals & Venues"
     ],
     entertainment: [
         "Music & Audio",

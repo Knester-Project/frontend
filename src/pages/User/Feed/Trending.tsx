@@ -23,10 +23,10 @@ const Trending = () => {
 
     return (
         <Card className="p-4">
-            <div className="flex items-center gap-2">
+            <header className="flex items-center gap-2">
                 <Flame className="size-5 text-primary animate-pulse" />
                 <p className="font-semibold text-base">Trending Hashtags</p>
-            </div>
+            </header>
 
             {/* Loading State */}
             {isLoading && (

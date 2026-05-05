@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { formatAmount } from "@/utils/format";
 
 // Icons
-import { Tag, Wrench, DollarSign, Pencil, Image } from "lucide-react";
+import { Tag, Wrench, Pencil, Image } from "lucide-react";
 
 const STATUS_META = {
     active: { label: "Active", color: "bg-green-500/10 text-green-600 border-green-500/20" },
@@ -42,7 +42,7 @@ export default function AdvertCard({ advert, stackIndex = 0, isTop = false, isOw
             <div className="relative bg-muted h-36 overflow-hidden">
                 {thumb ? (<img src={thumb} alt={advert.title} className="w-full h-full object-cover" />
                 ) : (
-                    <div className="flex flex-col justify-center items-center gap-2 w-full h-full text-muted-foreground/40">
+                    <div className="flex flex-col justify-center items-center gap-2 w-full h-full text-foreground/70">
                         <Image className="size-8" />
                         <span className="text-xs">No media</span>
                     </div>
@@ -65,8 +65,8 @@ export default function AdvertCard({ advert, stackIndex = 0, isTop = false, isOw
             {/* Body */}
             <div className="space-y-3 px-5 pt-4 pb-5">
                 <div>
-                    <h3 className="font-bold text-foreground text-base line-clamp-1 leading-snug">{advert.title}</h3>
-                    <p className="mt-1 text-muted-foreground text-xs line-clamp-2 leading-relaxed">{advert.description}</p>
+                    <h3 className="font-bold text-foreground line-clamp-1 leading-snug">{advert.title}</h3>
+                    <p className="mt-1 text-[10px] text-foreground/80 md:text-[11px] xl:text-xs line-clamp-2 leading-relaxed">{advert.description}</p>
                 </div>
 
                 {/* Categories */}
@@ -84,13 +84,12 @@ export default function AdvertCard({ advert, stackIndex = 0, isTop = false, isOw
                 {/* Footer */}
                 <div className="flex justify-between items-center pt-1">
                     <div className="flex items-center gap-1.5">
-                        <DollarSign className="w-3.5 h-3.5 text-primary" />
-                        <span className="font-bold text-[11px] text-primary md:text-xs xl:text-sm">{formatAmount(advert.averagePrice)}</span>
-                        <span className="text-[9px] text-muted-foreground md:text-[10px] xl:text-[11px]">avg</span>
+                        <span className="font-bold text-[11px] text-primary md:text-xs xl:text-sm montserrat">{formatAmount(advert.averagePrice)}</span>
+                        <span className="text-[9px] text-foreground/80 md:text-[10px] xl:text-[11px]">avg</span>
                     </div>
                     {(isTop && isOwner) && (
                         <button onClick={(e) => { e.stopPropagation(); }}
-                            className="flex items-center gap-1.5 hover:bg-muted px-3 py-1.5 border border-border hover:border-border/80 rounded-xl font-medium text-[10px] text-muted-foreground md:text-[11px] hover:text-foreground xl:text-xs transition-all">
+                            className="flex items-center gap-1.5 hover:bg-accent/20 px-3 py-1.5 border border-border hover:border-border/80 rounded-xl font-medium text-[10px] text-foreground/70 md:text-[11px] hover:text-foreground xl:text-xs transition-all cursor-pointer">
                             <Pencil className="size-3" />
                             Edit
                         </button>

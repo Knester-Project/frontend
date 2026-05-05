@@ -30,7 +30,7 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
 
 
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm({
-        resolver: zodResolver(commentSchema), reValidateMode: "onBlur"
+        resolver: zodResolver(commentSchema), mode: "onBlur"
     });
 
     const selectedMedia = watch("media");

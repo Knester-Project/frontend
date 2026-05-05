@@ -30,7 +30,7 @@ export default function Create() {
     const [isUploading, setIsUploading] = useState<boolean>(false);
 
     const { register, handleSubmit, reset, watch, setValue, formState: { errors } } =
-        useForm<SafetyInput>({ resolver: zodResolver(createSafetyPostSchema), reValidateMode: "onBlur" });
+        useForm<SafetyInput>({ resolver: zodResolver(createSafetyPostSchema), mode: "onBlur" });
 
     const selectedState = watch("location.state");
     const content = watch("content");

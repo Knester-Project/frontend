@@ -289,7 +289,7 @@ export const fetchUserAdvert = async () => {
 }
 
 // Create User Advert
-export const createAdvert = async (data: AdvertPayload) => {
-    const response = await userAxios.post(`advert/new`, data);
+export const createAdvert = async(data: AdvertPayload) => {
+    const response = await userAxios.post<AdvertResponse>(`advert/new`, data);
     return response.data;
 }

@@ -334,3 +334,10 @@ declare type MyAdvert = {
     createdAt: string;
     updatedAt: string;
 }
+
+declare type AdvertResponse = {
+    data: MyAdvert[];
+    message: string;
+    status: number;
+    success: boolean;
+}
