@@ -8,6 +8,8 @@ import { userProfileOptions } from '@/services/userQueries';
 import Main from '@/components/Main';
 import Header from './Header';
 import Body from './Body';
+import MyHeader from './MyHeader';
+import MyBody from './MyBody';
 
 export default function Index() {
 
@@ -19,53 +21,19 @@ export default function Index() {
     const { data } = useSuspenseQuery(userProfileOptions(profile.trim()));
     const user = data.data;
 
-    const relationshipDefault = {
-        inCircle: false,
-        hasReported: false,
-        hasBlocked: false,
-        isBlocked: false,
-    }
     return (
         <Main>
-            <Header
-                profilePicture={user.profile?.profilePicture}
-                isOnline={user.profile?.isOnline ?? true}
-                username={user.username}
-                bio={user.profile?.bio ?? ""}
-                isPremium={user.isPremium}
-                isModerator={user.isModerator}
-                isCore={user.isCore}
-                discoverable={user.discoverable ?? true}
-                circleMembers={user.profile?.circleMembers ?? 0}
-                wallet={user.profile?.wallet ?? { availableBalance: 0, escrowedBalance: 0 }}
-                isOwner={isOwner}
-                isSuspended={user.isSuspended}
-                circlesJoined={user.circlesJoined}
-                totalPosts={user.totalPosts}
-                details={user.profile?.details ?? []}
-                relationship={user?.relationship ?? relationshipDefault}
-                mediaLength={user.profile?.media?.length ?? 0}
-                dateOfBirth={user.profile?.dateOfBirth ?? ""}
-                profileLock={user.profile?.profileLock ?? false}
-                chatLock={user.profile?.chatLock ?? false}
-                referralPrivilege={user.referralPrivilege ?? 0}
-            />
-            <Body
-                media={user.profile?.media ?? []}
-                isOwner={isOwner}
-                username={user.username}
-                invitedUser={('invitedUser' in user) ? user.invitedUser : []}
-                isEmailVerified={user.isEmailVerified}
-                profileLock={user.profile?.profileLock ?? false}
-                chatLock={user.profile?.chatLock ?? false}
-                discoverable={user.discoverable ?? true}
-                flagged={user.profile?.flagged ?? false}
-                isSuspended={user.isSuspended}
-                referralPrivilege={user.referralPrivilege ?? 0}
-                dateOfBirth={user.profile?.dateOfBirth ?? ""}
-                email={user.email ?? ""}
-                createdAt={user.createdAt}
-            />
+            {isOwner ?
+                <>
+                    <MyHeader user={user} />
+                    <MyBody user={user} />
+                </>
+                :
+                <>
+                    <Header user={user} />
+                    <Body user={user} />
+                </>
+            }
         </Main>
     );
 }

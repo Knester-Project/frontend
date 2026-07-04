@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
@@ -8,10 +9,12 @@ import { cn } from "@/lib/utils";
 // UIs
 import MediaGallery from "./MediaGallery";
 import AccountStatus from "./AccountStatus";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import Cobweb from "@/components/Cobweb";
 
 // Icons
-import { TagUser, ShieldSecurity, Gallery, Shop, ReceiptText } from "iconsax-reactjs";
+import { TagUser, ShieldSecurity, Gallery, Slash, MedalStar, Crown1, Star1, Shop, ReceiptText } from "iconsax-reactjs";
 
 
 const TABS = [
@@ -22,9 +25,9 @@ const TABS = [
 
 type TabId = (typeof TABS)[number]["id"];
 
-const Body = ({ user }: { user: UserDetails }) => {
+const MyBody = ({ user }: { user: Me }) => {
 
-    const { username, isEmailVerified, discoverable, isSuspended, email, createdAt } = user;
+    const { username, invitedUser, isEmailVerified, discoverable, isSuspended, referralPrivilege, email, createdAt } = user
     const { media = [], profileLock = false, chatLock = false, flagged = false, dateOfBirth = "" } = user.profile ?? {};
 
     const { colors } = useProfileTheme();
@@ -40,7 +43,7 @@ const Body = ({ user }: { user: UserDetails }) => {
         advert: <Shop variant="Bold" {...iconProps} />,
     };
 
-    const label = activeTab === "account" ? "Account Summary" : activeTab === "advert" ? "Market Place" : "Posts";
+    const label = activeTab === "account" ? "Account Status" : activeTab === "advert" ? "Market Place" : "Posts";
 
 
     return (
@@ -52,13 +55,46 @@ const Body = ({ user }: { user: UserDetails }) => {
                     <p className="font-bold">{media.length}</p>
                 </div>
                 {media.length > 0 ?
-                    <MediaGallery media={media} username={username} isOwner={false} />
+                    <MediaGallery media={media} username={username} isOwner={true} />
                     :
                     <div className="flex flex-col items-center gap-y-2 py-8">
                         <Cobweb color={colors.primary} />
                         <p style={{ color: colors.primary }} className="capitalize montserrat">{username}'s Cobweb-filled media shelf.</p>
                     </div>
                 }
+            </section>
+            <section className="mt-10">
+                <div className="flex gap-x-1 text-sm md:text-base xl:text-lg items montserrat">
+                    <TagUser variant="Bold" className="size-5 md:size-5.5 xl:size-6" style={{ color: colors.primary }} />
+                    <p className="font-medium">Invited Users</p>
+                    <p className="font-bold"><span style={{ color: colors.primary }}>{invitedUser.length}</span>/{referralPrivilege}</p>
+                </div>
+                {invitedUser.length > 0 ? (
+                    invitedUser.map((user) => (
+                        <Link style={{ backgroundColor: colors.primary + 20 }} to="/profile" search={{ profile: user.username }} key={`invitedUser_${user._id}`} className="flex items-center gap-x-2 my-4 p-2 md:p-3 xl:p-4 border border-border rounded-2xl">
+                            <Avatar>
+                                <AvatarImage src={user.profile?.profilePicture} />
+                                <AvatarFallback>{user.username.charAt(0).toUpperCase() || "??"}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                                <p style={{ color: colors.primary }} className="font-medium text-base md:text-lg xl:text-xl">{user.username}</p>
+                                {user.isCore && <Badge className="bg-core/10 -mt-1 border-core text-core"><MedalStar variant="Bold" /> Core Member</Badge>}
+                                {user.isPremium && <Badge className="bg-premium/10 -mt-1 border-premium text-premium"><Crown1 variant="Bold" /> Premium Member</Badge>}
+                                {user.isModerator && <Badge className="bg-moderator/10 -mt-1 border-moderator text-moderator"><Star1 variant="Bold" /> Moderator</Badge>}
+                                {user.isSuspended &&
+                                    <Badge variant="destructive" className='-mt-1'>
+                                        <Slash /> Suspended
+                                    </Badge>
+                                }
+                            </div>
+                        </Link>
+                    ))
+                ) : (
+                    <div className="flex flex-col items-center gap-y-2 py-8">
+                        <Cobweb color={colors.primary} />
+                        <p style={{ color: colors.primary }}>No invited users yet.</p>
+                    </div>
+                )}
             </section>
             <section className="mt-10">
                 <div className="flex justify-between items-center mb-6">
@@ -93,8 +129,8 @@ const Body = ({ user }: { user: UserDetails }) => {
                         discoverable={discoverable}
                         flagged={flagged}
                         isSuspended={isSuspended}
-                        referralPrivilege={0}
-                        isOwner={false}
+                        referralPrivilege={referralPrivilege}
+                        isOwner={true}
                         dateOfBirth={dateOfBirth}
                         email={email}
                         createdAt={createdAt}
@@ -105,4 +141,4 @@ const Body = ({ user }: { user: UserDetails }) => {
     );
 }
 
-export default Body;
+export default MyBody;

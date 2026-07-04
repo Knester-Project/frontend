@@ -104,7 +104,7 @@ export default function AccountStatus(props: AccountProps) {
     ];
 
     const hasDOB = Boolean(dateOfBirth.trim());
-    const hasEmail = Boolean(email.trim());
+    const hasEmail = Boolean(email && email.trim());
     const hasCreatedAt = Boolean(createdAt);
 
     return (
