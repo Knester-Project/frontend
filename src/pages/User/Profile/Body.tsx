@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-// Stores and Utils
+// Stores, Utils and Services
 import { useProfileTheme } from "@/stores/profileTheme.store";
 import { cn } from "@/lib/utils";
+import { useUserAdverts } from "@/services/userQueries";
 
 // UIs
 import MediaGallery from "./MediaGallery";
 import AccountStatus from "./AccountStatus";
 import Cobweb from "@/components/Cobweb";
+import AdvertLoader from "@/components/AdvertLoader";
+import AdvertError from "@/components/AdvertError";
+import Adverts from "./Adverts";
+import Posts from "./Posts";
 
 // Icons
 import { TagUser, ShieldSecurity, Gallery, Shop, ReceiptText } from "iconsax-reactjs";
@@ -36,11 +41,14 @@ const Body = ({ user }: { user: UserDetails }) => {
 
     const icons = {
         account: <ShieldSecurity variant="Bold" {...iconProps} />,
-        post: <Shop variant="Bold" {...iconProps} />,
+        post: <ReceiptText variant="Bold" {...iconProps} />,
         advert: <Shop variant="Bold" {...iconProps} />,
     };
 
     const label = activeTab === "account" ? "Account Summary" : activeTab === "advert" ? "Market Place" : "Posts";
+
+    const { data: advertData, isLoading: advertLoading, isError: advertError, refetch: refetchAdvert } = useUserAdverts(username);
+    const adverts = advertData?.data || [];
 
 
     return (
@@ -99,6 +107,28 @@ const Body = ({ user }: { user: UserDetails }) => {
                         email={email}
                         createdAt={createdAt}
                     />
+                )}
+                {activeTab === "advert" && (
+                    <>
+                        {advertLoading && (
+                            <main className="gap-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+                                {Array.from({ length: 3 }).map((_, i) => (
+                                    <AdvertLoader key={`advertLoading_${i}`} />
+                                ))}
+                            </main>
+                        )}
+
+                        {advertError && (
+                            <AdvertError refetch={refetchAdvert} />
+                        )}
+
+                        {!advertError && !advertLoading && (
+                            <Adverts adverts={adverts} isOwner={false} />
+                        )}
+                    </>
+                )}
+                {activeTab === "post" && (
+                    <Posts isOwner={false} />
                 )}
             </section>
         </main>

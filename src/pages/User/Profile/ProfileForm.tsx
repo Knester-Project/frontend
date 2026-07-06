@@ -292,8 +292,8 @@ export default function ProfileForm({ isPremium, close, remainingMedia = 10, MAX
                                 checked={chatLock!} onChange={(v) => setValue("chatLock", v)} />
                         </>
                         :
-                        <div className="py-2 text-[11px] text-primary md:text-xs xl:text-sm montserrat">
-                            <p>This Field Is Only Available To Premium/Core/Moderating Users</p>
+                        <div className="py-2 text-[10px] text-foreground/50 md:text-[11px] xl:text-xs montserrat">
+                            <p>Profile Lock and Chat Lock is Only Available to Premium/Core/Moderating Users</p>
                         </div>
                     }
                 </div>

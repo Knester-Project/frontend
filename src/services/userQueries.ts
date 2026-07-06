@@ -2,7 +2,7 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { queryOptions } from '@tanstack/react-query';
 
 // API endpoints
-import { checkUsername, circlePosts, feed, fetchComments, fetchPeople, fetchPeopleAnalytics, fetchReplies, fetchSafetyPosts, fetchUserAdvert, getCurrentUser, getUserDetails, inviteUser, profilePosts, trendingPosts, trendingTags } from "./api.services";
+import { checkUsername, circlePosts, feed, fetchComments, fetchMyAdvert, fetchPeople, fetchPeopleAnalytics, fetchReplies, fetchSafetyPosts, fetchUserAdvert, getCurrentUser, getUserDetails, inviteUser, profilePosts, trendingPosts, trendingTags } from "./api.services";
 
 // Stores
 import { meStore } from "@/stores/me.store";
@@ -201,10 +201,18 @@ export const useNearByPeople = (queries: PeopleQueries) => {
     });
 };
 
-// Fetch User Advert
-export const useUserAdverts = () => {
+// Fetch My Adverts
+export const useMyAdverts = () => {
     return useQuery({
         queryKey: ['myAdverts'],
-        queryFn: () => fetchUserAdvert(),
+        queryFn: () => fetchMyAdvert(),
+    })
+}
+
+// Fetch User Adverts
+export const useUserAdverts = (username: string) => {
+    return useQuery({
+        queryKey: ['adverts', username],
+        queryFn: () => fetchUserAdvert(username),
     })
 }

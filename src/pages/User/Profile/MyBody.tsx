@@ -2,9 +2,10 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-// Stores and Utils
+// Stores, Utils and Services
 import { useProfileTheme } from "@/stores/profileTheme.store";
 import { cn } from "@/lib/utils";
+import { useMyAdverts } from "@/services/userQueries";
 
 // UIs
 import MediaGallery from "./MediaGallery";
@@ -12,6 +13,10 @@ import AccountStatus from "./AccountStatus";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import Cobweb from "@/components/Cobweb";
+import Adverts from "./Adverts";
+import AdvertLoader from "@/components/AdvertLoader";
+import AdvertError from "@/components/AdvertError";
+import Posts from "./Posts";
 
 // Icons
 import { TagUser, ShieldSecurity, Gallery, Slash, MedalStar, Crown1, Star1, Shop, ReceiptText } from "iconsax-reactjs";
@@ -39,11 +44,14 @@ const MyBody = ({ user }: { user: Me }) => {
 
     const icons = {
         account: <ShieldSecurity variant="Bold" {...iconProps} />,
-        post: <Shop variant="Bold" {...iconProps} />,
+        post: <ReceiptText variant="Bold" {...iconProps} />,
         advert: <Shop variant="Bold" {...iconProps} />,
     };
 
     const label = activeTab === "account" ? "Account Status" : activeTab === "advert" ? "Market Place" : "Posts";
+
+    const { data: advertData, isLoading: advertLoading, isError: advertError, refetch: refetchAdvert } = useMyAdverts();
+    const adverts = advertData?.data || [];
 
 
     return (
@@ -114,8 +122,8 @@ const MyBody = ({ user }: { user: Me }) => {
                                             className="absolute inset-0 bg-background shadow-sm border border-border/50 rounded-xl"
                                             transition={{ type: "spring", stiffness: 400, damping: 30 }} />
                                     )}
-                                    <Icon className={cn("z-10 relative size-3.5", activeTab === tab.id ? "text-primary" : "")} />
-                                    <span className="hidden sm:inline z-10 relative">{tab.label}</span>
+                                    <Icon className={cn("z-5 relative size-3.5", activeTab === tab.id ? "text-primary" : "")} />
+                                    <span className="hidden sm:inline z-5 relative">{tab.label}</span>
                                 </button>
                             );
                         })}
@@ -135,6 +143,28 @@ const MyBody = ({ user }: { user: Me }) => {
                         email={email}
                         createdAt={createdAt}
                     />
+                )}
+                {activeTab === "advert" && (
+                    <>
+                        {advertLoading && (
+                            <main className="gap-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+                                {Array.from({ length: 3 }).map((_, i) => (
+                                    <AdvertLoader key={`advertLoading_${i}`} />
+                                ))}
+                            </main>
+                        )}
+
+                        {advertError && (
+                            <AdvertError refetch={refetchAdvert} />
+                        )}
+
+                        {!advertError && !advertLoading && (
+                            <Adverts adverts={adverts} isOwner={true} />
+                        )}
+                    </>
+                )}
+                {activeTab === "post" && (
+                    <Posts isOwner={true} />
                 )}
             </section>
         </main>

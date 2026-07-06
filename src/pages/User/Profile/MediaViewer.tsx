@@ -17,27 +17,31 @@ interface MediaViewerProps {
 }
 
 export default function MediaViewer({ src, alt = "User media", isOwner = false }: MediaViewerProps) {
+
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const mediaType = detectMediaType(src);
 
     const deleteMedia = useDeleteMedia();
     const handleDelete = (url: string) => {
-
-        const ok = confirm("Delete this media?");
-        if (ok) {
-            deleteMedia.mutate((url), {
-                onSuccess: () => {
-                    sileo.success({ title: "Media Deleted !!!", icon: <Rocket className="size-3.5" />, });
+        sileo.action({
+            title: "File Deletion",
+            description: "Do you wish to delete this Media?",
+            button: {
+                title: "Delete",
+                onClick: () => {
+                    deleteMedia.mutate((url), {
+                        onSuccess: () => {
+                            sileo.success({ title: "Media Deleted !!!", icon: <Rocket className="size-3.5" />, });
+                        },
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        onError: (error: any) => {
+                            const message = error?.response?.data?.message || "Couldn't delete media now, kindly try again later.";
+                            sileo.error({ title: "Error", description: message });
+                        },
+                    })
                 },
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                onError: (error: any) => {
-                    const message = error?.response?.data?.message || "Couldn't delete media now, kindly try again later.";
-                    sileo.error({ title: "Error", description: message });
-                },
-            })
-        } else {
-            sileo.error({ title: "You cancelled the deletion" })
-        }
+            },
+        });
     };
 
     return (
@@ -65,7 +69,7 @@ export default function MediaViewer({ src, alt = "User media", isOwner = false }
                             e.stopPropagation();
                             handleDelete(src);
                         }}
-                        className="top-2 right-2 z-10 absolute bg-background/90 backdrop-blur-md p-1 rounded-sm text-destructive hover:scale-110 transition-all cursor-pointer">
+                        className="top-2 right-2 z-5 absolute bg-foreground/50 backdrop-blur-md p-1 rounded-sm text-destructive hover:scale-110 transition-all cursor-pointer">
                         <Trash className="size-3.5 md:size-4 xl:size-4.5" variant="Bold" />
                     </button>
                 )}
@@ -75,11 +79,11 @@ export default function MediaViewer({ src, alt = "User media", isOwner = false }
             <AnimatePresence>
                 {isExpanded && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        className="z-[50] fixed inset-0 flex justify-center items-center bg-background/95 backdrop-blur-lg p-4"
+                        className="z-6 fixed inset-0 flex justify-center items-center bg-background/95 backdrop-blur-lg p-4"
                         onClick={() => setIsExpanded(false)}>
 
                         <motion.button initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-                            className="top-6 right-6 z-[60] absolute hover:text-destructive transition-colors cursor-pointer"
+                            className="top-6 right-6 z-7 absolute hover:text-destructive transition-colors cursor-pointer"
                             onClick={() => setIsExpanded(false)}>
                             <CloseSquare className="size-5 md:size-5.5 xl:size-6" variant="Bold" />
                         </motion.button>

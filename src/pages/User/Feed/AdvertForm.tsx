@@ -111,8 +111,6 @@ const AdvertForm = ({ onClose }: { onClose: () => void; }) => {
         }
     };
 
-    console.log("The errors", errors)
-
     return (
         <main className="flex flex-col h-full">
             {/* Header section */}

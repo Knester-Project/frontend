@@ -1,18 +1,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-// Utils
+// Utils and Enums
 import { cn } from "@/lib/utils";
 import { formatAmount } from "@/utils/format";
+import { ADVERT_STATUS_META } from "@/enums";
 
 // Icons
-import { Tag, Wrench, Pencil, Image, ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
+import { PathTool, Tag, Image, ArrowLeft3, ArrowRight3 } from "iconsax-reactjs";
 
-const STATUS_META = {
-    active: { label: "Active", color: "bg-green-500/10 text-green-600 border-green-500/20" },
-    paused: { label: "Paused", color: "bg-amber-500/10 text-amber-600 border-amber-500/20" },
-    sold_out: { label: "Sold Out", color: "bg-red-500/10 text-red-500 border-red-500/20" },
-};
 
 interface AdvertProps {
     advert: MyAdvert;
@@ -21,12 +17,13 @@ interface AdvertProps {
     isOwner: boolean;
 }
 
-export default function AdvertCard({ advert, stackIndex = 0, isTop = false, isOwner }: AdvertProps) {
-    const status = STATUS_META[advert.status as keyof typeof STATUS_META] ?? STATUS_META.active;
+export default function AdvertCard({ advert, stackIndex = 0, isTop = false }: AdvertProps) {
+
+    const status = ADVERT_STATUS_META[advert.status as keyof typeof ADVERT_STATUS_META] ?? ADVERT_STATUS_META.active;
 
     // --- New States for our interactive features ---
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [showAllCategories, setShowAllCategories] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+    const [showAllCategories, setShowAllCategories] = useState<boolean>(false);
 
     const images = advert.mediaUrls || [];
     const hasImages = images.length > 0;
@@ -72,11 +69,14 @@ export default function AdvertCard({ advert, stackIndex = 0, isTop = false, isOw
                 {/* Carousel Controls (Only show if top card and has multiple images) */}
                 {(isTop && images.length > 1) && (
                     <>
-                        <button onClick={handlePrevImage} className="top-1/2 left-2 absolute bg-background/50 hover:bg-background/80 opacity-0 group-hover:opacity-100 backdrop-blur-sm p-1 rounded-full text-foreground transition-all -translate-y-1/2 cursor-pointer">
-                            <ChevronLeft className="size-4" />
+                        <button onClick={handlePrevImage}
+                            className="top-1/2 left-2 absolute bg-background/50 hover:bg-background/80 opacity-100 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:opacity-0 backdrop-blur-sm p-1 rounded-full text-foreground transition-all -translate-y-1/2 cursor-pointer">
+                            <ArrowLeft3 className="size-4" />
                         </button>
-                        <button onClick={handleNextImage} className="top-1/2 right-2 absolute bg-background/50 hover:bg-background/80 opacity-0 group-hover:opacity-100 backdrop-blur-sm p-1 rounded-full text-foreground transition-all -translate-y-1/2 cursor-pointer">
-                            <ChevronRight className="size-4" />
+
+                        <button onClick={handleNextImage}
+                            className="top-1/2 right-2 absolute bg-background/50 hover:bg-background/80 opacity-100 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:opacity-0 backdrop-blur-sm p-1 rounded-full text-foreground transition-all -translate-y-1/2 cursor-pointer">
+                            <ArrowRight3 className="size-4" />
                         </button>
 
                         {/* Image Indicators (Dots) */}
@@ -96,7 +96,7 @@ export default function AdvertCard({ advert, stackIndex = 0, isTop = false, isOw
 
                 {/* Type badge */}
                 <span className="top-3 left-3 absolute flex items-center gap-1 bg-background/80 backdrop-blur-sm px-2.5 py-1 border border-border/40 rounded-full font-semibold text-[9px] text-foreground md:text-[10px] xl:text-[11px]">
-                    {advert.type === "good" ? <Tag className="size-3" /> : <Wrench className="size-3" />}
+                    {advert.type === "good" ? <Tag className="size-3" /> : <PathTool className="size-3" />}
                     {advert.type === "good" ? "Good" : "Service"}
                 </span>
             </div>
@@ -143,28 +143,11 @@ export default function AdvertCard({ advert, stackIndex = 0, isTop = false, isOw
                 )}
 
                 {/* Footer Section */}
-                <div className="flex justify-between items-center mt-2 pt-3 border-border/40 border-t shrink-0">
+                <div className="mt-2 pt-3 border-border/40 border-t shrink-0">
                     <div className="flex items-center gap-1.5">
                         <span className="font-bold text-[11px] text-primary md:text-xs xl:text-sm montserrat">{formatAmount(advert.averagePrice)}</span>
                         <span className="text-[9px] text-foreground/80 md:text-[10px] xl:text-[11px]">avg</span>
                     </div>
-
-                    {/* Conditional Action Buttons */}
-                    {isTop && (
-                        isOwner ? (
-                            <button onClick={(e) => { e.stopPropagation(); /* edit logic */ }}
-                                className="flex items-center gap-1.5 hover:bg-accent/20 px-3 py-1.5 border border-border hover:border-border/80 rounded-xl font-medium text-[10px] text-foreground/70 md:text-[11px] hover:text-foreground xl:text-xs transition-all cursor-pointer">
-                                <Pencil className="size-3" />
-                                Edit
-                            </button>
-                        ) : (
-                            <button onClick={(e) => { e.stopPropagation(); /* chat logic */ }}
-                                className="flex items-center gap-1.5 bg-primary/10 hover:bg-primary shadow-sm px-3 py-1.5 rounded-xl font-bold text-[10px] text-primary md:text-[11px] hover:text-primary-foreground xl:text-xs transition-colors cursor-pointer">
-                                <MessageCircle className="size-3" />
-                                Chat
-                            </button>
-                        )
-                    )}
                 </div>
             </div>
         </motion.div>

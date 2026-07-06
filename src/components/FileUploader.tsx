@@ -6,7 +6,7 @@ import { sileo } from "sileo";
 import { makeFilesUnique } from "@/utils/format";
 
 // Icons
-import { GalleryAdd } from "iconsax-reactjs";
+import { CloseSquare, GalleryAdd } from "iconsax-reactjs";
 
 type Props = {
     multiple?: boolean;
@@ -155,7 +155,7 @@ export default function FileUploader({ multiple = false, disabled, max = 8, valu
 
             {/* Empty state */}
             {items.length === 0 && (
-                <p className="text-[10px] text-muted-foreground md:text-[11px] text-xs text-center">
+                <p className="text-[10px] text-foreground/50 md:text-[11px] text-xs text-center">
                     No files selected. Supported: images & videos.
                 </p>
             )}
@@ -172,11 +172,11 @@ export default function FileUploader({ multiple = false, disabled, max = 8, valu
                             )}
 
                             <button type="button" onClick={() => removeItem(i)}
-                                className="top-1 right-1 absolute bg-red-600 opacity-0 group-hover:opacity-100 rounded-full size-6 text-[11px] text-white md:text-xs xl:text-sm">
-                                ✕
+                                className="top-1 right-1 absolute bg-red-600 opacity-0 group-hover:opacity-100 p-1 rounded text-white cursor-pointer">
+                                <CloseSquare className="size-3 md:size-3.5 xl:size-4" />
                             </button>
 
-                            <div className="bottom-1 left-1 absolute bg-black/70 px-1 rounded text-[10px] text-white md:text-[11px] text-xs">
+                            <div className="bottom-1 left-1 absolute bg-black/70 px-1 rounded text-[10px] text-white md:text-[11px] text-xs montserrat">
                                 {item.sizeMB}
                             </div>
 

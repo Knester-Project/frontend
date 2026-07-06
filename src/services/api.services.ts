@@ -283,13 +283,33 @@ export const fetchPeople = async (queries: PeopleQueries) => {
 }
 
 // Fetch User Advert
-export const fetchUserAdvert = async () => {
-    const response = await userAxios.get(`advert/fetch/me`);
+export const fetchMyAdvert = async () => {
+    const response = await userAxios.get<AdvertResponse>(`advert/fetch/me`);
+    return response.data;
+}
+
+// Fetch Another User Advert
+export const fetchUserAdvert = async (username: string) => {
+    const response = await userAxios.get<AdvertResponse>(`advert/fetch/user/${username}`);
     return response.data;
 }
 
 // Create User Advert
-export const createAdvert = async(data: AdvertPayload) => {
-    const response = await userAxios.post<AdvertResponse>(`advert/new`, data);
+export const createAdvert = async (data: AdvertPayload) => {
+    const response = await userAxios.post(`advert/new`, data);
+    return response.data;
+}
+
+// Edit Advert
+export const editAdvert = async (data: EditAdvertPayload) => {
+    const { id, ...rest } = data;
+    const response = await userAxios.patch(`advert/update/${id}`, rest);
+    return response.data;
+}
+
+// Delete Advert
+export const updateAdvertMedia = async (data: { url: string, advertId: string }) => {
+    const { advertId, ...rest } = data;
+    const response = await userAxios.patch(`advert/update/image/${advertId}`, rest);
     return response.data;
 }

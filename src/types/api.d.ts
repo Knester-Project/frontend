@@ -321,9 +321,13 @@ declare type AdvertPayload = {
     status: "active" | "paused" | "sold_out";
 }
 
+type EditAdvertPayload = Partial<AdvertPayload> & {
+    id: string;
+};
+
 declare type MyAdvert = {
     _id: string;
-    vendorId: string;
+    vendorId: User;
     title: string;
     description: string;
     type: "good" | "service";

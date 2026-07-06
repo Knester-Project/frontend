@@ -2,7 +2,7 @@
 import { QueryClient, useMutation, useQueryClient, type QueryKey } from "@tanstack/react-query";
 
 // Functions
-import { authenticateUser, blockUser, commentOnPost, createAdvert, createReply, createSafetyPost, createUser, deleteComment, deleteMedia, deleteReply, flagPost, joinCircle, leaveCircle, newPost, reportUser, toggleVibe, unblockUser, updateProfile, validateInvite } from "./api.services";
+import { authenticateUser, blockUser, commentOnPost, createAdvert, createReply, createSafetyPost, createUser, deleteComment, deleteMedia, deleteReply, editAdvert, flagPost, joinCircle, leaveCircle, newPost, reportUser, toggleVibe, unblockUser, updateAdvertMedia, updateProfile, validateInvite } from "./api.services";
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
@@ -513,6 +513,38 @@ export function useNewAdvert() {
         mutationFn: (data: AdvertPayload) => createAdvert(data),
         onError: (error) => {
             console.error("Advert Creation failed:", error);
+        },
+        onSuccess: async () => {
+            queryClient.invalidateQueries({
+                queryKey: ["myAdverts"],
+            });
+        }
+    })
+}
+
+// Edit Advert
+export function useUpdateAdvert() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: EditAdvertPayload) => editAdvert(data),
+        onError: (error) => {
+            console.error("Advert Update failed:", error);
+        },
+        onSuccess: async () => {
+            queryClient.invalidateQueries({
+                queryKey: ["myAdverts"],
+            });
+        }
+    })
+}
+
+// Delete Image and Update Advert
+export function useUpdateAdvertMedia() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: { url: string, advertId: string }) => updateAdvertMedia(data),
+        onError: (error) => {
+            console.error("Advert Media Update failed:", error);
         },
         onSuccess: async () => {
             queryClient.invalidateQueries({

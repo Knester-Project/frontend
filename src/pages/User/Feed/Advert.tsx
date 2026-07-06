@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 // Services, Stores and Utils
-import { useUserAdverts } from "@/services/userQueries";
+import { useMyAdverts } from "@/services/userQueries";
 import { meStore } from "@/stores/me.store";
 import { cn } from "@/lib/utils";
 
@@ -23,7 +23,7 @@ const MAX = Number(import.meta.env.VITE_ADVERT_LENGTH) || 5;
 const Advert = () => {
 
     const { user } = meStore();
-    const { data, isLoading, isError, refetch } = useUserAdverts();
+    const { data, isLoading, isError, refetch } = useMyAdverts();
 
     // States
     const [newAdvert, setNewAdvert] = useState<boolean>(false);
@@ -31,6 +31,7 @@ const Advert = () => {
     const [direction, setDirection] = useState<number>(1);        // 1=forward, -1=back
 
     // Constants
+    const isBusy = isLoading || isError;
     const adverts: MyAdvert[] = data?.data || [];
     const canCreate = adverts.length < MAX;
     const isPremium = user?.isPremium || user?.isModerator || user?.isCore || false;
@@ -54,9 +55,19 @@ const Advert = () => {
 
     return (
         <Card className="p-4">
-            <header className="flex items-center gap-2 mb-2">
-                <Shop className="size-5 text-primary animate-pulse" />
-                <p className="font-semibold text-base">Your Adverts</p>
+            <header className="flex justify-between items-center">
+                <div className="flex items-center gap-x-2">
+                    <Shop className="size-5 text-primary animate-pulse" />
+                    <p className="font-semibold text-base">Your Adverts</p>
+                    <div className="bg-primary/10 px-2 py-1 rounded-3xl font-bold text-[10px] text-primary md:text-[11px] xl:text-xs montserrat">
+                        {adverts.length}/{MAX}
+                    </div>
+                </div>
+                {(!isBusy && isPremium && adverts.length < MAX) && (
+                    <button onClick={toggleNew} className="bg-primary hover:bg-primary/90 ml-auto px-3 py-1 rounded-md w-fit font-semibold text-primary-foreground text-xs transition-colors cursor-pointer">
+                        New Advert
+                    </button>
+                )}
             </header>
 
             {/* Loading State */}
@@ -77,14 +88,8 @@ const Advert = () => {
                 </div>
             )}
 
-            {(!isError && !isLoading && isPremium && adverts.length < MAX) && (
-                <button onClick={toggleNew} className="bg-primary hover:bg-primary/90 ml-auto px-3 py-1 rounded-xl w-fit font-semibold text-primary-foreground text-xs transition-colors cursor-pointer">
-                    New Advert
-                </button>
-            )}
-
             {/* Data State */}
-            {(!isLoading && !isError && adverts.length > 0) && (
+            {(!isBusy && adverts.length > 0) && (
                 <div className="relative" style={{ height: 370 }}>
                     {/* Ghost cards (stack depth visual) */}
                     {stackedAdverts.slice(1).reverse().map((advert, idx) => {
@@ -134,7 +139,7 @@ const Advert = () => {
                     )}
                 </div>
             )}
-            {!isLoading && !isError && adverts.length === 0 && (
+            {!isBusy && adverts.length === 0 && (
                 <div className="flex flex-col items-center gap-3 bg-accent/10 mx-auto px-5 py-6 border border-border rounded-xl w-full">
                     <Shop className="size-8 text-muted" />
                     <p className="text-foreground/80 text-xs text-center">You haven't created any adverts yet.</p>
