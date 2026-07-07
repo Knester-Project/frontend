@@ -164,7 +164,7 @@ const MyBody = ({ user }: { user: Me }) => {
                     </>
                 )}
                 {activeTab === "post" && (
-                    <Posts isOwner={true} />
+                    <Posts isOwner={true} username={username} />
                 )}
             </section>
         </main>

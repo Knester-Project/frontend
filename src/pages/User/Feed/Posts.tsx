@@ -92,7 +92,6 @@ const Posts = () => {
                 </div>
             </div>
 
-            {/* Content Area (Rendered below the tabs so tabs never disappear) */}
             {isLoading ? (
                 <div className="space-y-4 mt-5">
                     {Array.from({ length: 3 }).map((_, i) => (

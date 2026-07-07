@@ -50,7 +50,6 @@ const Body = ({ user }: { user: UserDetails }) => {
     const { data: advertData, isLoading: advertLoading, isError: advertError, refetch: refetchAdvert } = useUserAdverts(username);
     const adverts = advertData?.data || [];
 
-
     return (
         <main className="mx-auto max-w-7xl">
             <section className="mt-10">
@@ -128,7 +127,7 @@ const Body = ({ user }: { user: UserDetails }) => {
                     </>
                 )}
                 {activeTab === "post" && (
-                    <Posts isOwner={false} />
+                    <Posts isOwner={false} username={username} />
                 )}
             </section>
         </main>
