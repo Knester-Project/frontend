@@ -6,6 +6,8 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { Toaster } from "sileo";
 import { ThemeProviderEffect } from '@/components/ThemeProvider';
 
+export const APP_NAME = "Knester";
+
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {

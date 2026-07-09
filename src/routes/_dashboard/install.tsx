@@ -1,6 +1,15 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
+
+import { APP_NAME } from '../__root';
 
 export const Route = createFileRoute('/_dashboard/install')({
+  head: () => ({
+    meta: [
+      {
+        title: `Installation | ${APP_NAME}`,
+      },
+    ],
+  }),
   component: RouteComponent,
 })
 

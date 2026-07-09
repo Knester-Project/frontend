@@ -6,7 +6,16 @@ import Profile from '@/pages/User/Profile';
 import ErrorPage from '@/components/errors/Custom';
 import ProfileLoader from '@/pages/User/Profile/ProfileLoader';
 
+import { APP_NAME } from '../__root';
+
 export const Route = createFileRoute('/_dashboard/profile')({
+  head: () => ({
+    meta: [
+      {
+        title: `Profile | ${APP_NAME}`,
+      },
+    ],
+  }),
 
   validateSearch: (search: Record<string, string>) => ({
     profile: search.profile as string,
