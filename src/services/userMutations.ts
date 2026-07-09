@@ -2,7 +2,7 @@
 import { QueryClient, useMutation, useQueryClient, type QueryKey } from "@tanstack/react-query";
 
 // Functions
-import { authenticateUser, blockUser, commentOnPost, createAdvert, createReply, createSafetyPost, createUser, deleteComment, deleteMedia, deleteReply, editAdvert, flagPost, joinCircle, leaveCircle, newPost, reportUser, toggleVibe, unblockUser, updateAdvertMedia, updateProfile, validateInvite } from "./api.services";
+import { authenticateUser, blockUser, commentOnPost, createAdvert, createReply, createSafetyPost, createUser, deleteAdvert, deleteComment, deleteMedia, deletePost, deleteReply, editAdvert, editPostMedia, flagPost, joinCircle, leaveCircle, newPost, reportUser, toggleVibe, unblockUser, updateAdvertMedia, updatePost, updateProfile, validateInvite } from "./api.services";
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
@@ -19,11 +19,13 @@ type InfiniteData<T> = {
 };
 
 // Helper to update Infinite Query Data
-function updateInfiniteData<TItem>(old: unknown, updater: (item: TItem) => TItem) {
-
+function updateInfiniteData<TItem>(
+    old: unknown,
+    updater: (item: TItem) => TItem | null
+) {
     if (!old) return old;
 
-    const data = old as InfiniteData<{ data?: TItem[]; comments?: TItem[], replies?: TItem[] }>;
+    const data = old as InfiniteData<any>;
 
     return {
         ...data,
@@ -31,14 +33,27 @@ function updateInfiniteData<TItem>(old: unknown, updater: (item: TItem) => TItem
             ...page,
             data: {
                 ...page.data,
-                ...(page.data.data && {
-                    data: page.data.data.map(updater),
+                
+                // Map the updater, then immediately filter out any nulls
+                ...(page.data?.data && {
+                    data: page.data.data
+                        .map(updater)
+                        .filter((item: any) => item !== null),
                 }),
-                ...(page.data.comments && {
-                    comments: page.data.comments.map(updater),
+                ...(page.data?.posts && {
+                    posts: page.data.posts
+                        .map(updater)
+                        .filter((item: any) => item !== null),
                 }),
-                ...(page.data.replies && {
-                    replies: page.data.replies.map(updater),
+                ...(page.data?.comments && {
+                    comments: page.data.comments
+                        .map(updater)
+                        .filter((item: any) => item !== null),
+                }),
+                ...(page.data?.replies && {
+                    replies: page.data.replies
+                        .map(updater)
+                        .filter((item: any) => item !== null),
                 }),
             },
         })),
@@ -46,36 +61,38 @@ function updateInfiniteData<TItem>(old: unknown, updater: (item: TItem) => TItem
 }
 
 // Helper for Optimistic Mutations
-function useCreateOptimisticMutation<TVars>
-    ({ queryKey, mutationFn, updater }: {
-        queryKey: unknown[];
-        mutationFn: (vars: TVars) => Promise<any>;
-        updater: (item: any) => any;
-    }) {
-
+function useCreateOptimisticMutation<TVars>({
+    queryKey,
+    mutationFn,
+    updater,
+    invalidateOnSettled = true
+}: {
+    queryKey: unknown[];
+    mutationFn: (vars: TVars) => Promise<any>;
+    updater: (item: any, vars: TVars) => any | null;
+    invalidateOnSettled?: boolean;
+}) {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn,
-
-        onMutate: async () => {
+        onMutate: async (vars: TVars) => {
             await queryClient.cancelQueries({ queryKey });
-
             const previousData = queryClient.getQueryData(queryKey);
 
             queryClient.setQueryData(queryKey, (old: unknown) =>
-                updateInfiniteData(old, updater)
+                updateInfiniteData(old, (item) => updater(item, vars))
             );
 
             return { previousData };
         },
-
         onError: (_err, _vars, ctx) => {
             queryClient.setQueryData(queryKey, ctx?.previousData);
         },
-
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey });
+            if (invalidateOnSettled) {
+                queryClient.invalidateQueries({ queryKey });
+            }
         },
     });
 }
@@ -506,6 +523,89 @@ export function usePostFlag(postId: string, queryKey: string, feedQueries: Curso
     });
 }
 
+// Update Post
+export function useUpdatePost(queryKey: string, feedQueries: CursorQueries) {
+    return useCreateOptimisticMutation<EditPostPayload>({
+        queryKey: [queryKey, feedQueries],
+        mutationFn: updatePost,
+        updater: (p: Post, vars: EditPostPayload) => {
+            if (p._id === vars.id) {
+                return {
+                    ...p,
+                    ...vars,
+                    edited: true
+                };
+            }
+            if (p.thread && p.thread.length > 0) {
+                return {
+                    ...p, thread: p.thread.map((child) =>
+                        child._id === vars.id ? { ...child, ...vars, edited: true } : child
+                    )
+                };
+            }
+            return p;
+        },
+    });
+}
+
+// Delete Post Media
+export function useDeletePostMedia(postId: string, urlToRemove: string, queryKey: string, feedQueries: CursorQueries) {
+    return useCreateOptimisticMutation({
+        queryKey: [queryKey, feedQueries],
+        mutationFn: () => editPostMedia({ postId, url: urlToRemove }),
+        updater: (p: Post) => {
+
+            // Main post match
+            if (p._id === postId) {
+                return { ...p, media: p.media.filter((url) => url !== urlToRemove) };
+            }
+
+            // Thread child match
+            if (p.thread && p.thread.length > 0) {
+                return {
+                    ...p, thread: p.thread.map((child) =>
+                        child._id === postId ? { ...child, media: child.media.filter(url => url !== urlToRemove) } : child
+                    )
+                };
+            }
+
+            return p;
+        },
+        invalidateOnSettled: false,
+    });
+}
+
+// Delete Post
+export function useDeletePost(
+    postId: string,
+    queryKey: string,
+    feedQueries: CursorQueries
+) {
+    return useCreateOptimisticMutation({
+        queryKey: [queryKey, feedQueries],
+        mutationFn: () => deletePost(postId),
+        updater: (p: Post) => {
+
+            // If it's the main post, return null to delete it completely from the feed
+            if (p._id === postId) {
+                return null;
+            }
+
+            // If it's a child inside a thread, remove it from the thread array
+            if (p.thread && p.thread.length > 0) {
+                return {
+                    ...p,
+                    thread: p.thread.filter((child) => child._id !== postId),
+                };
+            }
+
+            // Otherwise, return the post untouched
+            return p;
+        },
+        invalidateOnSettled: false,
+    });
+}
+
 // Create New Advert
 export function useNewAdvert() {
     const queryClient = useQueryClient();
@@ -545,6 +645,22 @@ export function useUpdateAdvertMedia() {
         mutationFn: (data: { url: string, advertId: string }) => updateAdvertMedia(data),
         onError: (error) => {
             console.error("Advert Media Update failed:", error);
+        },
+        onSuccess: async () => {
+            queryClient.invalidateQueries({
+                queryKey: ["myAdverts"],
+            });
+        }
+    })
+}
+
+// Delete Advert
+export function useDeleteAdvert() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id: string) => deleteAdvert(id),
+        onError: (error) => {
+            console.error("Failed to Delete Advert:", error);
         },
         onSuccess: async () => {
             queryClient.invalidateQueries({

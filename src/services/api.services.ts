@@ -261,6 +261,26 @@ export const postsByTags = async (tags: string[], queries: CursorQueries) => {
     return response.data;
 }
 
+// Update Post
+export const updatePost = async (data : EditPostPayload) => {
+    const { id, ...rest } = data;
+    const response = await userAxios.patch(`post/update/${id}`, rest);
+    return response.data;
+}
+
+// Delete Post Media
+export const editPostMedia = async (data: { url: string, postId: string }) => {
+    const { postId, ...rest } = data;
+    const response = await userAxios.patch(`post/update/image/${postId}`, rest);
+    return response.data;
+}
+
+// Delete Post
+export const deletePost = async (id: string) => {
+    const response = await userAxios.delete(`post/delete/${id}`);
+    return response.data;
+}
+
 // Fetch People Page Analytics
 export const fetchPeopleAnalytics = async () => {
     const response = await userAxios.get(`analytics/fetch/people`);
@@ -307,9 +327,21 @@ export const editAdvert = async (data: EditAdvertPayload) => {
     return response.data;
 }
 
-// Delete Advert
+// Delete Advert Media
 export const updateAdvertMedia = async (data: { url: string, advertId: string }) => {
     const { advertId, ...rest } = data;
     const response = await userAxios.patch(`advert/update/image/${advertId}`, rest);
+    return response.data;
+}
+
+// Delete Advert
+export const deleteAdvert = async (id: string) => {
+    const response = await userAxios.delete(`advert/delete/${id}`);
+    return response.data;
+}
+
+// Fetch Server Time
+export const fetchTime = async () => {
+    const response = await userAxios.get(`time`);
     return response.data;
 }

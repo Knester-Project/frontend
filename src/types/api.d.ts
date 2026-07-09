@@ -238,6 +238,15 @@ declare type PostPayload = {
     isPrivate: boolean,
 }
 
+// Update Post
+declare type EditPostPayload = {
+    id: string,
+    content?: string,
+    hashtags?: string[],
+    media?: string[],
+    isPrivate?: boolean,
+}
+
 // Cursor and Limit
 declare type CursorQueries = {
     cursor?: string;
@@ -257,6 +266,7 @@ declare type Post = {
     postId: string;
     user: User;
     createdAt: string;
+    updatedAt: string;
     edited: boolean;
     content: string;
     media: string[];

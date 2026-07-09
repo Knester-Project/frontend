@@ -1,16 +1,20 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
+import { sileo } from "sileo";
 
-// Enums, Utils
+// Enums, Utils and Services
 import { ADVERT_STATUS_META } from "@/enums";
 import { cn } from "@/lib/utils";
-
-// 
-import { ArrowLeft3, ArrowRight3, Edit, Image, Messages2, PenTool, Tag2 } from "iconsax-reactjs";
 import { formatAmount } from "@/utils/format";
+import { useDeleteAdvert } from "@/services/userMutations";
+
+// UIs
 import AdvertEdit from "./AdvertEdit";
 import { Overlay } from "./Overlay";
+
+//  Icons
+import { ArrowLeft3, ArrowRight3, Edit, Image, Messages2, PenTool, Tag2, Trash } from "iconsax-reactjs";
 
 const AdvertCard = ({ advert, isOwner }: { advert: MyAdvert, isOwner: boolean }) => {
 
@@ -38,6 +42,35 @@ const AdvertCard = ({ advert, isOwner }: { advert: MyAdvert, isOwner: boolean })
         e.stopPropagation();
         setShowAllCategories((prev) => !prev);
     };
+
+    // Handle Deletion
+    const deleteAdvert = useDeleteAdvert();
+    const handleDeletion = () => {
+        sileo.action({
+            title: "Advert Deletion",
+            description: "Do you wish to delete this advert?",
+            button: {
+                title: "Delete",
+                onClick: () => {
+                    deleteAdvert.mutate(advert._id,
+                        {
+                            onSuccess: () => {
+                                sileo.success({
+                                    title: "Advert Was Deleted !!!",
+                                    description: "The Advert has been removed from the list of adverts."
+                                });
+                            },
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            onError: (error: any) => {
+                                const message = error?.response?.data?.message || "Couldn't advert now, kindly try again later.";
+                                sileo.error({ title: "Error", description: message });
+                            },
+                        }
+                    );
+                },
+            },
+        });
+    }
 
     return (
         <>
@@ -150,11 +183,19 @@ const AdvertCard = ({ advert, isOwner }: { advert: MyAdvert, isOwner: boolean })
 
                         {/* Conditional Action Buttons */}
                         {isOwner ? (
-                            <button onClick={(e) => { e.stopPropagation(); setEditing(advert) }}
-                                className="flex items-center gap-1.5 hover:bg-accent/20 px-3 py-1.5 border border-border hover:border-border/80 rounded-xl font-medium text-[10px] text-foreground/70 md:text-[11px] hover:text-foreground xl:text-xs transition-all cursor-pointer">
-                                <Edit className="size-3" />
-                                Edit
-                            </button>
+                            <div className="flex items-center gap-x-2">
+                                <button onClick={handleDeletion}
+                                    className="flex items-center gap-1.5 hover:bg-destructive/20 px-3 py-1.5 border border-destructive hover:border-destructive/80 rounded-xl font-medium text-[10px] text-destructive/70 md:text-[11px] hover:text-destructive xl:text-xs transition-all cursor-pointer">
+                                    <Trash className="size-3" />
+                                    Delete
+                                </button>
+
+                                <button onClick={() => setEditing(advert)}
+                                    className="flex items-center gap-1.5 hover:bg-accent/20 px-3 py-1.5 border border-border hover:border-border/80 rounded-xl font-medium text-[10px] text-foreground/70 md:text-[11px] hover:text-foreground xl:text-xs transition-all cursor-pointer">
+                                    <Edit className="size-3" />
+                                    Edit
+                                </button>
+                            </div>
                         ) : (
                             <Link to="/messages" search={{ username: advert.vendorId.username }}
                                 className="flex items-center gap-1.5 bg-primary/10 hover:bg-primary shadow-sm px-3 py-1.5 rounded-xl font-bold text-[10px] text-primary md:text-[11px] hover:text-primary-foreground xl:text-xs transition-colors cursor-pointer">
@@ -164,7 +205,7 @@ const AdvertCard = ({ advert, isOwner }: { advert: MyAdvert, isOwner: boolean })
                         )}
                     </div>
                 </div>
-            </motion.div>
+            </motion.div >
         </>
     );
 }

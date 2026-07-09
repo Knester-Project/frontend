@@ -69,7 +69,7 @@ interface ToolbarBtnProps {
 }
 
 // Character Count
-function CharRing({ content }: CharRingProps) {
+export function CharRing({ content }: CharRingProps) {
 
     const remaining = MAX_CHARS - content.length;
     const isOverLimit = remaining < 0;
@@ -97,7 +97,7 @@ function CharRing({ content }: CharRingProps) {
 }
 
 // Hash Tag Panel
-function HashtagPanel({ hashtags, setHashtags }: HashtagPanelProps) {
+export function HashtagPanel({ hashtags, setHashtags }: HashtagPanelProps) {
 
     const [input, setInput] = useState("");
     const { data, isLoading, isError } = useTrendingTags();
@@ -277,7 +277,7 @@ function PostSlot({ avatar, username, content, setContent, mediaFiles,
 }
 
 // Tool Btn 
-function ToolbarBtn({ icon, label, onClick, disabled, active }: ToolbarBtnProps) {
+export function ToolbarBtn({ icon, label, onClick, disabled, active }: ToolbarBtnProps) {
     return (
         <button onClick={onClick} disabled={disabled} className={cn(
             "flex items-center gap-1.5 px-2 py-1.5 rounded-lg font-medium text-[10px] md:text-[11px] xl:text-xs transition-all cursor-pointer",

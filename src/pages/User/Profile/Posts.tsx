@@ -30,12 +30,13 @@ const Posts = ({ isOwner, username }: { isOwner: boolean, username: string }) =>
     });
 
     const posts = data?.pages.flatMap((page) => page.data.posts) ?? [];
+    const nextCursor = data?.pages[0]?.data?.nextCursor || null;
 
     return (
         <main>
             {/* Content Area (Rendered below the tabs so tabs never disappear) */}
             {isLoading ? (
-                <div className="space-y-4 mt-5">
+                <div className="gap-5 grid grid-cols-1 md:grid-cols-2 mt-5">
                     {Array.from({ length: 3 }).map((_, i) => (
                         <PostLoader key={i} />
                     ))}
@@ -48,15 +49,15 @@ const Posts = ({ isOwner, username }: { isOwner: boolean, username: string }) =>
             ) : (
                 <>
                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3 }} className="space-y-4">
+                        transition={{ duration: 0.3 }} className="gap-5 grid grid-cols-1 md:grid-cols-2">
                         {posts.map((post, index) => (
-                            <PostCard key={post._id} post={post} index={index} />
+                            <PostCard key={post._id} post={post} index={index} nextCursor={nextCursor} isOwner={isOwner} />
                         ))}
                     </motion.div>
 
                     {/* Loading next page */}
                     {isFetchingNextPage && (
-                        <div className="space-y-4">
+                        <div className="gap-5 grid grid-cols-1 md:grid-cols-2">
                             {Array.from({ length: 2 }).map((_, i) => (
                                 <PostLoader key={i} />
                             ))}
