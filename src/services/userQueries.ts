@@ -2,7 +2,7 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { queryOptions } from '@tanstack/react-query';
 
 // API endpoints
-import { checkUsername, circlePosts, feed, fetchComments, fetchMyAdvert, fetchPeople, fetchPeopleAnalytics, fetchReplies, fetchSafetyPosts, fetchUserAdvert, getCurrentUser, getUserDetails, inviteUser, profilePosts, trendingPosts, trendingTags } from "./api.services";
+import { checkUsername, circlePosts, feed, fetchComments, fetchMyAdvert, fetchPeople, fetchPeopleAnalytics, fetchReplies, fetchSafetyPosts, fetchTime, fetchUserAdvert, getCurrentUser, getUserDetails, inviteUser, profilePosts, trendingPosts, trendingTags } from "./api.services";
 
 // Stores
 import { meStore } from "@/stores/me.store";
@@ -214,5 +214,13 @@ export const useUserAdverts = (username: string) => {
     return useQuery({
         queryKey: ['adverts', username],
         queryFn: () => fetchUserAdvert(username),
+    })
+}
+
+// Fetch Server Time
+export const useServerTime = () => {
+    return useQuery({
+        queryKey: ['serverTime'],
+        queryFn: () => fetchTime(),
     })
 }

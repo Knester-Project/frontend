@@ -16,7 +16,7 @@ import Views from "@/components/Views";
 import ShareMenu from "@/components/Share";
 
 // Icons
-import { Pencil, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Edit, Flag, Verify } from "iconsax-reactjs";
 import EditPost from "./PostEdit";
 
@@ -50,7 +50,14 @@ function ThreadBubble({ post, isOwner = false, nextCursor = null }: { post: Post
 
                     <article className="bg-accent/10 p-4 border border-accent/10 rounded-xl">
                         {/* Editing */}
-                        <section className="flex justify-end">
+                        <section className="flex justify-end gap-x-2">
+                            {post.edited && (
+                                <div className="inline-flex items-center gap-x-1 text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] dark:text-gray-400/60">
+                                    <Edit className="size-2.5 md:size-3 xl:size-3.5" />
+                                    <span>edited</span>
+                                </div>
+                            )}
+
                             {isOwner &&
                                 <button onClick={toggleEdit} className="flex items-center gap-x-1 mb-1 hover:text-blue-500 duration-500 cursor-pointer">
                                     <Edit variant="Bold" className={`size-3 md:size-3.5 xl:size-4`} />
@@ -58,7 +65,7 @@ function ThreadBubble({ post, isOwner = false, nextCursor = null }: { post: Post
                                 </button>
                             }
                         </section>
-                        <section className="flex-1 pb-1 min-w-0">
+                        <section className="flex-1 mt-2 pb-1 min-w-0">
                             <p className="mb-2 text-[11px] text-foreground/85 md:text-xs xl:text-sm leading-relaxed whitespace-pre-wrap">
                                 {post.content}
                             </p>
@@ -162,25 +169,29 @@ export default function PostCard({ post, index = 0, nextCursor = null, isOwner =
                                         <span className="font-semibold text-[11px] md:text-xs xl:text-sm leading-none">
                                             {post.user?.username || "user"}
                                         </span>
+
                                         {post.user?.isPremium && (
-                                            <span className="inline-flex items-center gap-0.5 bg-premium/10 px-1.5 py-0.5 rounded-md font-bold text-[8px] text-premium md:text-[9px] xl:text-[10px] uppercase tracking-wide">
-                                                <Verify className="size-2.5" /> Pro
-                                            </span>
+                                            <div className="inline-flex items-center gap-0.5 bg-premium/10 px-1.5 py-0.5 rounded-md font-bold text-[8px] text-premium md:text-[9px] xl:text-[10px] uppercase tracking-wide">
+                                                <Verify className="size-2.5 md:size-3 xl:size-3.5" /> Pro
+                                            </div>
                                         )}
                                         {post.user?.isCore && (
-                                            <span className="bg-core/10 px-1.5 py-0.5 rounded-md font-bold text-[8px] text-core md:text-[9px] xl:text-[10px] uppercase tracking-wide">
+                                            <div className="bg-core/10 px-1.5 py-0.5 rounded-md font-bold text-[8px] text-core md:text-[9px] xl:text-[10px] uppercase tracking-wide">
+                                                <Verify className="size-2.5 md:size-3 xl:size-3.5" />
                                                 Core
-                                            </span>
+                                            </div>
                                         )}
                                         {post.user?.isModerator && (
-                                            <span className="bg-moderator/10 px-1.5 py-0.5 rounded-md font-bold text-[8px] text-moderator md:text-[9px] xl:text-[10px] uppercase tracking-wide">
-                                                Core
-                                            </span>
+                                            <div className="bg-moderator/10 px-1.5 py-0.5 rounded-md font-bold text-[8px] text-moderator md:text-[9px] xl:text-[10px] uppercase tracking-wide">
+                                                <Verify className="size-2.5 md:size-3 xl:size-3.5" />
+                                                Moderator
+                                            </div>
                                         )}
                                         {post.edited && (
-                                            <span className="flex items-center gap-1 text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] dark:text-gray-400/60">
-                                                <Pencil className="size-2.5" /> edited
-                                            </span>
+                                            <div className="inline-flex items-center gap-x-1 text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] dark:text-gray-400/60">
+                                                <Edit className="size-2.5 md:size-3 xl:size-3.5" />
+                                                <span>edited</span>
+                                            </div>
                                         )}
                                     </div>
                                     <p className="mt-0.5 text-[10px] text-gray-600 md:text-[11px] dark:text-gray-400 text-xs">{timeAgo}</p>

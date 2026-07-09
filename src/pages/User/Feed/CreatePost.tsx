@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { sileo } from "sileo";
 
@@ -122,6 +122,12 @@ export function HashtagPanel({ hashtags, setHashtags }: HashtagPanelProps) {
 
     const remaining = 4 - hashtags.length;
 
+    const fallbackSuggestions = useMemo(() => {
+        return shuffle(
+            SUGGESTED_TAGS.filter((t) => !hashtags.includes(t))
+        ).slice(0, 5);
+    }, [hashtags]);
+
     return (
         <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.22 }} className="overflow-hidden">
@@ -164,14 +170,12 @@ export function HashtagPanel({ hashtags, setHashtags }: HashtagPanelProps) {
                                 </button>
                             ))
                             :
-                            shuffle(SUGGESTED_TAGS.filter((t) => !hashtags.includes(t)))
-                                .slice(0, 5)
-                                .map((tag) => (
-                                    <button key={tag} disabled={remaining === 0} onClick={() => addTag(tag)}
-                                        className="hover:bg-primary/5 disabled:opacity-30 px-2.5 py-1 border border-border hover:border-primary rounded-lg text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] hover:text-primary dark:text-gray-400 transition-all cursor-pointer disabled:pointer-events-none">
-                                        #{tag}
-                                    </button>
-                                ))
+                            fallbackSuggestions.map((tag) => (
+                                <button key={tag} disabled={remaining === 0} onClick={() => addTag(tag)}
+                                    className="hover:bg-primary/5 disabled:opacity-30 px-2.5 py-1 border border-border hover:border-primary rounded-lg text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] hover:text-primary dark:text-gray-400 transition-all cursor-pointer disabled:pointer-events-none">
+                                    #{tag}
+                                </button>
+                            ))
                         }
                     </div>
                 </div>

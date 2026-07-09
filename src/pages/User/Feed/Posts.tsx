@@ -70,7 +70,7 @@ const Posts = () => {
             {/* Section header */}
             <div className="flex justify-between items-center mb-6">
                 <h2 className="font-semibold text-[11px] md:text-xs xl:text-sm uppercase tracking-wide">
-                    Posts
+                   {activeTab === "foryou" ? "Your Circle" : activeTab} Posts
                 </h2>
                 <div className="flex items-center gap-0.5 bg-muted p-0.5 rounded-xl">
                     {TABS.map((tab) => {

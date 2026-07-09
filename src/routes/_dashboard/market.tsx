@@ -1,5 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 
+// UIs
+import MarketPlace from "@/pages/User/MarketPlace";
+
 import { APP_NAME } from '../__root';
 
 export const Route = createFileRoute('/_dashboard/market')({
@@ -15,5 +18,5 @@ export const Route = createFileRoute('/_dashboard/market')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/_dashboard/market"!</div>
+  return <MarketPlace />
 }
