@@ -36,7 +36,7 @@ const Posts = ({ isOwner, username }: { isOwner: boolean, username: string }) =>
         <main>
             {/* Content Area (Rendered below the tabs so tabs never disappear) */}
             {isLoading ? (
-                <div className="gap-5 grid grid-cols-1 md:grid-cols-2 mt-5">
+                <div className="gap-5 columns-1 md:columns-2 mt-5">
                     {Array.from({ length: 3 }).map((_, i) => (
                         <PostLoader key={i} />
                     ))}
@@ -49,7 +49,7 @@ const Posts = ({ isOwner, username }: { isOwner: boolean, username: string }) =>
             ) : (
                 <>
                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3 }} className="gap-5 grid grid-cols-1 md:grid-cols-2">
+                        transition={{ duration: 0.3 }} className="gap-5 columns-1 md:columns-2">
                         {posts.map((post, index) => (
                             <PostCard key={post._id} post={post} index={index} nextCursor={nextCursor} isOwner={isOwner} />
                         ))}
@@ -57,7 +57,7 @@ const Posts = ({ isOwner, username }: { isOwner: boolean, username: string }) =>
 
                     {/* Loading next page */}
                     {isFetchingNextPage && (
-                        <div className="gap-5 grid grid-cols-1 md:grid-cols-2">
+                        <div className="gap-5 columns-1 md:columns-2">
                             {Array.from({ length: 2 }).map((_, i) => (
                                 <PostLoader key={i} />
                             ))}

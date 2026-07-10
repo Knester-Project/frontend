@@ -1,4 +1,8 @@
 import { useState } from "react";
+import { UAParser } from 'ua-parser-js';
+
+// Services
+import { useNewContact } from "@/services/userMutations";
 
 // UIs
 import Input from "@/components/Input";
@@ -7,20 +11,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import Button from "@/components/Button";
 
-//Icons
-import { Mail, Timer, MessageCircle, Send } from "lucide-react";
+// Icons
+import { sileo } from "sileo";
+import { Whatsapp, Send2, Sms, Timer1 } from "iconsax-reactjs";
 
+const defaultState = {
+    name: "",
+    email: "",
+    inquiryType: "",
+    message: "",
+}
 
 const Index = () => {
 
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        inquiryType: "",
-        message: "",
-    })
+    const [formData, setFormData] = useState(defaultState)
 
-    //Functions
+    // Functions
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData((prev) => ({
             ...prev,
@@ -35,6 +41,48 @@ const Index = () => {
         }))
     }
 
+    const hasAllValues = Object.values(formData)
+        .every((v) => (typeof v === "string" ? v.trim() !== "" : v !== null && v !== undefined));
+
+    const reset = () => {
+        setFormData(defaultState)
+    }
+
+    const parser = new UAParser();
+    const result = parser.getResult();
+
+    const device = {
+        ua: navigator.userAgent,
+        type: result.device.type,
+        os: result.os.name,
+        browser: result.browser.name,
+    };
+
+    const newContact = useNewContact()
+    const handleSubmit = () => {
+
+        if (!hasAllValues) return sileo.error({
+            title: "Missing Field",
+            description: "Kindly fill all required fields before submitting"
+        })
+
+        const payload = { ...formData, device }
+        newContact.mutate(payload, {
+            onSuccess: () => {
+                sileo.success({
+                    title: "Contact Request Sent !!!",
+                    description: "Kindly wait for at least 7 days before sending another one",
+                });
+                reset();
+            },
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onError: (error: any) => {
+                const message = error?.response?.data?.message || "Your Contact Request Failed, Please try again later.";
+                sileo.error({ title: "Contact Request Failed", description: message });
+            },
+        });
+    }
+
     return (
         <main className="w-full">
             <div className="mb-8 text-center">
@@ -44,7 +92,7 @@ const Index = () => {
             <div className="items-center gap-5 grid sm:grid-cols-2 md:grid-cols-3 mb-8">
                 <Card className="bg-accent/20 dark:bg-accent/5 border-border text-center">
                     <CardContent>
-                        <Mail className="mx-auto mb-2 size-6 md:size-7 xl:size-8 text-primary" />
+                        <Sms className="mx-auto mb-2 size-6 md:size-7 xl:size-8 text-primary" />
                         <h3 className="mb-1 font-semibold text-card-foreground">Email</h3>
                         <p className="text-muted text-sm">hello@knester.com</p>
                     </CardContent>
@@ -52,7 +100,7 @@ const Index = () => {
 
                 <Card className="bg-accent/20 dark:bg-accent/5 border-border text-center">
                     <CardContent>
-                        <MessageCircle className="mx-auto mb-2 size-6 md:size-7 xl:size-8 text-primary" />
+                        <Whatsapp className="mx-auto mb-2 size-6 md:size-7 xl:size-8 text-primary" />
                         <h3 className="mb-1 font-semibold text-card-foreground">WhatsApp</h3>
                         <p className="text-muted text-sm">+1 (555) 123-4567</p>
                     </CardContent>
@@ -60,7 +108,7 @@ const Index = () => {
 
                 <Card className="bg-accent/20 dark:bg-accent/5 border-border text-center">
                     <CardContent>
-                        <Timer className="mx-auto mb-2 size-6 md:size-7 xl:size-8 text-primary" />
+                        <Timer1 className="mx-auto mb-2 size-6 md:size-7 xl:size-8 text-primary" />
                         <h3 className="mb-1 font-semibold text-card-foreground">Response Time</h3>
                         <p className="text-muted text-sm">Within 24 hours</p>
                     </CardContent>
@@ -86,7 +134,7 @@ const Index = () => {
                                 Inquiry Type<span className="-mr-1 text-red-500">*</span>
                             </Label>
                             <Select onValueChange={handleSelectChange}>
-                                <SelectTrigger className="bg-background py-3 border-border w-full text-muted">
+                                <SelectTrigger className="bg-background py-3 border-border w-full text-[11px] text-muted md:text-xs xl:text-sm">
                                     <SelectValue placeholder="Select inquiry type" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -99,12 +147,12 @@ const Index = () => {
                             </Select>
                         </div>
                         <div>
-                            <Label htmlFor="message" className="mb-2 text-foreground">
+                            <Label htmlFor="message" className="mb-2 text-[11px] text-foreground md:text-xs xl:text-sm">
                                 Message<span className="-mr-1 text-red-500">*</span>
                             </Label>
-                            <textarea name="message" className="bg-background p-2 px-4 py-3 border border-border rounded-lg focus:outline-none w-full h-24 placeholder:text-muted text-sm md:text-base xl:text-lg duration-300 focus:caret-primary resize-none" value={formData.message} onChange={handleInputChange} placeholder="Tell us how we can help you"></textarea>
+                            <textarea name="message" className="bg-background p-2 px-4 py-3 border border-border rounded-lg focus:outline-none w-full h-24 placeholder:text-[11px] placeholder:text-muted md:placeholder:text-xs text-sm xl:placeholder:text-sm md:text-base xl:text-lg duration-300 focus:caret-primary resize-none" value={formData.message} onChange={handleInputChange} placeholder="Tell us how we can help you"></textarea>
                         </div>
-                        <Button text="Send Message" loadingText="Sending..." disabled={false} loading={false} classNames="rounded-lg" icon={<Send className="size-4 md:size-5 xl:size-6" />} />
+                        <Button onClick={handleSubmit} text="Send Message" loadingText="Sending..." disabled={newContact.isPending || !hasAllValues} loading={false} classNames="rounded-lg" icon={<Send2 className="size-4 md:size-5 xl:size-6" />} />
                     </div>
                 </CardContent>
             </Card>

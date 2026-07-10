@@ -1,3 +1,17 @@
+// New Contact Payload
+declare type ContactPayload = {
+    name: string,
+    email: string,
+    inquiryType: string,
+    message: string,
+    device: {
+        ua?: string,
+        type?: string,
+        os?: string,
+        browser?: string,
+    }
+}
+
 // For Safety Post Creation
 declare type SafetyInput = {
     dateOfIncident: string;

@@ -10,6 +10,7 @@ import CreatePost from "./CreatePost";
 import PeopleAround from "./PeopleAround";
 import Posts from "./Posts";
 import Advert from "./Advert";
+import Messages from "./Messages";
 
 
 
@@ -41,6 +42,7 @@ const Index = () => {
             </section>
             <section className="hidden lg:block space-y-10 lg:w-[30%] xl:w-[25%]">
                 <PeopleAround />
+                <Messages />
             </section>
         </Main>
     );

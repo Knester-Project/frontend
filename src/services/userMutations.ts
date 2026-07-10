@@ -2,7 +2,7 @@
 import { QueryClient, useMutation, useQueryClient, type QueryKey } from "@tanstack/react-query";
 
 // Functions
-import { authenticateUser, blockUser, commentOnPost, createAdvert, createReply, createSafetyPost, createUser, deleteAdvert, deleteComment, deleteMedia, deletePost, deleteReply, editAdvert, editPostMedia, flagPost, joinCircle, leaveCircle, newPost, reportUser, toggleVibe, unblockUser, updateAdvertMedia, updatePost, updateProfile, validateInvite } from "./api.services";
+import { authenticateUser, blockUser, commentOnPost, createAdvert, createReply, createSafetyPost, createUser, deleteAdvert, deleteComment, deleteMedia, deletePost, deleteReply, editAdvert, editPostMedia, flagPost, joinCircle, leaveCircle, newContact, newPost, reportUser, toggleVibe, unblockUser, updateAdvertMedia, updatePost, updateProfile, validateInvite } from "./api.services";
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
@@ -33,7 +33,7 @@ function updateInfiniteData<TItem>(
             ...page,
             data: {
                 ...page.data,
-                
+
                 // Map the updater, then immediately filter out any nulls
                 ...(page.data?.data && {
                     data: page.data.data
@@ -171,9 +171,18 @@ const updateProfileCache = async (queryClient: QueryClient, queryKey: QueryKey, 
     return { previousData };
 };
 
+// New Contact
+export function useNewContact() {
+    return useMutation({
+        mutationFn: (data: ContactPayload) => newContact(data),
+        onError: (error) => {
+            console.error("New Contact Error:", error);
+        },
+    })
+}
+
 // Validate Users
 export function useValidateUser() {
-
     return useMutation({
         mutationFn: (data: { invitationCode: string }) => validateInvite(data),
         onError: (error) => {

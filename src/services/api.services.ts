@@ -14,6 +14,12 @@ export const fetchToken = async () => {
     return response.data;
 }
 
+// Contact
+export const newContact = async (data: ContactPayload) => {
+    const response = await axiosUnauthInstance.post(`contact/new`, data);
+    return response.data;
+}
+
 // Check Username
 export const checkUsername = async (username: string) => {
     const response = await axiosUnauthInstance.get(`users/checkUsername/${username}`);
@@ -343,5 +349,11 @@ export const deleteAdvert = async (id: string) => {
 // Fetch Server Time
 export const fetchTime = async () => {
     const response = await userAxios.get(`time`);
+    return response.data;
+}
+
+// Messages
+export const fetchConversations = async () => {
+    const response = await userAxios.get(`chat/fetch/conversations`);
     return response.data;
 }

@@ -20,7 +20,7 @@ const Input = ({ type, placeholder, label, name, value, onChange, pattern, title
     return (
         <main className="flex flex-col gap-y-1">
             {label && (
-                <label className="text-foreground text-xs md:text-sm xl:text-base cursor-pointer" htmlFor={name}>
+                <label className="text-[11px] text-foreground md:text-xs xl:text-sm cursor-pointer" htmlFor={name}>
                     {label}
                     {required && <span className="text-destructive"> *</span>}
                 </label>
@@ -28,7 +28,7 @@ const Input = ({ type, placeholder, label, name, value, onChange, pattern, title
             <input type={type} placeholder={placeholder}
                 id={name} value={value} onChange={onChange} pattern={pattern}
                 title={title} autoComplete={autoComplete} name={name}
-                className={`px-4 py-3 bg-background rounded-lg border border-border duration-300 focus:caret-primary focus:border-primary focus:outline-none placeholder:text-xs md:placeholder:text-sm xl:placeholder:text-base placeholder:text-muted ${widthClass} ${otherClass}`}
+                className={`px-4 py-3 bg-background rounded-lg border border-border duration-300 focus:caret-primary focus:border-primary focus:outline-none placeholder:text-[11px] md:placeholder:text-xs xl:placeholder:text-sm placeholder:text-muted ${widthClass} ${otherClass}`}
                 required={required}
             />
         </main>

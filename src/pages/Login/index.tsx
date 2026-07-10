@@ -41,22 +41,22 @@ const Index = () => {
 
     const allRequirementsMet = passwordRequirements.every(req => req.met);
 
+    const parser = new UAParser();
+    const result = parser.getResult();
+
+    const device = {
+        ua: navigator.userAgent,
+        type: result.device.type,
+        os: result.os.name,
+        browser: result.browser.name,
+    };
+
     const authUser = useAuthUser();
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!allRequirementsMet)
             return sileo.error({ title: "Authentication failed.", description: "Your Login Attempt Failed, Please check your credentials." });
-
-        const parser = new UAParser();
-        const result = parser.getResult();
-
-        const device = {
-            ua: navigator.userAgent,
-            type: result.device.type,
-            os: result.os.name,
-            browser: result.browser.name,
-        };
 
         const payload: AuthInput = {
             username: enteredUsername,
