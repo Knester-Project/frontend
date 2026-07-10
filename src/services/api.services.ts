@@ -20,6 +20,12 @@ export const newContact = async (data: ContactPayload) => {
     return response.data;
 }
 
+// WaitList
+export const newWaitList = async (data: WaitListPayload) => {
+    const response = await axiosUnauthInstance.post(`waitList/new`, data);
+    return response.data;
+}
+
 // Check Username
 export const checkUsername = async (username: string) => {
     const response = await axiosUnauthInstance.get(`users/checkUsername/${username}`);
@@ -268,7 +274,7 @@ export const postsByTags = async (tags: string[], queries: CursorQueries) => {
 }
 
 // Update Post
-export const updatePost = async (data : EditPostPayload) => {
+export const updatePost = async (data: EditPostPayload) => {
     const { id, ...rest } = data;
     const response = await userAxios.patch(`post/update/${id}`, rest);
     return response.data;

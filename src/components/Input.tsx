@@ -13,10 +13,11 @@ type InputProps = {
     required?: boolean;
     otherClass?: string;
     autoComplete?: string;
+    max?: number;
 };
 
 const Input = ({ type, placeholder, label, name, value, onChange, pattern, title,
-    widthClass = 'w-full', otherClass, required, autoComplete = 'off' }: InputProps) => {
+    widthClass = 'w-full', otherClass, required, autoComplete = 'off', max }: InputProps) => {
     return (
         <main className="flex flex-col gap-y-1">
             {label && (
@@ -27,7 +28,7 @@ const Input = ({ type, placeholder, label, name, value, onChange, pattern, title
             )}
             <input type={type} placeholder={placeholder}
                 id={name} value={value} onChange={onChange} pattern={pattern}
-                title={title} autoComplete={autoComplete} name={name}
+                title={title} autoComplete={autoComplete} name={name} maxLength={max}
                 className={`px-4 py-3 bg-background rounded-lg border border-border duration-300 focus:caret-primary focus:border-primary focus:outline-none placeholder:text-[11px] md:placeholder:text-xs xl:placeholder:text-sm placeholder:text-muted ${widthClass} ${otherClass}`}
                 required={required}
             />

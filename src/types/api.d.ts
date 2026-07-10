@@ -12,6 +12,12 @@ declare type ContactPayload = {
     }
 }
 
+// New WaitList Payload 
+declare type WaitListPayload = {
+    name: string,
+    email: string
+}
+
 // For Safety Post Creation
 declare type SafetyInput = {
     dateOfIncident: string;

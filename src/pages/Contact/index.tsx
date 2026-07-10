@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { UAParser } from 'ua-parser-js';
+import { isDisposableEmail } from "disposable-email-domains-js";
 
 // Services
 import { useNewContact } from "@/services/userMutations";
@@ -66,6 +67,8 @@ const Index = () => {
             description: "Kindly fill all required fields before submitting"
         })
 
+        if (formData.email.trim() && isDisposableEmail(formData.email)) return sileo.error({ title: "Not Allowed", description: "Disposable email addresses are not allowed." })
+
         const payload = { ...formData, device }
         newContact.mutate(payload, {
             onSuccess: () => {
@@ -123,10 +126,10 @@ const Index = () => {
                     <div className="flex flex-col gap-y-3">
                         <div className="flex sm:flex-row flex-col gap-3">
                             <div className="w-full sm:w-1/2">
-                                <Input type="text" name="name" label="Name" placeholder="Your Name" value={formData.name} onChange={handleInputChange} required />
+                                <Input type="text" name="name" label="Name" placeholder="Your Name" max={200} value={formData.name} onChange={handleInputChange} required />
                             </div>
                             <div className="w-full sm:w-1/2">
-                                <Input type="email" name="email" label="Email Address" placeholder="Your@email.com" value={formData.email} onChange={handleInputChange} required />
+                                <Input type="email" name="email" label="Email Address" placeholder="Your@email.com" max={320} value={formData.email} onChange={handleInputChange} required />
                             </div>
                         </div>
                         <div>
@@ -146,13 +149,16 @@ const Index = () => {
                                 </SelectContent>
                             </Select>
                         </div>
+
+                        <input name="website" className="hidden" />
+
                         <div>
                             <Label htmlFor="message" className="mb-2 text-[11px] text-foreground md:text-xs xl:text-sm">
                                 Message<span className="-mr-1 text-red-500">*</span>
                             </Label>
                             <textarea name="message" className="bg-background p-2 px-4 py-3 border border-border rounded-lg focus:outline-none w-full h-24 placeholder:text-[11px] placeholder:text-muted md:placeholder:text-xs text-sm xl:placeholder:text-sm md:text-base xl:text-lg duration-300 focus:caret-primary resize-none" value={formData.message} onChange={handleInputChange} placeholder="Tell us how we can help you"></textarea>
                         </div>
-                        <Button onClick={handleSubmit} text="Send Message" loadingText="Sending..." disabled={newContact.isPending || !hasAllValues} loading={false} classNames="rounded-lg" icon={<Send2 className="size-4 md:size-5 xl:size-6" />} />
+                        <Button onClick={handleSubmit} text="Send Message" loadingText="Sending..." disabled={newContact.isPending || !hasAllValues} loading={newContact.isPending} classNames="rounded-lg" icon={<Send2 className="size-4 md:size-5 xl:size-6" />} />
                     </div>
                 </CardContent>
             </Card>

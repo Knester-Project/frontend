@@ -2,7 +2,7 @@
 import { QueryClient, useMutation, useQueryClient, type QueryKey } from "@tanstack/react-query";
 
 // Functions
-import { authenticateUser, blockUser, commentOnPost, createAdvert, createReply, createSafetyPost, createUser, deleteAdvert, deleteComment, deleteMedia, deletePost, deleteReply, editAdvert, editPostMedia, flagPost, joinCircle, leaveCircle, newContact, newPost, reportUser, toggleVibe, unblockUser, updateAdvertMedia, updatePost, updateProfile, validateInvite } from "./api.services";
+import { authenticateUser, blockUser, commentOnPost, createAdvert, createReply, createSafetyPost, createUser, deleteAdvert, deleteComment, deleteMedia, deletePost, deleteReply, editAdvert, editPostMedia, flagPost, joinCircle, leaveCircle, newContact, newPost, newWaitList, reportUser, toggleVibe, unblockUser, updateAdvertMedia, updatePost, updateProfile, validateInvite } from "./api.services";
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
@@ -177,6 +177,16 @@ export function useNewContact() {
         mutationFn: (data: ContactPayload) => newContact(data),
         onError: (error) => {
             console.error("New Contact Error:", error);
+        },
+    })
+}
+
+// New WaitList
+export function useNewWaitList() {
+    return useMutation({
+        mutationFn: (data: WaitListPayload) => newWaitList(data),
+        onError: (error) => {
+            console.error("New Wait List Error:", error);
         },
     })
 }
