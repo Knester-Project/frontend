@@ -1,5 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 
+// UIs
+import Install from "@/pages/User/Install";
+
 import { APP_NAME } from '../__root';
 
 export const Route = createFileRoute('/_dashboard/install')({
@@ -14,5 +17,5 @@ export const Route = createFileRoute('/_dashboard/install')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/_dashboard/install"!</div>
+  return <Install />
 }

@@ -59,3 +59,12 @@ declare interface PushNotificationState {
     subscribe(): Promise<void>;
     unsubscribe(): Promise<void>;
 }
+
+// Installation
+interface BeforeInstallPromptEvent extends Event {
+    prompt: () => Promise<void>;
+    userChoice: Promise<{
+        outcome: "accepted" | "dismissed";
+        platform: string;
+    }>;
+}

@@ -3,8 +3,9 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { QueryClient } from '@tanstack/react-query';
 
-//Styles
+// Styles and Stores
 import './index.css';
+import { useInstallStore } from './stores/install.store';
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
@@ -31,6 +32,7 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>,
 )
 
+// Register the Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
@@ -43,3 +45,19 @@ if ('serviceWorker' in navigator) {
       });
   });
 }
+
+// Installation Prompt
+window.addEventListener("beforeinstallprompt", (event) => {
+  event.preventDefault();
+
+  useInstallStore
+    .getState()
+    .setDeferredPrompt(event as BeforeInstallPromptEvent);
+});
+
+window.addEventListener("appinstalled", () => {
+  const store = useInstallStore.getState();
+
+  store.setDeferredPrompt(null);
+  store.setInstalled(true);
+});
