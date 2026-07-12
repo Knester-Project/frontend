@@ -6,6 +6,8 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { Toaster } from "sileo";
 import { ThemeProviderEffect } from '@/components/ThemeProvider';
 import { NotificationInitializer } from '@/providers/Push';
+import { LocationGate } from '@/components/LocationGate';
+import { LocationProvider } from '@/providers/Location';
 
 export const APP_NAME = "Knester";
 
@@ -35,11 +37,15 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 function RootComponent() {
     return (
         <QueryClientProvider client={queryClient}>
-            <NotificationInitializer>
-                <Outlet />
-                <ThemeProviderEffect />
-                <Toaster position="top-center" theme="system" />
-            </NotificationInitializer>
+            <LocationProvider>
+                <LocationGate>
+                    <NotificationInitializer>
+                        <Outlet />
+                        <ThemeProviderEffect />
+                        <Toaster position="top-center" theme="system" />
+                    </NotificationInitializer>
+                </LocationGate>
+            </LocationProvider>
         </QueryClientProvider>
     )
 }

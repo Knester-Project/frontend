@@ -241,6 +241,10 @@ declare type EditProfilePayload = {
     profileLock?: boolean;
     discoverable?: boolean;
     chatLock?: boolean;
+    genres?: Record<string, {
+        count: number;
+        lastInteracted: Date;
+    }>
 }
 
 // New Report

@@ -56,11 +56,11 @@ export function PwaInstallPrompt() {
                 ) : deferredPrompt ? (
                     <main className="py-10">
                         <header>
-                            <h1 className="font-bold text-2xl md:text-3xl xl:text-4xl">
+                            <h1 className="font-bold text-lg sm:text-xl md:text-2xl xl:text-3xl">
                                 Experience Knester Web Like an App.
                             </h1>
                             <p className="mt-2 text-muted">
-                                Install PWA Solutions for faster access, offline capabilities, and a seamless desktop/android and or iOS experience. It's lightweight, secure, and always ready.
+                                Install Knester's PWA for faster access, offline capabilities, and a seamless desktop/android and or iOS experience. It's lightweight, secure, and always ready.
                             </p>
                         </header>
 

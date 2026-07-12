@@ -1,8 +1,3 @@
-import { useEffect } from "react";
-
-// Libs
-import { useLocationManager } from "@/lib/location/manager";
-
 // UIs
 import Main from "@/components/Main";
 import Trending from "./Trending";
@@ -15,20 +10,6 @@ import Messages from "./Messages";
 
 
 const Index = () => {
-
-    const { ensureFreshLocation } = useLocationManager()
-
-    useEffect(() => {
-        const handleLocation = async () => {
-            try {
-                await ensureFreshLocation();
-            } catch (error) {
-                console.error("Location check failed", error);
-            }
-        };
-
-        handleLocation();
-    }, [ensureFreshLocation])
 
     return (
         <Main classNames="flex gap-x-5">

@@ -5,8 +5,6 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const useNotifications = () => {
   useEffect(() => {
-    // Point directly to the SSE endpoint
-    // Add 'withCredentials: true' to force the browser to send the HTTP-only cookie
     const eventSource = new EventSource(`${BASE_URL}/notification/stream`, {
       withCredentials: true, 
     });

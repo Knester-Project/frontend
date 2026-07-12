@@ -28,7 +28,16 @@ declare type ToastInline = {
     handleClose: () => void;
 };
 
-// Location Update Store
+// Location
+declare type LocationPermission = PermissionState | "unsupported" | "unknown"
+declare type LocationState = {
+    permission: LocationPermission;
+    coordinates: Coordinates | null;
+    loading: boolean;
+    initialized: boolean;
+    lastUpdated: number | null;
+}
+
 declare type Coordinates = {
     longitude: number;
     latitude: number;
