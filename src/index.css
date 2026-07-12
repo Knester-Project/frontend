@@ -164,6 +164,19 @@ body {
   --share-active: #3399FF;
 }
 
+.shake{
+  animation: shakeEvery 3s infinite;
+  transform-origin:50% 50%;
+}
+
+@keyframes shakeEvery{
+  0%, 16.666%, 100% { transform: translateX(0) rotate(0deg); }
+  4%  { transform: translateX(-2px) rotate(-1deg); }
+  8%  { transform: translateX(2px) rotate(1deg); }
+  12% { transform: translateX(-2px) rotate(-1deg); }
+  16% { transform: translateX(2px) rotate(1deg); }
+}
+
 
 @layer base {
   * {

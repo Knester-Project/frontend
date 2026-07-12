@@ -57,7 +57,7 @@ export function NotificationDialog({ isOpen, onClose }: NotificationDialogProps)
                         {permission === "denied" ?
                             <BellOff className="size-4 md:size-4.5 xl:size-5 text-destructive" />
                             :
-                            <NotificationBing className="size-4 md:size-4.5 xl:size-5 text-primary" />
+                            <NotificationBing className="size-4 md:size-4.5 xl:size-5 text-primary shake" />
                         }
                         Push Notifications
                     </DialogTitle>
@@ -73,7 +73,7 @@ export function NotificationDialog({ isOpen, onClose }: NotificationDialogProps)
 
                             {isOffline && (
                                 <p className="flex items-center gap-1.5 mt-2 font-medium text-[11px] text-destructive md:text-xs xl:text-sm">
-                                    <WifiOff className="size-4" /> You're currently offline.
+                                    <WifiOff className="size-4 md:size-4.5 xl:size-5" /> You're currently offline.
                                 </p>
                             )}
 
@@ -96,7 +96,7 @@ export function NotificationDialog({ isOpen, onClose }: NotificationDialogProps)
 
                             {isOffline && (
                                 <p className="flex items-center gap-1.5 mt-2 font-medium text-[11px] text-destructive md:text-xs xl:text-sm">
-                                    <WifiOff className="size-4" /> Connect to the internet to finish.
+                                    <WifiOff className="size-4 md:size-4.5 xl:size-5" /> Connect to the internet to finish.
                                 </p>
                             )}
 
@@ -119,7 +119,7 @@ export function NotificationDialog({ isOpen, onClose }: NotificationDialogProps)
 
                             <div className="bg-muted p-4 border border-border rounded-xl w-full text-sm text-left">
                                 <p className="flex items-center gap-2 mb-2 font-semibold">
-                                    <Setting2 className="size-4" /> How to unblock:
+                                    <Setting2 className="size-4 md:size-4.5 xl:size-5" /> How to unblock:
                                 </p>
                                 <ol className="space-y-1.5 ml-1 text-muted-foreground list-decimal list-inside">
                                     <li>Click the <strong>Lock icon</strong> in your URL bar.</li>

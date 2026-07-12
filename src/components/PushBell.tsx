@@ -29,7 +29,7 @@ export function NotificationBell() {
                     <BellOff className="size-4 md:size-4.5 xl:size-5 text-muted-foreground" />
                 ) : (
                     <>
-                        <NotificationStatus className={cn("size-4 md:size-4.5 xl:size-5.5 text-foreground", "group-hover:animate-ping-once")} />
+                        <NotificationStatus className={cn("size-4 md:size-4.5 xl:size-5 text-foreground", "group-hover:animate-ping-once")} />
 
                         <span className="top-1.5 right-1.5 absolute flex size-2.5">
                             <span className="inline-flex absolute bg-destructive opacity-75 rounded-full w-full h-full animate-ping"></span>
