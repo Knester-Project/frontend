@@ -54,3 +54,35 @@ export const getDirtyValues = <T extends Record<string, any>>(
 
   return changes;
 };
+
+// Convert Public VAPID Key from Base64 to Uint8Array
+export const urlBase64ToUint8Array = (base64String: string) => {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding)
+    .replace(/-/g, '+')
+    .replace(/_/g, '/');
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+};
+
+// Push Subscription Serializer
+export function serializeSubscription(subscription: PushSubscription): PushSubscriptionPayload {
+
+  const json = subscription.toJSON();
+
+  return {
+    endpoint: json.endpoint!,
+    expirationTime: json.expirationTime ?? null,
+
+    keys: {
+      p256dh: json.keys?.p256dh ?? "",
+      auth: json.keys?.auth ?? "",
+    },
+  };
+}

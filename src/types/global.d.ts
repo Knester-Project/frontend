@@ -38,3 +38,24 @@ declare type StoredLocation = {
     coords: Coordinates;
     timestamp: number;
 };
+
+// Push Notifications
+declare type PushPermissionState = "default" | "granted" | "denied";
+
+declare interface PushNotificationState {
+    initialized: boolean;
+    isSupported: boolean;
+    permission: PushPermissionState;
+    subscription: PushSubscription | null;
+    lastSyncedEndpoint: string | null;
+    isChecking: boolean;
+    isSubscribing: boolean;
+    needsPermission: boolean;
+    needsSubscription: boolean;
+    isBlocked: boolean;
+    shouldShowBell: boolean;
+    initialize(): Promise<void>;
+    refresh(): Promise<void>;
+    subscribe(): Promise<void>;
+    unsubscribe(): Promise<void>;
+}

@@ -4,6 +4,8 @@ import { getAxiosAuthInstance } from './config';
 const axiosUnauthInstance = getAxiosAuthInstance();
 const userAxios = getAxiosAuthInstance();
 
+// Utils
+import { serializeSubscription } from '@/utils/generate';
 
 // Schemas
 import type { AuthInput } from '@/schemas/auth.schema';
@@ -361,5 +363,20 @@ export const fetchTime = async () => {
 // Messages
 export const fetchConversations = async () => {
     const response = await userAxios.get(`chat/fetch/conversations`);
+    return response.data;
+}
+
+// New Push Notification Subscription
+export const newSubscription = async (subscription: PushSubscription) => {
+    const data = serializeSubscription(subscription)
+    const response = await userAxios.patch(`users/push-subscription`, data);
+    return response.data;
+}
+
+// Delete a Subscription
+export const unregisterSubscription = async (endpoint: string) => {
+    // Encodes the URL so it acts as a safe URL parameter
+    const safeEndpoint = encodeURIComponent(endpoint);
+    const response = await userAxios.delete(`users/push-subscription/${safeEndpoint}`);
     return response.data;
 }

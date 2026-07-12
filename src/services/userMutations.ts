@@ -2,7 +2,7 @@
 import { QueryClient, useMutation, useQueryClient, type QueryKey } from "@tanstack/react-query";
 
 // Functions
-import { authenticateUser, blockUser, commentOnPost, createAdvert, createReply, createSafetyPost, createUser, deleteAdvert, deleteComment, deleteMedia, deletePost, deleteReply, editAdvert, editPostMedia, flagPost, joinCircle, leaveCircle, newContact, newPost, newWaitList, reportUser, toggleVibe, unblockUser, updateAdvertMedia, updatePost, updateProfile, validateInvite } from "./api.services";
+import { authenticateUser, blockUser, commentOnPost, createAdvert, createReply, createSafetyPost, createUser, deleteAdvert, deleteComment, deleteMedia, deletePost, deleteReply, editAdvert, editPostMedia, flagPost, joinCircle, leaveCircle, newContact, newPost, newSubscription, newWaitList, reportUser, toggleVibe, unblockUser, updateAdvertMedia, updatePost, updateProfile, validateInvite } from "./api.services";
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
@@ -685,6 +685,16 @@ export function useDeleteAdvert() {
             queryClient.invalidateQueries({
                 queryKey: ["myAdverts"],
             });
+        }
+    })
+}
+
+// New Push Notification Subscription
+export function useNewNotSub() {
+    return useMutation({
+        mutationFn: (data: PushSubscription) => newSubscription(data),
+        onError: (error) => {
+            console.error("Failed to add Notification Subscription:", error);
         }
     })
 }

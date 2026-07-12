@@ -2,9 +2,10 @@ import { Outlet } from '@tanstack/react-router';
 import { createRootRouteWithContext } from '@tanstack/react-router';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
-//Toast and Theme
+// Toast and Theme, and Providers
 import { Toaster } from "sileo";
 import { ThemeProviderEffect } from '@/components/ThemeProvider';
+import { NotificationInitializer } from '@/providers/Push';
 
 export const APP_NAME = "Knester";
 
@@ -34,9 +35,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 function RootComponent() {
     return (
         <QueryClientProvider client={queryClient}>
-            <Outlet />
-            <ThemeProviderEffect />
-            <Toaster position="top-center" theme="system" />
+            <NotificationInitializer>
+                <Outlet />
+                <ThemeProviderEffect />
+                <Toaster position="top-center" theme="system" />
+            </NotificationInitializer>
         </QueryClientProvider>
     )
 }

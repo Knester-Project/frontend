@@ -2,24 +2,25 @@ import { useState } from "react";
 import { useLocation, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Libs, Stores and Services
+// Libs, Stores, Services, Utils and Constants
 import { cn } from "@/lib/utils";
 import { meStore } from "@/stores/me.store";
 import { useTrendingTags } from "@/services/userQueries";
+import { shuffle } from "@/utils/format";
+import { SUGGESTED_TAGS } from "@/assets/tags";
 
 // UIs
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
+import { NotificationBell } from "./PushBell";
 
-//Logo
+// Logo
 import logo from "/logo.svg";
 
-//Icons
+// Icons
 import { Search, Menu, X } from "lucide-react";
 import { Home, Shop, Profile2User, Message, Notification, SearchNormal, SecuritySafe } from "iconsax-reactjs";
-import { SUGGESTED_TAGS } from "@/assets/tags";
-import { shuffle } from "@/utils/format";
 
 
 const Nav = () => {
@@ -78,6 +79,9 @@ const Nav = () => {
                             <Notification />
                             <span className="-top-1 -right-1 absolute bg-red-500 px-1 pb-[1px] rounded-full text-white text-xs">0</span>
                         </Button>
+
+                        {/* Push Notification Prompt */}
+                        <NotificationBell />
 
                         {/* Profile */}
                         <Link to="/profile" search={{ profile: "me" }}>
