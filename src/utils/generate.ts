@@ -86,3 +86,14 @@ export function serializeSubscription(subscription: PushSubscription): PushSubsc
     },
   };
 }
+
+// Change the selected for Genre Form
+type Genres = Record<string, { count: number; lastInteracted: Date }>;
+
+export function toGenres(arr: string[]): Genres {
+  const now = new Date();
+  return arr.reduce<Genres>((acc, key) => {
+    acc[key] = { count: 1, lastInteracted: now };
+    return acc;
+  }, {});
+}

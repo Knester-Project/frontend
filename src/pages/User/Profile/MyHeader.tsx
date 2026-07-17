@@ -14,11 +14,7 @@ import Invite from './Invite';
 import ProfilePictureEditor from './PictureEditor';
 
 // Icons and Images
-import {
-    People, ReceiptText, Slash, Setting2, Share, UserAdd,
-    Verify, Wallet1, type IconProps, MedalStar, Crown1, Star1, Image,
-    GalleryEdit
-} from 'iconsax-reactjs';
+import { Slash, Setting2, Share, Verify, MedalStar, Crown1, Star1, Image, GalleryEdit } from 'iconsax-reactjs';
 import emptyPicture from "/blank.jpg";
 
 const DETAILS_LENGTH = 4;
@@ -147,11 +143,11 @@ const MyHeader = ({ user }: { user: Me }) => {
                             <Badge style={{ borderColor: colors.primary }} key={`detail-${index}`} variant="outline" className='mt-2 mr-1 capitalize'>{detail}</Badge>
                         ))
                     }
-                    <section className='gap-2 grid grid-cols-2 sm:grid-cols-4 mt-2'>
-                        <HeaderCard isDark={colors.isDark} color={colors.primary} title='Circle Members' Icon={People} amount={formatTrendingCount(circleMembers)} />
-                        <HeaderCard isDark={colors.isDark} color={colors.primary} title='Posts' Icon={ReceiptText} amount={totalPosts} />
-                        <HeaderCard isDark={colors.isDark} color={colors.primary} title='Balance' Icon={Wallet1} amount={formatAmount(wallet.availableBalance)} amount1={formatAmount(wallet.escrowedBalance)} />
-                        <HeaderCard isDark={colors.isDark} color={colors.primary} title='Circles Joined' Icon={UserAdd} amount={formatTrendingCount(circlesJoined)} />
+                    <section className='gap-2 grid grid-cols-2 sm:grid-cols-4 mt-6'>
+                        <HeaderCard color={colors.primary} title='Circle Members' amount={formatTrendingCount(circleMembers)} />
+                        <HeaderCard color={colors.primary} title='Posts' amount={totalPosts} />
+                        <HeaderCard color={colors.primary} title='Balance' amount={formatAmount(wallet.availableBalance)} amount1={formatAmount(wallet.escrowedBalance)} />
+                        <HeaderCard color={colors.primary} title='Circles Joined' amount={formatTrendingCount(circlesJoined)} />
                     </section>
                 </section>
             </main >
@@ -193,24 +189,23 @@ const MyHeader = ({ user }: { user: Me }) => {
 export default MyHeader;
 
 type HeaderCardProps = {
-    isDark: boolean;
     color: string;
-    Icon: React.ComponentType<IconProps>;
     title: string;
     amount: number | string;
     amount1?: number | string;
 }
 
-const HeaderCard = ({ isDark, color, Icon, title, amount, amount1 }: HeaderCardProps) => {
-    return (
-        <div style={{ background: color, borderColor: color, color: isDark ? "white" : "#121212" }}
-            className="flex flex-col justify-between p-2 border rounded-xl w-full min-w-0">
-            <div className="flex items-center gap-1 truncate">
-                <Icon className="size-4.5 shrink-0" variant="Bold" />
-                <p className="font-medium text-[11px] md:text-xs xl:text-sm truncate">{title}</p>
-            </div>
+const HeaderCard = ({ color, title, amount, amount1 }: HeaderCardProps) => {
 
-            <h1 className="mt-1 font-bold text-lg md:text-xl xl:text-2xl truncate montserrat">
+    const withOpacity = (rgb: string, alpha: number) =>
+        rgb.replace("rgb(", "rgba(").replace(")", `, ${alpha})`);
+
+    return (
+        <div style={{ borderColor: withOpacity(color, 0.5) }}
+            className="flex flex-col justify-between p-2 border rounded-md w-full min-w-0 text-center">
+            <p className="font-medium text-[11px] text-foreground/70 md:text-xs xl:text-sm truncate">{title}</p>
+
+            <h1 className="mt-1 font-bold tabular-nums text-lg md:text-xl xl:text-2xl truncate montserrat">
                 {amount} <sup className='opacity-80 text-[11px] md:text-xs xl:text-sm'>{amount1}</sup>
             </h1>
         </div>

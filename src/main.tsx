@@ -55,6 +55,7 @@ window.addEventListener("beforeinstallprompt", (event) => {
     .setDeferredPrompt(event as BeforeInstallPromptEvent);
 });
 
+// Installed
 window.addEventListener("appinstalled", () => {
   const store = useInstallStore.getState();
 

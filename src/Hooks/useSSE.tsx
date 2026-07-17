@@ -1,35 +1,35 @@
 import { useEffect } from "react";
 
-// Using the same BASE_URL pattern you already have for Axios
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const useNotifications = () => {
+export const useNotifications = (enabled: boolean) => {
   useEffect(() => {
-    const eventSource = new EventSource(`${BASE_URL}/notification/stream`, {
-      withCredentials: true, 
+    // Wait until the user is verified before opening the stream
+    if (!enabled) return;
+
+    const eventSource = new EventSource(`${BASE_URL}notification/stream`, {
+      withCredentials: true,
     });
 
-    // Listen for the connection success event
     eventSource.addEventListener("connected", (event) => {
       console.log("SSE Stream Connected:", JSON.parse(event.data));
     });
 
-    // Listen for your custom notification events
     eventSource.addEventListener("notification:new", (event) => {
       const newNotification = JSON.parse(event.data);
       console.log("New Notification!", newNotification);
-      // Update your notification state here
+
+      // Update your global notification state here
+      // e.g., useNotificationStore.getState().addNotification(newNotification);
     });
 
-    // Handle errors (like lost connection)
     eventSource.onerror = (error) => {
       console.error("SSE Error:", error);
-      // EventSource automatically tries to reconnect, but you can manage state here
     };
 
-    // Cleanup on component unmount
     return () => {
+      // Automatically closes the connection when the user logs out
       eventSource.close();
     };
-  }, []);
+  }, [enabled]);
 };

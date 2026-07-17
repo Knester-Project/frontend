@@ -217,7 +217,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                         <p className='my-2 font-medium text-base md:text-lg xl:text-xl text-center montserrat'>{recoveryPhrase}</p>
                         <Button onClick={() => handleCopy(recoveryPhrase)} text={copied ? 'Copied!' : 'Copy Recovery Phrase'} disabled={false} loading={false} icon={<CheckCircle className="size-4 md:size-5" />} variant='success' />
                     </div>
-                    {copied && <Link to={"/feed"} className='block bg-primary hover:bg-accent my-4 p-3 rounded-2xl w-full text-center'>Enter Your Feed</Link>}
+                    {copied && <Link to={"/onboarding"} className='block bg-primary hover:bg-accent my-4 p-3 rounded-2xl w-full text-center'>Enter Your Feed</Link>}
                 </div>
             }
         </>

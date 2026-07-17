@@ -23,6 +23,7 @@ import { Route as DashboardMarketRouteImport } from './routes/_dashboard/market'
 import { Route as DashboardInstallRouteImport } from './routes/_dashboard/install'
 import { Route as DashboardFeedRouteImport } from './routes/_dashboard/feed'
 import { Route as AuthWaitlistRouteImport } from './routes/_auth/waitlist'
+import { Route as AuthOnboardingRouteImport } from './routes/_auth/onboarding'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthContactRouteImport } from './routes/_auth/contact'
 
@@ -94,6 +95,11 @@ const AuthWaitlistRoute = AuthWaitlistRouteImport.update({
   path: '/waitlist',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AuthOnboardingRoute = AuthOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/contact': typeof AuthContactRoute
   '/login': typeof AuthLoginRoute
+  '/onboarding': typeof AuthOnboardingRoute
   '/waitlist': typeof AuthWaitlistRoute
   '/feed': typeof DashboardFeedRoute
   '/install': typeof DashboardInstallRoute
@@ -126,6 +133,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/contact': typeof AuthContactRoute
   '/login': typeof AuthLoginRoute
+  '/onboarding': typeof AuthOnboardingRoute
   '/waitlist': typeof AuthWaitlistRoute
   '/feed': typeof DashboardFeedRoute
   '/install': typeof DashboardInstallRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/_auth/contact': typeof AuthContactRoute
   '/_auth/login': typeof AuthLoginRoute
+  '/_auth/onboarding': typeof AuthOnboardingRoute
   '/_auth/waitlist': typeof AuthWaitlistRoute
   '/_dashboard/feed': typeof DashboardFeedRoute
   '/_dashboard/install': typeof DashboardInstallRoute
@@ -163,6 +172,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/contact'
     | '/login'
+    | '/onboarding'
     | '/waitlist'
     | '/feed'
     | '/install'
@@ -179,6 +189,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/contact'
     | '/login'
+    | '/onboarding'
     | '/waitlist'
     | '/feed'
     | '/install'
@@ -197,6 +208,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/_auth/contact'
     | '/_auth/login'
+    | '/_auth/onboarding'
     | '/_auth/waitlist'
     | '/_dashboard/feed'
     | '/_dashboard/install'
@@ -316,6 +328,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthWaitlistRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/onboarding': {
+      id: '/_auth/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthOnboardingRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/login': {
       id: '/_auth/login'
       path: '/login'
@@ -336,6 +355,7 @@ declare module '@tanstack/react-router' {
 interface AuthRouteRouteChildren {
   AuthContactRoute: typeof AuthContactRoute
   AuthLoginRoute: typeof AuthLoginRoute
+  AuthOnboardingRoute: typeof AuthOnboardingRoute
   AuthWaitlistRoute: typeof AuthWaitlistRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
@@ -343,6 +363,7 @@ interface AuthRouteRouteChildren {
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthContactRoute: AuthContactRoute,
   AuthLoginRoute: AuthLoginRoute,
+  AuthOnboardingRoute: AuthOnboardingRoute,
   AuthWaitlistRoute: AuthWaitlistRoute,
   AuthIndexRoute: AuthIndexRoute,
 }

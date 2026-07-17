@@ -23,7 +23,7 @@ export const isoDateTime = (value: string): string | null => {
 
 // Date Converter
 export const dateConverter = (timestamp: string): string => {
-  
+
   const date = new Date(timestamp);
   const now = new Date();
 
@@ -176,3 +176,10 @@ export const areCategoriesValid = (selectedCategories: string[]): boolean => {
 
   return selectedCategories.every(category => ALL_VALID_CATEGORIES.includes(category));
 };
+
+// Format Number in Thousands
+export function format(n: number) {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
+  return `${n}`;
+}

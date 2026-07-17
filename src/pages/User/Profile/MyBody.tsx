@@ -110,19 +110,19 @@ const MyBody = ({ user }: { user: Me }) => {
                         {icons[activeTab] || null}
                         <p className="font-medium">{label}</p>
                     </div>
-                    <div className="flex items-center gap-0.5 bg-muted p-0.5 rounded-xl">
+                    <div className="flex items-center gap-0.5 p-1 border border-muted/20 rounded-md">
                         {TABS.map((tab) => {
                             const Icon = tab.icon;
                             return (
                                 <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                                    className={cn("relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-medium text-xs transition-all duration-200 cursor-pointer",
-                                        activeTab === tab.id ? "" : "text-gray-400 dark:text-gray-600 hover:text-accent dark:hover:text-accent")}>
+                                    className={cn("relative flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs transition-all duration-200 cursor-pointer",
+                                        activeTab === tab.id ? "text-primary-foreground" : "hover:text-primary")}>
                                     {activeTab === tab.id && (
                                         <motion.div layoutId="feed-tab-indicator"
-                                            className="absolute inset-0 bg-background shadow-sm border border-border/50 rounded-xl"
+                                            className="absolute inset-0 bg-primary shadow-sm rounded-sm"
                                             transition={{ type: "spring", stiffness: 400, damping: 30 }} />
                                     )}
-                                    <Icon className={cn("z-5 relative size-3.5", activeTab === tab.id ? "text-primary" : "")} />
+                                    <Icon className={cn("z-5 relative size-3.5", activeTab === tab.id ? "text-primary-foreground" : "")} />
                                     <span className="hidden sm:inline z-5 relative">{tab.label}</span>
                                 </button>
                             );

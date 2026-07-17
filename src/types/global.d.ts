@@ -77,3 +77,56 @@ interface BeforeInstallPromptEvent extends Event {
         platform: string;
     }>;
 }
+
+// Onboarding Genre
+declare type GenreGroup = {
+    id: string;
+    name: string;
+    members: number;
+    isPrivate: boolean;
+};
+
+declare type Genre = {
+    id: string;
+    name: string;
+    icon: string;
+    color: string;
+    groups: Group[];
+};
+
+// Notification Type
+declare type NotificationType =
+    | "post_like"
+    | "post_comment"
+    | "comment_reply"
+    | "reply_reply"
+    | "comment_like"
+    | "new_follower"
+    | "follow_request"
+    | "follow_request_accepted"
+    | "post_shared"
+    | "post_repost"
+    | "mention"
+    | "tagged"
+    | "story_reaction"
+    | "story_mention"
+    | "message"
+    | "group_invite"
+    | "event_invite"
+    | "order_update"
+    | "system_alert"
+    | "security_alert"
+    | "profile_lookup";
+
+// Notification
+declare type InAppNotification = {
+    recipientId: string;
+    sender: User | null;
+    type: NotificationType;
+    title: string;
+    message: string;
+    entity?: Record<string, unknown>;
+    isRead: boolean;
+    createdAt: string;
+    updatedAt: string;
+}

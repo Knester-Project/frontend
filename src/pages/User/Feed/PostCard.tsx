@@ -19,6 +19,7 @@ import ShareMenu from "@/components/Share";
 import { ChevronDown } from "lucide-react";
 import { Edit, Flag, Verify } from "iconsax-reactjs";
 import EditPost from "./PostEdit";
+import { Link } from "@tanstack/react-router";
 
 
 
@@ -158,17 +159,19 @@ export default function PostCard({ post, index = 0, nextCursor = null, isOwner =
                         {/* Author row */}
                         <section className="flex justify-between items-start gap-3">
                             <div className="flex items-center gap-2.5">
-                                <Avatar className="rounded-md size-9 shrink-0">
-                                    <AvatarImage src={post.user?.profile?.profilePicture} />
-                                    <AvatarFallback className="bg-primary/10 rounded-md font-semibold text-primary text-xs">
-                                        {post.user?.username?.slice(0, 2).toUpperCase() || "??"}
-                                    </AvatarFallback>
-                                </Avatar>
+                                <Link to="/profile" search={{ profile: post.user.username }}>
+                                    <Avatar className="rounded-md size-9 shrink-0">
+                                        <AvatarImage src={post.user?.profile?.profilePicture} />
+                                        <AvatarFallback className="bg-primary/10 rounded-md font-semibold text-primary text-xs">
+                                            {post.user?.username?.slice(0, 2).toUpperCase() || "??"}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                </Link>
                                 <div>
                                     <div className="flex items-center gap-x-1.5">
-                                        <span className="font-semibold text-[11px] md:text-xs xl:text-sm leading-none">
+                                        <Link to="/profile" search={{ profile: post.user.username }} className="font-semibold text-[11px] md:text-xs xl:text-sm leading-none">
                                             {post.user?.username || "user"}
-                                        </span>
+                                        </Link>
 
                                         {post.user?.isPremium && (
                                             <div className="inline-flex items-center gap-0.5 bg-premium/10 px-1.5 py-0.5 rounded-md font-bold text-[8px] text-premium md:text-[9px] xl:text-[10px] uppercase tracking-wide">
