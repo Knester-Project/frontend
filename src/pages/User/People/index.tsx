@@ -149,10 +149,10 @@ const Index = () => {
                         <section className="gap-3 grid grid-cols-3">
                             {[
                                 { label: "Active users", value: formatTrendingCount(data?.data?.totalOnlineUser ?? 0) || "...k" },
-                                { label: "States covered", value: "37" },
+                                { label: "States covered", value: "36" },
                                 { label: "Chats started", value: formatTrendingCount(data?.data?.totalChats ?? 0) || "...k" },
                             ].map((s) => (
-                                <div key={s.label} className="bg-card shadow-sm px-4 py-3 border border-border rounded-3xl text-card-foreground text-center">
+                                <div key={s.label} className="bg-card shadow-sm px-4 py-3 border border-border rounded-2xl text-card-foreground text-center">
                                     <p className="font-bold lining-nums text-base md:text-lg xl:text-xl">{s.value}</p>
                                     <p className="mt-0.5 text-[10px] text-gray-600 md:text-[11px] dark:text-gray-400 xl:text-xs">{s.label}</p>
                                 </div>

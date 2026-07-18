@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { meStore } from "@/stores/me.store";
 import { initSocket, disconnectSocket } from "@/utils/socket";
 import { useNotifications } from "@/Hooks/useSSE";
+import { usePresence } from "@/Hooks/usePresence";
 
 // UIs
 import Nav from "@/components/Nav";
@@ -18,6 +19,9 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
     // Initialize the SSE pipe
     useNotifications(isAuthReady);
+
+    // Initialize the Presence Heartbeat
+    usePresence(isAuthReady)
 
     // Initial Auth & Boot Sequence
     useEffect(() => {

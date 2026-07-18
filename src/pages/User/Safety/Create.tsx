@@ -111,7 +111,7 @@ export default function Create() {
     return (
         <>
             <Card className="bg-accent/20 dark:bg-accent/5 p-4 md:p-6 xl:p-8 border border-border rounded-3xl w-full">
-                <button onClick={() => setIsOpen(true)} className="bg-linear-to-r from-primary/10 hover:from-primary/20 to-primary/20 hover:to-primary/40 p-4 rounded-3xl w-full text-left transition-colors cursor-pointer">
+                <button onClick={() => setIsOpen(true)} className="bg-linear-to-r from-primary/10 hover:from-primary/20 to-primary/20 hover:to-primary/40 p-4 rounded-xl w-full text-left transition-colors cursor-pointer">
                     <div className="flex items-center gap-3">
                         <AlertCircle className="size-5 text-primary" />
                         <span>Report a safety incident...</span>

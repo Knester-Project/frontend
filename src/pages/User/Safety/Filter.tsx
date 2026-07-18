@@ -59,7 +59,7 @@ export default function StateFilter() {
                         </div>
                     )}
 
-                    <button onClick={() => setIsOpen((p) => !p)} className="flex justify-between items-center bg-linear-to-r from-primary/10 hover:from-primary/20 to-primary/20 hover:to-primary/40 px-4 py-2 border border-border rounded-full w-full text-sm transition cursor-pointer">
+                    <button onClick={() => setIsOpen((p) => !p)} className="flex justify-between items-center bg-linear-to-r from-primary/10 hover:from-primary/20 to-primary/20 hover:to-primary/40 px-4 py-2 border border-border rounded-lg w-full text-sm transition cursor-pointer">
                         <span>{state ? "Change state" : "Select a state"}</span>
                         <ChevronDown className={`size-4 transition ${isOpen ? "rotate-180" : ""}`} />
                     </button>
