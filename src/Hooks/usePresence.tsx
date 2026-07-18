@@ -7,21 +7,23 @@ export function usePresence(isAuthReady: boolean) {
     useEffect(() => {
         if (!isAuthReady) return;
 
-        const socket = getSocket();
-
-        // Emit on Connection
-        if (socket?.connected) {
-            socket.emit("presence:heartbeat");
+        // Initial Ping on Boot
+        const initialSocket = getSocket();
+        if (initialSocket?.connected) {
+            initialSocket.emit("presence:heartbeat");
         }
 
-        // Set up the recurring heartbeat
+        // The Recurring Heartbeat
         const pingInterval = setInterval(() => {
-            if (socket?.connected) {
-                socket.emit("presence:heartbeat");
+            // Grab the freshest socket
+            const currentSocket = getSocket();
+
+            if (currentSocket?.connected) {
+                currentSocket.emit("presence:heartbeat");
             }
         }, 30000);
 
-        // Cleanup: Stop pinging if the component unmounts or socket disconnects
+        // Cleanup
         return () => {
             clearInterval(pingInterval);
         };

@@ -380,3 +380,25 @@ export const unregisterSubscription = async (endpoint: string) => {
     const response = await userAxios.delete(`users/push-subscription/${safeEndpoint}`);
     return response.data;
 }
+
+// Fetch all Notification
+export const fetchNotifications = async (queries: CursorQueries) => {
+    const params = new URLSearchParams();
+
+    if (queries.cursor) params.append("cursor", queries.cursor);
+    if (queries.limit) params.append("limit", String(queries.limit));
+    const response = await userAxios.get(`notification/all?${params.toString()}`);
+    return response.data;
+}
+
+// Read Notification
+export const markAsRead = async (id: string) => {
+    const response = await userAxios.patch(`notification/mark/${id}`);
+    return response.data;
+}
+
+// Fetch Unread count
+export const fetchNotUnreadCount = async () => {
+    const response = await userAxios.get(`notification/unread`);
+    return response.data;
+}

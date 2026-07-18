@@ -125,7 +125,8 @@ declare type InAppNotification = {
     type: NotificationType;
     title: string;
     message: string;
-    entity?: Record<string, unknown>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    entity?: Record<string, any>;
     isRead: boolean;
     createdAt: string;
     updatedAt: string;

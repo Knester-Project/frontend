@@ -53,7 +53,17 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             if (document.visibilityState === "hidden") {
                 disconnectSocket();
             } else if (document.visibilityState === "visible") {
-                initSocket();
+                const newSocket = initSocket();
+
+                // Fire an immediate heartbeat
+                if (newSocket?.connected) {
+                    newSocket.emit("presence:heartbeat");
+                } else {
+                    // If it takes a second to connect, listen for the connect event
+                    newSocket.once("connect", () => {
+                        newSocket.emit("presence:heartbeat");
+                    });
+                }
             }
         };
 

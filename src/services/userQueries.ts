@@ -2,7 +2,7 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { queryOptions } from '@tanstack/react-query';
 
 // API endpoints
-import { checkUsername, circlePosts, feed, fetchComments, fetchMyAdvert, fetchPeople, fetchPeopleAnalytics, fetchReplies, fetchSafetyPosts, fetchTime, fetchUserAdvert, getCurrentUser, getUserDetails, inviteUser, profilePosts, trendingPosts, trendingTags } from "./api.services";
+import * as Api from "./api.services";
 
 // Stores
 import { meStore } from "@/stores/me.store";
@@ -12,7 +12,7 @@ import { meStore } from "@/stores/me.store";
 export function useCheckUsername(username: string) {
     return useQuery({
         queryKey: ['checkedUsername'],
-        queryFn: () => checkUsername(username),
+        queryFn: () => Api.checkUsername(username),
         enabled: username.trim().length >= 3,
     })
 }
@@ -25,7 +25,7 @@ export const useSafetyPosts = (queries: SafetyQueries) => {
         maxPages: 5,
 
         queryFn: ({ pageParam }) =>
-            fetchSafetyPosts({
+            Api.fetchSafetyPosts({
                 ...queries,
                 cursor: pageParam,
             }),
@@ -45,7 +45,7 @@ export const useComments = (commentQueries: CommentQueries, enabled: boolean) =>
         maxPages: 5,
 
         queryFn: ({ pageParam }) =>
-            fetchComments({
+            Api.fetchComments({
                 ...commentQueries,
                 ...(pageParam ?? {}),
             }),
@@ -65,7 +65,7 @@ export const useReplies = (replyQueries: ReplyQueries, enabled: boolean) => {
         maxPages: 5,
 
         queryFn: ({ pageParam }) =>
-            fetchReplies({
+            Api.fetchReplies({
                 ...replyQueries,
                 ...(pageParam ?? {}),
             }),
@@ -84,7 +84,7 @@ export const userProfileOptions = (username: string) => {
         queryKey: ["profile", username],
         queryFn: async () => {
             if (username === "me") {
-                const data = await getCurrentUser();
+                const data = await Api.getCurrentUser();
 
                 // Sync Zustand
                 meStore.getState().setUser(data.data);
@@ -92,7 +92,7 @@ export const userProfileOptions = (username: string) => {
                 return data;
             }
 
-            return getUserDetails(username);
+            return Api.getUserDetails(username);
         },
         staleTime: 1000 * 60 * 5,
     });
@@ -102,7 +102,7 @@ export const userProfileOptions = (username: string) => {
 export const useReferralLink = (enabled: boolean) => {
     return useQuery({
         queryKey: ['userReferral'],
-        queryFn: () => inviteUser(),
+        queryFn: () => Api.inviteUser(),
         enabled,
         staleTime: 8 * 60000, // 8 minutes
     })
@@ -114,7 +114,7 @@ export const useFeed = (feedQueries: CursorQueries) => {
         queryKey: ["feed", feedQueries],
         maxPages: 5,
 
-        queryFn: ({ pageParam }) => feed({ ...feedQueries, cursor: pageParam }),
+        queryFn: ({ pageParam }) => Api.feed({ ...feedQueries, cursor: pageParam }),
         initialPageParam: undefined,
 
         getNextPageParam: (lastPage) => {
@@ -127,7 +127,7 @@ export const useFeed = (feedQueries: CursorQueries) => {
 export const useTrendingTags = () => {
     return useQuery({
         queryKey: ['trendingTags'],
-        queryFn: () => trendingTags(),
+        queryFn: () => Api.trendingTags(),
     })
 }
 
@@ -137,7 +137,7 @@ export const useCirclePosts = (feedQueries: CursorQueries) => {
         queryKey: ["in-circle", feedQueries],
         maxPages: 5,
 
-        queryFn: ({ pageParam }) => circlePosts({ ...feedQueries, cursor: pageParam }),
+        queryFn: ({ pageParam }) => Api.circlePosts({ ...feedQueries, cursor: pageParam }),
         initialPageParam: undefined,
 
         getNextPageParam: (lastPage) => {
@@ -152,7 +152,7 @@ export const useTrendingPosts = (feedQueries: CursorQueries) => {
         queryKey: ["trending", feedQueries],
         maxPages: 5,
 
-        queryFn: ({ pageParam }) => trendingPosts({ ...feedQueries, cursor: pageParam }),
+        queryFn: ({ pageParam }) => Api.trendingPosts({ ...feedQueries, cursor: pageParam }),
         initialPageParam: undefined,
 
         getNextPageParam: (lastPage) => {
@@ -167,7 +167,7 @@ export const useProfilePosts = (feedQueries: CursorQueries, username: string) =>
         queryKey: ["profile-posts", feedQueries],
         maxPages: 5,
 
-        queryFn: ({ pageParam }) => profilePosts({ ...feedQueries, cursor: pageParam }, username),
+        queryFn: ({ pageParam }) => Api.profilePosts({ ...feedQueries, cursor: pageParam }, username),
         initialPageParam: undefined,
 
         getNextPageParam: (lastPage) => {
@@ -180,7 +180,7 @@ export const useProfilePosts = (feedQueries: CursorQueries, username: string) =>
 export const usePeoplePage = () => {
     return useQuery({
         queryKey: ['peopleAnalytics'],
-        queryFn: () => fetchPeopleAnalytics(),
+        queryFn: () => Api.fetchPeopleAnalytics(),
     })
 }
 
@@ -192,7 +192,7 @@ export const useNearByPeople = (queries: PeopleQueries) => {
         maxPages: 5,
         staleTime: 10 * 60000,
 
-        queryFn: ({ pageParam }) => fetchPeople({ ...queries, cursor: pageParam }),
+        queryFn: ({ pageParam }) => Api.fetchPeople({ ...queries, cursor: pageParam }),
         initialPageParam: undefined,
 
         getNextPageParam: (lastPage) => {
@@ -205,7 +205,7 @@ export const useNearByPeople = (queries: PeopleQueries) => {
 export const useMyAdverts = () => {
     return useQuery({
         queryKey: ['myAdverts'],
-        queryFn: () => fetchMyAdvert(),
+        queryFn: () => Api.fetchMyAdvert(),
     })
 }
 
@@ -213,7 +213,7 @@ export const useMyAdverts = () => {
 export const useUserAdverts = (username: string) => {
     return useQuery({
         queryKey: ['adverts', username],
-        queryFn: () => fetchUserAdvert(username),
+        queryFn: () => Api.fetchUserAdvert(username),
     })
 }
 
@@ -221,6 +221,29 @@ export const useUserAdverts = (username: string) => {
 export const useServerTime = () => {
     return useQuery({
         queryKey: ['serverTime'],
-        queryFn: () => fetchTime(),
-    })
+        queryFn: () => Api.fetchTime(),
+    });
+}
+
+// Fetch Notifications
+export const useNotification = (queries: CursorQueries) => {
+    return useInfiniteQuery({
+        queryKey: ['notification', queries],
+        maxPages: 5,
+
+        queryFn: ({ pageParam }) => Api.fetchNotifications({ ...queries, cursor: pageParam }),
+        initialPageParam: undefined,
+
+        getNextPageParam: (lastPage) => {
+            return lastPage.data.nextCursor ?? undefined;
+        },
+    });
+};
+
+// Fetch Unread Count
+export const useNotUnreadCount = () => {
+    return useQuery({
+        queryKey: ['notification-unread'],
+        queryFn: () => Api.fetchNotUnreadCount(),
+    });
 }

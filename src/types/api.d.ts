@@ -83,6 +83,8 @@ declare type SafetyPost = {
 type Profile = null | {
     profilePicture?: string;
     profileLock: boolean;
+    lastSeen: string;
+    isOnline: boolean;
 };
 
 type User = {

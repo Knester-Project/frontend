@@ -2,7 +2,7 @@
 import { QueryClient, useMutation, useQueryClient, type QueryKey } from "@tanstack/react-query";
 
 // Functions
-import { authenticateUser, blockUser, commentOnPost, createAdvert, createReply, createSafetyPost, createUser, deleteAdvert, deleteComment, deleteMedia, deletePost, deleteReply, editAdvert, editPostMedia, flagPost, joinCircle, leaveCircle, newContact, newPost, newSubscription, newWaitList, reportUser, toggleVibe, unblockUser, updateAdvertMedia, updatePost, updateProfile, validateInvite } from "./api.services";
+import * as Api from "./api.services";
 
 // Schemas
 import type { AuthInput } from "@/schemas/auth.schema";
@@ -174,7 +174,7 @@ const updateProfileCache = async (queryClient: QueryClient, queryKey: QueryKey, 
 // New Contact
 export function useNewContact() {
     return useMutation({
-        mutationFn: (data: ContactPayload) => newContact(data),
+        mutationFn: (data: ContactPayload) => Api.newContact(data),
         onError: (error) => {
             console.error("New Contact Error:", error);
         },
@@ -184,7 +184,7 @@ export function useNewContact() {
 // New WaitList
 export function useNewWaitList() {
     return useMutation({
-        mutationFn: (data: WaitListPayload) => newWaitList(data),
+        mutationFn: (data: WaitListPayload) => Api.newWaitList(data),
         onError: (error) => {
             console.error("New Wait List Error:", error);
         },
@@ -194,7 +194,7 @@ export function useNewWaitList() {
 // Validate Users
 export function useValidateUser() {
     return useMutation({
-        mutationFn: (data: { invitationCode: string }) => validateInvite(data),
+        mutationFn: (data: { invitationCode: string }) => Api.validateInvite(data),
         onError: (error) => {
             console.error("Validation failed:", error);
         },
@@ -206,7 +206,7 @@ export function useCreateUser() {
 
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (data: { username: string, password: string, referrer: string }) => createUser(data),
+        mutationFn: (data: { username: string, password: string, referrer: string }) => Api.createUser(data),
         onError: (error) => {
             console.error("Create User failed:", error);
         },
@@ -222,7 +222,7 @@ export function useAuthUser() {
 
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (data: AuthInput) => authenticateUser(data),
+        mutationFn: (data: AuthInput) => Api.authenticateUser(data),
         onError: (error) => {
             console.error("User Authentication failed:", error);
         },
@@ -237,7 +237,7 @@ export function useAuthUser() {
 export function useCreateSafetyPost() {
 
     return useMutation({
-        mutationFn: (data: SafetyInput) => createSafetyPost(data),
+        mutationFn: (data: SafetyInput) => Api.createSafetyPost(data),
         onError: (error) => {
             console.error("Safety Post Creation Failed:", error);
         },
@@ -248,7 +248,7 @@ export function useCreateSafetyPost() {
 export function useSafetyPostVibe(postId: string, queries: SafetyQueries) {
     return useCreateOptimisticMutation({
         queryKey: ["safety-posts", queries],
-        mutationFn: toggleVibe,
+        mutationFn: Api.toggleVibe,
         updater: (p: SafetyPost) =>
             p._id === postId ? toggleVibeField(p) : p,
     });
@@ -258,7 +258,7 @@ export function useSafetyPostVibe(postId: string, queries: SafetyQueries) {
 export function useFlagPost(postId: string, queries: SafetyQueries) {
     return useCreateOptimisticMutation({
         queryKey: ["safety-posts", queries],
-        mutationFn: flagPost,
+        mutationFn: Api.flagPost,
         updater: (p: SafetyPost) =>
             p._id === postId ? flagItemField(p) : p,
     });
@@ -270,7 +270,7 @@ export function useAddComment(commentQueries: CommentQueries) {
 
     return useMutation({
 
-        mutationFn: (data: { postId: string; postModel: string; content: string; media?: string }) => commentOnPost(data),
+        mutationFn: (data: { postId: string; postModel: string; content: string; media?: string }) => Api.commentOnPost(data),
 
         onSuccess: (response) => {
             const newComment = response.data;
@@ -297,7 +297,7 @@ export function useAddComment(commentQueries: CommentQueries) {
 export function useCommentVibe(commentId: string, queries: CommentQueries) {
     return useCreateOptimisticMutation({
         queryKey: ["comments", queries],
-        mutationFn: toggleVibe,
+        mutationFn: Api.toggleVibe,
         updater: (c: PostComment) =>
             c._id === commentId ? toggleVibeField(c) : c,
     });
@@ -307,7 +307,7 @@ export function useCommentVibe(commentId: string, queries: CommentQueries) {
 export function useFlagComment(commentId: string, queries: CommentQueries) {
     return useCreateOptimisticMutation({
         queryKey: ["comments", queries],
-        mutationFn: flagPost,
+        mutationFn: Api.flagPost,
         updater: (c: PostComment) =>
             c._id === commentId ? flagItemField(c) : c,
     });
@@ -317,7 +317,7 @@ export function useFlagComment(commentId: string, queries: CommentQueries) {
 export function useDeleteComment(commentId: string, queries: CommentQueries) {
     return useCreateOptimisticMutation({
         queryKey: ["comments", queries],
-        mutationFn: deleteComment,
+        mutationFn: Api.deleteComment,
         updater: (c: PostComment) =>
             c._id === commentId ? { ...c, isDeleted: true, content: "This comment has been deleted" } : c,
     });
@@ -328,7 +328,7 @@ export function useAddReply(replyQueries: ReplyQueries) {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (data: { commentId?: string; parentReplyId?: string; content: string }) => createReply(data),
+        mutationFn: (data: { commentId?: string; parentReplyId?: string; content: string }) => Api.createReply(data),
 
         onSuccess: (response) => {
             const newReply = response.data;
@@ -355,7 +355,7 @@ export function useAddReply(replyQueries: ReplyQueries) {
 export function useReplyVibe(replyId: string, queries: ReplyQueries) {
     return useCreateOptimisticMutation({
         queryKey: ["replies", queries],
-        mutationFn: toggleVibe,
+        mutationFn: Api.toggleVibe,
         updater: (r: Reply) =>
             r._id === replyId ? toggleVibeField(r) : r,
     });
@@ -365,7 +365,7 @@ export function useReplyVibe(replyId: string, queries: ReplyQueries) {
 export function useFlagReply(replyId: string, queries: ReplyQueries) {
     return useCreateOptimisticMutation({
         queryKey: ["replies", queries],
-        mutationFn: flagPost,
+        mutationFn: Api.flagPost,
         updater: (r: Reply) =>
             r._id === replyId ? flagItemField(r) : r,
     });
@@ -375,7 +375,7 @@ export function useFlagReply(replyId: string, queries: ReplyQueries) {
 export function useDeleteReply(replyId: string, queries: ReplyQueries) {
     return useCreateOptimisticMutation({
         queryKey: ["replies", queries],
-        mutationFn: deleteReply,
+        mutationFn: Api.deleteReply,
         updater: (r: Reply) =>
             r._id === replyId ? { ...r, isDeleted: true, content: "This reply has been deleted" } : r,
     });
@@ -387,7 +387,7 @@ export function useSyncProfile(username: string = "me") {
     const queryKey = ['profile', username];
 
     return useMutation({
-        mutationFn: (data: Partial<MyProfile>) => updateProfile(data),
+        mutationFn: (data: Partial<MyProfile>) => Api.updateProfile(data),
 
         onMutate: async (newValues) => {
             return await updateProfileCache(queryClient, queryKey, (old) => ({
@@ -411,7 +411,7 @@ export function useDeleteMedia(username: string = "me") {
     const queryKey = ['profile', username];
 
     return useMutation({
-        mutationFn: (url: string) => deleteMedia(url),
+        mutationFn: (url: string) => Api.deleteMedia(url),
 
         onMutate: async (deletedUrl) => {
             return await updateProfileCache(queryClient, queryKey, (old) => ({
@@ -457,7 +457,7 @@ export function useRelationshipActions(targetUsername: string) {
 
     // Join/Leave Circle
     const toggleCircle = useMutation({
-        mutationFn: (inCircle: boolean) => inCircle ? leaveCircle(targetUsername) : joinCircle(targetUsername),
+        mutationFn: (inCircle: boolean) => inCircle ? Api.leaveCircle(targetUsername) : Api.joinCircle(targetUsername),
         onMutate: async (currentlyInCircle) =>
             updateCache((old) => ({
                 ...old,
@@ -469,7 +469,7 @@ export function useRelationshipActions(targetUsername: string) {
 
     // Block/Unblock
     const toggleBlock = useMutation({
-        mutationFn: (isBlocked: boolean) => isBlocked ? unblockUser(targetUsername) : blockUser(targetUsername),
+        mutationFn: (isBlocked: boolean) => isBlocked ? Api.unblockUser(targetUsername) : Api.blockUser(targetUsername),
         onMutate: async (currentlyBlocked) =>
             updateCache((old) => ({
                 ...old,
@@ -481,7 +481,7 @@ export function useRelationshipActions(targetUsername: string) {
 
     // Report
     const report = useMutation({
-        mutationFn: (data: { reason: string, shouldBlock?: boolean }) => reportUser({ ...data, reportedUser: targetUsername }),
+        mutationFn: (data: { reason: string, shouldBlock?: boolean }) => Api.reportUser({ ...data, reportedUser: targetUsername }),
         onMutate: async () =>
             updateCache((old) => ({
                 ...old,
@@ -498,7 +498,7 @@ export function useRelationshipActions(targetUsername: string) {
 export function useNewPost() {
 
     return useMutation({
-        mutationFn: (data: PostPayload[]) => newPost(data),
+        mutationFn: (data: PostPayload[]) => Api.newPost(data),
         onError: (error) => {
             console.error("Post Creation failed:", error);
         },
@@ -509,7 +509,7 @@ export function useNewPost() {
 export function usePostVibe(postId: string, queryKey: string, feedQueries: CursorQueries) {
     return useCreateOptimisticMutation({
         queryKey: [queryKey, feedQueries],
-        mutationFn: toggleVibe,
+        mutationFn: Api.toggleVibe,
         updater: (p: Post) => {
             // If it is the main parent post
             if (p._id === postId) {
@@ -536,7 +536,7 @@ export function usePostVibe(postId: string, queryKey: string, feedQueries: Curso
 export function usePostFlag(postId: string, queryKey: string, feedQueries: CursorQueries) {
     return useCreateOptimisticMutation({
         queryKey: [queryKey, feedQueries],
-        mutationFn: flagPost,
+        mutationFn: Api.flagPost,
         updater: (p: Post) =>
             p._id === postId ? flagItemField(p) : p,
     });
@@ -546,7 +546,7 @@ export function usePostFlag(postId: string, queryKey: string, feedQueries: Curso
 export function useUpdatePost(queryKey: string, feedQueries: CursorQueries) {
     return useCreateOptimisticMutation<EditPostPayload>({
         queryKey: [queryKey, feedQueries],
-        mutationFn: updatePost,
+        mutationFn: Api.updatePost,
         updater: (p: Post, vars: EditPostPayload) => {
             if (p._id === vars.id) {
                 return {
@@ -571,7 +571,7 @@ export function useUpdatePost(queryKey: string, feedQueries: CursorQueries) {
 export function useDeletePostMedia(postId: string, urlToRemove: string, queryKey: string, feedQueries: CursorQueries) {
     return useCreateOptimisticMutation({
         queryKey: [queryKey, feedQueries],
-        mutationFn: () => editPostMedia({ postId, url: urlToRemove }),
+        mutationFn: () => Api.editPostMedia({ postId, url: urlToRemove }),
         updater: (p: Post) => {
 
             // Main post match
@@ -602,7 +602,7 @@ export function useDeletePost(
 ) {
     return useCreateOptimisticMutation({
         queryKey: [queryKey, feedQueries],
-        mutationFn: () => deletePost(postId),
+        mutationFn: () => Api.deletePost(postId),
         updater: (p: Post) => {
 
             // If it's the main post, return null to delete it completely from the feed
@@ -629,7 +629,7 @@ export function useDeletePost(
 export function useNewAdvert() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (data: AdvertPayload) => createAdvert(data),
+        mutationFn: (data: AdvertPayload) => Api.createAdvert(data),
         onError: (error) => {
             console.error("Advert Creation failed:", error);
         },
@@ -645,7 +645,7 @@ export function useNewAdvert() {
 export function useUpdateAdvert() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (data: EditAdvertPayload) => editAdvert(data),
+        mutationFn: (data: EditAdvertPayload) => Api.editAdvert(data),
         onError: (error) => {
             console.error("Advert Update failed:", error);
         },
@@ -661,7 +661,7 @@ export function useUpdateAdvert() {
 export function useUpdateAdvertMedia() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (data: { url: string, advertId: string }) => updateAdvertMedia(data),
+        mutationFn: (data: { url: string, advertId: string }) => Api.updateAdvertMedia(data),
         onError: (error) => {
             console.error("Advert Media Update failed:", error);
         },
@@ -677,7 +677,7 @@ export function useUpdateAdvertMedia() {
 export function useDeleteAdvert() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (id: string) => deleteAdvert(id),
+        mutationFn: (id: string) => Api.deleteAdvert(id),
         onError: (error) => {
             console.error("Failed to Delete Advert:", error);
         },
@@ -692,7 +692,7 @@ export function useDeleteAdvert() {
 // New Push Notification Subscription
 export function useNewNotSub() {
     return useMutation({
-        mutationFn: (data: PushSubscription) => newSubscription(data),
+        mutationFn: (data: PushSubscription) => Api.newSubscription(data),
         onError: (error) => {
             console.error("Failed to add Notification Subscription:", error);
         }

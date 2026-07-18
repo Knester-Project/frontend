@@ -75,7 +75,7 @@ export default function ComingSoon({
             className={`flex flex-col items-center justify-center text-center h-[85vh] rounded-3xl border-2 border-dashed border-accent/10 bg-accent/10 ${compact ? "py-10 px-6" : "py-20 px-6"}`}
         >
             <div className="flex justify-center items-center bg-primary/10 mb-4 rounded-lg size-10 md:size-12 xl:size-14">
-                {Icon ? <Icon className="size-7 md:size-8 xl:size-9 text-primary" /> : <Cake className="size-7 md:size-8 xl:size-9 text-primary" />}
+                {Icon ? <Icon className="size-7 md:size-8 xl:size-9 text-primary" variant="Bold" /> : <Cake variant="Bold" className="size-7 md:size-8 xl:size-9 text-primary" />}
             </div>
             <h3 className="font-bold text-foreground text-lg md:text-xl xl:text-2xl">{title}</h3>
             <p className="mt-1 max-w-xs text-[11px] md:text-xs xl:text-sm text-accent-foreground/70">{description}</p>
