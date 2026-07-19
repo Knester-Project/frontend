@@ -1,5 +1,5 @@
 const viewBuffer = new Set<string>();
-let debounceTimer: NodeJS.Timeout | null = null;
+let debounceTimer: number | null = null;
 
 export const queueCommentView = (commentId: string) => {
     viewBuffer.add(commentId);
@@ -12,7 +12,7 @@ export const queueCommentView = (commentId: string) => {
 
     // If the user is scrolling slowly, sync every 10 seconds
     if (!debounceTimer) {
-        debounceTimer = setTimeout(triggerSync, 10000);
+        debounceTimer = window.setTimeout(triggerSync, 10000);
     }
 };
 
@@ -21,6 +21,7 @@ const triggerSync = async () => {
 
     // Snapshot the current IDs and clear the buffer
     const idsToSync = Array.from(viewBuffer);
+    console.log("The IDs", idsToSync)
     viewBuffer.clear();
     
     if (debounceTimer) {

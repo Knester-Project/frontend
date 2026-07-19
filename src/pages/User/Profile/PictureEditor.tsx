@@ -23,7 +23,7 @@ interface FeatureConfig {
 }
 
 // Represents a complete DiceBear style configuration
-interface StyleConfig {
+export type StyleConfig = {
     id: string;
     label: string;
     options: Record<string, FeatureConfig>;
