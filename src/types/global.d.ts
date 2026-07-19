@@ -120,6 +120,7 @@ declare type NotificationType =
 
 // Notification
 declare type InAppNotification = {
+    _id: string;
     recipientId: string;
     sender: User | null;
     type: NotificationType;
@@ -128,6 +129,7 @@ declare type InAppNotification = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     entity?: Record<string, any>;
     isRead: boolean;
+    oneTime?: boolean;
     createdAt: string;
     updatedAt: string;
 }

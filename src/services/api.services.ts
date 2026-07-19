@@ -397,6 +397,12 @@ export const markAsRead = async (id: string) => {
     return response.data;
 }
 
+// Read All Notification
+export const markAllAsRead = async () => {
+    const response = await userAxios.patch(`notification/mark/all`);
+    return response.data;
+}
+
 // Fetch Unread count
 export const fetchNotUnreadCount = async () => {
     const response = await userAxios.get(`notification/unread`);

@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { sileo } from "sileo";
 
-// Enums
+// Enums and Utils
 import { NOTIF_TYPES } from "@/enums";
+import { dateConverter } from "@/utils/format";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -22,16 +23,19 @@ export const useNotifications = (enabled: boolean) => {
     eventSource.addEventListener("notification:new", (event) => {
 
       const newNotification: InAppNotification = JSON.parse(event.data);
-      console.log("New Notification!", newNotification);
-
+      console.log("New Notification Received:", newNotification);
       const config = NOTIF_TYPES[newNotification.type];
 
       sileo.info({
         title: newNotification.title,
-        description: newNotification.message,
-        icon: config.icon,
+        description:
+          <main className="flex flex-col items-center gap-y-1 text-black dark:text-white text-center">
+            <h2 className="font-semibold capitalize">{newNotification.message}</h2>
+            <p className="text-[10px] text-gray-600 md:text-[11px] dark:text-gray-300 xl:text-xs">{dateConverter(newNotification.createdAt)}</p>
+          </main>,
+        icon: <span className="text-2xl">{config.icon}</span>,
         styles: {
-          description: "text-center!",
+          title: "uppercase font-bold",
         },
       })
 

@@ -698,3 +698,62 @@ export function useNewNotSub() {
         }
     })
 }
+
+// Mark Single Notification
+export function useMarkNot(queryKey: string, queries: CursorQueries) {
+    const queryClient = useQueryClient();
+
+    const mutation = useCreateOptimisticMutation<InAppNotification>({
+        queryKey: [queryKey, queries],
+        mutationFn: (notification) => Api.markAsRead(notification._id), 
+        updater: (notificationItem: InAppNotification, vars: InAppNotification) => {
+            if (notificationItem._id === vars._id) {
+                return { ...notificationItem, isRead: true };
+            }
+            return notificationItem;
+        }
+    });
+
+    // Intercept the mutate function to handle the Unread Count cache
+    const customMutate = (notification: InAppNotification) => {
+  
+        if (notification.isRead) return;
+
+        // If it is NOT a oneTime notification, optimistically decrement the count
+        if (!notification.oneTime) {
+            queryClient.setQueryData(['notification-unread'], (oldCount: any) => {
+                // Adjust based on what your API returns. 
+                // If Api.fetchNotUnreadCount() returns a raw number:
+                if (typeof oldCount === 'number') return Math.max(0, oldCount - 1);
+                
+                // If Api.fetchNotUnreadCount() returns an object like { count: 5 }:
+                if (oldCount && typeof oldCount.count === 'number') {
+                    return { ...oldCount, count: Math.max(0, oldCount.count - 1) };
+                }
+                
+                return oldCount;
+            });
+        }
+
+        // Trigger the main infinite list update and network request
+        mutation.mutate(notification);
+    };
+
+    // Return the mutation, but override the mutate function with our custom one
+    return { ...mutation, mutate: customMutate };
+}
+
+// Mark All Notifications
+export function useMarkAllNot(queryKey: string, queries: CursorQueries) {
+    return useCreateOptimisticMutation<void>({
+        queryKey: [queryKey, queries],
+        mutationFn: () => Api.markAllAsRead(),
+        updater: (notification: InAppNotification) => {
+            if (notification.isRead) return notification;
+            return {
+                ...notification,
+                isRead: true
+            };
+        }
+    });
+}
