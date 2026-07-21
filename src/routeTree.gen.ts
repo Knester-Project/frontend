@@ -18,6 +18,7 @@ import { Route as DashboardSearchRouteImport } from './routes/_dashboard/search'
 import { Route as DashboardSafetyRouteImport } from './routes/_dashboard/safety'
 import { Route as DashboardProfileRouteImport } from './routes/_dashboard/profile'
 import { Route as DashboardPeopleRouteImport } from './routes/_dashboard/people'
+import { Route as DashboardNotificationRouteImport } from './routes/_dashboard/notification'
 import { Route as DashboardMessagesRouteImport } from './routes/_dashboard/messages'
 import { Route as DashboardMarketRouteImport } from './routes/_dashboard/market'
 import { Route as DashboardInstallRouteImport } from './routes/_dashboard/install'
@@ -68,6 +69,11 @@ const DashboardProfileRoute = DashboardProfileRouteImport.update({
 const DashboardPeopleRoute = DashboardPeopleRouteImport.update({
   id: '/people',
   path: '/people',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardNotificationRoute = DashboardNotificationRouteImport.update({
+  id: '/notification',
+  path: '/notification',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardMessagesRoute = DashboardMessagesRouteImport.update({
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/install': typeof DashboardInstallRoute
   '/market': typeof DashboardMarketRoute
   '/messages': typeof DashboardMessagesRoute
+  '/notification': typeof DashboardNotificationRoute
   '/people': typeof DashboardPeopleRoute
   '/profile': typeof DashboardProfileRoute
   '/safety': typeof DashboardSafetyRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/install': typeof DashboardInstallRoute
   '/market': typeof DashboardMarketRoute
   '/messages': typeof DashboardMessagesRoute
+  '/notification': typeof DashboardNotificationRoute
   '/people': typeof DashboardPeopleRoute
   '/profile': typeof DashboardProfileRoute
   '/safety': typeof DashboardSafetyRoute
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/_dashboard/install': typeof DashboardInstallRoute
   '/_dashboard/market': typeof DashboardMarketRoute
   '/_dashboard/messages': typeof DashboardMessagesRoute
+  '/_dashboard/notification': typeof DashboardNotificationRoute
   '/_dashboard/people': typeof DashboardPeopleRoute
   '/_dashboard/profile': typeof DashboardProfileRoute
   '/_dashboard/safety': typeof DashboardSafetyRoute
@@ -178,6 +187,7 @@ export interface FileRouteTypes {
     | '/install'
     | '/market'
     | '/messages'
+    | '/notification'
     | '/people'
     | '/profile'
     | '/safety'
@@ -195,6 +205,7 @@ export interface FileRouteTypes {
     | '/install'
     | '/market'
     | '/messages'
+    | '/notification'
     | '/people'
     | '/profile'
     | '/safety'
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '/_dashboard/install'
     | '/_dashboard/market'
     | '/_dashboard/messages'
+    | '/_dashboard/notification'
     | '/_dashboard/people'
     | '/_dashboard/profile'
     | '/_dashboard/safety'
@@ -291,6 +303,13 @@ declare module '@tanstack/react-router' {
       path: '/people'
       fullPath: '/people'
       preLoaderRoute: typeof DashboardPeopleRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/notification': {
+      id: '/_dashboard/notification'
+      path: '/notification'
+      fullPath: '/notification'
+      preLoaderRoute: typeof DashboardNotificationRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/_dashboard/messages': {
@@ -377,6 +396,7 @@ interface DashboardRouteRouteChildren {
   DashboardInstallRoute: typeof DashboardInstallRoute
   DashboardMarketRoute: typeof DashboardMarketRoute
   DashboardMessagesRoute: typeof DashboardMessagesRoute
+  DashboardNotificationRoute: typeof DashboardNotificationRoute
   DashboardPeopleRoute: typeof DashboardPeopleRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardSafetyRoute: typeof DashboardSafetyRoute
@@ -388,6 +408,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardInstallRoute: DashboardInstallRoute,
   DashboardMarketRoute: DashboardMarketRoute,
   DashboardMessagesRoute: DashboardMessagesRoute,
+  DashboardNotificationRoute: DashboardNotificationRoute,
   DashboardPeopleRoute: DashboardPeopleRoute,
   DashboardProfileRoute: DashboardProfileRoute,
   DashboardSafetyRoute: DashboardSafetyRoute,

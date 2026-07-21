@@ -3,10 +3,12 @@ import { useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { sileo } from "sileo";
 
-// Utils and Assets
+// Utils, Assets and Services
 import { cn } from "@/lib/utils";
 import { format } from "@/utils/format";
 import { GENRES } from "@/assets/genres";
+import { useSyncProfile } from "@/services/userMutations";
+import { toGenres } from "@/utils/generate";
 
 // UIs
 import { Button } from "@/components/ui/button";
@@ -45,7 +47,6 @@ export default function GenreOnboarding() {
 
     const navigate = useNavigate();
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-    const [saving, setSaving] = useState(false);
 
     const toggleGenre = (genreId: string) => {
         setSelectedGenres((prev) =>
@@ -64,23 +65,26 @@ export default function GenreOnboarding() {
         })
     };
 
+    const syncProfile = useSyncProfile()
     const handleSave = async () => {
         if (selectedGenres.length === 0) return;
-        setSaving(true);
-        try {
-            sileo.success({
-                title: "Genres updated! 🎉",
-                description: `You've selected ${selectedGenres.length} ${selectedGenres.length === 1 ? "genre" : "genres"}.`,
-            });
-            navigate({ to: "/feed" });
-        } catch {
-            sileo.error({
-                title: "Could not save genres",
-                description: "Please try again in a moment.",
-            });
-        } finally {
-            setSaving(false);
-        }
+
+        const payload = toGenres(selectedGenres)
+
+        syncProfile.mutate(payload, {
+            onSuccess: () => {
+                sileo.success({
+                    title: "Genres updated! 🎉",
+                    description: `You've selected ${selectedGenres.length} ${selectedGenres.length === 1 ? "genre" : "genres"}.`,
+                });
+                navigate({ to: "/feed" })
+            },
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onError: (error: any) => {
+                const message = error?.response?.data?.message || "Couldn't update preferred genres now, kindly try again later.";
+                sileo.error({ title: "Error", description: message });
+            },
+        });
     };
 
     return (
@@ -187,10 +191,10 @@ export default function GenreOnboarding() {
                 <div className="bottom-0 sticky bg-background/80 backdrop-blur-sm -mx-4 px-4 pt-4 pb-2">
                     <Button
                         onClick={handleSave}
-                        disabled={selectedGenres.length === 0 || saving}
+                        disabled={selectedGenres.length === 0 || syncProfile.isPending}
                         className="shadow-sm rounded-xl w-full h-12 font-semibold text-[11px] md:text-xs xl:text-sm"
                     >
-                        {saving ? (
+                        {syncProfile.isPending ? (
                             <>
                                 <Loader2 className="size-3 md:size-3.5 xl:size-4 animate-spin" /> Saving…
                             </>

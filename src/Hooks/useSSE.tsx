@@ -1,5 +1,7 @@
-import { useEffect } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useRef } from "react";
 import { sileo } from "sileo";
+import { useQueryClient } from "@tanstack/react-query";
 
 // Enums and Utils
 import { NOTIF_TYPES } from "@/enums";
@@ -7,9 +9,20 @@ import { dateConverter } from "@/utils/format";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const useNotifications = (enabled: boolean) => {
+
+export const useNotifications = (enabled: boolean, queries: CursorQueries) => {
+
+  const queryClient = useQueryClient();
+
+  // Store queries in a ref
+  const queriesRef = useRef(queries);
+
   useEffect(() => {
-    // Wait until the user is verified before opening the stream
+    queriesRef.current = queries;
+  }, [queries]);
+  
+  useEffect(() => {
+    
     if (!enabled) return;
 
     const eventSource = new EventSource(`${BASE_URL}notification/stream`, {
@@ -21,26 +34,69 @@ export const useNotifications = (enabled: boolean) => {
     });
 
     eventSource.addEventListener("notification:new", (event) => {
-
-      const newNotification: InAppNotification = JSON.parse(event.data);
-      console.log("New Notification Received:", newNotification);
+    
+      const newNotification: InAppNotification = JSON.parse(event.data);      
       const config = NOTIF_TYPES[newNotification.type];
 
       sileo.info({
         title: newNotification.title,
-        description:
-          <main className="flex flex-col items-center gap-y-1 text-black dark:text-white text-center">
-            <h2 className="font-semibold capitalize">{newNotification.message}</h2>
-            <p className="text-[10px] text-gray-600 md:text-[11px] dark:text-gray-300 xl:text-xs">{dateConverter(newNotification.createdAt)}</p>
-          </main>,
-        icon: <span className="text-2xl">{config.icon}</span>,
+        description: (
+          <main className="flex gap-x-2 text-black">
+            <img 
+              src={newNotification?.sender?.profile?.profilePicture || "/blank.jpg"} 
+              alt="Profile Picture" 
+              className="rounded-lg size-8 object-cover" 
+            />
+            <div>
+              <h2 className="font-semibold capitalize">{newNotification.message}</h2>
+              <p className="text-[10px] text-gray-600 md:text-[11px] xl:text-xs">
+                Date and Time: {dateConverter(newNotification.createdAt)}
+              </p>
+            </div>
+          </main>
+        ),
+        icon: <span className="text-xl">{config.icon}</span>,
+        fill: "#FFFAF3",
         styles: {
           title: "uppercase font-bold",
         },
-      })
+      });
 
-      // Update your global notification state here
-      // e.g., useNotificationStore.getState().addNotification(newNotification);
+      // Update your notification data here
+      if (newNotification.oneTime) return;
+
+      // Optimistically increase the Unread Count
+      queryClient.setQueryData(['notification-unread'], (oldResponse: any) => {
+        if (oldResponse?.data && typeof oldResponse.data.count === 'number') {
+          return {
+            ...oldResponse,
+            data: {
+              ...oldResponse.data,
+              count: oldResponse.data.count + 1
+            }
+          };
+        }
+        return oldResponse;
+      });
+
+      queryClient.setQueryData(['notification', queriesRef.current], (oldData: any) => {
+        if (!oldData || !oldData.pages || oldData.pages.length === 0) return oldData;
+
+        const newPages = [...oldData.pages];
+
+        newPages[0] = {
+          ...newPages[0],
+          data: {
+            ...newPages[0].data,
+            data: [newNotification, ...(newPages[0].data?.data || [])]
+          }
+        };
+
+        return {
+          ...oldData,
+          pages: newPages
+        };
+      });
     });
 
     eventSource.onerror = (error) => {
@@ -48,8 +104,7 @@ export const useNotifications = (enabled: boolean) => {
     };
 
     return () => {
-      // Automatically closes the connection when the user logs out
       eventSource.close();
     };
-  }, [enabled]);
+  }, [enabled, queryClient]);
 };

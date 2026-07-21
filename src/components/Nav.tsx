@@ -8,6 +8,7 @@ import { meStore } from "@/stores/me.store";
 import { useTrendingTags } from "@/services/userQueries";
 import { shuffle } from "@/utils/format";
 import { SUGGESTED_TAGS } from "@/assets/tags";
+import { useNotUnreadCount } from "@/services/userQueries";
 
 // UIs
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,7 @@ import logo from "/logo.svg";
 
 // Icons
 import { Search, Menu, X } from "lucide-react";
-import { Home, Shop, Profile2User, Message, Notification, SearchNormal, SecuritySafe } from "iconsax-reactjs";
+import { Home, Shop, Profile2User, Message, Notification, SearchNormal, SecuritySafe, Refresh, Danger } from "iconsax-reactjs";
 
 
 const Nav = () => {
@@ -30,6 +31,8 @@ const Nav = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
     const { data, isLoading, isError } = useTrendingTags();
+    const { data: unreadData, isLoading: unreadLoading, isError: unreadError } = useNotUnreadCount();
+    const unread: Unread = unreadData?.data;
 
 
     const navigationItems = [
@@ -75,10 +78,28 @@ const Nav = () => {
                         </Button>
 
                         {/* Notifications */}
-                        <Button variant="ghost" size="sm" className="relative">
-                            <Notification />
-                            <span className="-top-1 -right-1 absolute bg-red-500 px-1 pb-[1px] rounded-full text-white text-xs">0</span>
-                        </Button>
+                        <Link to="/notification">
+                            <Button variant="ghost" size="sm" className="relative">
+                                {(!unreadError && unreadLoading) &&
+                                    <>
+                                        <Refresh className="animate-spin" />
+                                        <span className="-top-1 -right-1 absolute bg-red-500 px-1 pb-[1px] rounded-full text-white text-xs">...</span>
+                                    </>
+                                }
+                                {(!unreadError && !unreadLoading) &&
+                                    <>
+                                        <Notification />
+                                        <span className="-top-1 -right-1 absolute bg-red-500 px-1 pb-[1px] rounded-full text-white text-xs">{unread.count}</span>
+                                    </>
+                                }
+                                {unreadError &&
+                                    <>
+                                        <Danger />
+                                        <span className="-top-1 -right-1 absolute bg-red-500 px-1 pb-[1px] rounded-full text-white text-xs">0</span>
+                                    </>
+                                }
+                            </Button>
+                        </Link>
 
                         {/* Push Notification Prompt */}
                         <NotificationBell />
@@ -140,7 +161,7 @@ const Nav = () => {
                                             #{tag}
                                         </Link>
                                     ))
-                                )}
+                                    )}
                             </div>
                         </motion.div>
                     )}

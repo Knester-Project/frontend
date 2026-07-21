@@ -46,7 +46,7 @@ export default function EditPost({ post, onClose, nextCursor }: EditPostFormProp
 
     const fileRef = useRef<HTMLInputElement>(null);
     const { uploadFiles } = usePresignedUpload();
-    const feedQueries = { limit: POST_LIMIT, ...(nextCursor ? { nextCursor } : {}) };
+    const feedQueries = { limit: POST_LIMIT, ...(nextCursor ? { cursor: nextCursor } : {}) };
 
     // Constraints
     const totalMediaCount = existingMedia.length + newMediaFiles.length;

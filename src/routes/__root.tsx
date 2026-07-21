@@ -9,6 +9,9 @@ import { NotificationInitializer } from '@/providers/Push';
 import { LocationGate } from '@/components/LocationGate';
 import { LocationProvider } from '@/providers/Location';
 
+// UIs
+import NotFound from "@/pages/NotFound";
+
 export const APP_NAME = "Knester";
 
 const queryClient = new QueryClient({
@@ -31,7 +34,27 @@ interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
+    head: () => ({
+        meta: [
+            {
+                charSet: "utf-8",
+            },
+            {
+                name: "viewport",
+                content: "width=device-width, initial-scale=1",
+            },
+            {
+                title: APP_NAME,
+            },
+            {
+                name: "description",
+                content:
+                    "A platform that connects users with similar interests, providing a seamless experience for anyone interested.",
+            },
+        ],
+    }),
     component: RootComponent,
+    notFoundComponent: NotFound,
 })
 
 function RootComponent() {

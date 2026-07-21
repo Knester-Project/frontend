@@ -391,3 +391,48 @@ declare type PushSubscriptionPayload = {
         auth: string;
     };
 }
+
+// Unread Count
+declare type Unread = {
+    count: number
+}
+
+// Notification Type
+declare type NotificationType =
+    | "post_like"
+    | "post_comment"
+    | "comment_reply"
+    | "reply_reply"
+    | "comment_like"
+    | "new_follower"
+    | "follow_request"
+    | "follow_request_accepted"
+    | "post_shared"
+    | "post_repost"
+    | "mention"
+    | "tagged"
+    | "story_reaction"
+    | "story_mention"
+    | "message"
+    | "group_invite"
+    | "event_invite"
+    | "order_update"
+    | "system_alert"
+    | "security_alert"
+    | "profile_lookup";
+
+// Notification
+declare type InAppNotification = {
+    _id: string;
+    recipientId: string;
+    sender: User | null;
+    type: NotificationType;
+    title: string;
+    message: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    entity?: Record<string, any>;
+    isRead: boolean;
+    oneTime?: boolean;
+    createdAt: string;
+    updatedAt: string;
+}

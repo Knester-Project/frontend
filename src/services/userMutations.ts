@@ -387,7 +387,7 @@ export function useSyncProfile(username: string = "me") {
     const queryKey = ['profile', username];
 
     return useMutation({
-        mutationFn: (data: Partial<MyProfile>) => Api.updateProfile(data),
+        mutationFn: (data: EditProfilePayload) => Api.updateProfile(data),
 
         onMutate: async (newValues) => {
             return await updateProfileCache(queryClient, queryKey, (old) => ({
@@ -705,7 +705,7 @@ export function useMarkNot(queryKey: string, queries: CursorQueries) {
 
     const mutation = useCreateOptimisticMutation<InAppNotification>({
         queryKey: [queryKey, queries],
-        mutationFn: (notification) => Api.markAsRead(notification._id), 
+        mutationFn: (notification: InAppNotification) => Api.markAsRead(notification._id),
         updater: (notificationItem: InAppNotification, vars: InAppNotification) => {
             if (notificationItem._id === vars._id) {
                 return { ...notificationItem, isRead: true };
@@ -714,46 +714,94 @@ export function useMarkNot(queryKey: string, queries: CursorQueries) {
         }
     });
 
-    // Intercept the mutate function to handle the Unread Count cache
-    const customMutate = (notification: InAppNotification) => {
-  
+    const customMutate = (
+        notification: InAppNotification,
+        options?: Parameters<typeof mutation.mutate>[1]
+    ) => {
         if (notification.isRead) return;
 
-        // If it is NOT a oneTime notification, optimistically decrement the count
         if (!notification.oneTime) {
-            queryClient.setQueryData(['notification-unread'], (oldCount: any) => {
-                // Adjust based on what your API returns. 
-                // If Api.fetchNotUnreadCount() returns a raw number:
-                if (typeof oldCount === 'number') return Math.max(0, oldCount - 1);
-                
-                // If Api.fetchNotUnreadCount() returns an object like { count: 5 }:
-                if (oldCount && typeof oldCount.count === 'number') {
-                    return { ...oldCount, count: Math.max(0, oldCount.count - 1) };
+            queryClient.setQueryData(["notification-unread"], (oldResponse: any) => {
+                if (oldResponse?.data && typeof oldResponse.data.count === "number") {
+                    return {
+                        ...oldResponse,
+                        data: {
+                            ...oldResponse.data,
+                            count: Math.max(0, oldResponse.data.count - 1),
+                        },
+                    };
                 }
-                
-                return oldCount;
+
+                return oldResponse;
             });
         }
 
-        // Trigger the main infinite list update and network request
-        mutation.mutate(notification);
+        mutation.mutate(notification, options);
     };
 
-    // Return the mutation, but override the mutate function with our custom one
     return { ...mutation, mutate: customMutate };
 }
 
 // Mark All Notifications
 export function useMarkAllNot(queryKey: string, queries: CursorQueries) {
-    return useCreateOptimisticMutation<void>({
+    const queryClient = useQueryClient();
+
+    const mutation = useCreateOptimisticMutation<void>({
         queryKey: [queryKey, queries],
         mutationFn: () => Api.markAllAsRead(),
         updater: (notification: InAppNotification) => {
             if (notification.isRead) return notification;
+
             return {
                 ...notification,
-                isRead: true
+                isRead: true,
             };
-        }
+        },
+    });
+
+    const customMutate = (
+        options?: Parameters<typeof mutation.mutate>[1]
+    ) => {
+        // Optimistically set unread count to zero
+        queryClient.setQueryData(["notification-unread"], (oldResponse: any) => {
+            if (oldResponse?.data) {
+                return {
+                    ...oldResponse,
+                    data: {
+                        ...oldResponse.data,
+                        count: 0,
+                    },
+                };
+            }
+
+            return oldResponse;
+        });
+
+        mutation.mutate(undefined, options);
+    };
+
+    return {
+        ...mutation,
+        mutate: customMutate,
+    };
+}
+
+// Delete Notification
+export function useDeleteNotification(queryKey: string, queries: CursorQueries) {
+    return useCreateOptimisticMutation<InAppNotification>({
+        queryKey: [queryKey, queries],
+        mutationFn: (notification: InAppNotification) =>
+            Api.deleteNotification(notification._id),
+
+        updater: (
+            notificationItem: InAppNotification,
+            notification: InAppNotification
+        ) => {
+            if (notificationItem._id === notification._id) {
+                return null;
+            }
+
+            return notificationItem;
+        },
     });
 }

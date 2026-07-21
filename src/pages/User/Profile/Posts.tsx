@@ -34,7 +34,6 @@ const Posts = ({ isOwner, username }: { isOwner: boolean, username: string }) =>
 
     return (
         <main>
-            {/* Content Area (Rendered below the tabs so tabs never disappear) */}
             {isLoading ? (
                 <div className="gap-5 columns-1 md:columns-2 mt-5">
                     {Array.from({ length: 3 }).map((_, i) => (

@@ -11,6 +11,9 @@ import { usePresence } from "@/Hooks/usePresence";
 import Nav from "@/components/Nav";
 import InstallBtn from "@/components/InstallBtn";
 
+// Const
+import { NOT_LIMIT } from "@/assets/constants";
+
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
@@ -18,7 +21,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     const [isAuthReady, setIsAuthReady] = useState(false);
 
     // Initialize the SSE pipe
-    useNotifications(isAuthReady);
+    useNotifications(isAuthReady, { limit: NOT_LIMIT });
 
     // Initialize the Presence Heartbeat
     usePresence(isAuthReady)

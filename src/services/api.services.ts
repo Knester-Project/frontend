@@ -408,3 +408,9 @@ export const fetchNotUnreadCount = async () => {
     const response = await userAxios.get(`notification/unread`);
     return response.data;
 }
+
+// Delete Notification
+export const deleteNotification = async (id: string) => {
+    const response = await userAxios.delete(`notification/delete/${id}`);
+    return response.data;
+}
