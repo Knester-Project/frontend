@@ -240,7 +240,7 @@ const Index = () => {
                             <section className="space-y-4">
 
                                 {/* Premium Filter */}
-                                <div className="flex justify-between items-start bg-accent/10 p-4 border border-border rounded-3xl">
+                                <div className="flex justify-between items-start bg-accent/10 p-4 border border-border rounded-xl">
                                     <div className="space-y-1">
                                         <Label className="font-semibold text-[11px] md:text-xs xl:text-sm">
                                             Premium users only
@@ -254,7 +254,7 @@ const Index = () => {
                                 </div>
 
                                 {/* Online Filter */}
-                                <div className="flex justify-between items-start bg-accent/10 p-4 border border-border rounded-3xl">
+                                <div className="flex justify-between items-start bg-accent/10 p-4 border border-border rounded-xl">
                                     <div className="space-y-1">
                                         <Label className="font-semibold text-[11px] md:text-xs xl:text-sm">
                                             Online users only

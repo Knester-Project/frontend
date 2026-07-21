@@ -151,7 +151,7 @@ export default function UserCard({ user, index = 0 }: UserCardProps) {
 
                 {/* Unified Distance display */}
                 {user.distance != null && (
-                    <div className="flex justify-center items-center gap-1.5 font-medium text-[10px] text-muted-foreground md:text-[11px] xl:text-xs">
+                    <div className="flex justify-center items-center gap-1.5 font-medium text-[10px] text-foreground/70 md:text-[11px] xl:text-xs">
                         <MapPin className="size-3.5" />
                         <span className="font-semibold montserrat">
                             {user.distance < 1
