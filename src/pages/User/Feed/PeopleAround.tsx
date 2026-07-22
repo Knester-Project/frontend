@@ -125,7 +125,7 @@ const PeopleAround = () => {
                                         </p>
 
                                         {user.distanceKm !== null && (
-                                            <span className="mt-0.5 text-[10px] text-foreground/80">
+                                            <span className="mt-0.5 text-[10px] text-foreground/80 montserrat">
                                                 {user.distanceKm.toFixed(1)} km away
                                             </span>
                                         )}

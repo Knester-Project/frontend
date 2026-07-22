@@ -436,3 +436,19 @@ declare type InAppNotification = {
     createdAt: string;
     updatedAt: string;
 }
+
+// Offset Query
+declare type OffSetQueries = {
+    offset?: number;
+    limit?: number;
+}
+
+// New Conversation Payload
+declare type NewConvPayload = {
+    members: string[],
+    type: string,
+    owner: string,
+    name: string,
+    avatar?: string,
+    isFeed?: boolean
+}

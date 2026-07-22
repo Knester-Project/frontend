@@ -414,3 +414,26 @@ export const deleteNotification = async (id: string) => {
     const response = await userAxios.delete(`notification/delete/${id}`);
     return response.data;
 }
+
+// Fetch a Particular Conversation
+export const fetchParticularUserConv = async (username: string) => {
+    const response = await userAxios.get(`chat/fetch/conversation/${username}`);
+    return response.data;
+}
+
+// Fetch all Conversations
+export const fetchAllConv = async (queries: OffSetQueries) => {
+    const params = new URLSearchParams();
+
+    if (queries.offset) params.append("offset", String(queries.offset));
+    if (queries.limit) params.append("limit", String(queries.limit));
+
+    const response = await userAxios.get(`chat/fetch/conversations?${params.toString()}`);
+    return response.data;
+}
+
+// Create Conversation (Group Message)
+export const newConv = async (data: NewConvPayload) => {
+    const response = await userAxios.post(`chat/create/conversations`, data);
+    return response.data;
+}

@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 import { APP_NAME } from '../__root';
+import Error from '@/pages/User/Chat/Conversations/Error';
 
 export const Route = createFileRoute('/_dashboard/messages')({
 
@@ -20,5 +21,5 @@ export const Route = createFileRoute('/_dashboard/messages')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/_dashboard/messages"!</div>
+  return <Error onRetry={() => console.log("Retry Function")} />
 }

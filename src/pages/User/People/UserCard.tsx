@@ -150,13 +150,13 @@ export default function UserCard({ user, index = 0 }: UserCardProps) {
                 </div>
 
                 {/* Unified Distance display */}
-                {user.distance != null && (
+                {user.distanceKm != null && (
                     <div className="flex justify-center items-center gap-1.5 font-medium text-[10px] text-foreground/70 md:text-[11px] xl:text-xs">
                         <MapPin className="size-3.5" />
                         <span className="font-semibold montserrat">
-                            {user.distance < 1
-                                ? `${Math.round(user.distance * 1000)} m apart`
-                                : `${user.distance.toFixed(1)} km apart`}
+                            {user.distanceKm < 1
+                                ? `${Math.round(user.distanceKm * 1000)} m apart`
+                                : `${user.distanceKm.toFixed(1)} km apart`}
                         </span>
                     </div>
                 )}

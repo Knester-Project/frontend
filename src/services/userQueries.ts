@@ -247,3 +247,20 @@ export const useNotUnreadCount = () => {
         queryFn: () => Api.fetchNotUnreadCount(),
     });
 }
+
+// Fetch All Conversations
+export const allConversationsOptions = (queries: OffSetQueries = { offset: 0, limit: 20 }) => {
+    return queryOptions({
+        queryKey: ['conversations', queries],
+        queryFn: () => Api.fetchAllConv(queries),
+        staleTime: 1000 * 60 * 5,
+    });
+};
+
+export const singleConversationOptions = (username: string) => {
+    return queryOptions({
+        queryKey: ['conversation', username],
+        queryFn: () => Api.fetchParticularUserConv(username),
+        staleTime: 1000 * 60 * 5,
+    });
+};

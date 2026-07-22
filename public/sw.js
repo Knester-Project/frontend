@@ -10,7 +10,7 @@ self.addEventListener("push", (event) => {
         // Configure how the OS renders the notification popup
         const options = {
             body: data.message,
-            icon: "/logo.png", // Replace with your app's logo in the public folder
+            icon: "/128.png", // Replace with your app's logo in the public folder
             badge: "/short_logo.png", // A small monochromatic icon for Android status bars
             vibrate: [200, 100, 200], // Android vibration pattern
             data: {
