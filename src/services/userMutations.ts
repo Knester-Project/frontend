@@ -217,6 +217,17 @@ export function useCreateUser() {
     })
 }
 
+// Update User
+export function useUpdateUser() {
+
+    return useMutation({
+        mutationFn: (data: UserUpdatePayload) => Api.updateUser(data),
+        onError: (error) => {
+            console.error("Update User failed:", error);
+        },
+    })
+}
+
 // Authenticate User
 export function useAuthUser() {
 

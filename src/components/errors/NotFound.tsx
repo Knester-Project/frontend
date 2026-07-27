@@ -28,7 +28,7 @@ export default function NotFound({ onReport, description }: { onReport: () => vo
             </div>
 
             {/* Title */}
-            <h1 className="mb-3 font-montserrat font-bold text-2xl md:text-3xl xl:text-4xl text-center">
+            <h1 className="mb-3 font-bold text-2xl md:text-3xl xl:text-4xl text-center montserrat">
                 Lost in the Warmth?
             </h1>
 

@@ -48,4 +48,10 @@ export const NOTIF_TYPES: Record<string, {
         accent: "bg-primary/10 text-primary border-primary/20",
         bar: "bg-primary",
     },
+    new_referral: {
+        label: "New Referral",
+        icon: "🫸",
+        accent: "bg-blue-500/10 text-blue-600 border-blue-500/20",
+        bar: "bg-blue-500"
+    }
 };

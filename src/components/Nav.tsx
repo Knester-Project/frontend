@@ -15,13 +15,13 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { NotificationBell } from "./PushBell";
+import { ThemeToggle } from "./ThemeToggle";
 
 // Logo
 import logo from "/logo.svg";
 
 // Icons
-import { Search, Menu, X } from "lucide-react";
-import { Home, Shop, Profile2User, Message, Notification, SearchNormal, SecuritySafe, Refresh, Danger } from "iconsax-reactjs";
+import { Element3, Home, SearchNormal, Shop, CloseSquare, Profile2User, Message, Notification, SecuritySafe, Refresh, Danger, Setting2 } from "iconsax-reactjs";
 
 
 const Nav = () => {
@@ -40,12 +40,13 @@ const Nav = () => {
         { href: "/market", icon: Shop, label: "Market Place" },
         { href: "/people?mode=entry", icon: Profile2User, label: "People" },
         { href: "/messages", icon: Message, label: "Messages" },
-        { href: "/safety", icon: SecuritySafe, label: "Safety" }
+        { href: "/safety", icon: SecuritySafe, label: "Safety" },
+        { href: "/settings", icon: Setting2, label: "Settings" },
     ]
 
     return (
         <header className="top-0 z-50 sticky bg-background/80 backdrop-blur-md border-border border-b">
-            <div className="px-[1rem] sm:px-8 md:px-[3rem] lg:px-[4rem] 2xl:px-[6rem] xl:px-[5rem] py-3">
+            <section className="px-[1rem] sm:px-8 md:px-[3rem] lg:px-[4rem] 2xl:px-[6rem] xl:px-[5rem] py-3">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <Link to="/feed" className="shrink-0">
@@ -54,17 +55,18 @@ const Nav = () => {
 
                         <nav className="hidden lg:flex items-center gap-4">
                             {navigationItems.map((item) => {
-                                const Icon = item.icon
-                                const isActive = loc.href === item.href
+                                const Icon = item.icon;
 
                                 return (
-                                    <Link key={item.href} to={item.href}>
-                                        <Button variant="ghost" size="sm" className={cn("gap-2 transition-colors", isActive && "bg-primary text-primary-foreground")}>
-                                            <Icon className="size-4" variant={isActive ? "Bold" : "Outline"} />
-                                            <span className="text-xs md:text-sm">{item.label}</span>
-                                        </Button>
+                                    <Link key={item.href} to={item.href} activeProps={{ className: "bg-primary text-primary-foreground rounded-md" }}>
+                                        {({ isActive }) => (
+                                            <Button variant="ghost" size="sm" className="gap-2 transition-colors">
+                                                <Icon className="size-4" variant={isActive ? "Bold" : "Outline"} />
+                                                <span className="text-xs md:text-sm">{item.label}</span>
+                                            </Button>
+                                        )}
                                     </Link>
-                                )
+                                );
                             })}
                         </nav>
                     </div>
@@ -114,7 +116,7 @@ const Nav = () => {
 
                         {/* Mobile Menu Button */}
                         <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-                            {isMobileMenuOpen ? <X className="size-4" /> : <Menu className="size-4" />}
+                            {isMobileMenuOpen ? <CloseSquare className="size-4" /> : <Element3 className="size-4" />}
                         </Button>
                     </div>
                 </div>
@@ -122,7 +124,7 @@ const Nav = () => {
                 {/* Mobile Navigation Menu */}
                 <AnimatePresence>
                     {isMobileMenuOpen && (
-                        <motion.div key="mobile-menu" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25, ease: "easeInOut" }} className="lg:hidden top-10 left-0 z-10 absolute bg-white dark:bg-black mt-4 p-4 w-full">
+                        <motion.div key="mobile-menu" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25, ease: "easeInOut" }} className="lg:hidden top-10 left-0 z-10 absolute bg-white dark:bg-black mt-4 p-4 border-border border-b rounded-b-xl w-full">
                             <nav className="flex flex-col gap-2 mt-4">
                                 {navigationItems.map((item) => {
                                     const Icon = item.icon
@@ -143,7 +145,7 @@ const Nav = () => {
 
                                 {/* Mobile Search */}
                                 <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 5 }} transition={{ duration: 0.2, delay: 0.1 }} className="relative mt-2">
-                                    <Search className="top-1/2 left-3 absolute size-4 -translate-y-1/2 transform" />
+                                    <SearchNormal className="top-1/2 left-3 absolute size-4 -translate-y-1/2 transform" />
                                     <Input placeholder="Search Knester..." className="pl-10" />
                                 </motion.div>
                             </nav>
@@ -163,10 +165,14 @@ const Nav = () => {
                                     ))
                                     )}
                             </div>
+                            <div className="flex justify-between items-center mt-4 text-muted-foreground text-xs">
+                                <p>Knester {new Date().getFullYear()}</p>
+                                <ThemeToggle />
+                            </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
-            </div>
+            </section>
         </header>
     );
 }

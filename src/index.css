@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "@fontsource/raleway";
+@import "@fontsource/montserrat";
 @import "tw-animate-css";
 
 body {
@@ -33,6 +35,7 @@ body {
 }
 
 @theme inline {
+  --font-body: "Raleway", sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -92,8 +95,8 @@ body {
   --primary-foreground: oklch(18.71% 0.0066 17.582); 
   --accent: oklch(0.888 0.076 63.379);          /* #ffd0a6 (light) */
   --accent-foreground: var(--foreground);       /* use dark text on light accent */
-  --muted: oklch(16.5% 0.022 260);
-  --muted-foreground: oklch(46% 0.010 260);
+  --muted: oklch(96% 0.003 90);
+  --muted-foreground: oklch(56% 0.01 260);
   --destructive: oklch(0.6 0.22 25);
   /* industrial red-orange */
   --destructive-foreground: oklch(0.98 0.005 255);
@@ -137,8 +140,8 @@ body {
   --primary-foreground: oklch(1.000 0.000 90);   /* #ffffff */
   --accent: oklch(0.603 0.153 46.681);          /* #c85e1f (darker pumpkin) */
   --accent-foreground: var(--foreground);
-  --muted: oklch(88.5% 0.028 210);
-  --muted-foreground: oklch(11.0% 0.020 260);
+  --muted: oklch(26% 0.01 260);
+  --muted-foreground: oklch(72% 0.01 260);
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(0.98 0.005 255);
 
@@ -177,6 +180,16 @@ body {
   16% { transform: translateX(2px) rotate(1deg); }
 }
 
+p a {
+  color: var(--primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+p a:hover {
+  opacity: 0.8;
+}
+
 
 @layer base {
   * {
@@ -185,6 +198,6 @@ body {
 
   body {
     @apply bg-background text-foreground;
-    @apply text-xs md:text-sm xl:text-base
+    @apply text-xs md:text-sm font-body xl:text-base
   }
 }

@@ -1,8 +1,10 @@
+import { Cake, Camera, Designtools, DocumentText, Game, Monitor, Music, Smileys, Weight } from "iconsax-reactjs";
+
 export const GENRES = [
   {
     id: "design",
     name: "Design",
-    icon: "🎨",
+    icon: Designtools,
     color: "from-purple-500 to-indigo-500",
     groups: [
       { id: "grp_01", name: "UI/UX Designers Hub", members: 12400, isPrivate: false },
@@ -13,7 +15,7 @@ export const GENRES = [
   {
     id: "tech",
     name: "Tech",
-    icon: "💻",
+    icon: Monitor,
     color: "from-blue-500 to-cyan-500",
     groups: [
       { id: "grp_05", name: "Full Stack Developers", members: 25000, isPrivate: false },
@@ -24,7 +26,7 @@ export const GENRES = [
   {
     id: "photography",
     name: "Photography",
-    icon: "📸",
+    icon: Camera,
     color: "from-rose-500 to-orange-500",
     groups: [
       { id: "grp_09", name: "Street Photography", members: 6700, isPrivate: false },
@@ -35,7 +37,7 @@ export const GENRES = [
   {
     id: "music",
     name: "Music",
-    icon: "🎵",
+    icon: Music,
     color: "from-emerald-500 to-teal-500",
     groups: [
       { id: "grp_13", name: "Beat Makers", members: 8900, isPrivate: false },
@@ -46,7 +48,7 @@ export const GENRES = [
   {
     id: "writing",
     name: "Writing",
-    icon: "✍️",
+    icon: DocumentText,
     color: "from-amber-500 to-yellow-500",
     groups: [
       { id: "grp_17", name: "Creative Writers", members: 4500, isPrivate: false },
@@ -57,7 +59,7 @@ export const GENRES = [
   {
     id: "gaming",
     name: "Gaming",
-    icon: "🎮",
+    icon: Game,
     color: "from-violet-500 to-fuchsia-500",
     groups: [
       { id: "grp_21", name: "Esports Arena", members: 18000, isPrivate: false },
@@ -68,7 +70,7 @@ export const GENRES = [
   {
     id: "fitness",
     name: "Fitness",
-    icon: "💪",
+    icon: Weight,
     color: "from-green-500 to-emerald-500",
     groups: [
       { id: "grp_26", name: "Marathon Runners", members: 2800, isPrivate: false },
@@ -79,7 +81,7 @@ export const GENRES = [
   {
     id: "food",
     name: "Food",
-    icon: "🍳",
+    icon: Cake,
     color: "from-lime-500 to-green-500",
     groups: [
       { id: "grp_29", name: "Home Chefs", members: 7800, isPrivate: false },
@@ -90,7 +92,7 @@ export const GENRES = [
   {
     id: "erotic",
     name: "Wataa",
-    icon: "🍆🍩",
+    icon: Smileys,
     color: "from-red-500 to-orange-500",
     groups: [
       { id: "grp_29", name: "Wataa Headquarters", members: 6700, isPrivate: false },

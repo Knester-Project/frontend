@@ -1,7 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router';
-
 import { APP_NAME } from '../__root';
-import Error from '@/pages/User/Chat/Conversations/Error';
+
+// Queries
+import { allConversationsOptions, singleConversationOptions } from '@/services/userQueries';
+
+// UIs
+import Chat from "@/pages/User/Chat";
+import Loader from '@/pages/User/Chat/Loader';
+import ErrorPage from '@/components/errors/Custom';
 
 export const Route = createFileRoute('/_dashboard/messages')({
 
@@ -17,9 +23,28 @@ export const Route = createFileRoute('/_dashboard/messages')({
     username: search.username as string | undefined,
   }),
 
-  component: RouteComponent,
-})
+  loaderDeps: ({ search: { username } }) => ({ username }),
 
-function RouteComponent() {
-  return <Error onRetry={() => console.log("Retry Function")} />
-}
+  loader: async ({ context: { queryClient }, deps: { username } }) => {
+    // If we have a specific user, ensure we have their chat data
+    if (username) {
+      return queryClient.ensureQueryData(singleConversationOptions(username));
+    }
+
+    // Otherwise, ensure we have the main inbox list loaded
+    return queryClient.ensureQueryData(allConversationsOptions());
+  },
+
+  component: Chat,
+
+  pendingComponent: () => <Loader />,
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  errorComponent: (error: any) => (
+    <ErrorPage
+      code={error.error?.status === 404 ? "404" : "500"}
+      title={error.error?.status === 404 ? "Chat Not Found" : "Something went wrong"}
+      description="We couldn't load this conversation."
+    />
+  ),
+});

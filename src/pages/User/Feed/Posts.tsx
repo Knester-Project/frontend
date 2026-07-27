@@ -72,7 +72,7 @@ const Posts = () => {
                 <h2 className="font-semibold text-[11px] md:text-xs xl:text-sm uppercase tracking-wide">
                     {activeTab === "foryou" ? "Your Circle" : activeTab} Posts
                 </h2>
-                <div className="flex items-center gap-0.5 p-1 border border-muted/20 rounded-md">
+                <div className="flex items-center gap-0.5 p-1 border border-muted rounded-md">
                     {TABS.map((tab) => {
                         const Icon = tab.icon;
                         return (

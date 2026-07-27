@@ -240,7 +240,7 @@ export const useNotification = (queries: CursorQueries) => {
     });
 };
 
-// Fetch Unread Count
+// Fetch Notification Unread Count
 export const useNotUnreadCount = () => {
     return useQuery({
         queryKey: ['notification-unread'],
@@ -257,10 +257,28 @@ export const allConversationsOptions = (queries: OffSetQueries = { offset: 0, li
     });
 };
 
+// Fetch a Single Conversation
 export const singleConversationOptions = (username: string) => {
     return queryOptions({
         queryKey: ['conversation', username],
         queryFn: () => Api.fetchParticularUserConv(username),
         staleTime: 1000 * 60 * 5,
+    });
+};
+
+// Fetch Messages
+export const useMessages = (queries: CursorQueries, conversationId: string, enabled = false) => {
+    return useInfiniteQuery({
+        queryKey: ['messages', queries, conversationId],
+        maxPages: 5,
+
+        queryFn: ({ pageParam }) => Api.fetchMessages(conversationId, { ...queries, cursor: pageParam }),
+        enabled: enabled,
+        initialPageParam: undefined,
+
+        getNextPageParam: (lastPage) => {
+            console.log("The messages last page", lastPage)
+            return lastPage.data.nextCursor ?? undefined;
+        },
     });
 };

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 // Icons
-import { MessageCircleHeart, Sparkles } from "lucide-react";
+import { EmojiHappy, MessageText1 } from "iconsax-reactjs";
 
 export default function Empty({ participant }: { participant: User }) {
 
@@ -19,7 +19,7 @@ export default function Empty({ participant }: { participant: User }) {
                 {/* Glow */}
                 <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-150" />
                 {/* Avatar */}
-                <div className="relative shadow-sm rounded-full ring-4 ring-card size-20 md:size-22 xl:size-24 overflow-hidden">
+                <div className="relative shadow-sm rounded-full size-16 md:size-18 xl:size-20 overflow-hidden">
                     {participant?.profile?.profilePicture ? (
                         <img
                             src={participant.profile.profilePicture}
@@ -28,7 +28,7 @@ export default function Empty({ participant }: { participant: User }) {
                         />
                     ) : (
                         <div className="flex justify-center items-center bg-gradient-to-br from-primary/40 to-primary/10 w-full h-full">
-                            <MessageCircleHeart className="size-10 md:size-11 xl:size-12 text-primary" />
+                            <MessageText1 className="size-8 md:size-9 xl:size-10 text-primary" />
                         </div>
                     )}
                 </div>
@@ -39,21 +39,16 @@ export default function Empty({ participant }: { participant: User }) {
                     {participant?.username ? `Say hi to ${participant.username}` : "Start a conversation"}
                 </h2>
                 <p className="mx-auto mt-2 max-w-xs text-[11px] text-foreground/70 md:text-xs xl:text-sm leading-relaxed">
-                    No messages yet. Break the ice and send your first message below.
+                    No messages yet. <br /> Break the ice and send your first message below.
                 </p>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-6">
                 <Button onClick={onStart} className="gap-2 shadow shadow-primary/20 rounded-xl">
-                    <Sparkles className="size-4" />
+                    <EmojiHappy variant="Bold" className="size-3 md:size-3.5 xl:size-4" />
                     Say hello 👋
                 </Button>
             </motion.div>
-
-            {/* Privacy note */}
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mt-8 text-[10px] text-foreground/70 md:text-[11px] xl:text-xs">
-                🔒 Messages are end-to-end encrypted
-            </motion.p>
         </div>
     );
 }

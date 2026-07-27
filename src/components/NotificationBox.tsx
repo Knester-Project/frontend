@@ -151,12 +151,12 @@ export default function NotificationBox({ notification, nextCursor }: { notifica
                     <span className="font-semibold text-foreground">
                         {notification.title}
                     </span>{" "}
-                    <span className="text-foreground/70">
-                        {notification.message}
-                    </span>
+                    <span
+                        className="text-muted-foreground"
+                        dangerouslySetInnerHTML={{ __html: notification.message }}
+                    />
                 </p>
-
-                <p className="mt-1.5 text-[10px] text-foreground/70">
+                <p className="mt-1.5 text-[10px] text-muted-foreground">
                     {dateConverter(notification.createdAt)}
                 </p>
             </div>

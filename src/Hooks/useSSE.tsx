@@ -20,9 +20,9 @@ export const useNotifications = (enabled: boolean, queries: CursorQueries) => {
   useEffect(() => {
     queriesRef.current = queries;
   }, [queries]);
-  
+
   useEffect(() => {
-    
+
     if (!enabled) return;
 
     const eventSource = new EventSource(`${BASE_URL}notification/stream`, {
@@ -34,21 +34,21 @@ export const useNotifications = (enabled: boolean, queries: CursorQueries) => {
     });
 
     eventSource.addEventListener("notification:new", (event) => {
-    
-      const newNotification: InAppNotification = JSON.parse(event.data);      
+
+      const newNotification: InAppNotification = JSON.parse(event.data);
       const config = NOTIF_TYPES[newNotification.type];
 
       sileo.info({
         title: newNotification.title,
         description: (
           <main className="flex gap-x-2 text-black">
-            <img 
-              src={newNotification?.sender?.profile?.profilePicture || "/blank.jpg"} 
-              alt="Profile Picture" 
-              className="rounded-lg size-8 object-cover" 
+            <img
+              src={newNotification?.sender?.profile?.profilePicture || "/blank.jpg"}
+              alt="Profile Picture"
+              className="rounded-lg size-8 object-cover"
             />
             <div>
-              <h2 className="font-semibold capitalize">{newNotification.message}</h2>
+              <p className="font-semibold capitalize" dangerouslySetInnerHTML={{ __html: newNotification.message }} />
               <p className="text-[10px] text-gray-600 md:text-[11px] xl:text-xs">
                 Date and Time: {dateConverter(newNotification.createdAt)}
               </p>

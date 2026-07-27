@@ -88,8 +88,8 @@ export default function GenreOnboarding() {
     };
 
     return (
-        <div className="min-h-dvh">
-            <div className="mx-auto px-4 py-8 md:py-10 xl:py-12 max-w-screen-2xl">
+        <div className="mx-auto w-full max-w-2xl min-h-dvh">
+            <div className="px-4 py-8 md:py-10 xl:py-12">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 12 }}
@@ -126,8 +126,8 @@ export default function GenreOnboarding() {
                                     <div className={cn("absolute inset-0 bg-gradient-to-br opacity-10", genre.color)} />
                                 )}
 
-                                <span className="z-2 relative text-xl sm:text-2xl md:text-3xl xl:text-4xl">{genre.icon}</span>
-                                <span className="z-2 relative font-semibold text-[11px] md:text-xs xl:text-sm">{genre.name}</span>
+                                <span className={cn("z-2 relative size-6 md:size-6.5 xl:size-7")}><genre.icon variant="Bold"  /></span>
+                                <span className="z-2 relative font-semibold text-[11px] text-muted-foreground md:text-xs xl:text-sm">{genre.name}</span>
                                 {isSelected && (
                                     <motion.div
                                         initial={{ scale: 0 }}
@@ -162,7 +162,7 @@ export default function GenreOnboarding() {
                             {selectedGenreObjects.map((genre) => (
                                 <div key={genre.id}>
                                     <div className="flex items-center gap-2 mb-2.5">
-                                        <span className="text-lg">{genre.icon}</span>
+                                        <span className="size-6 md:size-6.5 xl:size-7 text-lg"><genre.icon /></span>
                                         <h3 className="font-bold text-[11px] text-foreground md:text-xs xl:text-sm">{genre.name}</h3>
                                         <span className="text-[10px] text-foreground/70 md:text-[11px] xl:text-xs">· {genre.groups.length} groups</span>
                                     </div>

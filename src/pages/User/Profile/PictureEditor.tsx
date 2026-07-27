@@ -145,7 +145,7 @@ function FeatureOption({ optionKey, config, value, onChange, styleId, seed, para
                     if (isColor) {
                         return (
                             <button key={val} type="button" title={`#${val}`} onClick={() => onChange(val)} style={{ background: `#${val}` }}
-                                className={cn("border-2 rounded-2xl size-6 md:size-7 xl:size-8 transition-all cursor-pointer",
+                                className={cn("border-2 rounded size-6 md:size-7 xl:size-8 transition-all cursor-pointer",
                                     selected ? "border-primary scale-110 shadow-md" : "border-transparent hover:scale-105"
                                 )} />
                         )
@@ -155,7 +155,7 @@ function FeatureOption({ optionKey, config, value, onChange, styleId, seed, para
                         return (
                             <button key={val} type="button" onClick={() => onChange(val)}
                                 className={cn(
-                                    "flex justify-center items-center border rounded-xl size-8 md:size-9 xl:size-10 transition-all cursor-pointer",
+                                    "flex justify-center items-center border rounded size-8 md:size-9 xl:size-10 transition-all cursor-pointer",
                                     selected ? "border-primary bg-primary/10 text-primary scale-110 shadow-md"
                                         : "border-border bg-accent/40 hover:border-primary/40 text-gray-600 dark:text-gray-300"
                                 )} title="None">
@@ -170,7 +170,7 @@ function FeatureOption({ optionKey, config, value, onChange, styleId, seed, para
                     return (
                         <button key={val} type="button" onClick={() => onChange(val)}
                             className={cn(
-                                "flex justify-center items-center bg-accent/20 border rounded-xl size-8 md:size-9 xl:size-10 overflow-hidden transition-all cursor-pointer",
+                                "flex justify-center items-center bg-accent/20 border rounded size-8 md:size-9 xl:size-10 overflow-hidden transition-all cursor-pointer",
                                 selected ? "border-primary scale-110 shadow-md shadow-primary/20" : "border-border hover:border-primary/40"
                             )}>
                             <img src={swatchUrl} alt={val} className="w-full h-full object-cover" loading="lazy" />
@@ -359,7 +359,7 @@ export default function ProfilePictureEditor({ onClose, isPremium }: ProfilePict
             {/* Footer */}
             <div className="flex gap-2 p-3 md:p-4 xl:p-5 border-border border-t">
                 {step === 1 ? (
-                    <Button className="flex-1 rounded-xl" disabled={!selectedStyle} onClick={handleNext}>
+                    <Button className="flex-1 rounded-xl h-12" disabled={!selectedStyle} onClick={handleNext}>
                         Next — Customize →
                     </Button>
                 ) : (

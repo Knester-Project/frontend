@@ -18,6 +18,23 @@ declare type WaitListPayload = {
     email: string
 }
 
+// Update User Payload
+declare type UserUpdatePayload = {
+    publicKey: {
+        crv: string,
+        ext: boolean,
+        key_ops: string[],
+        kty: string,
+        x: string,
+        y: string
+    },
+    encryptedVault: {
+        vaultData: string,
+        salt: string,
+        iv: string
+    }
+}
+
 // For Safety Post Creation
 declare type SafetyInput = {
     dateOfIncident: string;
@@ -85,6 +102,7 @@ type Profile = null | {
     profileLock: boolean;
     lastSeen: string;
     isOnline: boolean;
+    chatLock: boolean;
 };
 
 type User = {
@@ -419,7 +437,8 @@ declare type NotificationType =
     | "order_update"
     | "system_alert"
     | "security_alert"
-    | "profile_lookup";
+    | "profile_lookup"
+    | "new_referral"
 
 // Notification
 declare type InAppNotification = {
@@ -451,4 +470,38 @@ declare type NewConvPayload = {
     name: string,
     avatar?: string,
     isFeed?: boolean
+}
+
+// Username Conversation
+declare type UsernameConv = {
+    conversationId: string | null;
+    meta: {
+        avatar: string;
+        createdAt: string;
+        messageTtl: string;
+        name: string;
+        owner: string;
+        type: string;
+    } | null;
+    targetUser: User
+}
+
+// User's Conversations
+declare type ConversationsData = {
+    conversations: [];
+    hasMore: boolean;
+}
+
+declare type Message = {
+    id: string;
+    senderId: string;
+    conversationId: string;
+    ciphertext: string;
+    iv: string;
+    tag: string;
+    media: string[]
+    replyTo?: string;
+    createdAt: string;
+    isSystem: boolean;
+    status: 'pending' | 'sent' | 'error';
 }

@@ -1,8 +1,15 @@
+// Services
+import { allConversationsOptions } from "@/services/userQueries";
+
 // UIs
 import { Card } from "@/components/ui/card";
 import { Messages3 } from "iconsax-reactjs";
 
 const Messages = () => {
+
+    const { data, isLoading, isError, refetch } = allConversationsOptions({ offset: 0, limit: 5 });
+    console.log("The data", data);
+
     return (
         <Card className="p-4">
             <header>

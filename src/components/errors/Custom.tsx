@@ -5,8 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 
 // Icons
-import { ArrowLeft, AlertTriangle } from "lucide-react";
-import { Home, Refresh } from "iconsax-reactjs";
+import { Home, Refresh, Danger, ArrowLeft3 } from "iconsax-reactjs";
 
 type ErrorPageProps = {
     code?: string;
@@ -63,7 +62,7 @@ export default function ErrorPage(props: ErrorPageProps = {}) {
             <div className="z-10 relative w-full max-w-lg text-center">
                 {/* Error code with animated glitch */}
                 <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="mb-4" >
-                    <span className="font-montserrat font-extrabold text-primary/40 text-5xl md:text-6xl xl:text-7xl leading-none tracking-tighter select-none montserrat">
+                    <span className="font-extrabold text-primary/40 text-5xl md:text-6xl xl:text-7xl leading-none tracking-tighter select-none montserrat montserrat">
                         {config.code}
                     </span>
                 </motion.div>
@@ -72,19 +71,19 @@ export default function ErrorPage(props: ErrorPageProps = {}) {
                 <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }} className="flex justify-center mb-6">
                     <div className="flex justify-center items-center bg-primary/10 rounded-xl size-14 md:size-16 xl:size-18">
-                        <AlertTriangle className="size-7 md:size-8 xl:size-9 text-primary" strokeWidth={1.8} />
+                        <Danger className="size-7 md:size-8 xl:size-9 text-primary" strokeWidth={1.8} />
                     </div>
                 </motion.div>
 
                 {/* Title */}
                 <motion.h1 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                    className="mb-3 font-montserrat font-bold text-foreground text-xl md:text-2xl xl:text-3xl tracking-tight">
+                    className="mb-3 font-bold text-foreground text-xl md:text-2xl xl:text-3xl tracking-tight montserrat">
                     {config.title}
                 </motion.h1>
 
                 {/* Description */}
                 <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    className="mx-auto mb-10 max-w-md text-muted text-sm md:text-base xl:text-lg leading-relaxed">
+                    className="mx-auto mb-10 max-w-md text-muted-foreground text-sm md:text-base xl:text-lg leading-relaxed">
                     {config.description}
                 </motion.p>
 
@@ -93,21 +92,21 @@ export default function ErrorPage(props: ErrorPageProps = {}) {
                     className="flex sm:flex-row flex-col justify-center items-center gap-3">
                     {config.showRetryButton && (
                         <Button onClick={handleRetry}
-                            className="gap-2 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:shadow-xl px-6 py-2.5 rounded-xl w-full sm:w-auto font-montserrat font-semibold text-primary-foreground transition-all duration-200">
+                            className="gap-2 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:shadow-xl px-6 py-2.5 rounded-xl w-full sm:w-auto font-semibold text-primary-foreground transition-all duration-200 montserrat">
                             <Refresh className="size-4" />
                             {config.retryLabel}
                         </Button>
                     )}
                     {config.showBackButton && (
                         <Button variant="outline" onClick={() => window.history.back()}
-                            className="gap-2 hover:bg-accent/30 px-6 py-2.5 border-border rounded-xl w-full sm:w-auto font-montserrat font-medium transition-all duration-200">
-                            <ArrowLeft className="size-4" />
+                            className="gap-2 hover:bg-accent/30 px-6 py-2.5 border-border rounded-xl w-full sm:w-auto font-medium transition-all duration-200 montserrat">
+                            <ArrowLeft3 className="size-4" />
                             {config.backLabel}
                         </Button>
                     )}
                     {config.showHomeButton && (
                         <Button variant="ghost" onClick={() => navigate({ to: "/feed" })}
-                            className="gap-2 hover:bg-accent/20 px-6 py-2.5 rounded-xl w-full sm:w-auto font-montserrat font-medium text-muted hover:text-foreground transition-all duration-200">
+                            className="gap-2 hover:bg-accent/20 px-6 py-2.5 rounded-xl w-full sm:w-auto font-medium text-muted-foreground hover:text-foreground transition-all duration-200 montserrat">
                             <Home className="size-4" />
                             {config.homeLabel}
                         </Button>

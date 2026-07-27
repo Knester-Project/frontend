@@ -183,3 +183,61 @@ export function format(n: number) {
   if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
   return `${n}`;
 }
+
+// Format Last Seen
+export function formatLastSeen(dateString: string): string {
+    const date = new Date(dateString);
+    const now = new Date();
+    
+    // Ensure valid date
+    if (isNaN(date.getTime())) return "Unknown";
+
+    const diffMs = now.getTime() - date.getTime();
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    // Time Formatter
+    const timeFormat = new Intl.DateTimeFormat('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit', 
+        hour12: true 
+    }).format(date);
+
+    // Day checks
+    const isToday = date.toDateString() === now.toDateString();
+    
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    const isYesterday = date.toDateString() === yesterday.toDateString();
+
+    // Within the last hour
+    if (diffMinutes < 1) return "Just now";
+    if (diffMinutes < 60) return `${diffMinutes}m ago`;
+
+    // Today and Yesterday
+    if (isToday) return `Today at ${timeFormat}`;
+    if (isYesterday) return `Yesterday at ${timeFormat}`;
+
+    // Within the last week
+    if (diffDays < 7) return `${diffDays} days ago`;
+
+    // Older than a week, but same year
+    const isSameYear = date.getFullYear() === now.getFullYear();
+    const shortDateFormat = new Intl.DateTimeFormat('en-US', { 
+        month: 'short', 
+        day: 'numeric' 
+    }).format(date); // e.g., "Jul 20"
+
+    if (isSameYear) return `${shortDateFormat} at ${timeFormat}`;
+
+    // Different year
+    const fullDateFormat = new Intl.DateTimeFormat('en-US', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+    }).format(date);
+
+    return fullDateFormat;
+}

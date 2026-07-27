@@ -2,16 +2,21 @@ import { useState, type ChangeEvent } from 'react';
 import { sileo } from "sileo";
 import { Link } from '@tanstack/react-router';
 
-// Hooks, Stores and Utils
+// Hooks, Stores, Utils, Services and Libs
 import { useCreateUser, useValidateUser } from "@/services/userMutations";
 import { useCheckUsername } from '@/services/userQueries';
 import { generateCustomUsernames } from '@/utils/generate';
+import { generateIdentityKeyPair, exportKeyToJwk } from "@/utils/e2ee";
+import { useUpdateUser } from "@/services/userMutations";
+import { lockPrivateKey } from "@/utils/vault";
+import { db } from "@/lib/db";
 
 // UIs
 import Button from '@/components/Button';
 
 //Icons
-import { User, CircleCheckBig, Loader, Eye, EyeOff, Lock, Check, UserPlus, Shield, AlertTriangle, CheckCircle, LogIn } from "lucide-react";
+import { CircleCheckBig, Loader } from "lucide-react";
+import { TagUser, Eye, EyeSlash, Lock, TickCircle, ShieldSecurity, UserCirlceAdd, Danger, LoginCurve,  } from 'iconsax-reactjs';
 
 
 const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
@@ -31,6 +36,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
 
     const [recoveryPhrase, setRecoveryPhrase] = useState<string>('');
     const [copied, setCopied] = useState<boolean>(false);
+    const [isGeneratingKeys, setIsGeneratingKeys] = useState<boolean>(false);
 
     //Functions
     const passwordRequirements = [
@@ -57,9 +63,10 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
         setTimeout(() => setCopied(false), 10000);
     };
 
-    // Form submission handler
+    // Form submission handlers
     const validateInvite = useValidateUser();
     const createUser = useCreateUser();
+    const updateUser = useUpdateUser();
 
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -68,7 +75,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
 
         validateInvite.mutate({ invitationCode }, {
             onSuccess: (response) => {
-                sileo.success({ title: response.data.message || "Referral Validation was successfully!" });
+                sileo.success({ title: response.data.message || "Referral Validation was successful!" });
                 setReferrer(response.data.referrer)
                 setIndexPage(false);
                 setPasswordPage(true);
@@ -84,18 +91,73 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        sileo.show({ title: "Creating your account" })
+        sileo.show({ title: "Creating your account" });
+        setIsGeneratingKeys(true);
+
         createUser.mutate({ username: enteredUsername, password, referrer }, {
-            onSuccess: (response) => {
-                sileo.success({ title: response.data.message || "Your account was created successfully!" });
-                setRecoveryPhrase(response.data.recoveryUsername)
-                setPasswordPage(false);
-                setRecoveryPage(true);
+            onSuccess: async (response) => {
+                const phrase = response.data.recoveryUsername;
+                setRecoveryPhrase(phrase);
+                
+                try {
+                    sileo.show({ title: "Generating Secure E2EE Keys..." });
+                    
+                    // Generate the ECDH Identity Keys
+                    const keyPair = await generateIdentityKeyPair();
+                    
+                    // Export them to JSON (JWK)
+                    const publicJwk = await exportKeyToJwk(keyPair.publicKey);
+                    const privateJwk = await exportKeyToJwk(keyPair.privateKey);
+
+                    // Lock the private key using the RECOVERY PHRASE
+                    const encryptedVault = await lockPrivateKey(privateJwk, phrase);
+
+                    // Save the raw private key locally to Dexie
+                    await db.identity.add({
+                        id: "me",
+                        privateKeyJwk: privateJwk,
+                        publicKeyJwk: publicJwk,
+                    });
+
+                    // Send the Public Key and Encrypted Vault to the backend
+                    updateUser.mutate({
+                        publicKey: {
+                            crv: publicJwk.crv!,
+                            ext: publicJwk.ext!,
+                            key_ops: publicJwk.key_ops!,
+                            kty: publicJwk.kty!,
+                            x: publicJwk.x!,
+                            y: publicJwk.y!
+                        },
+                        encryptedVault: {
+                            vaultData: encryptedVault.vaultData,
+                            salt: encryptedVault.salt,
+                            iv: encryptedVault.iv
+                        }
+                    }, {
+                        onSuccess: () => {
+                            sileo.success({ title: "Account and Security Keys created successfully!" });
+                            setIsGeneratingKeys(false);
+                            setPasswordPage(false);
+                            setRecoveryPage(true);
+                        },
+                        onError: () => {
+                            sileo.error({ title: "Failed to upload security keys. Please try again." });
+                            setIsGeneratingKeys(false);
+                        }
+                    });
+
+                } catch (error) {
+                    console.error("Cryptography error:", error);
+                    sileo.error({ title: "Encryption failed on your device. Ensure you are using a modern browser." });
+                    setIsGeneratingKeys(false);
+                }
             },
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onError: (error: any) => {
                 const message = error?.response?.data?.message || "Account creation failed. Kindly restart the process.";
                 sileo.error({ title: message });
+                setIsGeneratingKeys(false);
             },
         });
     }
@@ -106,10 +168,10 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                 <div className="bg-accent/20 dark:bg-accent/5 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-2xl">
                     <div className="mb-8 text-center">
                         <div className="flex justify-center items-center bg-background mx-auto mb-4 border border-border rounded-full size-16">
-                            <User className="size-8 text-primary" />
+                            <TagUser className="size-7 md:size-7.5 xl:size-8 text-primary" />
                         </div>
                         <h2 className="mb-2 font-bold text-lg md:text-xl xl:text-2xl montserrat">Choose Your Username</h2>
-                        <p className="-mt-2 text-neutral-700 dark:text-neutral-400">Pick a unique username for your Knester profile</p>
+                        <p className="-mt-2 text-muted-foreground">Pick a unique username for your Knester profile</p>
                     </div>
                     <form onSubmit={onSubmit} className="space-y-6">
                         <div className="relative flex flex-col gap-y-1">
@@ -123,24 +185,24 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                             <div className='bg-red-100 my-4 p-4 rounded-xl text-red-500 capitalize'>
                                 <p>{error.message === "Request failed with status code 409" ? "Username already chosen, kindly try a new one" : "Sorry, we couldn't validate your username now, kindly try again."}</p>
                                 <div className='flex gap-x-2'>{generatedUsernames.map((username) => (
-                                    <p className='font-medium text-black'>{username}</p>
+                                    <p key={username} className='font-medium text-black'>{username}</p>
                                 ))}</div>
                             </div>}
                         {data && <div className='bg-green-100 my-4 p-4 rounded-xl text-green-500 capitalize'>
                             <CircleCheckBig className='inline size-3 md:size-4 xl:size-5' />
                             {data.message} press continue to enter password.
                         </div>}
-                        <Button text="Continue" loadingText={"Validating Invitation..."} disabled={validateInvite.isPending || (isLoading || isError)} loading={validateInvite.isPending} icon={<LogIn className='size-4 md:size-5' />} variant='primary' />
+                        <Button text="Continue" loadingText={"Validating Invitation..."} disabled={validateInvite.isPending || (isLoading || isError)} loading={validateInvite.isPending} icon={<LoginCurve className='size-4 md:size-4.5 xl:size-5' />} variant='primary' />
                     </form>
                 </div>}
             {passwordPage &&
                 <div className="bg-accent/20 dark:bg-accent/5 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-2xl">
                     <div className="mb-8 text-center">
                         <div className="flex justify-center items-center bg-background mx-auto mb-4 border border-border rounded-full size-16">
-                            <Lock className="size-8 text-primary" />
+                            <Lock className="size-7 md:size-7.5 xl:size-8 text-primary" />
                         </div>
                         <h2 className="mb-2 font-bold text-lg md:text-xl xl:text-2xl montserrat">Secure Your Account</h2>
-                        <p className="-mt-2 text-neutral-700 dark:text-neutral-400">Create a strong password to protect your account</p>
+                        <p className="-mt-2 text-muted-foreground">Create a strong password to protect your account</p>
                     </div>
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="flex flex-col gap-y-1">
@@ -150,7 +212,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                             <div className="relative">
                                 <input type={showPassword ? 'text' : 'password'} id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none w-full text-sm md:text-base xl:text-lg duration-300 focus:caret-primary" placeholder="Enter your password" required />
                                 <button type="button" onClick={() => setShowPassword(!showPassword)} className="top-1/2 right-3 absolute text-foreground hover:text-gray-600 -translate-y-1/2 cursor-pointer transform">
-                                    {showPassword ? <EyeOff className="size-4 md:size-5" /> : <Eye className="size-4 md:size-5" />}
+                                    {showPassword ? <EyeSlash className="size-4 md:size-4.5 xl:size-5" /> : <Eye className="size-4 md:size-4.5 xl:size-5" />}
                                 </button>
                             </div>
                         </div>
@@ -162,7 +224,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                             <div className="relative">
                                 <input type={showConfirmPassword ? 'text' : 'password'} id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none w-full text-sm md:text-base xl:text-lg duration-300 focus:caret-primary" placeholder="Confirm your password" required />
                                 <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="top-1/2 right-3 absolute text-foreground hover:text-gray-600 -translate-y-1/2 cursor-pointer transform">
-                                    {showConfirmPassword ? <EyeOff className="size-4 md:size-5" /> : <Eye className="size-4 md:size-5" />}
+                                    {showConfirmPassword ? <EyeSlash className="size-4 md:size-4.5 xl:size-5" /> : <Eye className="size-4 md:size-4.5 xl:size-5" />}
                                 </button>
                             </div>
                             {confirmPassword && !passwordsMatch && (
@@ -178,7 +240,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                             <div className="space-y-1">
                                 {passwordRequirements.map((req, index) => (
                                     <div key={`passwordRequirements_${index}`} className="flex items-center space-x-2">
-                                        <Check className={`size-4 ${req.met ? 'text-green-500' : 'text-gray-300'}`} />
+                                        <TickCircle className={`size-4 ${req.met ? 'text-green-500' : 'text-gray-300'}`} />
                                         <span className={`${req.met ? 'text-green-600' : 'text-gray-500'}`}>
                                             {req.text}
                                         </span>
@@ -186,7 +248,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                                 ))}
                             </div>
                         </div>
-                        <Button text="Create Account" loadingText={"Creating Account..."} disabled={createUser.isPending || (!allRequirementsMet || !passwordsMatch)} loading={createUser.isPending} icon={<UserPlus className='size-4 md:size-5' />} variant='primary' />
+                        <Button text="Create Account" loadingText={"Setting up encryption..."} disabled={createUser.isPending || isGeneratingKeys || !allRequirementsMet || !passwordsMatch} loading={createUser.isPending || isGeneratingKeys} icon={<UserCirlceAdd className='size-4 md:size-4.5 xl:size-5' />} variant='primary' />
                     </form>
                 </div>
             }
@@ -194,34 +256,34 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                 <div className="bg-accent/20 dark:bg-accent/5 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-2xl">
                     <div className="mb-8 text-center">
                         <div className="flex justify-center items-center bg-background mx-auto mb-4 border border-border rounded-full size-16">
-                            <Shield className="size-8 text-amber-500" />
+                            <ShieldSecurity className="size-7 md:size-7.5 xl:size-8 text-amber-500" />
                         </div>
                         <h2 className="mb-2 font-bold text-lg md:text-xl xl:text-2xl montserrat">Secure Your Account</h2>
-                        <p className="-mt-2 text-neutral-700 dark:text-neutral-400">Your recovery phrase is the only way to restore access to your account if you lose your password.</p>
+                        <p className="-mt-2 text-muted-foreground">Your recovery phrase is the only way to restore access to your account if you lose your password.</p>
                     </div>
                     <div className="bg-amber-50 mb-6 p-4 border border-amber-200 rounded-2xl">
                         <div className="flex items-start space-x-3">
-                            <AlertTriangle className="flex-shrink-0 mt-0.5 size-4 md:size-5 text-amber-600" />
+                            <Danger className="flex-shrink-0 mt-0.5 size-4 md:size-4.5 xl:size-5 text-amber-600" />
                             <div>
                                 <p className="mb-1 font-semibold text-amber-600 dark:text-amber-800">Important Security Notice</p>
-                                <ul className="space-y-1 text-amber-500 dark:text-amber-700">
-                                    <li>• Store this phrase in a safe, offline location</li>
-                                    <li>• Never share it with anyone or store it digitally</li>
-                                    <li>• You'll need it to recover your account if you lose access</li>
-                                    <li>• Knester cannot recover your account without this phrase</li>
+                                <ul className="space-y-1 pl-4 text-amber-500 dark:text-amber-700 list-disc">
+                                    <li> Store this phrase in a safe, offline location</li>
+                                    <li> Never share it with anyone or store it digitally</li>
+                                    <li> You'll need it to recover your account if you lose access</li>
+                                    <li> You'll need it to recover your messages if you login in a new browser</li>
+                                    <li className='uppercase'> Knester cannot recover your account without this phrase</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <div className='bg-background p-4 md:p-6 xl:p-8 border border-border rounded-2xl'>
                         <p className='my-2 font-medium text-base md:text-lg xl:text-xl text-center montserrat'>{recoveryPhrase}</p>
-                        <Button onClick={() => handleCopy(recoveryPhrase)} text={copied ? 'Copied!' : 'Copy Recovery Phrase'} disabled={false} loading={false} icon={<CheckCircle className="size-4 md:size-5" />} variant='success' />
+                        <Button onClick={() => handleCopy(recoveryPhrase)} text={copied ? 'Copied!' : 'Copy Recovery Phrase'} disabled={false} loading={false} icon={<TickCircle className="size-4 md:size-4.5 xl:size-5" />} variant='success' />
                     </div>
-                    {copied && <Link to={"/onboarding"} className='block bg-primary hover:bg-accent my-4 p-3 rounded-2xl w-full text-center'>Enter Your Feed</Link>}
+                    {copied && <Link to={"/onboarding"} className='block bg-primary hover:bg-accent my-4 p-3 rounded-2xl w-full text-center'>Continue</Link>}
                 </div>
             }
         </>
-
     );
 }
 

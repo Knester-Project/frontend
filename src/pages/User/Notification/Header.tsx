@@ -48,7 +48,7 @@ const Header = ({ type, update }: { type: string, update: (value: string) => voi
                 <h1 className="font-semibold text-sm md:text-base xl:text-lg">Notifications</h1>
                 <div className="bg-border w-0.5 h-7"></div>
                 <Select onValueChange={update}>
-                    <SelectTrigger className="bg-primary/10 border-border w-full text-[11px] text-muted md:text-xs xl:text-sm">
+                    <SelectTrigger className="bg-primary/10 border-border w-full text-[11px] text-primary-foreground md:text-xs xl:text-sm">
                         <SelectValue placeholder={`Filter: ${type}`} />
                     </SelectTrigger>
                     <SelectContent>

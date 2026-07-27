@@ -9,8 +9,8 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // Icons
-import { Lock, MapPin, MessageCircle } from "lucide-react";
-import { Verify } from "iconsax-reactjs";
+import { Lock, MapPin } from "lucide-react";
+import { MessageText1, Verify } from "iconsax-reactjs";
 
 // Types
 export type GeoPoint = {
@@ -74,7 +74,7 @@ export default function UserCard({ user, index = 0 }: UserCardProps) {
             className="group relative flex flex-col justify-between bg-accent/10 hover:shadow-black/5 hover:shadow-xl border border-border/60 hover:border-primary/30 rounded-3xl overflow-hidden transition-all hover:-translate-y-1 duration-300 cursor-pointer">
 
             {user.user.isSuspended && (
-                <div className="z-10 absolute inset-0 flex justify-center items-center bg-background/60 backdrop-blur-md rounded-2xl">
+                <div className="z-5 absolute inset-0 flex justify-center items-center bg-background/60 backdrop-blur-md rounded-2xl">
                     <span className="bg-background/80 shadow-sm px-3 py-1.5 rounded-lg font-bold text-xs uppercase tracking-widest">
                         Suspended
                     </span>
@@ -104,7 +104,7 @@ export default function UserCard({ user, index = 0 }: UserCardProps) {
 
                         {/* The Lock Overlay: Absolutely positioned over the blurred image */}
                         {isLocked && (
-                            <div className="z-10 absolute inset-0 flex justify-center items-center bg-background/20">
+                            <div className="z-5 absolute inset-0 flex justify-center items-center bg-background/20">
                                 <Lock className="drop-shadow-lg size-4 md:size-5 xl:size-6 text-foreground/90" />
                             </div>
                         )}
@@ -112,7 +112,11 @@ export default function UserCard({ user, index = 0 }: UserCardProps) {
 
                     {/* Online Marker */}
                     {user.isOnline && (
-                        <div className="-right-1 -bottom-1 z-20 absolute bg-green-500 rounded-full ring-4 ring-card size-3 md:size-3.5 xl:size-4" />
+                        <div
+                            className="-right-1 -bottom-1 z-6 absolute bg-yellow-500 rounded-full ring-4 ring-card size-3 md:size-3.5 xl:size-4"
+                            aria-label={`${user.user.username} was recently online`}
+                            title={`${user.user.username} was recently online`}
+                        />
                     )}
                 </div>
 
@@ -155,8 +159,8 @@ export default function UserCard({ user, index = 0 }: UserCardProps) {
                         <MapPin className="size-3.5" />
                         <span className="font-semibold montserrat">
                             {user.distanceKm < 1
-                                ? `${Math.round(user.distanceKm * 1000)} m apart`
-                                : `${user.distanceKm.toFixed(1)} km apart`}
+                                ? `${Math.round(user.distanceKm * 1000)} M apart`
+                                : `${user.distanceKm.toFixed(1)} KM apart`}
                         </span>
                     </div>
                 )}
@@ -165,7 +169,7 @@ export default function UserCard({ user, index = 0 }: UserCardProps) {
             {/* Chat CTA - Transformed into a proper flex button layout */}
             <Link to="/messages" search={{ username: user.user.username }}
                 className="flex justify-center items-center gap-2 bg-primary/10 hover:bg-primary w-full h-9 font-semibold text-[11px] text-primary hover:text-primary-foreground md:text-xs xl:text-sm transition-colors duration-300">
-                <MessageCircle className="size-4" />
+                <MessageText1 className="size-4" />
                 <span>Start Chat</span>
             </Link>
         </motion.div>

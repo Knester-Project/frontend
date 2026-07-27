@@ -1,42 +1,47 @@
-import crypto from "crypto";
+// Helpers for Base64 conversion
+const toBase64 = (buffer: ArrayBuffer | Uint8Array) => btoa(String.fromCharCode(...new Uint8Array(buffer)));
+const fromBase64 = (base64: string) => Uint8Array.from(atob(base64), c => c.charCodeAt(0));
 
-const ALGO = "aes-256-gcm";
-const KEY = crypto.randomBytes(32);
+// Encrypts a message using a shared CryptoKey
+export async function encrypt(text: string, cryptoKey: CryptoKey) {
+    const iv = window.crypto.getRandomValues(new Uint8Array(12));
+    const encodedText = new TextEncoder().encode(text);
 
-// Encrypt Message
-export function encrypt(text: string) {
-    const iv = crypto.randomBytes(12);
+    // Web Crypto appends the 16-byte Auth Tag automatically to the end of the ciphertext
+    const encryptedBuffer = await window.crypto.subtle.encrypt(
+        { name: "AES-GCM", iv },
+        cryptoKey,
+        encodedText
+    );
 
-    const cipher = crypto.createCipheriv(ALGO, KEY, iv);
-
-    const encrypted = Buffer.concat([
-        cipher.update(text, "utf8"),
-        cipher.final()
-    ]);
-
-    const tag = cipher.getAuthTag();
+    // Split the ciphertext and the tag to match your DB schema
+    const encryptedArray = new Uint8Array(encryptedBuffer);
+    const ciphertext = encryptedArray.slice(0, -16);
+    const tag = encryptedArray.slice(-16);
 
     return {
-        ciphertext: encrypted.toString("base64"),
-        iv: iv.toString("base64"),
-        tag: tag.toString("base64")
+        ciphertext: toBase64(ciphertext),
+        iv: toBase64(iv),
+        tag: toBase64(tag)
     };
 }
 
-// Decrypt Message
-export function decrypt(ciphertext: string, iv: string, tag: string) {
-    const decipher = crypto.createDecipheriv(
-        ALGO,
-        KEY,
-        Buffer.from(iv, "base64")
+// Decrypts a message using a shared CryptoKey
+export async function decrypt(ciphertext: string, iv: string, tag: string, cryptoKey: CryptoKey): Promise<string> {
+    const ivBuffer = fromBase64(iv);
+    const ciphertextBuffer = fromBase64(ciphertext);
+    const tagBuffer = fromBase64(tag);
+
+    // Recombine the ciphertext and tag for the Web Crypto API
+    const combinedBuffer = new Uint8Array(ciphertextBuffer.length + tagBuffer.length);
+    combinedBuffer.set(ciphertextBuffer, 0);
+    combinedBuffer.set(tagBuffer, ciphertextBuffer.length);
+
+    const decryptedBuffer = await window.crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: ivBuffer },
+        cryptoKey,
+        combinedBuffer
     );
 
-    decipher.setAuthTag(Buffer.from(tag, "base64"));
-
-    const decrypted = Buffer.concat([
-        decipher.update(Buffer.from(ciphertext, "base64")),
-        decipher.final()
-    ]);
-
-    return decrypted.toString("utf8");
+    return new TextDecoder().decode(decryptedBuffer);
 }

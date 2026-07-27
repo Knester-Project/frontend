@@ -22,7 +22,7 @@ export default function Critical(
                 </h2>
 
                 {/* Description */}
-                <p className="mb-6 text-muted leading-relaxed">
+                <p className="mb-6 text-muted-foreground leading-relaxed">
                     {description}
                 </p>
 

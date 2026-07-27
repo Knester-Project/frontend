@@ -46,6 +46,12 @@ export const createUser = async (data: { username: string, password: string, ref
     return response.data;
 }
 
+// Update Chat Keys
+export const updateUser = async (data: UserUpdatePayload) => {
+    const response = await userAxios.post(`users/update`, data);
+    return response.data;
+}
+
 // Login User
 export const authenticateUser = async (data: AuthInput) => {
     const response = await axiosUnauthInstance.post("auth/login", data);
@@ -435,5 +441,15 @@ export const fetchAllConv = async (queries: OffSetQueries) => {
 // Create Conversation (Group Message)
 export const newConv = async (data: NewConvPayload) => {
     const response = await userAxios.post(`chat/create/conversations`, data);
+    return response.data;
+}
+
+// Fetch Messages
+export const fetchMessages = async (conversationId: string, queries: CursorQueries) => {
+    const params = new URLSearchParams();
+
+    if (queries.cursor) params.append("cursor", queries.cursor);
+    if (queries.limit) params.append("limit", String(queries.limit));
+    const response = await userAxios.get(`chat/fetch/messages/${conversationId}?${params.toString()}`);
     return response.data;
 }

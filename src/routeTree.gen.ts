@@ -26,6 +26,8 @@ import { Route as DashboardFeedRouteImport } from './routes/_dashboard/feed'
 import { Route as AuthWaitlistRouteImport } from './routes/_auth/waitlist'
 import { Route as AuthOnboardingRouteImport } from './routes/_auth/onboarding'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as AuthGuidelinesRouteImport } from './routes/_auth/guidelines'
+import { Route as AuthFeaturesRouteImport } from './routes/_auth/features'
 import { Route as AuthContactRouteImport } from './routes/_auth/contact'
 
 const TermsRoute = TermsRouteImport.update({
@@ -111,6 +113,16 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AuthGuidelinesRoute = AuthGuidelinesRouteImport.update({
+  id: '/guidelines',
+  path: '/guidelines',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthFeaturesRoute = AuthFeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthContactRoute = AuthContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -121,6 +133,8 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/contact': typeof AuthContactRoute
+  '/features': typeof AuthFeaturesRoute
+  '/guidelines': typeof AuthGuidelinesRoute
   '/login': typeof AuthLoginRoute
   '/onboarding': typeof AuthOnboardingRoute
   '/waitlist': typeof AuthWaitlistRoute
@@ -139,6 +153,8 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/contact': typeof AuthContactRoute
+  '/features': typeof AuthFeaturesRoute
+  '/guidelines': typeof AuthGuidelinesRoute
   '/login': typeof AuthLoginRoute
   '/onboarding': typeof AuthOnboardingRoute
   '/waitlist': typeof AuthWaitlistRoute
@@ -160,6 +176,8 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/_auth/contact': typeof AuthContactRoute
+  '/_auth/features': typeof AuthFeaturesRoute
+  '/_auth/guidelines': typeof AuthGuidelinesRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/onboarding': typeof AuthOnboardingRoute
   '/_auth/waitlist': typeof AuthWaitlistRoute
@@ -180,6 +198,8 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/terms'
     | '/contact'
+    | '/features'
+    | '/guidelines'
     | '/login'
     | '/onboarding'
     | '/waitlist'
@@ -198,6 +218,8 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/terms'
     | '/contact'
+    | '/features'
+    | '/guidelines'
     | '/login'
     | '/onboarding'
     | '/waitlist'
@@ -218,6 +240,8 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/terms'
     | '/_auth/contact'
+    | '/_auth/features'
+    | '/_auth/guidelines'
     | '/_auth/login'
     | '/_auth/onboarding'
     | '/_auth/waitlist'
@@ -361,6 +385,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/guidelines': {
+      id: '/_auth/guidelines'
+      path: '/guidelines'
+      fullPath: '/guidelines'
+      preLoaderRoute: typeof AuthGuidelinesRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/features': {
+      id: '/_auth/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof AuthFeaturesRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/contact': {
       id: '/_auth/contact'
       path: '/contact'
@@ -373,6 +411,8 @@ declare module '@tanstack/react-router' {
 
 interface AuthRouteRouteChildren {
   AuthContactRoute: typeof AuthContactRoute
+  AuthFeaturesRoute: typeof AuthFeaturesRoute
+  AuthGuidelinesRoute: typeof AuthGuidelinesRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthOnboardingRoute: typeof AuthOnboardingRoute
   AuthWaitlistRoute: typeof AuthWaitlistRoute
@@ -381,6 +421,8 @@ interface AuthRouteRouteChildren {
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthContactRoute: AuthContactRoute,
+  AuthFeaturesRoute: AuthFeaturesRoute,
+  AuthGuidelinesRoute: AuthGuidelinesRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthOnboardingRoute: AuthOnboardingRoute,
   AuthWaitlistRoute: AuthWaitlistRoute,

@@ -5,7 +5,7 @@ import { useLocationStore } from "@/stores/location.store";
 import { Button } from "@/components/ui/button";
 
 // Icons
-import { Map1, LocationCross, Warning2 } from "iconsax-reactjs";
+import { Location, LocationCross, Warning2 } from "iconsax-reactjs";
 
 export function PermissionScreen() {
 
@@ -23,7 +23,7 @@ export function PermissionScreen() {
                             {isDenied ? (
                                 <LocationCross className="size-8 md:size-10 xl:size-12" />
                             ) : (
-                                <Map1 className="size-8 md:size-10 xl:size-12" />
+                                <Location className="size-8 md:size-10 xl:size-12" />
                             )}
                         </div>
                     </div>

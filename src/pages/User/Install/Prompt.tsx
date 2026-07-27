@@ -48,7 +48,7 @@ export function PwaInstallPrompt() {
                             <h3 className="font-semibold">
                                 App Installed!
                             </h3>
-                            <p className="mt-1 text-[11px] text-muted md:text-xs xl:text-sm">
+                            <p className="mt-1 text-[11px] text-muted-foreground md:text-xs xl:text-sm">
                                 You are already using the installed application.
                             </p>
                         </div>
@@ -59,7 +59,7 @@ export function PwaInstallPrompt() {
                             <h1 className="font-bold text-lg sm:text-xl md:text-2xl xl:text-3xl">
                                 Experience Knester Web Like an App.
                             </h1>
-                            <p className="mt-2 text-muted">
+                            <p className="mt-2 text-muted-foreground">
                                 Install Knester's PWA for faster access, offline capabilities, and a seamless desktop/android and or iOS experience. It's lightweight, secure, and always ready.
                             </p>
                         </header>
@@ -74,7 +74,7 @@ export function PwaInstallPrompt() {
                                     Install App
                                 </h3>
 
-                                <p className="mt-1 text-[11px] text-muted md:text-xs xl:text-sm">
+                                <p className="mt-1 text-[11px] text-muted-foreground md:text-xs xl:text-sm">
                                     Install the application for a faster,
                                     full-screen experience.
                                 </p>
@@ -102,7 +102,7 @@ export function PwaInstallPrompt() {
                                 Install App on iPhone
                             </h3>
 
-                            <p className="mt-1 mb-3 text-[11px] text-muted md:text-xs xl:text-sm">
+                            <p className="mt-1 mb-3 text-[11px] text-muted-foreground md:text-xs xl:text-sm">
                                 Install the app for the best experience.
                             </p>
 

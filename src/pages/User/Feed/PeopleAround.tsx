@@ -89,13 +89,13 @@ const PeopleAround = () => {
                                         {/* Avatar */}
                                         <div className="relative">
                                             <Avatar className={cn(
-                                                "ring-border rounded-2xl ring-2 size-14 overflow-hidden transition-all duration-300",
+                                                "ring-border rounded-md ring-2 size-14 overflow-hidden transition-all duration-300",
                                                 user.user.isPremium && "ring-primary/40 ring-offset-2 ring-offset-background")}>
                                                 <AvatarImage src={avatar} className={cn("w-full h-full object-cover transition-all duration-300",
                                                     isLocked && "blur-sm scale-110 brightness-75")} />
 
-                                                <AvatarFallback className={cn("flex justify-center items-center rounded-2xl w-full h-full font-bold text-sm",
-                                                    user.user.isPremium ? "bg-primary/10 text-primary" : "bg-muted text-foreground/80")}>
+                                                <AvatarFallback className={cn("flex justify-center items-center rounded-md w-full h-full font-bold text-sm",
+                                                    user.user.isPremium ? "bg-primary/10 text-primary" : "bg-muted text-foreground/70")}>
                                                     {initials}
                                                 </AvatarFallback>
 
@@ -109,7 +109,11 @@ const PeopleAround = () => {
 
                                             {/* Online indicator */}
                                             {user.isOnline && (
-                                                <div className="-right-1 -bottom-1 absolute bg-green-500 rounded-full ring-4 ring-card size-3" />
+                                                <div
+                                                    className="-right-1 -bottom-1 absolute bg-yellow-500 rounded-full ring-4 ring-card size-3"
+                                                    aria-label={`${user.user.username} was recently online`}
+                                                    title={`${user.user.username} was recently online`}
+                                                />
                                             )}
                                         </div>
                                     </Link>
@@ -125,8 +129,10 @@ const PeopleAround = () => {
                                         </p>
 
                                         {user.distanceKm !== null && (
-                                            <span className="mt-0.5 text-[10px] text-foreground/80 montserrat">
-                                                {user.distanceKm.toFixed(1)} km away
+                                            <span className="text-[10px] text-foreground/80 montserrat">
+                                                {user.distanceKm < 1
+                                                    ? `${Math.round(user.distanceKm * 1000)} M apart`
+                                                    : `${user.distanceKm.toFixed(1)} kM apart`}
                                             </span>
                                         )}
                                     </div>

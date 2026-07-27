@@ -73,7 +73,7 @@ const Body = ({ user }: { user: UserDetails }) => {
                         {icons[activeTab] || null}
                         <p className="font-medium">{label}</p>
                     </div>
-                    <div className="flex items-center gap-0.5 p-1 border border-muted/20 rounded-md">
+                    <div className="flex items-center gap-0.5 p-1 border border-muted rounded-md">
                         {TABS.map((tab) => {
                             const Icon = tab.icon;
                             return (

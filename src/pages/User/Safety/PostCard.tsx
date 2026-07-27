@@ -132,7 +132,7 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
                     {socialMedia.map((item, i) => (
                         <a key={i} href={item.profileLink} target="_blank" className="flex justify-between items-center text-sm hover:underline">
                             <span className="font-medium">{item.platform}</span>
-                            <span className="text-muted">@{item.username}</span>
+                            <span className="text-muted-foreground">@{item.username}</span>
                         </a>
                     ))}
                 </div>
@@ -141,17 +141,17 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
             {/* Views */}
             <div className="flex justify-between">
                 {vibes === 1 && hasVibed ? (
-                    <p>You vibed with this</p>
+                    <p className="text-muted-foreground">You vibed with this</p>
                 ) : vibes > 0 && hasVibed ? (
-                    <p>You and {vibes - 1} people vibed with this</p>
+                    <p className="text-muted-foreground">You and {vibes - 1} people vibed with this</p>
                 ) : vibes > 0 ? (
-                    <p>{vibes} people vibed with this</p>
+                    <p className="text-muted-foreground">{vibes} people vibed with this</p>
                 ) : null}
                 <Views views={views} />
             </div>
 
             {/* Actions */}
-            <footer className="flex justify-between items-center pt-3 border-t text-muted">
+            <footer className="flex justify-between items-center pt-3 border-t text-muted-foreground">
                 <Vibe handleToggle={handleToggle} userVibed={userVibed} vibes={vibes} />
 
                 <Comment postId={post._id} comments={comments} postModel={"SafetyPost"} />

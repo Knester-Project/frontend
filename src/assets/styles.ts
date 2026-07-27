@@ -247,7 +247,7 @@ const STYLES: StyleConfig[] = [
             hair: {
                 label: "Hair",
                 type: "swatch",
-                values: ["bun", "sideCombed", "spiky", "undercut"],
+                values: ["bun", "spiky", "undercut"],
             },
             hairColor: {
                 label: "Hair color",

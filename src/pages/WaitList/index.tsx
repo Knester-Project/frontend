@@ -80,7 +80,7 @@ const Index = () => {
             <section className="bg-accent/20 dark:bg-accent/5 shadow-lg p-4 md:p-6 xl:p-8 border border-border rounded-2xl">
                 <div className="mb-8 text-center">
                     <h2 className="mb-4 font-bold text-xl md:text-2xl xl:text-3xl text-balance">Join Our List</h2>
-                    <p className="text-muted">Stay updated with the latest news and opportunities. We'll never spam you.</p>
+                    <p className="text-muted-foreground">Stay updated with the latest news and opportunities. We'll never spam you.</p>
                 </div>
                 <div className="flex flex-col gap-y-3 mt-4">
 
