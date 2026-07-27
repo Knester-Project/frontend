@@ -421,6 +421,12 @@ export const deleteNotification = async (id: string) => {
     return response.data;
 }
 
+// Fetch User Encrypted Vault
+export const fetchVault = async () => {
+    const response = await userAxios.get(`users/vault`);
+    return response.data;
+}
+
 // Fetch a Particular Conversation
 export const fetchParticularUserConv = async (username: string) => {
     const response = await userAxios.get(`chat/fetch/conversation/${username}`);

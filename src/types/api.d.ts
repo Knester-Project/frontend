@@ -18,21 +18,25 @@ declare type WaitListPayload = {
     email: string
 }
 
+type PubicKey = {
+    crv: string,
+    ext: boolean,
+    key_ops: string[],
+    kty: string,
+    x: string,
+    y: string
+}
+
+type EncryptedVault = {
+    vaultData: string,
+    salt: string,
+    iv: string
+}
+
 // Update User Payload
 declare type UserUpdatePayload = {
-    publicKey: {
-        crv: string,
-        ext: boolean,
-        key_ops: string[],
-        kty: string,
-        x: string,
-        y: string
-    },
-    encryptedVault: {
-        vaultData: string,
-        salt: string,
-        iv: string
-    }
+    publicKey: PublicKey,
+    encryptedVault: EncryptedVault
 }
 
 // For Safety Post Creation

@@ -19,10 +19,9 @@ type RecoveryMode = "restore" | "sync";
 interface SecuritySyncProps {
     mode: RecoveryMode;
     userEncryptedVault?: { vaultData: string; salt: string; iv: string };
-    onSuccess: () => void;
 }
 
-export default function SecuritySync({ mode, userEncryptedVault, onSuccess }: SecuritySyncProps) {
+export default function VaultSync({ mode, userEncryptedVault }: SecuritySyncProps) {
 
     const [recoveryPhrase, setRecoveryPhrase] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
@@ -48,7 +47,6 @@ export default function SecuritySync({ mode, userEncryptedVault, onSuccess }: Se
             });
 
             sileo.success({ title: "Messages unlocked successfully!" });
-            onSuccess();
             
         } catch (error) {
             console.error("Decryption failed:", error);
@@ -83,7 +81,6 @@ export default function SecuritySync({ mode, userEncryptedVault, onSuccess }: Se
             }, {
                 onSuccess: () => {
                     sileo.success({ title: "Security keys synced with server!" });
-                    onSuccess();
                 },
                 onError: () => sileo.error({ title: "Failed to upload keys. Please try again." })
             });

@@ -257,6 +257,14 @@ export const allConversationsOptions = (queries: OffSetQueries = { offset: 0, li
     });
 };
 
+// Fetch Vault
+export const useUserVault = () => {
+    return useQuery({
+        queryKey: ['chat-vault'],
+        queryFn: () => Api.fetchVault(),
+    })
+}
+
 // Fetch a Single Conversation
 export const singleConversationOptions = (username: string) => {
     return queryOptions({

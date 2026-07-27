@@ -42,8 +42,9 @@ export const Route = createFileRoute('/_dashboard/messages')({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errorComponent: (error: any) => (
     <ErrorPage
-      code={error.error?.status === 404 ? "404" : "500"}
-      title={error.error?.status === 404 ? "Chat Not Found" : "Something went wrong"}
+      showRetryButton={false}
+      code={error.error.status}
+      title={error.error?.status === 404 ? "Chat Not Found" : (error.error.response.data.message || "Something went wrong")}
       description="We couldn't load this conversation."
     />
   ),
