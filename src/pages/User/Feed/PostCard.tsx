@@ -159,7 +159,7 @@ export default function PostCard({ post, index = 0, nextCursor = null, isOwner =
                         {/* Author row */}
                         <section className="flex justify-between items-start gap-3">
                             <div className="flex items-center gap-2.5">
-                                <Link to="/profile" search={{ profile: post.user.username }}>
+                                <Link disabled={post.user.profile?.profileLock} to="/profile" search={{ profile: post.user.username }}>
                                     <Avatar className="rounded-md size-9 shrink-0">
                                         <AvatarImage src={post.user?.profile?.profilePicture} />
                                         <AvatarFallback className="bg-primary/10 rounded-md font-semibold text-primary text-xs">
@@ -169,7 +169,7 @@ export default function PostCard({ post, index = 0, nextCursor = null, isOwner =
                                 </Link>
                                 <div>
                                     <div className="flex items-center gap-x-1.5">
-                                        <Link to="/profile" search={{ profile: post.user.username }} className="font-semibold text-[11px] md:text-xs xl:text-sm leading-none">
+                                        <Link to="/profile" disabled={post.user.profile?.profileLock} search={{ profile: post.user.username }} className="font-semibold text-[11px] md:text-xs xl:text-sm leading-none">
                                             {post.user?.username || "user"}
                                         </Link>
 

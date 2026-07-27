@@ -40,6 +40,15 @@ function Features() {
 
     return (
         <main>
+
+            {/* Header */}
+            <header className="top-0 z-5 sticky flex items-center gap-3 bg-card/80 backdrop-blur-lg py-3">
+                <div className="flex items-center gap-2">
+                    <TickCircle className="size-5 md:size-5.5 xl:size-6 text-primary" />
+                    <h1 className="font-bold text-lg md:text-xl xl:text-2xl">Available Features</h1>
+                </div>
+            </header>
+
             {/* Intro */}
             <div>
                 <motion.div
@@ -123,7 +132,7 @@ function Features() {
                     <Rocket className="flex-shrink-0 mt-0.5 size-3 md:size-3.5 xl:size-4 text-muted-foreground" />
                     <p className="text-[10px] text-muted-foreground md:text-[11px] xl:text-xs leading-relaxed">
                         Feature availability and timelines may change. We prioritise security and stability above all else —
-                        thank you for being part of the CircleSync community.
+                        thank you for being part of the Knester community.
                     </p>
                 </motion.div>
             </div>

@@ -9,6 +9,7 @@ import ProfileLoader from '@/pages/User/Profile/ProfileLoader';
 import { APP_NAME } from '../__root';
 
 export const Route = createFileRoute('/_dashboard/profile')({
+
   head: () => ({
     meta: [
       {
@@ -35,11 +36,11 @@ export const Route = createFileRoute('/_dashboard/profile')({
   errorComponent: (error: any) => (
     <>
       {error.error.status === 404
-        ?
-        <ErrorPage code="404" title="Profile Not Found"
+        ? <ErrorPage showRetryButton={false} code="404" title="Profile Not Found"
           description="We couldn't find a profile matching that username. Try checking the spelling or searching for a different name." />
-        :
-        <ErrorPage />
+        : error.error.status === 403
+          ? <ErrorPage showRetryButton={false} code="403" title="Profile Is Locked" description={error.error.response.data.message || "This user locked their profile. They prefer more privacy."} />
+          : <ErrorPage />
       }
     </>
   ),

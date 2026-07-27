@@ -258,8 +258,8 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                         <div className="flex justify-center items-center bg-background mx-auto mb-4 border border-border rounded-full size-16">
                             <ShieldSecurity className="size-7 md:size-7.5 xl:size-8 text-amber-500" />
                         </div>
-                        <h2 className="mb-2 font-bold text-lg md:text-xl xl:text-2xl montserrat">Secure Your Account</h2>
-                        <p className="-mt-2 text-muted-foreground">Your recovery phrase is the only way to restore access to your account if you lose your password.</p>
+                        <h2 className="font-bold text-lg md:text-xl xl:text-2xl montserrat">Secure Your Account</h2>
+                        <p className="text-muted-foreground">Your recovery phrase is the only way to restore access to your account if you lose your password.</p>
                     </div>
                     <div className="bg-amber-50 mb-6 p-4 border border-amber-200 rounded-2xl">
                         <div className="flex items-start space-x-3">
