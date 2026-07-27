@@ -21,7 +21,7 @@ import ErrorText from "@/components/ErrorText";
 // Icons
 import {
     AddSquare, Trash, DirectSend, CloseSquare, GalleryFavorite, Lock, MessageRemove, Calendar1, AlignLeft, Tag, GridLock,
-    ProfileTick, GlobalSearch
+    TagUser, GlobalSearch
 } from "iconsax-reactjs";
 import { Rocket } from "lucide-react";
 
@@ -301,7 +301,7 @@ export default function ProfileForm({ isPremium, close, remainingMedia = 10, MAX
 
             {/* ── Submit ── */}
             <Button type="submit" disabled={isSubmitting || syncProfile.isPending} className="shadow-lg shadow-primary/20 rounded-xl w-full h-10 font-semibold text-sm">
-                <ProfileTick variant="Bold" />
+                <TagUser variant="Bold" className="size-5" />
                 {isSubmitting ? (
                     <span className="flex items-center gap-2">
                         <span className="border-2 border-primary-foreground/40 border-t-primary-foreground rounded-full size-4 animate-spin" />

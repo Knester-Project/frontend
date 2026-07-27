@@ -29,8 +29,8 @@ type TabId = (typeof TABS)[number]["id"];
 
 const Body = ({ user }: { user: UserDetails }) => {
 
-    const { username, isEmailVerified, discoverable, isSuspended, email, createdAt } = user;
-    const { media = [], profileLock = false, chatLock = false, flagged = false, dateOfBirth = "" } = user.profile ?? {};
+    const { username, isEmailVerified, isSuspended, email, createdAt } = user;
+    const { media = [], profileLock = false, chatLock = false, discoverable = false, flagged = false, dateOfBirth = "" } = user.profile ?? {};
 
     const { colors } = useProfileTheme();
     const [activeTab, setActiveTab] = useState<TabId>("account");

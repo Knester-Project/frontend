@@ -22,7 +22,7 @@ const MEDIA_LENGTH = 10;
 
 const MyHeader = ({ user }: { user: Me }) => {
 
-    const { username, isPremium, isModerator, discoverable,
+    const { username, isPremium, isModerator,
         isCore, circlesJoined, totalPosts, isSuspended, referralPrivilege } = user;
 
     const {
@@ -164,7 +164,7 @@ const MyHeader = ({ user }: { user: Me }) => {
                             dateOfBirth: dateOfBirth ? dateOfBirth.toString() : "",
                             profileLock,
                             chatLock,
-                            discoverable
+                            discoverable: user.profile?.discoverable
                         }}
                     />
                 </Overlay>

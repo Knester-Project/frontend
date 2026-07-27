@@ -189,6 +189,7 @@ type MyProfile = {
     flagged: boolean;
     circleMembers: number;
     profileLock: boolean;
+    discoverable: boolean;
     chatLock: boolean;
 }
 
@@ -201,7 +202,6 @@ declare type Me = {
     isModerator: boolean;
     isCore: boolean;
     isSuspended: boolean;
-    discoverable: boolean;
     circlesJoined: number;
     totalPosts: number;
     profile: null | MyProfile;
@@ -221,6 +221,7 @@ type UserProfile = {
     circleMembers: number;
     profileLock: boolean;
     chatLock: boolean;
+    discoverable: boolean;
     lastSeen?: string;
     isOnline: boolean;
     flagged: boolean;
@@ -234,7 +235,6 @@ declare type UserDetails = {
     isModerator: boolean;
     isCore: boolean;
     isSuspended: boolean;
-    discoverable: boolean;
     circlesJoined: number;
     totalPosts: number;
     relationship: {

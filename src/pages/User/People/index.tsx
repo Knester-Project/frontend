@@ -21,10 +21,11 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import UserChatLoader from "./ChatLoader";
 import PremiumGate from "./PremiumGate";
+import UserCard from "./UserCard";
+import Gate from "./Gate";
 
 // Icons
 import { Profile2User, ShieldSecurity, Location, Shuffle, Discover } from "iconsax-reactjs";
-import UserCard from "./UserCard";
 
 const Index = () => {
 
@@ -39,6 +40,7 @@ const Index = () => {
     const [selectedState, setSelectedState] = useState<string | null>(null);
     const [isPremiumOnly, setIsPremiumOnly] = useState<boolean>(false);
     const [isOnlineOnly, setIsOnlineOnly] = useState<boolean>(false);
+
 
     // Functions
     const setMode = (newMode: string) => {
@@ -113,6 +115,10 @@ const Index = () => {
     });
 
     const users = nearbyUsers?.pages.flatMap((page) => page.data.profiles) ?? [];
+
+    if (!user?.profile?.discoverable) {
+        return <Gate />
+    }
 
     return (
         <Main classNames="max-w-7xl mx-auto">
