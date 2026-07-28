@@ -121,7 +121,7 @@ const Advert = () => {
                             {/* Left Arrow: calls handleNavigate with -1 */}
                             <button onClick={() => handleNavigate(-1)} disabled={activeIdx === 0}
                                 className={cn(
-                                    "top-1/2 left-2 z-30 absolute flex justify-center items-center bg-card shadow-md border border-border rounded-full size-8 text-foreground/80 hover:text-foreground hover:scale-110 transition-all -translate-y-1/2 cursor-pointer",
+                                    "top-1/2 left-2 z-30 absolute flex justify-center items-center bg-card shadow-md border border-border rounded-full size-8 text-muted-foreground hover:text-foreground hover:scale-110 transition-all -translate-y-1/2 cursor-pointer",
                                     activeIdx === 0 && "opacity-30 pointer-events-none"
                                 )}>
                                 <ChevronLeft className="size-4" />
@@ -130,7 +130,7 @@ const Advert = () => {
                             {/* Right Arrow: calls handleNavigate with 1 */}
                             <button onClick={() => handleNavigate(1)} disabled={activeIdx === adverts.length - 1}
                                 className={cn(
-                                    "top-1/2 right-2 z-30 absolute flex justify-center items-center bg-card shadow-md border border-border rounded-full size-8 text-foreground/80 hover:text-foreground hover:scale-110 transition-all -translate-y-1/2 cursor-pointer",
+                                    "top-1/2 right-2 z-30 absolute flex justify-center items-center bg-card shadow-md border border-border rounded-full size-8 text-muted-foreground hover:text-foreground hover:scale-110 transition-all -translate-y-1/2 cursor-pointer",
                                     activeIdx === adverts.length - 1 && "opacity-30 pointer-events-none"
                                 )}>
                                 <ChevronRight className="size-4" />
@@ -141,8 +141,8 @@ const Advert = () => {
             )}
             {!isBusy && adverts.length === 0 && (
                 <div className="flex flex-col items-center gap-3 bg-accent/10 mx-auto px-5 py-6 border border-border rounded-xl w-full">
-                    <Shop className="size-8 text-muted" />
-                    <p className="text-foreground/80 text-xs text-center">You haven't created any adverts yet.</p>
+                    <Shop className="size-8" />
+                    <p className="text-muted-foreground text-xs text-center">You haven't created any adverts yet.</p>
                     <button onClick={toggleNew} className="bg-primary hover:bg-primary/90 px-3 py-1 rounded-xl font-semibold text-primary-foreground text-xs transition-colors cursor-pointer">
                         New Advert
                     </button>

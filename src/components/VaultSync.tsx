@@ -105,7 +105,7 @@ export default function VaultSync({ mode, userEncryptedVault }: SecuritySyncProp
     };
 
     return (
-        <div className="bg-card shadow-lg mx-auto mt-10 p-6 md:p-8 border border-border rounded-2xl max-w-xl">
+        <div className="bg-card shadow mx-auto mt-10 p-4 md:p-6 xl:p-8 border border-border rounded-2xl max-w-xl">
             <div className="flex justify-center mb-6">
                 <div className="bg-primary/10 p-4 rounded-full">
                     {mode === "restore" ? (

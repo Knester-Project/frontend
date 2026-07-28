@@ -241,3 +241,13 @@ export function formatLastSeen(dateString: string): string {
 
     return fullDateFormat;
 }
+
+// Parse Incoming Message
+export const parseRedisMessage = (redisMsg: RedisMessage): Message => ({
+    ...redisMsg,
+    createdAt: Number(redisMsg.createdAt),
+    editedAt: redisMsg.editedAt ? Number(redisMsg.editedAt) : undefined,
+    isSystem: redisMsg.isSystem === "true",
+    edited: redisMsg.edited === "true",
+    syncStatus: 'sent'
+});

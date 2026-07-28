@@ -487,7 +487,8 @@ declare type UsernameConv = {
         owner: string;
         type: string;
     } | null;
-    targetUser: User
+    targetUser: User;
+    publicKey: PubicKey
 }
 
 // User's Conversations
@@ -496,16 +497,32 @@ declare type ConversationsData = {
     hasMore: boolean;
 }
 
+// Local Message
 declare type Message = {
+    id: string;
+    conversationId: string;
+    senderId: string;
+    ciphertext: string;
+    iv: string;
+    tag: string;
+    syncStatus: 'pending' | 'sent' | 'failed';
+    isSystem: boolean;
+    edited: boolean;
+    editedAt?: number;
+    createdAt: number;
+}
+
+// Redis Message
+declare type RedisMessage = {
     id: string;
     senderId: string;
     conversationId: string;
     ciphertext: string;
     iv: string;
     tag: string;
-    media: string[]
-    replyTo?: string;
+    syncStatus: string;
+    edited: string;
+    editedAt: string;
     createdAt: string;
-    isSystem: boolean;
-    status: 'pending' | 'sent' | 'error';
+    isSystem: string;
 }

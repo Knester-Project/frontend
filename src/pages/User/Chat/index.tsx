@@ -17,8 +17,10 @@ import { Loader } from 'lucide-react';
 export default function MessagesLayout() {
 
     const { username } = Route.useSearch();
-    const { data } = useUserVault();
+    const { data, isLoading, isError } = useUserVault();
     const vault: EncryptedVault = data?.data || {}
+
+    const isBusy = isLoading || isError;
 
 
     // Check Dexie for the local identity keys
@@ -46,7 +48,7 @@ export default function MessagesLayout() {
     }
 
     // The user has local keys, but the server doesn't know about them
-    if (localIdentity && Object.keys(vault).length === 0) {
+    if (localIdentity && !isBusy && Object.keys(vault).length === 0) {
         return (
             <Main>
                 <VaultSync mode="sync" />
