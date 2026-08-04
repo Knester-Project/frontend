@@ -86,7 +86,7 @@ const Index = ({ username }: { username: string }) => {
     }
 
     return (
-        <main className='flex flex-col rounded-xl h-[87vh]'>
+        <main className='flex flex-col rounded-xl h-dvh'>
             <Header {...headerProps} />
 
             <section className="flex justify-center gap-1.5 bg-muted/30 px-4 py-2 border-border border-b">

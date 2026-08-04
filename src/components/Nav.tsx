@@ -44,8 +44,11 @@ const Nav = () => {
         { href: "/settings", icon: Setting2, label: "Settings" },
     ]
 
+    const isMessage = loc.pathname === "/messages"
+    console.log("The href", loc.pathname)
+
     return (
-        <header className="top-0 z-50 sticky bg-background/80 backdrop-blur-md border-border border-b">
+        <header className={`${isMessage && "hidden"} top-0 z-50 sticky bg-background/80 backdrop-blur-md border-border border-b`}>
             <section className="px-[1rem] sm:px-8 md:px-[3rem] lg:px-[4rem] 2xl:px-[6rem] xl:px-[5rem] py-3">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
@@ -128,7 +131,7 @@ const Nav = () => {
                             <nav className="flex flex-col gap-2 mt-4">
                                 {navigationItems.map((item) => {
                                     const Icon = item.icon
-                                    const isActive = loc.href === item.href
+                                    const isActive = loc.pathname === item.href
 
                                     return (
                                         <motion.div key={item.href} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.2 }}>

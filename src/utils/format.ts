@@ -226,7 +226,7 @@ export function formatLastSeen(dateString: string): string {
     // Older than a week, but same year
     const isSameYear = date.getFullYear() === now.getFullYear();
     const shortDateFormat = new Intl.DateTimeFormat('en-US', { 
-        month: 'short', 
+        month: 'long', 
         day: 'numeric' 
     }).format(date); // e.g., "Jul 20"
 
@@ -235,7 +235,7 @@ export function formatLastSeen(dateString: string): string {
     // Different year
     const fullDateFormat = new Intl.DateTimeFormat('en-US', { 
         year: 'numeric', 
-        month: 'short', 
+        month: 'long', 
         day: 'numeric' 
     }).format(date);
 

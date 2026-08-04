@@ -57,12 +57,12 @@ export default function MessagesLayout() {
     }
 
     return (
-        <Main>
+        <main>
             {username ? (
                 <Messages username={username} />
             ) : (
                 <Conversations />
             )}
-        </Main>
+        </main>
     );
 }

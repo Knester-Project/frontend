@@ -127,7 +127,7 @@ export default function InputToolbar({ replyTo, editingMsg, cancelReply, cancelE
     };
 
     return (
-        <div className="flex flex-col bg-primary/10 backdrop-blur-lg mt-auto border-border border-t rounded-b-xl">
+        <div className="flex flex-col bg-primary/10 backdrop-blur-lg mt-auto border-border border-t">
 
             {/* Reply / Edit Banners */}
             {replyTo && (

@@ -78,7 +78,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     }, [isAuthReady]);
 
     return (
-        <div className="min-h-dvh">
+        <div>
             <Nav />
             <InstallBtn />
             {children}

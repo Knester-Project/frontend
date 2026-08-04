@@ -52,7 +52,7 @@ const Header = ({ profilePicture, username, isOnline, lastSeen }: HeaderProps) =
 
     return (
         <>
-            <main className="top-0 z-5 sticky flex items-center gap-3 bg-primary/10 backdrop-blur-lg p-3 md:p-4 xl:p-5 rounded-t-xl">
+            <main className="top-0 z-5 sticky flex items-center gap-3 bg-primary/10 backdrop-blur-lg p-3 md:p-4 xl:p-5">
                 <button onClick={() => navigate({ to: "/messages", search: { username: undefined } })}
                     className="hover:bg-primary/10 p-1.5 rounded-full transition-colors cursor-pointer"
                     aria-label="Back">
