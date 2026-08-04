@@ -35,8 +35,15 @@ type EncryptedVault = {
 
 // Update User Payload
 declare type UserUpdatePayload = {
-    publicKey: PublicKey,
-    encryptedVault: EncryptedVault
+    publicKey: PublicKey;
+    encryptedVault: EncryptedVault;
+}
+
+// Forgot Password
+declare type PasswordRecovery = {
+    username: string,
+    recoveryUsername: string,
+    newPassword: string;
 }
 
 // For Safety Post Creation

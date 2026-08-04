@@ -5,10 +5,10 @@ import { Sms, TagUser } from 'iconsax-reactjs';
 
 const InviteOnly = () => {
     return (
-        <main className="bg-accent/20 dark:bg-accent/5 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl text-center">
+        <main className="bg-accent/20 dark:bg-accent/5 shadow mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl text-center">
             <div className="mb-8">
                 <div className="flex justify-center items-center bg-background mx-auto mb-4 border border-border rounded-full size-16">
-                    <Sms className="size-6 md:size-7 xl:size-8 text-primary" />
+                    <Sms className="size-7 md:size-7.5 xl:size-8 text-primary" />
                 </div>
                 <h2 className="mb-2 font-bold text-lg md:text-xl xl:text-2xl montserrat">Invitation Required</h2>
                 <p className='text-neutral-700 dark:text-neutral-400'>

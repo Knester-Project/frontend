@@ -27,6 +27,7 @@ import { Route as AuthWaitlistRouteImport } from './routes/_auth/waitlist'
 import { Route as AuthOnboardingRouteImport } from './routes/_auth/onboarding'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthGuidelinesRouteImport } from './routes/_auth/guidelines'
+import { Route as AuthForgotRouteImport } from './routes/_auth/forgot'
 import { Route as AuthFeaturesRouteImport } from './routes/_auth/features'
 import { Route as AuthContactRouteImport } from './routes/_auth/contact'
 
@@ -118,6 +119,11 @@ const AuthGuidelinesRoute = AuthGuidelinesRouteImport.update({
   path: '/guidelines',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AuthForgotRoute = AuthForgotRouteImport.update({
+  id: '/forgot',
+  path: '/forgot',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthFeaturesRoute = AuthFeaturesRouteImport.update({
   id: '/features',
   path: '/features',
@@ -134,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/contact': typeof AuthContactRoute
   '/features': typeof AuthFeaturesRoute
+  '/forgot': typeof AuthForgotRoute
   '/guidelines': typeof AuthGuidelinesRoute
   '/login': typeof AuthLoginRoute
   '/onboarding': typeof AuthOnboardingRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/contact': typeof AuthContactRoute
   '/features': typeof AuthFeaturesRoute
+  '/forgot': typeof AuthForgotRoute
   '/guidelines': typeof AuthGuidelinesRoute
   '/login': typeof AuthLoginRoute
   '/onboarding': typeof AuthOnboardingRoute
@@ -177,6 +185,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/_auth/contact': typeof AuthContactRoute
   '/_auth/features': typeof AuthFeaturesRoute
+  '/_auth/forgot': typeof AuthForgotRoute
   '/_auth/guidelines': typeof AuthGuidelinesRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/onboarding': typeof AuthOnboardingRoute
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/contact'
     | '/features'
+    | '/forgot'
     | '/guidelines'
     | '/login'
     | '/onboarding'
@@ -219,6 +229,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/contact'
     | '/features'
+    | '/forgot'
     | '/guidelines'
     | '/login'
     | '/onboarding'
@@ -241,6 +252,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/_auth/contact'
     | '/_auth/features'
+    | '/_auth/forgot'
     | '/_auth/guidelines'
     | '/_auth/login'
     | '/_auth/onboarding'
@@ -392,6 +404,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthGuidelinesRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/forgot': {
+      id: '/_auth/forgot'
+      path: '/forgot'
+      fullPath: '/forgot'
+      preLoaderRoute: typeof AuthForgotRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/features': {
       id: '/_auth/features'
       path: '/features'
@@ -412,6 +431,7 @@ declare module '@tanstack/react-router' {
 interface AuthRouteRouteChildren {
   AuthContactRoute: typeof AuthContactRoute
   AuthFeaturesRoute: typeof AuthFeaturesRoute
+  AuthForgotRoute: typeof AuthForgotRoute
   AuthGuidelinesRoute: typeof AuthGuidelinesRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthOnboardingRoute: typeof AuthOnboardingRoute
@@ -422,6 +442,7 @@ interface AuthRouteRouteChildren {
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthContactRoute: AuthContactRoute,
   AuthFeaturesRoute: AuthFeaturesRoute,
+  AuthForgotRoute: AuthForgotRoute,
   AuthGuidelinesRoute: AuthGuidelinesRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthOnboardingRoute: AuthOnboardingRoute,

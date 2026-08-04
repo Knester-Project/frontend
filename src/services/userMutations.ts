@@ -244,6 +244,17 @@ export function useAuthUser() {
     })
 }
 
+// Forget Password
+export function useForgotPassword() {
+
+    return useMutation({
+        mutationFn: (data: PasswordRecovery) => Api.forgotPassword(data),
+        onError: (error) => {
+            console.error("Password Recovery Failed:", error);
+        },
+    })
+}
+
 // Create Post
 export function useCreateSafetyPost() {
 

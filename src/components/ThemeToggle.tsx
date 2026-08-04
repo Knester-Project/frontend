@@ -2,7 +2,7 @@
 import { useThemeStore } from "@/stores/theme.store";
 
 //Icons
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "iconsax-reactjs";
 
 export const ThemeToggle = () => {
     const { theme, setTheme } = useThemeStore();

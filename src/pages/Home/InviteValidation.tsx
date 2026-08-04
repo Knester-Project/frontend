@@ -165,7 +165,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
     return (
         <>
             {indexPage &&
-                <div className="bg-accent/20 dark:bg-accent/5 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-2xl">
+                <div className="bg-accent/20 dark:bg-accent/5 shadow mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-2xl">
                     <div className="mb-8 text-center">
                         <div className="flex justify-center items-center bg-background mx-auto mb-4 border border-border rounded-full size-16">
                             <TagUser className="size-7 md:size-7.5 xl:size-8 text-primary" />
@@ -196,7 +196,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                     </form>
                 </div>}
             {passwordPage &&
-                <div className="bg-accent/20 dark:bg-accent/5 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-2xl">
+                <div className="bg-accent/20 dark:bg-accent/5 shadow mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-2xl">
                     <div className="mb-8 text-center">
                         <div className="flex justify-center items-center bg-background mx-auto mb-4 border border-border rounded-full size-16">
                             <Lock className="size-7 md:size-7.5 xl:size-8 text-primary" />
@@ -253,7 +253,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                 </div>
             }
             {recoveryPage &&
-                <div className="bg-accent/20 dark:bg-accent/5 shadow-xl mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-2xl">
+                <div className="bg-accent/20 dark:bg-accent/5 shadow mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full max-w-2xl">
                     <div className="mb-8 text-center">
                         <div className="flex justify-center items-center bg-background mx-auto mb-4 border border-border rounded-full size-16">
                             <ShieldSecurity className="size-7 md:size-7.5 xl:size-8 text-amber-500" />

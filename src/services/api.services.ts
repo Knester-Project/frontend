@@ -58,6 +58,12 @@ export const authenticateUser = async (data: AuthInput) => {
     return response.data;
 }
 
+// Forgot Password
+export const forgotPassword = async (data: PasswordRecovery) => {
+    const response = await axiosUnauthInstance.patch("users/password/recovery", data);
+    return response.data;
+}
+
 // Presigned URL Request
 export const requestPresignedUrls = async (kind: string, files: { fileName: string, contentType: string }[]) => {
     const response = await userAxios.post("general/presigned", { kind, files });
