@@ -14,7 +14,7 @@ type OverlayProps = {
 const getVariantClass = (variant: OverlayProps["variant"]) => {
     switch (variant) {
         case "bottom":
-            return "absolute bottom-0 w-full max-w-5xl mx-auto flex flex-col max-h-[90vh]";
+            return "absolute bottom-0 w-full max-w-7xl mx-auto flex flex-col max-h-[90vh]";
         case "fullscreen":
             return "absolute inset-0 w-full h-full max-w-7xl mx-auto flex flex-col";
         default:
@@ -68,11 +68,20 @@ export const Overlay = ({ open, onClose, children, variant = "center", showBackd
         };
     }, [open, onClose]);
 
+
+    // Handle Escape key to close the modal
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && open) onClose();
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [open, onClose]);
+
     return (
         <AnimatePresence>
             {open && (
                 <div className="z-50 fixed inset-0 flex justify-center items-center p-2">
-
                     {/* Backdrop */}
                     {showBackdrop && (
                         <motion.div className="absolute inset-0 bg-background/40 backdrop-blur-sm" initial={{ opacity: 0 }}
@@ -82,7 +91,10 @@ export const Overlay = ({ open, onClose, children, variant = "center", showBackd
                     {/* Content Wrapper */}
                     <motion.div initial={getInitial(variant)} animate={getAnimate()} exit={getExit(variant)}
                         transition={{ duration: 0.2 }} className={getVariantClass(variant)} onClick={(e) => e.stopPropagation()}>
-                        <div className="bg-card shadow-lg mx-auto p-4 md:p-6 xl:p-8 border border-border rounded-2xl w-full overflow-y-auto text-card-foreground hide-scrollbar">
+                        <div className={`${variant === "bottom" ? "border-x border-border border-t rounded-t-2xl" : "border-border border rounded-2xl"} bg-background shadow-lg mx-auto p-4 md:p-6 xl:p-8 w-full overflow-y-auto text-card-foreground hide-scrollbar`}>
+                            {variant === "bottom" && (
+                                <div onClick={onClose} className="bg-muted mx-auto mb-2 rounded-2xl w-10 md:w-12 xl:w-14 h-2 cursor-grab" />
+                            )}
                             {children}
                         </div>
                     </motion.div>

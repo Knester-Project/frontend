@@ -1,16 +1,9 @@
 import { motion } from "framer-motion";
 
-// UIs
-import { Button } from "@/components/ui/button";
-
 // Icons
-import { EmojiHappy, MessageText1 } from "iconsax-reactjs";
+import { MessageText1 } from "iconsax-reactjs";
 
 export default function Empty({ participant }: { participant: User }) {
-
-    const onStart = () => {
-        console.log("I have started")
-    }
     
     return (
         <div className="flex flex-col flex-1 justify-center items-center px-4 md:px-6 xl:px-8 text-center">
@@ -41,13 +34,6 @@ export default function Empty({ participant }: { participant: User }) {
                 <p className="mx-auto mt-2 max-w-xs text-[11px] text-foreground/70 md:text-xs xl:text-sm leading-relaxed">
                     No messages yet. <br /> Break the ice and send your first message below.
                 </p>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-6">
-                <Button onClick={onStart} className="gap-2 shadow shadow-primary/20 rounded-xl">
-                    <EmojiHappy variant="Bold" className="size-3 md:size-3.5 xl:size-4" />
-                    Say hello 👋
-                </Button>
             </motion.div>
         </div>
     );

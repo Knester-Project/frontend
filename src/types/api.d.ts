@@ -251,8 +251,8 @@ declare type UserDetails = {
     relationship: {
         inCircle: boolean;
         hasReported: boolean;
-        hasBlocked: boolean;
-        isBlocked: boolean;
+        blockedByMe: boolean;
+        blockedMe: boolean;
     }
     profile: null | UserProfile;
     createdAt: string;
@@ -483,6 +483,14 @@ declare type NewConvPayload = {
     isFeed?: boolean
 }
 
+// Username conversation response
+declare type ConversationResponse = {
+    success: boolean;
+    status: number;
+    message: string;
+    data: UsernameConv; 
+};
+
 // Username Conversation
 declare type UsernameConv = {
     conversationId: string | null;
@@ -495,7 +503,13 @@ declare type UsernameConv = {
         type: string;
     } | null;
     targetUser: User;
-    publicKey: PubicKey
+    publicKey: PubicKey;
+    relationship: {
+        inCircle: boolean
+        hasReported: boolean;
+        blockedByMe: boolean;
+        blockedMe: boolean;
+    }
 }
 
 // User's Conversations

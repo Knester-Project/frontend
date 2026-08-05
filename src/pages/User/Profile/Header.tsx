@@ -101,22 +101,22 @@ const Header = ({ user }: { user: UserDetails }) => {
                         <p><span style={{ color: colors.primary }} className='font-semibold text-sm md:text-base xl:text-lg montserrat'>{totalPosts}</span> Posts</p>
                     </div>
                     <section className="flex justify-between gap-2 p-4">
-                        <Link to="/messages" search={{ username }} disabled={(relationship?.isBlocked || relationship?.hasBlocked) ?? false}>
-                            <ActionButton disabled={(relationship?.isBlocked || relationship?.hasBlocked) ?? false} color={colors.primary} icon={MessageText1} label="Message" />
+                        <Link to="/messages" search={{ username }} disabled={(relationship?.blockedMe || relationship?.blockedByMe) ?? false}>
+                            <ActionButton disabled={(relationship?.blockedMe || relationship?.blockedByMe) ?? false} color={colors.primary} icon={MessageText1} label="Message" />
                         </Link>
                         {/* Block/Unblock Toggle */}
-                        <ActionButton onClick={() => toggleBlock.mutate(rel.hasBlocked)} isLoading={toggleBlock.isPending}
-                            color={rel.hasBlocked ? "#EF4444" : colors.primary} icon={Slash}
-                            label={rel.hasBlocked ? "Unblock" : "Block"} />
+                        <ActionButton onClick={() => toggleBlock.mutate(rel.blockedByMe)} isLoading={toggleBlock.isPending}
+                            color={rel.blockedByMe ? "#EF4444" : colors.primary} icon={Slash}
+                            label={rel.blockedByMe ? "Unblock" : "Block"} />
 
                         {/* Join/Leave Circle Toggle */}
                         <ActionButton onClick={() => toggleCircle.mutate(rel.inCircle)} isLoading={toggleCircle.isPending}
-                            disabled={rel.hasBlocked} color={rel.inCircle ? "#10B981" : colors.primary}
+                            disabled={rel.blockedMe} color={rel.inCircle ? "#10B981" : colors.primary}
                             icon={rel.inCircle ? UserTick : UserAdd} label={rel.inCircle ? "In Circle" : "Join Circle"} />
 
                         {/* Report with Dialog */}
-                        <ReportDialog isLoading={report.isPending}
-                            onReport={(reason, isBlocked) => report.mutate({ reason, shouldBlock: isBlocked })}
+                        <ReportDialog isLoading={report.isPending} username={username} blockedByMe={rel.blockedByMe}
+                            onReport={(reason, blockedByMe) => report.mutate({ reason, shouldBlock: blockedByMe })}
                             trigger={
                                 <ActionButton disabled={rel.hasReported} color={rel.hasReported ? "#F59E0B" : colors.primary}
                                     icon={Flag2} label={rel.hasReported ? "Reported" : "Report"} />

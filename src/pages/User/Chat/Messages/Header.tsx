@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "@tanstack/react-router";
 import { sileo } from "sileo";
@@ -6,33 +6,33 @@ import { sileo } from "sileo";
 // Utils
 import { formatLastSeen } from "@/utils/format";
 
+// UIs
+import { Overlay } from "@/components/Overlay";
+import Actions from "./Actions";
+
 // Icons
-import { ArrowLeft2, Call, CloseSquare, MoreSquare, Video } from "iconsax-reactjs";
+import { ArrowLeft2, Call, MoreSquare, Video } from "iconsax-reactjs";
 
 type HeaderProps = {
     profilePicture: string;
     username: string;
     isOnline: boolean;
     lastSeen: string;
+    relationship: {
+        inCircle: boolean;
+        hasReported: boolean;
+        blockedByMe: boolean;
+        blockedMe: boolean;
+    }
 }
 
-const Header = ({ profilePicture, username, isOnline, lastSeen }: HeaderProps) => {
+const Header = ({ profilePicture, username, isOnline, lastSeen, relationship }: HeaderProps) => {
 
     const navigate = useNavigate();
-    const [isImageOpen, setIsImageOpen] = useState(false);
-    const isTyping = false;
+    const [isImageOpen, setIsImageOpen] = useState<boolean>(false);
+    const [optionsOpen, setOptionsOpen] = useState<boolean>(false);
 
-    // Lock body scroll when the image modal is open
-    useEffect(() => {
-        if (isImageOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "unset";
-        }
-        return () => {
-            document.body.style.overflow = "unset";
-        };
-    }, [isImageOpen]);
+    const isTyping = false;
 
     const handleUnavailable = (value: string) => {
         sileo.info({
@@ -41,14 +41,19 @@ const Header = ({ profilePicture, username, isOnline, lastSeen }: HeaderProps) =
         });
     }
 
-    // Handle Escape key to close the modal
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape' && isImageOpen) setIsImageOpen(false);
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isImageOpen]);
+    // Functions
+    const toggleImages = () => setIsImageOpen((prev) => !prev);
+    const toggleOptions = () => setOptionsOpen((prev) => !prev);
+
+    const actionProps = {
+        inCircle: relationship.inCircle,
+        hasReported: relationship.hasReported,
+        blockedByMe: relationship.blockedByMe,
+        blockedMe: relationship.blockedMe,
+        profilePicture: profilePicture,
+        username: username,
+        onClose: toggleOptions,
+    }
 
     return (
         <>
@@ -61,7 +66,7 @@ const Header = ({ profilePicture, username, isOnline, lastSeen }: HeaderProps) =
 
                 {/* Profile Picture Button */}
                 <button
-                    onClick={() => setIsImageOpen(true)}
+                    onClick={toggleImages}
                     className="relative flex-shrink-0 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-95 transition-transform cursor-pointer"
                     aria-label={`View ${username}'s profile picture`}
                 >
@@ -79,7 +84,7 @@ const Header = ({ profilePicture, username, isOnline, lastSeen }: HeaderProps) =
                     <p className="font-semibold truncate">{username}</p>
                     <p className={cn("text-[10px] md:text-[11px] xl:text-xs truncate montserrat",
                         isTyping ? "text-primary animate-pulse" : isOnline ? "text-green-500" : "text-muted-foreground")}>
-                        {isTyping ? "Typing..." : isOnline ? "Online" : formatLastSeen(lastSeen)}
+                        {isTyping ? "Typing..." : isOnline ? "Online" : `Last Seen ${formatLastSeen(lastSeen)}`}
                     </p>
                 </div>
 
@@ -90,7 +95,7 @@ const Header = ({ profilePicture, username, isOnline, lastSeen }: HeaderProps) =
                     <button onClick={() => handleUnavailable("Video Call")} className="hover:bg-primary/20 opacity-40 p-2 rounded-full text-foreground/70 cursor-not-allowed" aria-label="Video call (coming soon)">
                         <Video className="size-4 md:size-4.5 xl:size-5" />
                     </button>
-                    <button className="hover:bg-primary/20 p-2 rounded-full text-foreground/70 cursor-pointer" aria-label="More options">
+                    <button onClick={toggleOptions} className="hover:bg-primary/20 p-2 rounded-full text-foreground/70 cursor-pointer" aria-label="More options">
                         <MoreSquare className="size-4 md:size-4.5 xl:size-5" />
                     </button>
                 </div>
@@ -98,18 +103,7 @@ const Header = ({ profilePicture, username, isOnline, lastSeen }: HeaderProps) =
 
             {/* Full Screen Image Modal */}
             {isImageOpen && (
-                <div className="z-60 fixed inset-0 flex flex-col justify-center items-center bg-black/90 backdrop-blur-md p-4 md:p-6 xl:p-8 animate-in duration-200 fade-in"
-                    onClick={() => setIsImageOpen(false)}>
-                    {/* Close Button */}
-                    <button className="top-4 md:top-8 right-4 md:right-8 absolute bg-destructive/10 hover:bg-destructive/20 backdrop-blur-lg p-3 rounded-full text-destructive transition-colors cursor-pointer"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setIsImageOpen(false);
-                        }}
-                        aria-label="Close modal">
-                        <CloseSquare className="size-4 md:size-4.5 xl:size-5" />
-                    </button>
-
+                <Overlay open={isImageOpen} onClose={toggleImages}>
                     {/* Image and Details Container */}
                     <div className="flex flex-col items-center animate-in duration-200 zoom-in-95" onClick={(e) => e.stopPropagation()}>
                         <img src={profilePicture} alt={username}
@@ -129,8 +123,11 @@ const Header = ({ profilePicture, username, isOnline, lastSeen }: HeaderProps) =
                             </div>
                         </div>
                     </div>
-                </div>
+                </Overlay>
             )}
+            <Overlay open={optionsOpen} onClose={toggleOptions} variant="bottom">
+                <Actions {...actionProps} />
+            </Overlay>
         </>
     );
 }

@@ -18,7 +18,7 @@ export default function Loader() {
 
 function MessageLoader({ text = "Loading Messages..." }: { text?: string }) {
     return (
-        <div className="flex flex-col justify-center items-center gap-4 h-[90vh]">
+        <div className="flex flex-col justify-center items-center gap-4 h-dvh">
             <Refresh className="size-6 md:size-7 xl:size-8 text-primary animate-spin" />
             <p className="text-[11px] text-foreground/70 md:text-xs xl:text-sm">
                 {text}

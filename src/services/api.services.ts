@@ -435,7 +435,7 @@ export const fetchVault = async () => {
 
 // Fetch a Particular Conversation
 export const fetchParticularUserConv = async (username: string) => {
-    const response = await userAxios.get(`chat/fetch/conversation/${username}`);
+    const response = await userAxios.get<ConversationResponse>(`chat/fetch/conversation/${username}`);
     return response.data;
 }
 

@@ -5,21 +5,6 @@ import { db } from "@/lib/db";
 import { useCryptoStore } from "@/stores/crypto.store";
 import { importPublicKey, importPrivateKey, deriveSharedAesKey } from "@/utils/e2ee";
 
-
-type UsernameConv = {
-    conversationId: string | null;
-    meta: {
-        avatar: string;
-        createdAt: string;
-        messageTtl: string;
-        name: string;
-        owner: string;
-        type: string;
-    } | null;
-    targetUser: User;
-    publicKey: PubicKey;
-};
-
 export const useSetupChatEncryption = (convData: UsernameConv | undefined) => {
 
     const { getSessionKey, setSessionKey } = useCryptoStore();

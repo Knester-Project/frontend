@@ -18,9 +18,11 @@ type InputProps = {
     editingMsg?: Message;
     cancelReply?: () => void;
     cancelEdit?: () => void;
+    blockedMe: boolean;
+    blockedByMe: boolean;
 }
 
-export default function InputToolbar({ replyTo, editingMsg, cancelReply, cancelEdit }: InputProps) {
+export default function InputToolbar({ replyTo, editingMsg, cancelReply, cancelEdit, blockedMe, blockedByMe }: InputProps) {
 
     const [text, setText] = useState(editingMsg?.ciphertext ?? "");
     const [showEmoji, setShowEmoji] = useState(false);
@@ -177,8 +179,11 @@ export default function InputToolbar({ replyTo, editingMsg, cancelReply, cancelE
                     <GalleryEdit className="size-5 md:size-5.5 xl:size-6" />
                 </button>
 
-                <textarea ref={inputRef} value={text} onChange={(e) => setText(e.target.value)} onKeyDown={handleKey} onSelect={handleSelect}
-                    onClick={handleSelect} placeholder="Message…" rows={1} maxLength={500}
+                <textarea ref={inputRef} value={text} onChange={(e) => setText(e.target.value)} disabled={blockedMe} onKeyDown={handleKey} onSelect={handleSelect}
+                    onClick={handleSelect} placeholder={blockedMe ?
+                        "Messaging is unavailable because this user blocked you." :
+                        blockedByMe ? "Messaging is unavailable because this user is blocked." :
+                            "Enter Your Message…"} rows={1} maxLength={500}
                     className={cn(
                         "flex-1 bg-background px-4 py-2.5 rounded-2xl outline-none md:size-xs text-[11px] placeholder:text-muted-foreground xl:text-sm resize-none",
                         "max-h-36 overflow-y-auto leading-relaxed")} style={{ minHeight: "2.75rem" }} />

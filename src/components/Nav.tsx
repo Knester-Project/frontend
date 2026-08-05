@@ -45,7 +45,6 @@ const Nav = () => {
     ]
 
     const isMessage = loc.pathname === "/messages"
-    console.log("The href", loc.pathname)
 
     return (
         <header className={`${isMessage && "hidden"} top-0 z-50 sticky bg-background/80 backdrop-blur-md border-border border-b`}>

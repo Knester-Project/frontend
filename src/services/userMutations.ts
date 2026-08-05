@@ -491,11 +491,11 @@ export function useRelationshipActions(targetUsername: string) {
 
     // Block/Unblock
     const toggleBlock = useMutation({
-        mutationFn: (isBlocked: boolean) => isBlocked ? Api.unblockUser(targetUsername) : Api.blockUser(targetUsername),
+        mutationFn: (blockedByMe: boolean) => blockedByMe ? Api.unblockUser(targetUsername) : Api.blockUser(targetUsername),
         onMutate: async (currentlyBlocked) =>
             updateCache((old) => ({
                 ...old,
-                relationship: { ...old.relationship, hasBlocked: !currentlyBlocked }
+                relationship: { ...old.relationship, blockedByMe: !currentlyBlocked }
             })),
         onError: (_, __, ctx) => onError(ctx),
         onSettled
@@ -826,4 +826,93 @@ export function useDeleteNotification(queryKey: string, queries: CursorQueries) 
             return notificationItem;
         },
     });
+}
+
+// Chat Relationship Actions
+export function useChatRelationshipActions(targetUsername: string) {
+    const queryClient = useQueryClient();
+    
+    const conversationQueryKey = ['conversation', targetUsername];
+    const profileQueryKey = ['profile', targetUsername];
+
+    // Helper for optimistic updates
+    const updateCache = async (updater: (old: ConversationResponse) => ConversationResponse) => {
+
+        await queryClient.cancelQueries({ queryKey: conversationQueryKey });
+
+        // Previous Data
+        const previousData = queryClient.getQueryData<ConversationResponse>(conversationQueryKey);
+        if (previousData) {
+            queryClient.setQueryData<ConversationResponse>(conversationQueryKey, updater(previousData));
+        }
+        
+        return { previousData };
+    };
+
+    const onError = (context: any) => {
+        if (context?.previousData) {
+            queryClient.setQueryData(conversationQueryKey, context.previousData);
+        }
+    };
+
+    const onSettled = () => {
+        queryClient.invalidateQueries({ queryKey: conversationQueryKey });
+        queryClient.invalidateQueries({ queryKey: profileQueryKey });
+    };
+
+    // Join/Leave Circle
+    const toggleCircle = useMutation({
+        mutationFn: (inCircle: boolean) => inCircle ? Api.leaveCircle(targetUsername) : Api.joinCircle(targetUsername),
+        onMutate: async (currentlyInCircle) =>
+            updateCache((old) => ({
+                ...old,
+                data: {
+                    ...old.data,
+                    relationship: { 
+                        ...old.data.relationship, 
+                        inCircle: !currentlyInCircle 
+                    }
+                }
+            })),
+        onError: (_, __, ctx) => onError(ctx),
+        onSettled
+    });
+
+    // Block/Unblock
+    const toggleBlock = useMutation({
+        mutationFn: (blockedByMe: boolean) => blockedByMe ? Api.unblockUser(targetUsername) : Api.blockUser(targetUsername),
+        onMutate: async (currentlyBlocked) =>
+            updateCache((old) => ({
+                ...old,
+                data: {
+                    ...old.data,
+                    relationship: { 
+                        ...old.data.relationship, 
+                        blockedByMe: !currentlyBlocked 
+                    }
+                }
+            })),
+        onError: (_, __, ctx) => onError(ctx),
+        onSettled
+    });
+
+    // Report
+    const report = useMutation({
+        mutationFn: (data: { reason: string, shouldBlock?: boolean }) => Api.reportUser({ ...data, reportedUser: targetUsername }),
+        onMutate: async () =>
+            updateCache((old) => ({
+                ...old,
+                data: {
+                    ...old.data,
+                    relationship: { 
+                        ...old.data.relationship, 
+                        hasReported: true 
+                    }
+                }
+            })),
+        onError: (_, __, ctx) => onError(ctx),
+        onSettled
+    });
+
+    return { toggleCircle, toggleBlock, report };
 }

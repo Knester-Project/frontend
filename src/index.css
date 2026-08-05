@@ -190,6 +190,9 @@ p a:hover {
   opacity: 0.8;
 }
 
+@layer component {
+  .unset { @apply appearance-none border-0 bg-transparent p-0 m-0 outline-none shadow-none cursor-pointer }
+}
 
 @layer base {
   * {

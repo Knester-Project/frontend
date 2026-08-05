@@ -24,7 +24,7 @@ const Index = ({ username }: { username: string }) => {
 
     // Fetch Metadata
     const { data } = useSuspenseQuery(singleConversationOptions(username));
-    const convData: UsernameConv = data?.data || {};
+    const convData = data?.data || {};
     const conversationId = convData.conversationId;
     const isEnabled = typeof (conversationId) === "string";
 
@@ -80,16 +80,17 @@ const Index = ({ username }: { username: string }) => {
 
     const headerProps = {
         username: meta?.name ?? targetUser.username,
-        profilePicture: meta?.avatar ?? targetUser.profile?.profilePicture ?? "/chat.png",
+        profilePicture: meta?.avatar ?? targetUser.profile?.profilePicture ?? convData.relationship.blockedMe ? "/chat_block.png" : "/chat.png",
         isOnline: targetUser.profile?.isOnline || false,
         lastSeen: targetUser.profile?.lastSeen || new Date().toLocaleString(),
+        relationship: convData.relationship
     }
 
     return (
         <main className='flex flex-col rounded-xl h-dvh'>
             <Header {...headerProps} />
 
-            <section className="flex justify-center gap-1.5 bg-muted/30 px-4 py-2 border-border border-b">
+            <section className="flex justify-center gap-1 bg-muted/30 px-4 py-2 border-border border-b">
                 <Lock variant='Bold' className="size-3 md:size-3.5 xl:size-4 text-foreground/60" />
                 <p className="text-[10px] text-muted-foreground/70 md:text-[11px] xl:text-xs text-center">
                     Messages are end-to-end encrypted. No one outside this chat can read them.
@@ -105,7 +106,7 @@ const Index = ({ username }: { username: string }) => {
                             </div>
                         ) : (
                             <div className="flex flex-col gap-3">
-\                                {hasNextPage && <div ref={loadMoreRef} className="w-full h-4" />}
+                                {hasNextPage && <div ref={loadMoreRef} className="w-full h-4" />}
 
                                 {isFetchingNextPage && <MessagesSkeleton />}
 
@@ -130,7 +131,10 @@ const Index = ({ username }: { username: string }) => {
                 )}
             </section>
 
-            <InputToolbar />
+            <InputToolbar
+                blockedMe={convData.relationship.blockedMe}
+                blockedByMe={convData.relationship.blockedByMe}
+            />
         </main>
     );
 }
