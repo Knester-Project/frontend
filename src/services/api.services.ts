@@ -477,3 +477,11 @@ export const deleteMessageFn = async (data: { messageId: string, conversationId:
     const response = await userAxios.delete(`chat/delete/message`, { data });
     return response.data;
 }
+
+// Update Meta Details
+export const updateConvMeta = async (data: EditConvMetaPayload) => {
+    const { conversationId: id, ...rest } = data;
+    
+    const response = await userAxios.patch(`chat/conversation/${id}/meta`, rest);
+    return response.data;
+}

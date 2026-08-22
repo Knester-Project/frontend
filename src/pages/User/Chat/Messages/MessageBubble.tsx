@@ -144,7 +144,7 @@ export default function MessageBubble({ message, senderDetails }: MessageBoxProp
                 <div className={cn(
                     "relative flex flex-col shadow-sm p-3",
                     isMe ? "bg-primary/60 text-primary-foreground rounded-2xl rounded-br-sm"
-                        : "bg-accent/10 text-foreground border border-accent/10 rounded-2xl rounded-bl-sm"
+                        : "bg-accent/10 text-foreground border border-accent/20 rounded-2xl rounded-bl-sm"
                 )}>
 
                     {/* Context Menu Dropdown */}
@@ -152,7 +152,7 @@ export default function MessageBubble({ message, senderDetails }: MessageBoxProp
                         <div className="top-1 -left-6 absolute">
                             <button onClick={() => setShowMenu(!showMenu)} className="p-1 rounded-full cursor-pointer">
                                 {showMenu ? <CloseSquare className="hover:bg-destructive/40 size-3 md:size-3.5 xl:size-4 hover:text-destructive" />
-                                    : <More className="hover:bg-muted size-3 md:size-3.5 xl:size-4 text-muted-foreground" />
+                                    : <More className="hover:bg-muted size-3 md:size-3.5 xl:size-4 text-muted-foreground rotate-90" />
                                 }
                             </button>
 

@@ -550,9 +550,18 @@ declare type RedisMessage = {
 
 // Edit Message Payload
 declare type EditMessagePayload = {
-    messageId: string,
-    conversationId: string,
-    ciphertext: string,
-    iv: string,
-    tag: string
+    messageId: string;
+    conversationId: string;
+    ciphertext: string;
+    iv: string;
+    tag: string;
+}
+
+// Update Conversation Meta Payload
+declare type EditConvMetaPayload = {
+    name: string;
+    avatar: string;
+    type: public;
+    messageTtl: number;
+    conversationId: string;
 }
