@@ -1,26 +1,30 @@
-import { useEffect } from 'react';
+import { useRef } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useLiveQuery } from 'dexie-react-hooks';
 
-// Libs, Services, Hooks, Constants and Utils
-import { db } from '@/lib/db';
+// Services, Hooks, Constants, Utils and Stores
 import { singleConversationOptions, useMessages } from '@/services/userQueries';
+import { useSetupChatEncryption } from '@/Hooks/chats/useChatEncryption';
 import useInfiniteScroll from "@/Hooks/useInfiniteScroll";
 import { MESSAGES_LIMIT } from '@/assets/constants';
-import { parseRedisMessage } from '@/utils/format';
-import { useSetupChatEncryption } from '@/Hooks/useChatEncryption';
+import { meStore } from '@/stores/me.store';
+import { useTypingStore } from "@/stores/typing.store";
 
 // UIs
 import Header from './Header';
 import Empty from './Empty';
 import { MessagesSkeleton } from './MessageLoader';
 import InputToolbar from './InputToolbar';
-import MessageBox from './MessageBox';
+import MessageBubble from './MessageBubble';
+import TypingIndicator from './TypingIndicator';
+import { useChatScroll, useJoinActiveConv, useJoinChatRoom, useSyncToDexie } from './SyncUI';
 
 // Icons
-import { Lock } from 'iconsax-reactjs';
+import { Lock, Refresh } from 'iconsax-reactjs';
+import { useReadMessages } from '@/utils/chat/local.storage';
 
 const Index = ({ username }: { username: string }) => {
+
+    const { user } = meStore();
 
     // Fetch Metadata
     const { data } = useSuspenseQuery(singleConversationOptions(username));
@@ -28,10 +32,10 @@ const Index = ({ username }: { username: string }) => {
     const conversationId = convData.conversationId;
     const isEnabled = typeof (conversationId) === "string";
 
-    // Generate & Save AES Key to Zustand
-    useSetupChatEncryption(convData);
+    // State & Refs
+    const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    // The Sync Engine (React Query)
+    // The Sync Engine
     const {
         data: messagesData,
         fetchNextPage,
@@ -40,51 +44,58 @@ const Index = ({ username }: { username: string }) => {
         isFetchingNextPage
     } = useMessages({ limit: MESSAGES_LIMIT }, conversationId || "", isEnabled);
 
-    // Move API Data to Local Dexie DB
-    useEffect(() => {
-        if (!messagesData || !messagesData.pages) return;
-
-        const syncToLocal = async () => {
-            // Flatten the React Query pages into a single array
-            const allFetchedMessages = messagesData.pages.flatMap(page => page.data.messages || []);
-
-            if (allFetchedMessages.length === 0) return;
-
-            // Parse and format for Dexie strictly
-            const formattedForDexie = allFetchedMessages.map(msg => (parseRedisMessage(msg)));
-
-            // BulkPut inserts new messages and updates existing ones (ignoring duplicates)
-            await db.messages.bulkPut(formattedForDexie);
-        };
-
-        syncToLocal();
-    }, [messagesData]);
-
     // Read strictly from Dexie
-    const localMessages = useLiveQuery(
-        () => conversationId
-            ? db.messages.where('conversationId').equals(conversationId).sortBy('createdAt')
-            : [],
-        [conversationId]
-    );
+    const localMessages = useReadMessages(conversationId || "")
+    const pageParams = messagesData?.pageParams;
 
-    // Pagination trigger
+    // IMPORTANT HOOKS
+    useJoinActiveConv(conversationId)
+    useSetupChatEncryption(convData);
+    useSyncToDexie(messagesData);
+    useJoinChatRoom(conversationId, user?._id);
+    useChatScroll(messagesEndRef, localMessages);
+
     const loadMoreRef = useInfiniteScroll({
         hasNextPage,
         isFetchingNextPage,
         fetchNextPage,
     });
 
+    // Meta and Participant Details
     const meta = convData.meta;
     const targetUser = convData.targetUser;
+    
 
+    // Header Props
     const headerProps = {
-        username: meta?.name ?? targetUser.username,
-        profilePicture: meta?.avatar ?? targetUser.profile?.profilePicture ?? convData.relationship.blockedMe ? "/chat_block.png" : "/chat.png",
+        username: meta?.name.trim() || targetUser.username,
+        profilePicture: meta?.avatar.trim() ? meta.avatar : (
+            convData.relationship.blockedMe
+                ? "/chat_block.png"
+                : targetUser.profile?.profilePicture ?? "/chat.png"
+        ),
         isOnline: targetUser.profile?.isOnline || false,
         lastSeen: targetUser.profile?.lastSeen || new Date().toLocaleString(),
         relationship: convData.relationship
     }
+
+    // Participant Map for MessageBubble
+    const participantMap = {
+        [targetUser._id]: { username: targetUser.username, avatar: headerProps.profilePicture },
+        [user?._id || ""]: { username: user?.username || "Me", avatar: user?.profile?.profilePicture || "/chat.png" }
+    };
+
+    // Typing Store
+    const typingUsers = useTypingStore(state =>
+        conversationId ? state.typingUsers[conversationId] : undefined
+    );
+    const isSomeoneTyping = typingUsers && typingUsers.size > 0;
+
+    // Today's Banner
+    let todayBannerShown = false;
+    const isToday = (timestamp: number) => {
+        return new Date(timestamp).toDateString() === new Date().toDateString();
+    };
 
     return (
         <main className='flex flex-col rounded-xl h-dvh'>
@@ -97,7 +108,7 @@ const Index = ({ username }: { username: string }) => {
                 </p>
             </section>
 
-            <section className="flex-1 p-4 max-h-[70vh] overflow-y-auto">
+            <section className="flex-1 p-4 max-h-[90vh] overflow-y-auto hide-scrollbar">
                 {conversationId ? (
                     <>
                         {isApiLoading && !localMessages?.length ? (
@@ -105,23 +116,41 @@ const Index = ({ username }: { username: string }) => {
                                 <MessagesSkeleton />
                             </div>
                         ) : (
-                            <div className="flex flex-col gap-3">
-                                {hasNextPage && <div ref={loadMoreRef} className="w-full h-4" />}
+                            <>
+                                <div className="flex flex-col gap-y-2">
+                                    {hasNextPage && <div ref={loadMoreRef} className="w-full h-4" />}
 
-                                {isFetchingNextPage && <MessagesSkeleton />}
+                                    {isFetchingNextPage && <Refresh className="mx-auto my-2 size-3 md:size-3.5 xl:size-4 animate-spin" />}
 
-                                {!hasNextPage && localMessages && localMessages?.length > 0 && (
-                                    <p className="py-4 font-medium text-foreground/80 text-xs text-center">
-                                        You've caught up on all messages!
-                                    </p>
-                                )}
+                                    {!hasNextPage && localMessages && localMessages.length > 0 && pageParams?.[0] !== undefined ? (
+                                        <p className="py-4 font-medium text-foreground/80 text-center smallText">
+                                            You've caught up on all messages!
+                                        </p>
+                                    ) : null}
 
-                                {localMessages?.map((msg) => (
-                                    <div key={msg.id}>
-                                        <MessageBox message={msg} />
-                                    </div>
-                                ))}
-                            </div>
+                                    {localMessages?.map((msg) => {
+                                        const msgIsToday = isToday(msg.createdAt);
+                                        const showBanner = msgIsToday && !todayBannerShown;
+
+                                        // Toggle the tracker so we don't show the banner twice
+                                        if (showBanner) todayBannerShown = true;
+
+                                        return (
+                                            <div key={msg.id} className="flex flex-col">
+                                                {showBanner && (
+                                                    <div className="flex justify-center my-4">
+                                                        <span className="bg-muted/60 px-3 py-1 rounded font-medium text-[10px] text-muted-foreground md:text-[11px] xl:text-xs">
+                                                            Today
+                                                        </span>
+                                                    </div>
+                                                )}
+                                                <MessageBubble message={msg} senderDetails={participantMap[msg.senderId]} />
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                <div ref={messagesEndRef} />
+                            </>
                         )}
                     </>
                 ) : (
@@ -130,8 +159,12 @@ const Index = ({ username }: { username: string }) => {
                     </main>
                 )}
             </section>
-
+            {isSomeoneTyping && (
+                <TypingIndicator profilePicture={headerProps.profilePicture} />
+            )}
             <InputToolbar
+                conversationId={conversationId}
+                targetUserId={targetUser._id}
                 blockedMe={convData.relationship.blockedMe}
                 blockedByMe={convData.relationship.blockedByMe}
             />

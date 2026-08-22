@@ -1,64 +1,55 @@
-import { useRef, useState, useEffect, type KeyboardEvent } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 import { AnimatePresence } from "framer-motion";
 import { sileo } from "sileo";
 
-// Utils
+// Utils, Stores, Hooks
 import { cn } from "@/lib/utils";
 import { makeFilesUnique } from "@/utils/format";
+import { getSocket } from "@/utils/socket";
+import { meStore } from "@/stores/me.store";
+import { useChatUIStore } from "@/stores/chatUI.store";
+import { useSendMessage } from "@/Hooks/chats/useSendMessage";
+import { useEditMessage } from "@/Hooks/chats/useEditMessage";
+import { useInputStates } from "./SyncUI";
 
 // UIs
 import EmojiPicker from "./EmojiPicker";
+import ReplyBanner from "./ReplyBanner";
 
 // Icons
-import { CloseSquare, Send2, GalleryEdit, EmojiHappy } from "iconsax-reactjs";
+import { CloseSquare, Send2, GalleryEdit, EmojiHappy, Edit2, MessageEdit } from "iconsax-reactjs";
 
-// Assuming Message type is imported
 type InputProps = {
-    replyTo?: Message;
-    editingMsg?: Message;
-    cancelReply?: () => void;
-    cancelEdit?: () => void;
+    conversationId: string | null;
+    targetUserId?: string;
     blockedMe: boolean;
     blockedByMe: boolean;
 }
 
-export default function InputToolbar({ replyTo, editingMsg, cancelReply, cancelEdit, blockedMe, blockedByMe }: InputProps) {
+export default function InputToolbar({ conversationId, targetUserId, blockedMe, blockedByMe }: InputProps) {
 
-    const [text, setText] = useState(editingMsg?.ciphertext ?? "");
-    const [showEmoji, setShowEmoji] = useState(false);
-    const [files, setFiles] = useState<File[]>([]);
-    const [previews, setPreviews] = useState<{ url: string; type: "image" | "video" }[]>([]);
+    const { user } = meStore()
+    const { editingMessage, replyingTo, clearUIState } = useChatUIStore();
+    const { sendMessage, isSending } = useSendMessage();
+    const { editMessage, isEditing } = useEditMessage();
+
+    const [isTyping, setIsTyping] = useState<boolean>(false);
+    const [showEmoji, setShowEmoji] = useState<boolean>(false);
 
     const inputRef = useRef<HTMLTextAreaElement | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const cursorPosRef = useRef(0);
+    const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const MAX_FILES = 8;
     const MAX_FILE_SIZE_MB = 50;
     const allowedExts = ["jpg", "jpeg", "png", "gif", "webp", "mp4", "mov", "webm"];
 
-    // Sync text when editingMsg changes
-    useEffect(() => {
-        setText(editingMsg?.ciphertext ?? "");
-    }, [editingMsg]);
-
-    // Generate File Previews securely
-    useEffect(() => {
-        const newPreviews = files.map(file => ({
-            url: URL.createObjectURL(file),
-            type: file.type.startsWith("video/") ? "video" as const : "image" as const
-        }));
-
-        setPreviews(newPreviews);
-
-        // Cleanup memory leaks
-        return () => {
-            newPreviews.forEach(p => URL.revokeObjectURL(p.url));
-        };
-    }, [files]);
+    const { text, setText, files, setFiles, previews, retainedMedia, setRetainedMedia, replyPreviewText, originalReplyToId } = useInputStates(inputRef);
 
     // File Handling Logic
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+
         const incomingFiles = Array.from(e.target.files || []);
         if (!incomingFiles.length) return;
 
@@ -75,7 +66,9 @@ export default function InputToolbar({ replyTo, editingMsg, cancelReply, cancelE
             return true;
         });
 
-        const availableSlots = MAX_FILES - files.length;
+        const currentTotal = files.length + retainedMedia.length;
+        const availableSlots = MAX_FILES - currentTotal;
+
         if (availableSlots <= 0) {
             return sileo.error({ title: `Maximum of ${MAX_FILES} files allowed.` });
         }
@@ -87,14 +80,11 @@ export default function InputToolbar({ replyTo, editingMsg, cancelReply, cancelE
         e.target.value = "";
     };
 
-    const removeFile = (indexToRemove: number) => {
-        setFiles(prev => prev.filter((_, i) => i !== indexToRemove));
-    };
+    const removeFile = (indexToRemove: number) => setFiles(prev => prev.filter((_, i) => i !== indexToRemove));
+    const removeRetainedMedia = (indexToRemove: number) => setRetainedMedia(prev => prev.filter((_, i) => i !== indexToRemove));
 
-    // Text & Cursor Logic
-    const handleSelect = () => {
-        cursorPosRef.current = inputRef.current?.selectionStart ?? text.length;
-    };
+    // Text & Emoji Logic
+    const handleSelect = () => cursorPosRef.current = inputRef.current?.selectionStart ?? text.length;
 
     const insertEmoji = (emoji: string) => {
         const pos = inputRef.current?.selectionStart ?? cursorPosRef.current;
@@ -110,15 +100,51 @@ export default function InputToolbar({ replyTo, editingMsg, cancelReply, cancelE
         });
     };
 
+    const handleTyping = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setText(e.target.value);
+
+        const socket = getSocket();
+        if (!socket || !conversationId) return;
+
+        if (!isTyping) {
+            setIsTyping(true);
+            socket.emit("typing:start", conversationId);
+        }
+
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
+        typingTimeoutRef.current = setTimeout(() => {
+            setIsTyping(false);
+            socket.emit("typing:stop", conversationId);
+        }, 2000);
+    };
+
     const handleSend = () => {
         const trimmedText = text.trim();
-        if (!trimmedText && files.length === 0) return;
+        if (!trimmedText && files.length === 0 && retainedMedia.length === 0) return;
 
-        // onSend(trimmedText, files);
+        if (editingMessage) {
+            editMessage(editingMessage, {
+                text: trimmedText,
+                newFiles: files,
+                retainedMediaUrls: retainedMedia,
+                replyTo: originalReplyToId
+            });
+        } else {
+            sendMessage({
+                conversationId,
+                targetUserId,
+                text: trimmedText,
+                files,
+                replyTo: replyingTo?.message?.id
+            });
+        }
 
         setText("");
         setFiles([]);
+        setRetainedMedia([]);
         setShowEmoji(false);
+        clearUIState();
     };
 
     const handleKey = (e: KeyboardEvent) => {
@@ -128,29 +154,49 @@ export default function InputToolbar({ replyTo, editingMsg, cancelReply, cancelE
         }
     };
 
+    const isWorking = isSending || isEditing;
+
     return (
         <div className="flex flex-col bg-primary/10 backdrop-blur-lg mt-auto border-border border-t">
 
-            {/* Reply / Edit Banners */}
-            {replyTo && (
-                <div className="flex items-center gap-2 bg-muted/40 px-4 py-2 border-border border-b">
-                    <div className="flex-1 pl-2 border-primary border-l-4 min-w-0">
-                        <p className="font-semibold text-primary text-xs truncate">
-                            {replyTo.senderId === "me" ? "You" : replyTo.senderId}
-                        </p>
-                        <p className="text-[11px] text-muted-foreground md:text-xs xl:text-sm truncate">{replyTo.ciphertext}</p>
-                    </div>
-                    <button onClick={cancelReply} className="hover:bg-muted p-1 rounded-full">
-                        <CloseSquare className="size-3 md:size-3.5 xl:size-4 text-muted-foreground" />
+            {replyingTo && !editingMessage && (
+                <ReplyBanner
+                    replyingTo={replyingTo.senderName === user?.username ? "You" : replyingTo.senderName}
+                    replyPreview={replyPreviewText}
+                    clearState={clearUIState}
+                />
+            )}
+
+            {editingMessage && (
+                <div className="flex items-center gap-2 bg-primary/5 px-4 py-2 border-border border-b">
+                    <MessageEdit className="size-3 md:size-3.5 xl:size-4 text-primary" />
+                    <p className="flex-1 font-medium text-[10px] text-primary md:text-[11px] xl:text-xs">Editing message</p>
+                    <button onClick={clearUIState} className="p-1 rounded-full cursor-pointer">
+                        <CloseSquare className="size-3 md:size-3.5 xl:size-4 text-muted-foreground hover:text-destructive" />
                     </button>
                 </div>
             )}
 
-            {/* Media Preview Strip */}
-            {previews.length > 0 && (
+            {/* Media Preview Strip (Shows BOTH Retained S3 Media and New Local Previews) */}
+            {(previews.length > 0 || retainedMedia.length > 0) && (
                 <div className="flex gap-2 p-2 border-border border-b overflow-x-auto scrollbar-hide">
+                    {/* Render Old/Retained Media */}
+                    {retainedMedia.map((url, i) => (
+                        <div key={`retained-${i}`} className="group relative flex-shrink-0 border border-border rounded-lg size-16 md:size-18 xl:size-20 overflow-hidden">
+                            {url.match(/\.(mp4|webm|mov)$/i) ? (
+                                <video src={url} className="w-full h-full object-cover" />
+                            ) : (
+                                <img src={url} alt="Previous" className="opacity-80 w-full h-full object-cover" />
+                            )}
+                            <button onClick={() => removeRetainedMedia(i)} className="top-1 right-1 absolute bg-black/60 hover:bg-destructive opacity-0 group-hover:opacity-100 p-1 rounded-full text-destructive-foreground transition-opacity duration-200 cursor-pointer">
+                                <CloseSquare className="size-3" variant="Bold" />
+                            </button>
+                        </div>
+                    ))}
+
+                    {/* Render New Upload Previews */}
                     {previews.map((preview, i) => (
-                        <div key={i} className="group relative flex-shrink-0 border border-border rounded-lg size-16 md:size-18 xl:size-20 overflow-hidden">
+                        <div key={`new-${i}`} className="group relative flex-shrink-0 border border-border rounded-lg size-16 md:size-18 xl:size-20 overflow-hidden">
                             {preview.type === "image" ? (
                                 <img src={preview.url} alt="Preview" className="w-full h-full object-cover" />
                             ) : (
@@ -168,35 +214,59 @@ export default function InputToolbar({ replyTo, editingMsg, cancelReply, cancelE
                 {showEmoji && <EmojiPicker onPick={insertEmoji} onClose={() => setShowEmoji(false)} />}
             </AnimatePresence>
 
-            {/* Input Row */}
-            <div className="flex items-end gap-2 px-3 py-3">
+            <div className="flex items-center gap-2 px-3 py-3">
 
                 <input type="file" ref={fileInputRef} multiple accept={allowedExts.map(ext => `.${ext}`).join(",")} className="hidden" onChange={handleFileSelect} />
 
                 <button onClick={() => fileInputRef.current?.click()}
-                    className="flex-shrink-0 hover:bg-primary/20 mb-0.5 p-2 rounded-full text-muted-foreground hover:text-primary duration-200 cursor-pointer"
+                    disabled={blockedMe || blockedByMe || isWorking}
+                    className="flex-shrink-0 hover:bg-primary/20 disabled:opacity-50 mb-0.5 p-2 rounded-full text-muted-foreground hover:text-primary duration-200 cursor-pointer"
                     aria-label="Attach file">
                     <GalleryEdit className="size-5 md:size-5.5 xl:size-6" />
                 </button>
 
-                <textarea ref={inputRef} value={text} onChange={(e) => setText(e.target.value)} disabled={blockedMe} onKeyDown={handleKey} onSelect={handleSelect}
-                    onClick={handleSelect} placeholder={blockedMe ?
-                        "Messaging is unavailable because this user blocked you." :
-                        blockedByMe ? "Messaging is unavailable because this user is blocked." :
-                            "Enter Your Message…"} rows={1} maxLength={500}
+                <textarea
+                    ref={inputRef}
+                    value={text}
+                    onChange={handleTyping}
+                    disabled={blockedMe || blockedByMe || isWorking}
+                    onKeyDown={handleKey}
+                    onSelect={handleSelect}
+                    onClick={handleSelect}
+                    placeholder={
+                        blockedMe
+                            ? "Messaging is unavailable because this user blocked you."
+                            : blockedByMe
+                                ? "Messaging is unavailable because this user is blocked."
+                                : "Enter Your Message…"
+                    }
+                    rows={1}
+                    maxLength={500}
                     className={cn(
-                        "flex-1 bg-background px-4 py-2.5 rounded-2xl outline-none md:size-xs text-[11px] placeholder:text-muted-foreground xl:text-sm resize-none",
-                        "max-h-36 overflow-y-auto leading-relaxed")} style={{ minHeight: "2.75rem" }} />
+                        "flex-1 bg-background disabled:opacity-70 px-4 py-2.5 rounded-md outline-none",
+                        "placeholder:text-muted-foreground transition-all duration-75",
+                        "resize-none hide-scrollbar leading-relaxed focus:border-primary/30 focus:border"
+                    )}
+                    style={{
+                        minHeight: "44px",
+                        maxHeight: "144px",
+                    }}
+                />
 
                 <button onClick={() => setShowEmoji(!showEmoji)}
-                    className={cn("hidden lg:block flex-shrink-0 mb-0.5 p-2 rounded-full transition-colors cursor-pointer",
+                    disabled={blockedMe || blockedByMe || isWorking}
+                    className={cn("hidden lg:block flex-shrink-0 disabled:opacity-50 mb-0.5 p-2 rounded-full transition-colors cursor-pointer",
                         showEmoji ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-primary/20 hover:text-primary"
                     )}>
                     <EmojiHappy className="size-5 md:size-5.5 xl:size-6" />
                 </button>
 
-                <button onClick={handleSend} disabled={!text.trim() && files.length === 0} className="flex-shrink-0 bg-primary disabled:opacity-40 mb-0.5 p-2.5 rounded-full text-primary-foreground transition-opacity cursor-pointer">
-                    <Send2 className="size-4 md:size-4.5 xl:size-5" variant="Bold" />
+                <button onClick={handleSend} disabled={(!text.trim() && files.length === 0 && retainedMedia.length === 0) || isWorking} className="flex-shrink-0 bg-primary disabled:opacity-40 mb-0.5 p-2.5 rounded-full text-primary-foreground transition-opacity cursor-pointer">
+                    {editingMessage ?
+                        <Edit2 className="size-4 md:size-4.5 xl:size-5" variant="Bold" />
+                        :
+                        <Send2 className="size-4 md:size-4.5 xl:size-5" variant="Bold" />
+                    }
                 </button>
             </div>
         </div>

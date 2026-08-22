@@ -27,7 +27,7 @@ export function Storage({ percentage = 90 }) {
                     <AlertTriangle className="size-4 text-primary" />
                 </div>
                 <div>
-                    <p className="font-semibold text-[11px] md:text-xs xl:text-sm">Storage Almost Full</p>
+                    <p className="font-semibold smallText">Storage Almost Full</p>
                     <p className="mt-1 text-[10px] text-gray-600 md:text-[11px] dark:text-gray-300 xl:text-xs leading-relaxed montserrat">
                         You have reached {percentage}% of your curation storage. Consider upgrading
                         for unlimited collections.

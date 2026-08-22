@@ -3,28 +3,26 @@ import { useQueryClient } from "@tanstack/react-query";
 
 // Stores, Utils, and Hooks
 import { meStore } from "@/stores/me.store";
-import { initSocket, disconnectSocket } from "@/utils/socket";
+import { initSocket, getSocket } from "@/utils/socket"; // <-- Import getSocket
 import { useNotifications } from "@/Hooks/useSSE";
 import { usePresence } from "@/Hooks/usePresence";
+import { useChatSocket } from "@/Hooks/chats/useChatSocket";
 
 // UIs
 import Nav from "@/components/Nav";
 import InstallBtn from "@/components/InstallBtn";
-
-// Const
 import { NOT_LIMIT } from "@/assets/constants";
-
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
     const queryClient = useQueryClient();
-    const [isAuthReady, setIsAuthReady] = useState(false);
+    const [isAuthReady, setIsAuthReady] = useState<boolean>(false);
 
-    // Initialize the SSE pipe
     useNotifications(isAuthReady, { limit: NOT_LIMIT });
+    usePresence(isAuthReady);
 
-    // Initialize the Presence Heartbeat
-    usePresence(isAuthReady)
+    // Chat Socket Hook
+    useChatSocket(isAuthReady);
 
     // Initial Auth & Boot Sequence
     useEffect(() => {
@@ -34,7 +32,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             const user = await meStore.getState().ensureUser(queryClient);
 
             if (user && mounted) {
-                initSocket();
+                initSocket(); // Creates the instance
                 setIsAuthReady(true);
             }
         };
@@ -43,28 +41,32 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
         return () => {
             mounted = false;
-            disconnectSocket();
+            const socket = getSocket();
+            if (socket) socket.disconnect();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // Tab Visibility Manager (Battery & Server Saver)
+    // Tab Visibility Manager
     useEffect(() => {
         if (!isAuthReady) return;
 
         const handleVisibilityChange = () => {
-            if (document.visibilityState === "hidden") {
-                disconnectSocket();
-            } else if (document.visibilityState === "visible") {
-                const newSocket = initSocket();
+            const socket = getSocket();
+            if (!socket) return;
 
-                // Fire an immediate heartbeat
-                if (newSocket?.connected) {
-                    newSocket.emit("presence:heartbeat");
+            if (document.visibilityState === "hidden") {
+                // Pause the connection, but keep the instance and listeners alive
+                socket.disconnect();
+            } else if (document.visibilityState === "visible") {
+                // Resume the connection
+                socket.connect();
+
+                if (socket.connected) {
+                    socket.emit("presence:heartbeat");
                 } else {
-                    // If it takes a second to connect, listen for the connect event
-                    newSocket.once("connect", () => {
-                        newSocket.emit("presence:heartbeat");
+                    socket.once("connect", () => {
+                        socket.emit("presence:heartbeat");
                     });
                 }
             }

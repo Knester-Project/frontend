@@ -36,7 +36,7 @@ export default function InviteError({
                 </div>
 
                 {/* Text Content */}
-                <h3 className="font-semibold text-[11px] md:text-xs xl:text-sm">
+                <h3 className="font-semibold smallText">
                     {title}
                 </h3>
                 <p className="mt-1.5 mb-6 max-w-[260px] text-gray-600 dark:text-gray-400 text-xs leading-relaxed">

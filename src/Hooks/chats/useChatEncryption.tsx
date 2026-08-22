@@ -3,7 +3,7 @@ import { useEffect } from "react";
 // Libs, Stores and Utils
 import { db } from "@/lib/db";
 import { useCryptoStore } from "@/stores/crypto.store";
-import { importPublicKey, importPrivateKey, deriveSharedAesKey } from "@/utils/e2ee";
+import { importPublicKey, importPrivateKey, deriveSharedAesKey } from "@/utils/chat/e2ee";
 
 export const useSetupChatEncryption = (convData: UsernameConv | undefined) => {
 

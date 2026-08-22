@@ -67,7 +67,7 @@ export default function ToastInline({ title, message, variant = "error", duratio
                 <h4 className={`font-semibold ${current.title}`}>
                     {title || current.defaultTitle}
                 </h4>
-                <p className={`mt-1 text-[11px] md:text-xs xl:text-sm capitalize ${current.message}`}>
+                <p className={`mt-1 smallText capitalize ${current.message}`}>
                     {message}
                 </p>
             </div>

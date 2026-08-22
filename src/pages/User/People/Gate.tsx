@@ -44,7 +44,7 @@ export default function Gate() {
             </div>
 
             {/* Actions */}
-            <div className="space-y-2.5 mt-6 w-full max-w-sm text-[11px] md:text-xs xl:text-sm">
+            <div className="space-y-2.5 mt-6 w-full max-w-sm smallText">
                 <motion.a whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }} href="/profile?profile=me"
                     className="flex justify-center items-center gap-2 bg-primary hover:bg-primary/90 shadow py-3 rounded-2xl w-full font-semibold text-primary-foreground transition-colors"
                 >

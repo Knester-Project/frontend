@@ -488,7 +488,7 @@ declare type ConversationResponse = {
     success: boolean;
     status: number;
     message: string;
-    data: UsernameConv; 
+    data: UsernameConv;
 };
 
 // Username Conversation
@@ -526,7 +526,7 @@ declare type Message = {
     ciphertext: string;
     iv: string;
     tag: string;
-    syncStatus: 'pending' | 'sent' | 'failed';
+    syncStatus: 'pending' | 'sent' | 'failed' | 'delivered' | 'read';
     isSystem: boolean;
     edited: boolean;
     editedAt?: number;
@@ -546,4 +546,13 @@ declare type RedisMessage = {
     editedAt: string;
     createdAt: string;
     isSystem: string;
+}
+
+// Edit Message Payload
+declare type EditMessagePayload = {
+    messageId: string,
+    conversationId: string,
+    ciphertext: string,
+    iv: string,
+    tag: string
 }

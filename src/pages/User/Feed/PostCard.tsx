@@ -169,7 +169,7 @@ export default function PostCard({ post, index = 0, nextCursor = null, isOwner =
                                 </Link>
                                 <div>
                                     <div className="flex items-center gap-x-1.5">
-                                        <Link to="/profile" disabled={post.user.profile?.profileLock} search={{ profile: post.user.username }} className="font-semibold text-[11px] md:text-xs xl:text-sm leading-none">
+                                        <Link to="/profile" disabled={post.user.profile?.profileLock} search={{ profile: post.user.username }} className="font-semibold leading-none smallText">
                                             {post.user?.username || "user"}
                                         </Link>
 

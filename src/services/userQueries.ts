@@ -285,7 +285,6 @@ export const useMessages = (queries: CursorQueries, conversationId: string, enab
         initialPageParam: undefined,
 
         getNextPageParam: (lastPage) => {
-            console.log("The messages last page", lastPage)
             return lastPage.data.nextCursor ?? undefined;
         },
     });

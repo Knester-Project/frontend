@@ -24,7 +24,7 @@ export const MediaGrid = ({ media }: { media: MediaItem[] }) => {
 
     return (
         <>
-            <div className="gap-2 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
+            <div className="gap-2 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-2">
                 {visibleMedia.map((item, i) => (
                     <div key={i} onClick={() => setActiveIndex(i)}
                         className="relative rounded-xl max-h-[150px] aspect-square lg:aspect-[4/3] overflow-hidden cursor-pointer">

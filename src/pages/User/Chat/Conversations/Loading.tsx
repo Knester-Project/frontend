@@ -10,7 +10,7 @@ const ConvoLoading = () => {
             <header className="flex justify-between items-center bg-primary/10 p-4 rounded-xl">
                 <div>
                     <h1 className="font-bold text-lg md:text-xl xl:text-2xl">Messages</h1>
-                    <p className="text-[11px] md:text-xs xl:text-sm">Loading Conversations ...</p>
+                    <p className="smallText">Loading Conversations ...</p>
                 </div>
                 <div className="place-items-center grid bg-background rounded-md size-8 md:size-10 xl:size-12 duration-200 cursor-pointer">
                     <MessageAdd1 className="size-4 md:size-5 xl:size-6" />

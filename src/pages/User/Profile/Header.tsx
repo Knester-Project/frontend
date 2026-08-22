@@ -95,7 +95,7 @@ const Header = ({ user }: { user: UserDetails }) => {
                             <Badge style={{ borderColor: colors.primary }} key={`detail-${index}`} variant="outline" className='mt-2 mr-1 capitalize'>{detail}</Badge>
                         ))
                     }
-                    <div className='relative flex gap-x-3 my-2 text-[11px] md:text-xs xl:text-sm'>
+                    <div className='relative flex gap-x-3 my-2 smallText'>
                         <p><span style={{ color: colors.primary }} className="font-semibold text-sm md:text-base xl:text-lg montserrat">{formatTrendingCount(circleMembers)}</span> Circle Members</p>
                         <p><span style={{ color: colors.primary }} className='font-semibold text-sm md:text-base xl:text-lg montserrat'>{formatTrendingCount(circlesJoined)}</span> Circles Joined</p>
                         <p><span style={{ color: colors.primary }} className='font-semibold text-sm md:text-base xl:text-lg montserrat'>{totalPosts}</span> Posts</p>

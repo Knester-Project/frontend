@@ -133,7 +133,7 @@ const Index = () => {
                                     <Profile2User className="size-5 md:size-6 xl:size-7" variant="Bold" />
                                 </div>
                                 <h2 className="mb-2 font-bold text-lg md:text-xl xl:text-2xl">Meet New People</h2>
-                                <p className="max-w-xs text-[11px] md:text-xs xl:text-sm leading-relaxed">
+                                <p className="max-w-xs leading-relaxed smallText">
                                     Connect with real people by location, city, state, or how close they are to you.
                                 </p>
                             </div>
@@ -186,7 +186,7 @@ const Index = () => {
                         exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.28 }} className="space-y-4">
                         <header className="montserrat">
                             <h2 className="font-bold text-lg md:text-xl xl:text-2xl">People</h2>
-                            <p className="max-w-xs text-[11px] md:text-xs xl:text-sm leading-relaxed">
+                            <p className="max-w-xs leading-relaxed smallText">
                                 Within <span className="font-semibold text-primary">{distance} KM</span> of you.
                             </p>
                         </header>
@@ -198,7 +198,7 @@ const Index = () => {
                             {/* Premium Filter */}
                             <div className="flex justify-between items-start bg-accent/10 p-4 border border-border rounded-3xl">
                                 <div className="space-y-1">
-                                    <Label className="font-semibold text-[11px] md:text-xs xl:text-sm">
+                                    <Label className="font-semibold smallText">
                                         Premium users only
                                     </Label>
                                     <p className="text-[10px] text-foreground/80 md:text-[11px] xl:text-xs">
@@ -212,7 +212,7 @@ const Index = () => {
                             {/* Online Filter */}
                             <div className="flex justify-between items-start bg-accent/10 p-4 border border-border rounded-3xl">
                                 <div className="space-y-1">
-                                    <Label className="font-semibold text-[11px] md:text-xs xl:text-sm">
+                                    <Label className="font-semibold smallText">
                                         Online users only
                                     </Label>
                                     <p className="text-[10px] text-foreground/80 md:text-[11px] xl:text-xs">
@@ -235,7 +235,7 @@ const Index = () => {
                                 <StateSelector selected={selectedState} setSelected={handleState} />
 
                                 {/* Nearby toggle */}
-                                <button onClick={() => { setNearbyActive((v) => !v); setSelectedState(null); setDistance(15) }} className={cn("flex items-center gap-2.5 px-4 py-3 border rounded-2xl w-full font-medium text-[11px] md:text-xs xl:text-sm transition-all duration-300 cursor-pointer",
+                                <button onClick={() => { setNearbyActive((v) => !v); setSelectedState(null); setDistance(15) }} className={cn("flex items-center gap-2.5 px-4 py-3 border rounded-2xl w-full font-medium transition-all duration-300 cursor-pointer smallText",
                                     nearbyActive ? "border-green-500 bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-400"
                                         : "border-border bg-background text-gray-600 dark:text-gray-400 hover:border-green-400/40 hover:text-foreground dark:hover:text-foreground")}>
                                     <Discover className={cn("size-4", nearbyActive && "text-green-500")} />
@@ -248,7 +248,7 @@ const Index = () => {
                                 {/* Premium Filter */}
                                 <div className="flex justify-between items-start bg-accent/10 p-4 border border-border rounded-xl">
                                     <div className="space-y-1">
-                                        <Label className="font-semibold text-[11px] md:text-xs xl:text-sm">
+                                        <Label className="font-semibold smallText">
                                             Premium users only
                                         </Label>
                                         <p className="text-[10px] text-foreground/80 md:text-[11px] xl:text-xs">
@@ -262,7 +262,7 @@ const Index = () => {
                                 {/* Online Filter */}
                                 <div className="flex justify-between items-start bg-accent/10 p-4 border border-border rounded-xl">
                                     <div className="space-y-1">
-                                        <Label className="font-semibold text-[11px] md:text-xs xl:text-sm">
+                                        <Label className="font-semibold smallText">
                                             Online users only
                                         </Label>
                                         <p className="text-[10px] text-foreground/80 md:text-[11px] xl:text-xs">
@@ -347,7 +347,7 @@ const ActionCard = ({ icon, title, desc, color, iconBg, onClick, className, ...p
                 {icon}
             </div>
             <div>
-                <p className="font-bold text-[11px] md:text-xs xl:text-sm">{title}</p>
+                <p className="font-bold smallText">{title}</p>
                 <p className="mt-0.5 font-medium lining-nums text-[10px] md:text-[11px] xl:text-xs leading-relaxed">{desc}</p>
             </div>
         </motion.button>

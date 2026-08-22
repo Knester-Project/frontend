@@ -75,7 +75,7 @@ export default function Invite() {
                         <QrCode className="size-4 md:size-5 xl:size-6 text-primary" />
                     </div>
                     <div className="flex-1 text-left">
-                        <p className="font-semibold text-[11px] md:text-xs xl:text-sm">Invite via QR Code</p>
+                        <p className="font-semibold smallText">Invite via QR Code</p>
                         <p className="mt-0.5 text-[10px] text-gray-600 md:text-[11px] dark:text-gray-400 xl:text-xs">
                             Share your personal invite link or QR code
                         </p>
@@ -138,7 +138,7 @@ export default function Invite() {
                                                 {inviteUrl}
                                             </p>
                                             <motion.button whileTap={{ scale: 0.9 }} onClick={handleCopy} className={cn(
-                                                "flex items-center gap-1.5 px-2 py-1.5 rounded-xl text-[11px] md:text-xs xl:text-sm transition-all duration-200 shrink-0", copied ? "bg-emerald-500/15 text-emerald-600" : "bg-primary/10 text-primary hover:bg-primary/20"
+                                                "flex items-center gap-1.5 px-2 py-1.5 rounded-xl transition-all duration-200 smallText shrink-0", copied ? "bg-emerald-500/15 text-emerald-600" : "bg-primary/10 text-primary hover:bg-primary/20"
                                             )}>
                                                 <AnimatePresence mode="wait" initial={false}>
                                                     {copied ? (

@@ -32,7 +32,7 @@ export default function MessagesLayout() {
             <Main>
                 <div className="flex flex-col justify-center items-center h-full min-h-[50vh]">
                     <Loader className="size-6 md:size-7 xl:size-8 text-primary animate-spin" />
-                    <p className='text-[11px] md:text-xs xl:text-sm text-center'>Loading...</p>
+                    <p className='text-center smallText'>Loading...</p>
                 </div>
             </Main>
         );

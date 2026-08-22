@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 // Stores & Utils
 import { useCryptoStore } from '@/stores/crypto.store';
 import { meStore } from '@/stores/me.store';
-import { decrypt } from '@/utils/encrytion';
+import { decrypt } from '@/utils/chat/encrytion';
 import { cn } from '@/lib/utils';
 import { detectMediaType } from '@/utils/format';
 

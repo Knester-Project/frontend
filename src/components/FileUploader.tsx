@@ -141,7 +141,7 @@ export default function FileUploader({ multiple = false, disabled, max = 8, valu
                 className="group relative flex flex-col justify-center items-center gap-1 bg-gradient-to-br from-primary hover:from-primary/90 to-primary/70 hover:to-primary disabled:opacity-50 px-4 py-4 rounded-xl w-full text-primary-foreground duration-200 cursor-pointer disabled:cursor-not-allowed">
                 <GalleryAdd className="size-6 group-hover:scale-110 transition" variant="Bold" />
 
-                <span className="font-medium text-[11px] md:text-xs xl:text-sm">
+                <span className="font-medium smallText">
                     Upload Media
                 </span>
 

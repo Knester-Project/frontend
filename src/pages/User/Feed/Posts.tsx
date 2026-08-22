@@ -69,7 +69,7 @@ const Posts = () => {
         <main className="space-y-4 py-10">
             {/* Section header */}
             <div className="flex justify-between items-center mb-6">
-                <h2 className="font-semibold text-[11px] md:text-xs xl:text-sm uppercase tracking-wide">
+                <h2 className="font-semibold uppercase tracking-wide smallText">
                     {activeTab === "foryou" ? "Your Circle" : activeTab} Posts
                 </h2>
                 <div className="flex items-center gap-0.5 p-1 border border-muted rounded-md">

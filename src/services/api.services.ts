@@ -465,3 +465,15 @@ export const fetchMessages = async (conversationId: string, queries: CursorQueri
     const response = await userAxios.get(`chat/fetch/messages/${conversationId}?${params.toString()}`);
     return response.data;
 }
+
+// Edit a Message
+export const editMessageFn = async (data: EditMessagePayload) => {
+    const response = await userAxios.patch(`chat/edit/message`, data);
+    return response.data;
+}
+
+// Delete a Message
+export const deleteMessageFn = async (data: { messageId: string, conversationId: string }) => {
+    const response = await userAxios.delete(`chat/delete/message`, { data });
+    return response.data;
+}

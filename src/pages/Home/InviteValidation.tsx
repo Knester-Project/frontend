@@ -6,7 +6,7 @@ import { Link } from '@tanstack/react-router';
 import { useCreateUser, useValidateUser } from "@/services/userMutations";
 import { useCheckUsername } from '@/services/userQueries';
 import { generateCustomUsernames } from '@/utils/generate';
-import { generateIdentityKeyPair, exportKeyToJwk } from "@/utils/e2ee";
+import { generateIdentityKeyPair, exportKeyToJwk } from "@/utils/chat/e2ee";
 import { useUpdateUser } from "@/services/userMutations";
 import { lockPrivateKey } from "@/utils/vault";
 import { db } from "@/lib/db";

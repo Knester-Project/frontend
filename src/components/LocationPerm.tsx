@@ -58,7 +58,7 @@ export function PermissionScreen() {
                             <div className="flex items-start gap-3">
                                 <Warning2 className="size-4 md:size-4.5 xl:size-5 text-yellow-500 shrink-0" />
 
-                                <div className="space-y-2 text-[11px] md:text-xs xl:text-sm">
+                                <div className="space-y-2 smallText">
                                     <p className="font-semibold">
                                         How to enable location
                                     </p>

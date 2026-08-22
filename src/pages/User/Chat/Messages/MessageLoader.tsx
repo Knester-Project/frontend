@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 function Bubble({ me, lines = 2 }: { me: boolean; lines?: number }) {
     return (
         <div className={`max-w-[75%] ${me ? "ml-auto" : ""}`}>
-            <div className="p-4 border border-border rounded-3xl">
+            <div className="p-4 border border-primary/10 rounded-3xl">
                 <Skeleton className="rounded-full w-full h-3" />
 
                 {lines > 1 && (
@@ -30,7 +30,6 @@ export function MessagesSkeleton() {
             <Bubble me={false} />
             <Bubble me={false} lines={1} />
             <Bubble me={true} />
-            <Bubble me={false} />
         </div>
     );
 }

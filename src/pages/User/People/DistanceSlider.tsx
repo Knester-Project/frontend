@@ -29,7 +29,7 @@ export default function DistanceSlider({ value, onChange }: DistanceSliderProps)
             <div className="flex justify-between items-center">
                 <p className="font-medium">Search radius</p>
                 <motion.span key={value} initial={{ scale: 0.85, opacity: 0.6 }} animate={{ scale: 1, opacity: 1 }}
-                    style={{ color }} className="font-bold text-[11px] md:text-xs xl:text-sm montserrat">
+                    style={{ color }} className="font-bold smallText montserrat">
                     {formatDist(value)}
                 </motion.span>
             </div>

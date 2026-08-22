@@ -6,7 +6,7 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Raleway", sans-serif;
   font-optical-sizing: auto;
-   -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
@@ -82,8 +82,10 @@ body {
 :root {
   --radius: 0.625rem;
 
-  --background: oklch(1.000 0.000 90);          /* #ffffff */
-  --foreground: oklch(0.346 0.043 236.812);     /* #233d4d (charcoal) */
+  --background: oklch(1.000 0.000 90);
+  /* #ffffff */
+  --foreground: oklch(0.346 0.043 236.812);
+  /* #233d4d (charcoal) */
 
   --card: var(--background);
   --card-foreground: var(--foreground);
@@ -91,10 +93,13 @@ body {
   --popover-foreground: var(--foreground);
 
   /* Brand colors */
-  --primary: oklch(0.731 0.178 48.687);         /* #fe7f2d (pumpkin) */
-  --primary-foreground: oklch(18.71% 0.0066 17.582); 
-  --accent: oklch(0.888 0.076 63.379);          /* #ffd0a6 (light) */
-  --accent-foreground: var(--foreground);       /* use dark text on light accent */
+  --primary: oklch(0.731 0.178 48.687);
+  /* #fe7f2d (pumpkin) */
+  --primary-foreground: oklch(18.71% 0.0066 17.582);
+  --accent: oklch(0.888 0.076 63.379);
+  /* #ffd0a6 (light) */
+  --accent-foreground: var(--foreground);
+  /* use dark text on light accent */
   --muted: oklch(96% 0.003 90);
   --muted-foreground: oklch(56% 0.01 260);
   --destructive: oklch(0.6 0.22 25);
@@ -102,7 +107,8 @@ body {
   --destructive-foreground: oklch(0.98 0.005 255);
 
   /* Borders, outline */
-  --border: oklch(0.907 0.000 90);              /* #e0e0e0 */
+  --border: oklch(0.907 0.000 90);
+  /* #e0e0e0 */
   --input: var(--border);
   --ring: var(--primary);
 
@@ -110,12 +116,14 @@ body {
   --chart-1: var(--primary);
   --chart-2: var(--accent);
   --chart-3: var(--muted);
-  --chart-4: oklch(0.603 0.153 46.681);          /* slightly darker pumpkin */
-  --chart-5: oklch(0.346 0.043 236.812);        /* charcoal */
+  --chart-4: oklch(0.603 0.153 46.681);
+  /* slightly darker pumpkin */
+  --chart-5: oklch(0.346 0.043 236.812);
+  /* charcoal */
 
   --safety: #00897B;
   --premium: #F57F17;
-  --moderator: 	#2E7D32;
+  --moderator: #2E7D32;
   --core: #6A1B9A;
   --vibe: #E53935;
   --comment: #43A047;
@@ -128,32 +136,40 @@ body {
 
 .dark {
 
-  --background: oklch(0.182 0.000 90);          /* #121212 */
-  --foreground: oklch(1.000 0.000 90);          /* #ffffff */
+  --background: oklch(0.182 0.000 90);
+  /* #121212 */
+  --foreground: oklch(1.000 0.000 90);
+  /* #ffffff */
 
   --card: var(--background);
   --card-foreground: var(--foreground);
   --popover: var(--background);
   --popover-foreground: var(--foreground);
 
-  --primary: oklch(0.731 0.178 48.687);         /* #fe7f2d */
-  --primary-foreground: oklch(1.000 0.000 90);   /* #ffffff */
-  --accent: oklch(0.603 0.153 46.681);          /* #c85e1f (darker pumpkin) */
+  --primary: oklch(0.731 0.178 48.687);
+  /* #fe7f2d */
+  --primary-foreground: oklch(1.000 0.000 90);
+  /* #ffffff */
+  --accent: oklch(0.603 0.153 46.681);
+  /* #c85e1f (darker pumpkin) */
   --accent-foreground: var(--foreground);
   --muted: oklch(26% 0.01 260);
   --muted-foreground: oklch(72% 0.01 260);
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(0.98 0.005 255);
 
-  --border: oklch(0.293 0.000 90);              /* #2c2c2c */
+  --border: oklch(0.293 0.000 90);
+  /* #2c2c2c */
   --input: var(--border);
   --ring: var(--primary);
 
   --chart-1: var(--primary);
   --chart-2: var(--accent);
   --chart-3: var(--muted);
-  --chart-4: oklch(0.888 0.076 63.379);          /* light accent as chart tone */
-  --chart-5: oklch(0.346 0.043 236.812);        /* charcoal */
+  --chart-4: oklch(0.888 0.076 63.379);
+  /* light accent as chart tone */
+  --chart-5: oklch(0.346 0.043 236.812);
+  /* charcoal */
 
   --safety: #4DB6AC;
   --premium: #FFD54F;
@@ -167,17 +183,34 @@ body {
   --share-active: #3399FF;
 }
 
-.shake{
+.shake {
   animation: shakeEvery 3s infinite;
-  transform-origin:50% 50%;
+  transform-origin: 50% 50%;
 }
 
-@keyframes shakeEvery{
-  0%, 16.666%, 100% { transform: translateX(0) rotate(0deg); }
-  4%  { transform: translateX(-2px) rotate(-1deg); }
-  8%  { transform: translateX(2px) rotate(1deg); }
-  12% { transform: translateX(-2px) rotate(-1deg); }
-  16% { transform: translateX(2px) rotate(1deg); }
+@keyframes shakeEvery {
+
+  0%,
+  16.666%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+
+  4% {
+    transform: translateX(-2px) rotate(-1deg);
+  }
+
+  8% {
+    transform: translateX(2px) rotate(1deg);
+  }
+
+  12% {
+    transform: translateX(-2px) rotate(-1deg);
+  }
+
+  16% {
+    transform: translateX(2px) rotate(1deg);
+  }
 }
 
 p a {
@@ -191,7 +224,13 @@ p a:hover {
 }
 
 @layer component {
-  .unset { @apply appearance-none border-0 bg-transparent p-0 m-0 outline-none shadow-none cursor-pointer }
+  .unset {
+    @apply appearance-none border-0 bg-transparent p-0 m-0 outline-none shadow-none cursor-pointer
+  }
+
+  .smallText {
+    @apply text-[11px] md:text-xs xl:text-sm
+  }
 }
 
 @layer base {

@@ -206,7 +206,7 @@ const HeaderCard = ({ color, title, amount, amount1 }: HeaderCardProps) => {
             <p className="font-medium text-[11px] text-foreground/70 md:text-xs xl:text-sm truncate">{title}</p>
 
             <h1 className="mt-1 font-bold tabular-nums text-lg md:text-xl xl:text-2xl truncate montserrat">
-                {amount} <sup className='opacity-80 text-[11px] md:text-xs xl:text-sm'>{amount1}</sup>
+                {amount} <sup className='opacity-80 smallText'>{amount1}</sup>
             </h1>
         </div>
     );

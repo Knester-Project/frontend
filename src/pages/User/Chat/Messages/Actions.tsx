@@ -51,7 +51,7 @@ const Actions = ({ inCircle, hasReported, blockedByMe, blockedMe, profilePicture
                     alt={username}
                     className="ring-border rounded-full ring-2 size-8 md:size-9 xl:size-10 object-cover"
                 />
-                <div className="text-[11px] md:text-xs xl:text-sm">
+                <div className="smallText">
                     <p className="font-semibold">
                         {username}
                     </p>

@@ -9,7 +9,7 @@ export default function Button({ text, loadingText = "Processing...", icon, onCl
 
     // Size styles
     const sizeStyles = {
-        sm: "text-[11px] md:text-xs xl:text-sm px-4 py-2",
+        sm: "smallText px-4 py-2",
         md: "text-xs md:text-sm xl:text-base px-6 py-3",
         lg: "text-sm md:text-base xl:text-lg px-8 py-4",
     }

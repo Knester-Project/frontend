@@ -5,14 +5,14 @@ import { sileo } from "sileo";
 // Lib, Utils, Store and Hooks
 import { db } from "@/lib/db";
 import { getSocket } from "@/utils/socket";
-import { encrypt } from "@/utils/encrytion";
+import { encrypt } from "@/utils/chat/encrytion";
 import { makeFilesUnique } from "@/utils/format";
 import { meStore } from "@/stores/me.store";
 import { useCryptoStore } from "@/stores/crypto.store";
 import { usePresignedUpload } from "@/Hooks/usePresignedUpload";
 
 type SendMessageArgs = {
-    conversationId?: string;
+    conversationId: string | null;
     targetUserId?: string;
     text: string;
     files: File[];
@@ -21,7 +21,7 @@ type SendMessageArgs = {
 
 type ServerPayload = {
     id: string;
-    conversationId?: string;
+    conversationId: string | null;
     isNew?: boolean;
     targetUserId?: string;
     ciphertext: string;

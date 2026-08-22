@@ -135,7 +135,7 @@ function FeatureOption({ optionKey, config, value, onChange, styleId, seed, para
 
     return (
         <div>
-            <p className="mb-2 font-semibold text-[11px] md:text-xs xl:text-sm">
+            <p className="mb-2 font-semibold smallText">
                 {config.label}
             </p>
 
@@ -203,10 +203,10 @@ function FeatureCustomizer({ style, seed, onSeedChange, params, onParamChange }:
         <div className="space-y-5">
             {/* Seed row */}
             <div>
-                <p className="mb-2 font-semibold text-[11px] md:text-xs xl:text-sm">Seed</p>
+                <p className="mb-2 font-semibold smallText">Seed</p>
                 <div className="flex gap-x-2">
                     <input value={seed} onChange={(e) => onSeedChange(e.target.value)} placeholder="Enter any text…"
-                        className="flex-1 bg-background px-3 py-2 border border-input rounded-xl focus:outline-none text-[11px] md:text-xs xl:text-sm" />
+                        className="flex-1 bg-background px-3 py-2 border border-input rounded-xl focus:outline-none smallText" />
                     <Button type="button" variant="outline" size="icon" className="rounded-xl shrink-0" onClick={() => onSeedChange(randomSeed())}>
                         <Shuffle className="size-4" />
                     </Button>

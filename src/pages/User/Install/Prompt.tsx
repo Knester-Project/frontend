@@ -106,7 +106,7 @@ export function PwaInstallPrompt() {
                                 Install the app for the best experience.
                             </p>
 
-                            <div className="space-y-2 bg-muted p-3 border border-border rounded-lg text-[11px] md:text-xs xl:text-sm">
+                            <div className="space-y-2 bg-muted p-3 border border-border rounded-lg smallText">
                                 <p className="flex items-center gap-2">
                                     <Share className="size-4 md:size-4.5 xl:size-5 text-blue-500" />
                                     Tap the Share button.

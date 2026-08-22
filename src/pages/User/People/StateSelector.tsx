@@ -33,7 +33,7 @@ export default function StateSelector({selected, setSelected}: {selected: string
     return (
         <main className="relative">
             {/* Trigger */}
-            <button onClick={() => setOpen((v) => !v)} className={cn("flex items-center gap-2 px-4 py-3 border rounded-2xl w-full font-medium text-[11px] md:text-xs xl:text-sm transition-all cursor-pointer", selected ? "border-primary bg-primary/5 text-primary" : "border-border bg-card text-card-foreground hover:border-primary/30")}>
+            <button onClick={() => setOpen((v) => !v)} className={cn("flex items-center gap-2 px-4 py-3 border rounded-2xl w-full font-medium transition-all cursor-pointer smallText", selected ? "border-primary bg-primary/5 text-primary" : "border-border bg-card text-card-foreground hover:border-primary/30")}>
 
                 <Location className="size-4 shrink-0" />
                 <span className="flex-1 text-left">

@@ -261,7 +261,7 @@ export default function ProfileForm({ isPremium, close, remainingMedia = 10, MAX
                 )}>
                     <DirectSend className="size-4 text-gray-600 dark:text-gray-300 shrink-0" />
                     <div className="flex-1">
-                        <p className="font-medium text-[11px] md:text-xs xl:text-sm">
+                        <p className="font-medium smallText">
                             {canAddMedia ? "Upload photos or videos" : "No more slots available"}
                         </p>
                         <p className="mt-0.5 text-[11px] text-gray-600 dark:text-gray-300">
@@ -333,7 +333,7 @@ function Section({ icon: IconComponent, title, badge, children }: SectionProps) 
                 <div style={{ backgroundColor: colors.primary }} className="flex justify-center items-center rounded-lg size-8 md:size-9 xl:size-10">
                     <IconComponent variant="Bold" style={{ color: colors.isDark ? "white" : "#121212" }} className={`size-4 md:size-4.5 xl:size-5`} />
                 </div>
-                <span className="font-medium text-[11px] md:text-xs xl:text-sm montserrat">{title}</span>
+                <span className="font-medium smallText montserrat">{title}</span>
                 {badge != null && (
                     <span className="bg-accent ml-auto px-2 py-0.5 rounded-lg font-medium text-[11px] montserrat">
                         {badge}
@@ -364,7 +364,7 @@ function ToggleRow({ icon: IconComponent, label, description, checked, onChange 
                 <IconComponent className="size-4 md:size-4.5 xl:size-5" />
             </div>
             <div className="flex-1 min-w-0">
-                <Label style={{ color: colors.isDark ? "white" : "#121212" }} htmlFor={id} className="font-medium text-[11px] md:text-xs xl:text-sm cursor-pointer montserrat">
+                <Label style={{ color: colors.isDark ? "white" : "#121212" }} htmlFor={id} className="font-medium cursor-pointer smallText montserrat">
                     {label}
                 </Label>
                 <p style={{ color: colors.isDark ? "white" : "#121212" }} className="mt-0.5 text-[10px] md:text-[11px] xl:text-xs">{description}</p>

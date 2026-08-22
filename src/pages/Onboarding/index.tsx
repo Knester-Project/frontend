@@ -192,7 +192,7 @@ export default function GenreOnboarding() {
                     <Button
                         onClick={handleSave}
                         disabled={selectedGenres.length === 0 || syncProfile.isPending}
-                        className="shadow-sm rounded-xl w-full h-12 font-semibold text-[11px] md:text-xs xl:text-sm"
+                        className="shadow-sm rounded-xl w-full h-12 font-semibold smallText"
                     >
                         {syncProfile.isPending ? (
                             <>

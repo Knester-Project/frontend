@@ -147,7 +147,7 @@ export default function NotificationBox({ notification, nextCursor }: { notifica
                     )}
                 </div>
 
-                <p className="mt-1 text-[11px] md:text-xs xl:text-sm leading-snug">
+                <p className="mt-1 leading-snug smallText">
                     <span className="font-semibold text-foreground">
                         {notification.title}
                     </span>{" "}
