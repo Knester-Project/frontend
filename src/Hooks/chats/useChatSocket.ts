@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 
 // Libs, Utils, Stores
-import { db } from "@/lib/db";
 import { getSocket } from "@/utils/socket";
 import { parseRedisMessage } from "@/utils/format";
 import { meStore } from "@/stores/me.store";
 import { useTypingStore } from "@/stores/typing.store";
 import { useChatUIStore } from "@/stores/chatUI.store";
+import * as DBServices from "@/utils/chat/local.storage";
 
 export const useChatSocket = (isAuthReady: boolean) => {
 
@@ -33,29 +33,34 @@ export const useChatSocket = (isAuthReady: boolean) => {
         // New Message
         const handleNewMessage = async (incomingMsg: RedisMessage) => {
             try {
-                const existingMsg = await db.messages.get(incomingMsg.id);
+                const existingMsg = await DBServices.getMessage(incomingMsg.id);
 
+                // Message already exists locally.
                 if (existingMsg) {
                     if (existingMsg.syncStatus !== "sent") {
-                        await db.messages.update(incomingMsg.id, { syncStatus: "sent" });
+                        await DBServices.updateMessageSyncStatus(
+                            incomingMsg.id,
+                            "sent"
+                        );
                     }
                     return;
                 }
 
+                // Convert Redis message into our Dexie format and Save.
                 const localMessage = parseRedisMessage(incomingMsg);
-                await db.messages.add(localMessage);
+                await DBServices.saveIncomingMessage(localMessage);
 
                 const currentActiveId = useChatUIStore.getState().activeConversationId;
 
                 if (currentActiveId === incomingMsg.conversationId) {
                     socket.emit("message:read", {
                         conversationId: incomingMsg.conversationId,
-                        messageId: incomingMsg.id
+                        messageId: incomingMsg.id,
                     });
                 } else {
                     socket.emit("message:delivered", {
                         conversationId: incomingMsg.conversationId,
-                        messageId: incomingMsg.id
+                        messageId: incomingMsg.id,
                     });
                 }
             } catch (error) {
@@ -64,62 +69,39 @@ export const useChatSocket = (isAuthReady: boolean) => {
         };
 
         // Edit Message
-        const handleEditMessage = async (data: { messageId: string, ciphertext: string, iv: string, tag: string }) => {
+        const handleEditMessage = async (data: { messageId: string; ciphertext: string; iv: string; tag: string }) => {
             try {
-                const existingMsg = await db.messages.get(data.messageId);
-                if (!existingMsg) return;
-
-                await db.messages.update(data.messageId, {
-                    ciphertext: data.ciphertext,
-                    iv: data.iv,
-                    tag: data.tag,
-                    edited: true,
-                    editedAt: Date.now()
-                });
+                await DBServices.updateEditedMessage(data.messageId, { ciphertext: data.ciphertext, iv: data.iv, tag: data.tag });
             } catch (error) {
                 console.error("Error processing edited message:", error);
             }
         };
 
         // Delete Message
-        const handleDeleteMessage = async (data: { messageId: string }) => {
+        const handleDeleteMessage = async (data: { messageId: string; }) => {
             try {
-                await db.messages.delete(data.messageId);
+                await DBServices.deleteMessage(data.messageId);
             } catch (error) {
                 console.error("Error processing deleted message:", error);
             }
         };
 
         // Delivery Update
-        const handleDeliveredUpdate = async (data: { messageId: string, userId: string }) => {
-            const triggerMsg = await db.messages.get(data.messageId);
-            if (!triggerMsg) return;
-
-            // Find ALL messages sent by us, in this conversation, older than or equal to this message
-            await db.messages
-                .where('conversationId').equals(triggerMsg.conversationId)
-                .and(msg =>
-                    msg.senderId === user?._id &&
-                    msg.createdAt <= triggerMsg.createdAt &&
-                    msg.syncStatus === 'sent'
-                )
-                .modify({ syncStatus: 'delivered' });
+        const handleDeliveredUpdate = async (data: { messageId: string; userId: string }) => {
+            try {
+                await DBServices.markMessagesAsDelivered(data.messageId, user?._id);
+            } catch (error) {
+                console.error("Error processing delivered update:", error);
+            }
         };
 
         // Read Update
-        const handleReadUpdate = async (data: { messageId: string, userId: string }) => {
-            const triggerMsg = await db.messages.get(data.messageId);
-            if (!triggerMsg) return;
-
-            // Find ALL messages sent by us, in this conversation, older than or equal to this message
-            await db.messages
-                .where('conversationId').equals(triggerMsg.conversationId)
-                .and(msg =>
-                    msg.senderId === user?._id &&
-                    msg.createdAt <= triggerMsg.createdAt &&
-                    msg.syncStatus !== 'read'
-                )
-                .modify({ syncStatus: 'read' });
+        const handleReadUpdate = async (data: { messageId: string; userId: string }) => {
+            try {
+                await DBServices.markMessagesAsRead(data.messageId, user?._id);
+            } catch (error) {
+                console.error("Error processing read update:", error);
+            }
         };
 
         // Typing Start
@@ -137,18 +119,13 @@ export const useChatSocket = (isAuthReady: boolean) => {
         };
 
         // Handle Conversation Read
-        const handleConversationRead = async (data: { userId: string, timestamp: number }) => {
-            if (data.userId === user?._id) return;
-
-            // Find all messages WE sent, that are older than the timestamp, and aren't marked read yet
-            await db.messages
-                .where('createdAt')
-                .belowOrEqual(data.timestamp)
-                .modify((msg) => {
-                    if (msg.senderId === user?._id && msg.syncStatus !== 'read') {
-                        msg.syncStatus = 'read';
-                    }
-                });
+        const handleConversationRead = async (data: { userId: string; timestamp: number }) => {
+            try {
+                if (data.userId === user?._id) return;
+                await DBServices.markConversationMessagesAsRead(data.timestamp, user?._id);
+            } catch (error) {
+                console.error("Error processing conversation read update:", error);
+            }
         };
 
         // --- ATTACH LISTENERS ---
@@ -170,6 +147,7 @@ export const useChatSocket = (isAuthReady: boolean) => {
             socket.off("message:read_update", handleReadUpdate);
             socket.off("typing:start", handleTypingStart);
             socket.off("typing:stop", handleTypingStop);
+            socket.off("conversation:read_update", handleConversationRead);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuthReady, user?._id]);

@@ -14,7 +14,7 @@ import { detectMediaType } from '@/utils/format';
 import { MediaGrid } from '@/components/MediaGrid';
 
 // Icons
-import { Clock, TickCircle, Danger, Lock1, Edit2, Trash, More, ArrowUp2 } from 'iconsax-reactjs';
+import { Lock1, Edit2, Trash, More, ArrowUp2, CloseSquare } from 'iconsax-reactjs';
 import { useDeleteMessage } from '@/Hooks/chats/useDeleteMessage';
 
 interface MessageBoxProps {
@@ -150,17 +150,22 @@ export default function MessageBubble({ message, senderDetails }: MessageBoxProp
                     {/* Context Menu Dropdown */}
                     {isMe && (
                         <div className="top-1 -left-6 absolute">
-                            <button onClick={() => setShowMenu(!showMenu)} className="hover:bg-muted p-1 rounded-full text-muted-foreground cursor-pointer">
-                                <More className="size-3 md:size-3.5 xl:size-4" />
+                            <button onClick={() => setShowMenu(!showMenu)} className="p-1 rounded-full cursor-pointer">
+                                {showMenu ? <CloseSquare className="hover:bg-destructive/40 size-3 md:size-3.5 xl:size-4 hover:text-destructive" />
+                                    : <More className="hover:bg-muted size-3 md:size-3.5 xl:size-4 text-muted-foreground" />
+                                }
                             </button>
 
                             {showMenu && (
-                                <div className="right-0 z-20 absolute bg-card mt-1 border border-border rounded-xl w-28 overflow-hidden smallText">
-                                    <button onClick={handleEdit} className="flex items-center gap-2 hover:bg-muted px-3 py-2 w-full text-foreground transition-colors cursor-pointer">
-                                        <Edit2 className="size-3 md:size-3.5 xl:size-4" /> Edit
+                                <div className="top-full left-0 z-20 absolute bg-card shadow-lg mt-1 border border-border rounded-xl w-28 overflow-hidden smallText">
+                                    <button onClick={handleEdit} className="flex items-center gap-2 hover:bg-primary/60 px-3 py-2 w-full text-foreground transition-colors cursor-pointer">
+                                        <Edit2 className="size-3 md:size-3.5 xl:size-4" />
+                                        Edit
                                     </button>
-                                    <button onClick={handleDelete} className="flex items-center gap-2 hover:bg-destructive/10 px-3 py-2 border-border border-t w-full text-destructive transition-colors cursor-pointer">
-                                        <Trash className="size-3 md:size-3.5 xl:size-4" /> Delete
+
+                                    <button onClick={handleDelete} className="flex items-center gap-2 hover:bg-destructive/40 px-3 py-2 border-border border-t w-full text-destructive transition-colors cursor-pointer">
+                                        <Trash className="size-3 md:size-3.5 xl:size-4" />
+                                        Delete
                                     </button>
                                 </div>
                             )}
@@ -224,32 +229,48 @@ export default function MessageBubble({ message, senderDetails }: MessageBoxProp
                             {timeString}
                         </span>
 
-                        {/* Sync Status Ticks */}
+                        {/* Message Sync Status */}
                         {isMe && (
-                            <div className="flex items-center">
-                                {message.syncStatus === 'pending' && <Clock className="opacity-70 size-3" />}
-                                {message.syncStatus === "sent" && <TickCircle className="size-3" variant="Outline" />}
+                            <div className="flex justify-center items-center">
+                                {/* Pending — transmitting */}
+                                {message.syncStatus === "pending" && (
+                                    <span className="relative flex justify-center items-center size-3">
+                                        <span className="absolute inset-0 border border-current border-t-transparent rounded-full animate-spin" />
+                                        <span className="bg-current rounded-full size-1" />
+                                    </span>
+                                )}
+
+                                {/* Sent — transmission completed */}
+                                {message.syncStatus === "sent" && (
+                                    <span className="relative flex justify-center items-center size-3">
+                                        <span className="absolute inset-0 opacity-50 border border-current rounded-full" />
+                                        <span className="bg-current rounded-full size-1.5" />
+                                    </span>
+                                )}
+
+                                {/* Delivered — reached recipient */}
                                 {message.syncStatus === "delivered" && (
-                                    <span className="relative flex w-4.5 h-3 overflow-hidden">
-                                        <span className="top-0 left-0 absolute w-2 h-3 overflow-hidden">
-                                            <TickCircle className="size-3" variant="Outline" />
-                                        </span>
-                                        <span className="top-0 left-1.5 z-2 absolute">
-                                            <TickCircle className="size-3" variant="Outline" />
-                                        </span>
+                                    <span className="relative flex justify-center items-center size-4">
+                                        <span className="left-0 absolute opacity-50 border border-current rounded-full size-2.5" />
+                                        <span className="right-0 absolute border border-current rounded-full size-2.5" />
                                     </span>
                                 )}
+
+                                {/* Read — recipient has opened it */}
                                 {message.syncStatus === "read" && (
-                                    <span className="relative flex w-4.5 h-3 overflow-hidden">
-                                        <span className="top-0 left-0 absolute w-2 h-3 overflow-hidden">
-                                            <TickCircle className="size-3" variant="Bold" />
-                                        </span>
-                                        <span className="top-0 left-1.5 z-2 absolute">
-                                            <TickCircle className="size-3" variant="Bold" />
-                                        </span>
+                                    <span className="relative flex justify-center items-center size-3.5">
+                                        <span className="absolute inset-0 opacity-60 border border-current rounded-full" />
+                                        <span className="bg-current rounded-full size-1.5" />
                                     </span>
                                 )}
-                                {message.syncStatus === 'failed' && <Danger className="size-3 text-destructive" variant="Bold" />}
+
+                                {/* Failed */}
+                                {message.syncStatus === "failed" && (
+                                    <span className="relative flex justify-center items-center size-3">
+                                        <span className="absolute bg-destructive w-3 h-px rotate-45" />
+                                        <span className="absolute bg-destructive w-3 h-px -rotate-45" />
+                                    </span>
+                                )}
                             </div>
                         )}
                     </div>
