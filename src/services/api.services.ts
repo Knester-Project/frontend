@@ -481,7 +481,8 @@ export const deleteMessageFn = async (data: { messageId: string, conversationId:
 // Update Meta Details
 export const updateConvMeta = async (data: EditConvMetaPayload) => {
     const { conversationId: id, ...rest } = data;
-    
-    const response = await userAxios.patch(`chat/conversation/${id}/meta`, rest);
+    console.log("The Id", id)
+
+    const response = await userAxios.patch(`chat/conversations/${id}/meta`, rest);
     return response.data;
 }

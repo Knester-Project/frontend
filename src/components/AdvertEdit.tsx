@@ -41,7 +41,6 @@ const AdvertEdit = ({ advert, onClose }: UpdateAdvertProps) => {
 
 
     const [files, setFiles] = useState<File[]>([]);
-    const [isUploading, setIsUploading] = useState<boolean>(false);
 
     // Initialize state with existing categories
     const [categories, setCategories] = useState<string[]>(advert.categories);
@@ -53,7 +52,7 @@ const AdvertEdit = ({ advert, onClose }: UpdateAdvertProps) => {
         handleSubmit,
         setValue,
         watch,
-        formState: { errors, dirtyFields, isDirty }
+        formState: { errors, dirtyFields, isDirty, isSubmitting }
     } = useForm<NewAdvertPayload>({
         resolver: zodResolver(newAdvertSchema),
         mode: "onBlur",
@@ -94,42 +93,29 @@ const AdvertEdit = ({ advert, onClose }: UpdateAdvertProps) => {
         }
 
         try {
-            setIsUploading(true);
             let mediaUrls = advert.mediaUrls;
 
-            // Handle new file uploads if the user selected any
             if (hasNewMedia) {
                 const uploads = await uploadFiles(files, "post");
                 mediaUrls = uploads.map((u) => u.publicUrl);
             }
 
-            // Construct the specific PATCH payload
             const dirtyData = getDirtyValues(dirtyFields, data);
-
             const payload: EditAdvertPayload = { id: advert._id, ...dirtyData };
 
             if (hasCategoriesChanged) payload.categories = categories;
             if (hasNewMedia) payload.mediaUrls = mediaUrls;
 
-            setIsUploading(false);
-
-            updateAdvert.mutate(payload, {
-                onSuccess: () => {
-                    sileo.success({ title: "Advert updated successfully", icon: <Edit className="size-3.5" /> });
-                    onClose();
-                },
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                onError: (error: any) => {
-                    const message = error?.response?.data?.message || "Couldn't update advert now.";
-                    sileo.error({ title: "Update Failed", description: message });
-                },
-            });
-        } catch {
-            sileo.error({ title: "Couldn't update advert now, kindly try again later." });
-            setIsUploading(false);
+            await updateAdvert.mutateAsync(payload);
+            sileo.success({ title: "Advert updated successfully", icon: <Edit className="size-3.5" /> });
+            onClose();
+            
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            const message = error?.response?.data?.message || "Couldn't update advert now.";
+            sileo.error({ title: "Update Failed", description: message });
         }
     };
-
 
     const mediaUpdate = useUpdateAdvertMedia();
     const handleMediaDelete = (url: string) => {
@@ -250,7 +236,7 @@ const AdvertEdit = ({ advert, onClose }: UpdateAdvertProps) => {
                     <div className="space-y-2 pt-2 pb-4">
                         <Label>Update Media (Optional)</Label>
                         <p className="text-foreground/50 text-xs">Select new files</p>
-                        <FileUploader disabled={updateAdvert.isPending || isUploading} value={files} multiple max={REMAINING_MEDIA} onChange={setFiles} />
+                        <FileUploader disabled={isSubmitting} value={files} multiple max={REMAINING_MEDIA} onChange={setFiles} />
                     </div>
 
                 </div>
@@ -260,8 +246,8 @@ const AdvertEdit = ({ advert, onClose }: UpdateAdvertProps) => {
                     <Button type="button" onClick={onClose} className="bg-background hover:bg-destructive/10 rounded-xl hover:text-destructive text-xs transition-colors">
                         Cancel
                     </Button>
-                    <Button type="submit" disabled={updateAdvert.isPending || isUploading} className="shadow-md shadow-primary/20 px-6 rounded-xl text-xs">
-                        {updateAdvert.isPending || isUploading ? (
+                    <Button type="submit" disabled={isSubmitting} className="shadow-md shadow-primary/20 px-6 rounded-xl text-xs">
+                        {isSubmitting ? (
                             <>
                                 <Loader2 className="mr-2 size-3.5 animate-spin" />
                                 Updating...

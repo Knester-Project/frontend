@@ -3,8 +3,9 @@ import { cn } from "@/lib/utils";
 import { useNavigate } from "@tanstack/react-router";
 import { sileo } from "sileo";
 
-// Utils
+// Utils and Stores
 import { formatLastSeen } from "@/utils/format";
+import { useTypingStore } from "@/stores/typing.store";
 
 // UIs
 import { Overlay } from "@/components/Overlay";
@@ -23,16 +24,16 @@ type HeaderProps = {
         hasReported: boolean;
         blockedByMe: boolean;
         blockedMe: boolean;
-    }
+    };
+    meta: Omit<Meta, "createdAt" | "owner">;
+    conversationId: string | null;
 }
 
-const Header = ({ profilePicture, username, isOnline, lastSeen, relationship }: HeaderProps) => {
+const Header = ({ profilePicture, username, isOnline, lastSeen, relationship, meta, conversationId }: HeaderProps) => {
 
     const navigate = useNavigate();
     const [isImageOpen, setIsImageOpen] = useState<boolean>(false);
     const [optionsOpen, setOptionsOpen] = useState<boolean>(false);
-
-    const isTyping = false;
 
     const handleUnavailable = (value: string) => {
         sileo.info({
@@ -53,7 +54,15 @@ const Header = ({ profilePicture, username, isOnline, lastSeen, relationship }: 
         profilePicture: profilePicture,
         username: username,
         onClose: toggleOptions,
+        meta,
+        isPrivate: true,
+        conversationId,
     }
+
+    const typingUsers = useTypingStore(state =>
+        conversationId ? state.typingUsers[conversationId] : undefined
+    );
+    const isTyping = typingUsers && typingUsers.size > 0;
 
     return (
         <>

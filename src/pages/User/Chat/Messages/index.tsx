@@ -76,7 +76,14 @@ const Index = ({ username }: { username: string }) => {
         ),
         isOnline: targetUser.profile?.isOnline || false,
         lastSeen: targetUser.profile?.lastSeen || new Date().toLocaleString(),
-        relationship: convData.relationship
+        relationship: convData.relationship,
+        conversationId,
+        meta: {
+            name: meta?.name || "",
+            avatar: meta?.avatar || "",
+            type: meta?.type || "private",
+            messageTtl: meta?.messageTtl || 86400,
+        }
     }
 
     // Participant Map for MessageBubble

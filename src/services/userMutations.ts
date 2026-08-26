@@ -831,7 +831,7 @@ export function useDeleteNotification(queryKey: string, queries: CursorQueries) 
 // Chat Relationship Actions
 export function useChatRelationshipActions(targetUsername: string) {
     const queryClient = useQueryClient();
-    
+
     const conversationQueryKey = ['conversation', targetUsername];
     const profileQueryKey = ['profile', targetUsername];
 
@@ -845,7 +845,7 @@ export function useChatRelationshipActions(targetUsername: string) {
         if (previousData) {
             queryClient.setQueryData<ConversationResponse>(conversationQueryKey, updater(previousData));
         }
-        
+
         return { previousData };
     };
 
@@ -868,9 +868,9 @@ export function useChatRelationshipActions(targetUsername: string) {
                 ...old,
                 data: {
                     ...old.data,
-                    relationship: { 
-                        ...old.data.relationship, 
-                        inCircle: !currentlyInCircle 
+                    relationship: {
+                        ...old.data.relationship,
+                        inCircle: !currentlyInCircle
                     }
                 }
             })),
@@ -886,9 +886,9 @@ export function useChatRelationshipActions(targetUsername: string) {
                 ...old,
                 data: {
                     ...old.data,
-                    relationship: { 
-                        ...old.data.relationship, 
-                        blockedByMe: !currentlyBlocked 
+                    relationship: {
+                        ...old.data.relationship,
+                        blockedByMe: !currentlyBlocked
                     }
                 }
             })),
@@ -904,9 +904,9 @@ export function useChatRelationshipActions(targetUsername: string) {
                 ...old,
                 data: {
                     ...old.data,
-                    relationship: { 
-                        ...old.data.relationship, 
-                        hasReported: true 
+                    relationship: {
+                        ...old.data.relationship,
+                        hasReported: true
                     }
                 }
             })),
@@ -915,4 +915,39 @@ export function useChatRelationshipActions(targetUsername: string) {
     });
 
     return { toggleCircle, toggleBlock, report };
+}
+
+// Update Meta Details
+export function useUpdateConvMeta(name: string) {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: EditConvMetaPayload) => Api.updateConvMeta(data),
+
+        onError: (error) => {
+            console.error("Failed to Update Conversation:", error);
+        },
+
+        onSuccess: async (_, variables) => {
+            queryClient.setQueryData<ConversationResponse>(
+                ["conversation", name],
+                (old) => {
+                    if (!old?.data?.meta) return old;
+
+                    return {
+                        ...old,
+                        data: {
+                            ...old.data,
+                            meta: {
+                                ...old.data.meta,
+                                ...(variables.name !== undefined && { name: variables.name }),
+                                ...(variables.avatar !== undefined && { avatar: variables.avatar }),
+                                ...(variables.messageTtl !== undefined && { messageTtl: variables.messageTtl }),
+                                ...(variables.type !== undefined && { type: variables.type }),
+                            },
+                        },
+                    };
+                }
+            );
+        },
+    });
 }

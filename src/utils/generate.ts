@@ -55,6 +55,19 @@ export const getDirtyValues = <T extends Record<string, any>>(
   return changes;
 };
 
+// Get Changed Values
+export function getChangedValues(prev: Record<string, string | number>, latest: Record<string, string | number>): Partial<Record<string, string | number>> {
+  const changed: Partial<Record<string, string | number>> = {};
+
+  (Object.keys(latest) as (keyof Record<string, string | number>)[]).forEach((key) => {
+    if (prev[key] !== latest[key]) {
+      changed[key] = latest[key];
+    }
+  });
+
+  return changed;
+}
+
 // Convert Public VAPID Key from Base64 to Uint8Array
 export const urlBase64ToUint8Array = (base64String: string) => {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -101,43 +114,43 @@ export function toGenres(arr: string[]): Genres {
 // Build Notification URL
 export function buildNotificationUrl(type: NotificationType, entity?: Record<string, any>, username?: string) {
 
-    switch (type) {
-        case "profile_lookup":
-        case "new_follower":
-        case "follow_request":
-        case "follow_request_accepted":
-            return username
-                ? `/profile?profile=${username}`
-                : "/";
+  switch (type) {
+    case "profile_lookup":
+    case "new_follower":
+    case "follow_request":
+    case "follow_request_accepted":
+      return username
+        ? `/profile?profile=${username}`
+        : "/";
 
-        case "post_like":
-        case "post_comment":
-        case "comment_reply":
-        case "reply_reply":
-        case "comment_like":
-        case "post_shared":
-        case "post_repost":
-        case "mention":
-        case "tagged":
-            return `/post/${entity?.postId}`;
+    case "post_like":
+    case "post_comment":
+    case "comment_reply":
+    case "reply_reply":
+    case "comment_like":
+    case "post_shared":
+    case "post_repost":
+    case "mention":
+    case "tagged":
+      return `/post/${entity?.postId}`;
 
-        case "story_reaction":
-        case "story_mention":
-            return `/story/${entity?.storyId}`;
+    case "story_reaction":
+    case "story_mention":
+      return `/story/${entity?.storyId}`;
 
-        case "message":
-            return `/messages/${entity?.conversationId}`;
+    case "message":
+      return `/messages/${entity?.conversationId}`;
 
-        case "group_invite":
-            return `/groups/${entity?.groupId}`;
+    case "group_invite":
+      return `/groups/${entity?.groupId}`;
 
-        case "event_invite":
-            return `/events/${entity?.eventId}`;
+    case "event_invite":
+      return `/events/${entity?.eventId}`;
 
-        case "order_update":
-            return `/order/${entity?.orderId}`;
+    case "order_update":
+      return `/order/${entity?.orderId}`;
 
-        default:
-            return "/";
-    }
+    default:
+      return "/";
+  }
 }

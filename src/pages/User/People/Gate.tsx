@@ -7,7 +7,7 @@ import { GridLock, Unlock, ShieldTick, ArrowLeft3 } from "iconsax-reactjs";
 export default function Gate() {
 
     return (
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="flex flex-col items-center py-10 text-center">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="flex flex-col items-center px-2 py-10 text-center">
             {/* Locked icon */}
             <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ delay: 0.1, type: "spring" }}
                 className="relative flex justify-center items-center bg-amber-500/10 mb-6 rounded-3xl size-18 md:size-20 xl:size-22">

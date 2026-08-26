@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef } from "react";
 import { Drawer } from "vaul";
-import { useForm } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 // Schemas, Services, Hooks and Assets
@@ -25,11 +25,10 @@ import { Messages1, GalleryAdd, Send2, CloseCircle } from "iconsax-reactjs";
 const Comment = ({ comments, postId, postModel }: { comments: number; postId: string; postModel: string }) => {
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [isUploading, setIsUploading] = useState<boolean>(false);
     const [toastMessages, setToastMessages] = useState<ToastInline | null>(null);
 
 
-    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm({
+    const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm({
         resolver: zodResolver(commentSchema), mode: "onBlur"
     });
 
@@ -42,10 +41,18 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
     const { uploadFiles } = usePresignedUpload();
 
     const newComment = useAddComment({ postId, limit: COMMENT_LIMIT });
-    const onSubmit = async (data: CommentInput) => {
+    const onSubmit: SubmitHandler<CommentInput> = async (data) => {
 
+        if (!data.content.trim() && (!selectedMedia && selectedMedia.length === 0)) {
+            return setToastMessages({
+                title: "Error",
+                message: "Comment cannot be empty.",
+                variant: "error",
+                handleClose: closeToast,
+            });
+        }
+        
         try {
-            setIsUploading(true);
 
             let mediaUrl: string | null = null;
 
@@ -59,21 +66,11 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
                 const uploads = await uploadFiles(uniqueFiles, "post");
 
                 const failedUpload = uploads.some(u => !u.uploadUrl);
-
                 if (failedUpload) {
                     throw new Error("Upload failed");
                 }
-                
-                mediaUrl = uploads[0]?.publicUrl || null;
-            }
 
-            if (!data.content.trim() && !mediaUrl) {
-                return setToastMessages({
-                    title: "Error",
-                    message: "Comment cannot be empty.",
-                    variant: "error",
-                    handleClose: closeToast,
-                });
+                mediaUrl = uploads[0]?.publicUrl || null;
             }
 
             // Create payload
@@ -84,43 +81,27 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
                 ...(mediaUrl && { media: mediaUrl }),
             };
 
-            newComment.mutate(payload, {
-                onSuccess: () => {
-                    setToastMessages({
-                        title: "Comment added",
-                        message: "Your comment has been added successfully.",
-                        variant: "success",
-                        handleClose: closeToast,
-                    });
-                    reset();
-                },
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                onError: (error: any) => {
-                    const message = error?.response?.data?.message || "Couldn't add comment now, kindly try again later.";
-                    setToastMessages({
-                        title: "Error",
-                        message,
-                        variant: "error",
-                        handleClose: closeToast,
-                    });
-                    reset();
-                },
-                onSettled: () => {
-                    setIsUploading(false);
-                }
-            });
-        } catch {
-            setIsUploading(false);
+            await newComment.mutateAsync(payload);
             setToastMessages({
-                title: "Couldn't add comment now, kindly try again later.",
-                message: "Couldn't add comment now, kindly try again later.",
+                title: "Comment added",
+                message: "Your comment has been added successfully.",
+                variant: "success",
+                handleClose: closeToast,
+            });
+            reset();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            const message = error?.response?.data?.message || "Couldn't add comment now, kindly try again later.";
+            setToastMessages({
+                title: "Error",
+                message,
                 variant: "error",
                 handleClose: closeToast,
             });
+            reset();
         }
     };
 
-    const isLoading = isUploading || newComment.isPending;
 
     // Comments Query
     const { data, fetchNextPage, isLoading: isCommentLoading, hasNextPage, isFetchingNextPage } = useComments({ postId, limit: COMMENT_LIMIT }, isOpen)
@@ -199,8 +180,8 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
                                 {selectedMedia?.[0] && (
                                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="relative size-20">
                                         <img src={URL.createObjectURL(selectedMedia[0])} className="border border-accent/40 rounded-lg w-full h-full object-cover" alt="preview" />
-                                        <button type="button" disabled={isLoading} onClick={() => reset({ media: undefined })}
-                                            className={`-top-2 -right-2 absolute rounded-full text-destructive ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}>
+                                        <button type="button" disabled={isSubmitting} onClick={() => reset({ media: undefined })}
+                                            className={`-top-2 -right-2 absolute rounded-full text-destructive ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}>
                                             <CloseCircle variant="Bold" className="size-5 cursor-pointer" />
                                         </button>
                                     </motion.div>
@@ -208,7 +189,7 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
                             </AnimatePresence>
 
                             <div className="relative flex items-end gap-x-3 bg-background p-2 border border-border focus-within:border-primary/50 rounded-2xl transition-colors">
-                                <textarea  {...register("content")} placeholder={isLoading ? "Posting..." : "Write a comment..."} rows={1} className={`flex-1 bg-transparent px-2 py-2 border-none outline-none focus:ring-0 max-h-44 text-sm md:text-base xl:text-lg resize-none hide-scrollbar ${isLoading ? "opacity-60 cursor-not-allowed" : ""
+                                <textarea  {...register("content")} placeholder={isSubmitting ? "Posting..." : "Write a comment..."} rows={1} className={`flex-1 bg-transparent px-2 py-2 border-none outline-none focus:ring-0 max-h-44 text-sm md:text-base xl:text-lg resize-none hide-scrollbar ${isSubmitting ? "opacity-60 cursor-not-allowed" : ""
                                     }`} onInput={(e) => {
                                         const target = e.target as HTMLTextAreaElement;
                                         target.style.height = "auto";
@@ -216,12 +197,12 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
                                     }} />
 
                                 <div className="flex items-center gap-x-2 pb-1">
-                                    <label className={`p-2 rounded-full transition-colors ${isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/30 cursor-pointer"}`}>
+                                    <label className={`p-2 rounded-full transition-colors ${isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/30 cursor-pointer"}`}>
                                         <GalleryAdd className="size-5" />
-                                        <input disabled={isUploading || newComment.isPending} type="file" className="hidden" accept="image/*,video/*" {...register("media")} />
+                                        <input disabled={isSubmitting} type="file" className="hidden" accept="image/*,video/*" {...register("media")} />
                                     </label>
 
-                                    <button disabled={contentValue.length === 0 || contentValue.length > 200 || isLoading} type="submit"
+                                    <button disabled={contentValue.length === 0 || contentValue.length > 200 || isSubmitting} type="submit"
                                         className="bg-primary disabled:opacity-50 disabled:grayscale p-2 rounded-full transition-all cursor-pointer">
                                         <Send2 variant="Bold" className="size-5" />
                                     </button>

@@ -491,17 +491,20 @@ declare type ConversationResponse = {
     data: UsernameConv;
 };
 
+// Meta Details
+declare type Meta = {
+    avatar: string;
+    createdAt: string;
+    messageTtl: number;
+    name: string;
+    owner: string;
+    type: string;
+}
+
 // Username Conversation
 declare type UsernameConv = {
     conversationId: string | null;
-    meta: {
-        avatar: string;
-        createdAt: string;
-        messageTtl: string;
-        name: string;
-        owner: string;
-        type: string;
-    } | null;
+    meta: Meta | null;
     targetUser: User;
     publicKey: PubicKey;
     relationship: {
@@ -559,9 +562,9 @@ declare type EditMessagePayload = {
 
 // Update Conversation Meta Payload
 declare type EditConvMetaPayload = {
-    name: string;
-    avatar: string;
-    type: public;
-    messageTtl: number;
-    conversationId: string;
+    name?: string;
+    avatar?: string;
+    type?: public;
+    messageTtl?: number;
+    conversationId?: string;
 }

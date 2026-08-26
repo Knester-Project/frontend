@@ -37,7 +37,7 @@ export default function ProfileForm({ isPremium, close, remainingMedia = 10, MAX
 
     const [mediaFiles, setMediaFiles] = useState<File[]>([]);
     const [mediaError, setMediaError] = useState<string | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     const { register, handleSubmit, control, watch, setValue, reset, formState: { errors } } = useForm<EditProfileInput>({
         resolver: zodResolver(editProfileSchema),
