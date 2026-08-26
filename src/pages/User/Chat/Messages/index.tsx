@@ -45,7 +45,8 @@ const Index = ({ username }: { username: string }) => {
     } = useMessages({ limit: MESSAGES_LIMIT }, conversationId || "", isEnabled);
 
     // Read strictly from Dexie
-    const localMessages = useReadMessages(conversationId || "")
+    const messageTtl = convData.meta?.messageTtl
+    const localMessages = useReadMessages(conversationId || "", messageTtl || 86400)
     const pageParams = messagesData?.pageParams;
 
     // IMPORTANT HOOKS
@@ -64,7 +65,7 @@ const Index = ({ username }: { username: string }) => {
     // Meta and Participant Details
     const meta = convData.meta;
     const targetUser = convData.targetUser;
-    
+
 
     // Header Props
     const headerProps = {

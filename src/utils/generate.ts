@@ -154,3 +154,19 @@ export function buildNotificationUrl(type: NotificationType, entity?: Record<str
       return "/";
   }
 }
+
+// For the message duration
+export const getTtlMs = (ttlValue?: string | number): number => {
+    // Default to 1 day (24 hours) if undefined
+    if (!ttlValue) return 24 * 60 * 60 * 1000; 
+    
+    const ttlStr = String(ttlValue).toLowerCase();
+    
+    if (ttlStr === '24h' || ttlStr === '1d') return 24 * 60 * 60 * 1000;
+    if (ttlStr === '3d') return 3 * 24 * 60 * 60 * 1000;
+    if (ttlStr === '7d') return 7 * 24 * 60 * 60 * 1000;
+    
+    // Fallback if you store it directly as milliseconds/seconds in the DB
+    const parsed = parseInt(ttlStr);
+    return parsed > 100000 ? parsed : 24 * 60 * 60 * 1000; 
+};

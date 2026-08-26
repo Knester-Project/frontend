@@ -34,6 +34,13 @@ const Header = ({ profilePicture, username, isOnline, lastSeen, relationship, me
     const navigate = useNavigate();
     const [isImageOpen, setIsImageOpen] = useState<boolean>(false);
     const [optionsOpen, setOptionsOpen] = useState<boolean>(false);
+    const [search, setSearch] = useState<boolean>(false);
+
+
+    // Functions
+    const toggleImages = () => setIsImageOpen((prev) => !prev);
+    const toggleOptions = () => setOptionsOpen((prev) => !prev);
+    const toggleSearch = () => setSearch((prev) => !prev);
 
     const handleUnavailable = (value: string) => {
         sileo.info({
@@ -41,10 +48,6 @@ const Header = ({ profilePicture, username, isOnline, lastSeen, relationship, me
             icon: value === "Voice Call" ? <Call variant="Bold" /> : <Video variant="Bold" />,
         });
     }
-
-    // Functions
-    const toggleImages = () => setIsImageOpen((prev) => !prev);
-    const toggleOptions = () => setOptionsOpen((prev) => !prev);
 
     const actionProps = {
         inCircle: relationship.inCircle,
@@ -57,6 +60,7 @@ const Header = ({ profilePicture, username, isOnline, lastSeen, relationship, me
         meta,
         isPrivate: true,
         conversationId,
+        toggleSearch,
     }
 
     const typingUsers = useTypingStore(state =>
@@ -66,50 +70,59 @@ const Header = ({ profilePicture, username, isOnline, lastSeen, relationship, me
 
     return (
         <>
-            <main className="top-0 z-5 sticky flex items-center gap-3 bg-primary/10 backdrop-blur-lg p-3 md:p-4 xl:p-5">
-                <button onClick={() => navigate({ to: "/messages", search: { username: undefined } })}
-                    className="hover:bg-primary/10 p-1.5 rounded-full transition-colors cursor-pointer"
-                    aria-label="Back">
-                    <ArrowLeft2 className="size-4 md:size-4.5 xl:size-5 text-muted-foreground" />
-                </button>
-
-                {/* Profile Picture Button */}
-                <button
-                    onClick={toggleImages}
-                    className="relative flex-shrink-0 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-95 transition-transform cursor-pointer"
-                    aria-label={`View ${username}'s profile picture`}
-                >
-                    <img
-                        src={profilePicture}
-                        alt={username}
-                        className="ring-border rounded-full ring-2 size-8 md:size-9 xl:size-10 object-cover"
-                    />
-                    {isOnline && (
-                        <span className="right-0 bottom-0 absolute bg-green-500 border-2 border-card rounded-full size-3 md:size-3.5 xl:size-4" />
-                    )}
-                </button>
-
-                <div className="flex-1 min-w-0">
-                    <p className="font-semibold truncate">{username}</p>
-                    <p className={cn("text-[10px] md:text-[11px] xl:text-xs truncate montserrat",
-                        isTyping ? "text-primary animate-pulse" : isOnline ? "text-green-500" : "text-muted-foreground")}>
-                        {isTyping ? "Typing..." : isOnline ? "Online" : `Last Seen ${formatLastSeen(lastSeen)}`}
-                    </p>
-                </div>
-
-                <div className="flex items-center gap-1">
-                    <button onClick={() => handleUnavailable("Voice Call")} className="hover:bg-primary/20 opacity-40 p-2 rounded-full text-foreground/70 cursor-not-allowed" aria-label="Voice call (coming soon)">
-                        <Call className="size-4 md:size-4.5 xl:size-5" />
+            {search ?
+                <section className="flex items-center gap-x-2">
+                    <button onClick={toggleSearch}
+                        className="hover:bg-primary/10 p-1.5 rounded-full transition-colors cursor-pointer"
+                        aria-label="Back">
+                        <ArrowLeft2 className="size-4 md:size-4.5 xl:size-5 text-muted-foreground" />
                     </button>
-                    <button onClick={() => handleUnavailable("Video Call")} className="hover:bg-primary/20 opacity-40 p-2 rounded-full text-foreground/70 cursor-not-allowed" aria-label="Video call (coming soon)">
-                        <Video className="size-4 md:size-4.5 xl:size-5" />
+                    <input type="text" placeholder="🔍 Search" className="px-4 py-3 border border-border focus:border-primary rounded-lg focus:outline-none placeholder:text-[11px] md:placeholder:text-xs xl:placeholder:text-sm duration-300 focus:caret-primary" />
+                </section>
+                : <main className="top-0 z-5 sticky flex items-center gap-3 bg-primary/10 backdrop-blur-lg p-3 md:p-4 xl:p-5">
+                    <button onClick={() => navigate({ to: "/messages", search: { username: undefined } })}
+                        className="hover:bg-primary/10 p-1.5 rounded-full transition-colors cursor-pointer"
+                        aria-label="Back">
+                        <ArrowLeft2 className="size-4 md:size-4.5 xl:size-5 text-muted-foreground" />
                     </button>
-                    <button onClick={toggleOptions} className="hover:bg-primary/20 p-2 rounded-full text-foreground/70 cursor-pointer" aria-label="More options">
-                        <MoreSquare className="size-4 md:size-4.5 xl:size-5" />
-                    </button>
-                </div>
-            </main>
 
+                    {/* Profile Picture Button */}
+                    <button
+                        onClick={toggleImages}
+                        className="relative flex-shrink-0 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-95 transition-transform cursor-pointer"
+                        aria-label={`View ${username}'s profile picture`}
+                    >
+                        <img
+                            src={profilePicture}
+                            alt={username}
+                            className="ring-border rounded-full ring-2 size-8 md:size-9 xl:size-10 object-cover"
+                        />
+                        {isOnline && (
+                            <span className="right-0 bottom-0 absolute bg-green-500 border-2 border-card rounded-full size-3 md:size-3.5 xl:size-4" />
+                        )}
+                    </button>
+
+                    <div className="flex-1 min-w-0">
+                        <p className="font-semibold truncate">{username}</p>
+                        <p className={cn("text-[10px] md:text-[11px] xl:text-xs truncate montserrat",
+                            isTyping ? "text-primary animate-pulse" : isOnline ? "text-green-500" : "text-muted-foreground")}>
+                            {isTyping ? "Typing..." : isOnline ? "Online" : `Last Seen ${formatLastSeen(lastSeen)}`}
+                        </p>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                        <button onClick={() => handleUnavailable("Voice Call")} className="hover:bg-primary/20 opacity-40 p-2 rounded-full text-foreground/70 cursor-not-allowed" aria-label="Voice call (coming soon)">
+                            <Call className="size-4 md:size-4.5 xl:size-5" />
+                        </button>
+                        <button onClick={() => handleUnavailable("Video Call")} className="hover:bg-primary/20 opacity-40 p-2 rounded-full text-foreground/70 cursor-not-allowed" aria-label="Video call (coming soon)">
+                            <Video className="size-4 md:size-4.5 xl:size-5" />
+                        </button>
+                        <button onClick={toggleOptions} className="hover:bg-primary/20 p-2 rounded-full text-foreground/70 cursor-pointer" aria-label="More options">
+                            <MoreSquare className="size-4 md:size-4.5 xl:size-5" />
+                        </button>
+                    </div>
+                </main>
+            }
             {/* Full Screen Image Modal */}
             {isImageOpen && (
                 <Overlay open={isImageOpen} onClose={toggleImages}>

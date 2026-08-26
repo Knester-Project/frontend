@@ -2,19 +2,27 @@ import { db } from "@/lib/db";
 import { useLiveQuery } from "dexie-react-hooks";
 import type { Socket } from "socket.io-client";
 
+// Utils
+import { getTtlMs } from "../generate";
+
 
 // READ MESSAGES
-export const useReadMessages = (conversationId: string) => {
+export const useReadMessages = (conversationId: string, messageTtl: number) => {
     return useLiveQuery(
-        () =>
-            conversationId.trim()
-                ? db.messages
-                    .where("conversationId")
-                    .equals(conversationId)
-                    .sortBy("createdAt")
-                : [],
-        [conversationId]
-    );
+        () => {
+            if (!conversationId) return [];
+
+            // Calculate the exact cutoff time for this render
+            const expirationThreshold = Date.now() - getTtlMs(messageTtl);
+
+            return db.messages
+                .where('conversationId').equals(conversationId)
+                // Filter out anything older than the threshold
+                .filter(msg => msg.createdAt >= expirationThreshold)
+                .sortBy('createdAt');
+        },
+        [conversationId, messageTtl]
+    )
 };
 
 

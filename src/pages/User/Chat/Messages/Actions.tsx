@@ -24,9 +24,10 @@ type ActionProps = {
     meta: Omit<Meta, "createdAt" | "owner">;
     onClose: () => void;
     isPrivate: boolean;
+    toggleSearch: () => void;
 }
 
-const Actions = ({ conversationId, inCircle, hasReported, blockedByMe, blockedMe, profilePicture, username, meta, onClose, isPrivate }: ActionProps) => {
+const Actions = ({ conversationId, inCircle, hasReported, blockedByMe, blockedMe, profilePicture, username, meta, onClose, isPrivate, toggleSearch }: ActionProps) => {
 
     const navigate = useNavigate();
     const [showMetaForm, setShowMetaForm] = useState<boolean>(false);
@@ -40,7 +41,7 @@ const Actions = ({ conversationId, inCircle, hasReported, blockedByMe, blockedMe
 
     const safeActions = [
         { label: "View profile", Icon: TagUser, onClick: onViewProfile, hint: username },
-        { label: "Search in chat", Icon: SearchNormal, onClick: () => { } },
+        { label: "Search in chat", Icon: SearchNormal, onClick: toggleSearch },
         { label: "Customize chat", Icon: Edit2, onClick: toggleForm },
         { label: inCircle ? "Leave circle" : "Join circle", Icon: inCircle ? ExportCircle : ImportCircle, onClick: () => toggleCircle.mutate(inCircle) },
     ];
@@ -62,57 +63,55 @@ const Actions = ({ conversationId, inCircle, hasReported, blockedByMe, blockedMe
         <>
             {showMetaForm ?
                 <MetaForm {...metaHeaderProps} /> :
-                <>
-                    <main>
-                        <section className="flex items-center gap-x-2">
-                            <img
-                                src={profilePicture}
-                                alt={username}
-                                className="ring-border rounded-full ring-2 size-8 md:size-9 xl:size-10 object-cover"
-                            />
-                            <div className="smallText">
-                                <p className="font-semibold">
-                                    {username}
-                                </p>
-                                <p className="text-muted-foreground">
-                                    {inCircle ? "In their circle" : "Outside their circle"}
-                                </p>
-                            </div>
-                        </section>
-                        <section className="space-y-2">
-                            <div className="my-4">
-                                {safeActions.map((a) => (
-                                    <SheetRow key={a.label} {...a} />
-                                ))}
-                            </div>
+                <main>
+                    <section className="flex items-center gap-x-2">
+                        <img
+                            src={profilePicture}
+                            alt={username}
+                            className="ring-border rounded-full ring-2 size-8 md:size-9 xl:size-10 object-cover"
+                        />
+                        <div className="smallText">
+                            <p className="font-semibold">
+                                {username}
+                            </p>
+                            <p className="text-muted-foreground">
+                                {inCircle ? "In their circle" : "Outside their circle"}
+                            </p>
+                        </div>
+                    </section>
+                    <section className="space-y-2">
+                        <div className="my-4">
+                            {safeActions.map((a) => (
+                                <SheetRow key={a.label} {...a} />
+                            ))}
+                        </div>
 
-                            {/* Report with Dialog */}
-                            <ReportDialog isLoading={report.isPending} username={username} blockedByMe={blockedByMe}
-                                onReport={(reason, blockedByMe) => report.mutate({ reason, shouldBlock: blockedByMe })}
-                                trigger={
-                                    <button
-                                        disabled={hasReported}
-                                        onClick={() => hasReported && handleHasReported()}
-                                        className={cn("flex items-center gap-3 hover:bg-primary/10 px-3 py-3 rounded-2xl w-full font-medium text-primary transition-colors cursor-pointer")}
-                                    >
-                                        {hasReported ? <Flag className="flex-shrink-0 size-5 md:size-5.5 xl:size-6" /> :
-                                            <Lock className="flex-shrink-0 size-5 md:size-5.5 xl:size-6" />
-                                        }
-                                        <span className="flex-1 text-left">{hasReported ? "Already Reported" : "Report user"}</span>
-                                    </button>
-                                } />
-                            <div className="-mt-2">
-                                {destructiveActions.map((a) => (
-                                    <SheetRow key={a.label} {...a} />
-                                ))}
-                            </div>
-                        </section>
-                    </main>
-                    <p onClick={showMetaForm ? toggleForm : onClose} className="my-4 font-bold text-destructive/70 hover:text-destructive text-center duration-200 cursor-pointer">
-                        {showMetaForm ? "Go back" : "Close"}
-                    </p>
-                </>
+                        {/* Report with Dialog */}
+                        <ReportDialog isLoading={report.isPending} username={username} blockedByMe={blockedByMe}
+                            onReport={(reason, blockedByMe) => report.mutate({ reason, shouldBlock: blockedByMe })}
+                            trigger={
+                                <button
+                                    disabled={hasReported}
+                                    onClick={() => hasReported && handleHasReported()}
+                                    className={cn("flex items-center gap-3 hover:bg-primary/10 px-3 py-3 rounded-2xl w-full font-medium text-primary transition-colors cursor-pointer")}
+                                >
+                                    {hasReported ? <Flag className="flex-shrink-0 size-5 md:size-5.5 xl:size-6" /> :
+                                        <Lock className="flex-shrink-0 size-5 md:size-5.5 xl:size-6" />
+                                    }
+                                    <span className="flex-1 text-left">{hasReported ? "Already Reported" : "Report user"}</span>
+                                </button>
+                            } />
+                        <div className="-mt-2">
+                            {destructiveActions.map((a) => (
+                                <SheetRow key={a.label} {...a} />
+                            ))}
+                        </div>
+                    </section>
+                </main>
             }
+            <p onClick={showMetaForm ? toggleForm : onClose} className="my-4 font-bold text-destructive/70 hover:text-destructive text-center duration-200 cursor-pointer">
+                {showMetaForm ? "Go back" : "Close"}
+            </p>
         </>
     );
 }
