@@ -1,4 +1,4 @@
-export default function Button({ text, loadingText = "Processing...", icon, onClick, variant = "primary", size = "md", disabled = false, loading = false, classNames = "" }: FancyButtonProps) {
+export default function Button({ type, text, loadingText = "Processing...", icon, onClick, variant = "primary", size = "md", disabled = false, loading = false, classNames = "" }: FancyButtonProps) {
 
     // Variant styles
     const variantStyles = {
@@ -15,7 +15,7 @@ export default function Button({ text, loadingText = "Processing...", icon, onCl
     }
 
     return (
-        <button onClick={onClick} disabled={disabled} className={`mt-4 font-medium transition-all duration-300 cursor-pointer
+        <button type={type ? type : "button"} onClick={onClick} disabled={disabled} className={`mt-4 font-medium transition-all duration-300 cursor-pointer
         shadow-md hover:shadow-lg active:scale-[0.98] disabled:opacity-90 ${variantStyles[variant]} ${sizeStyles[size]} ${classNames} w-full flex items-center justify-center gap-x-2 disabled:cursor-not-allowed`}>
             {loading && (
                 <svg className="size-5 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

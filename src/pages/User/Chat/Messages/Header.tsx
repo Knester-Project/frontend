@@ -60,7 +60,6 @@ const Header = ({ profilePicture, username, isOnline, lastSeen, relationship, me
         blockedByMe: relationship.blockedByMe,
         blockedMe: relationship.blockedMe,
         profilePicture: profilePicture,
-        username: username,
         onClose: toggleOptions,
         meta,
         isPrivate: true,
@@ -101,7 +100,7 @@ const Header = ({ profilePicture, username, isOnline, lastSeen, relationship, me
                     </button>
 
                     <div className="flex-1 min-w-0">
-                        <p className="font-semibold truncate">{username}</p>
+                        <p className="font-medium truncate">{username}</p>
                         <p className={cn("text-[10px] md:text-[11px] xl:text-xs truncate montserrat",
                             isTyping ? "text-primary animate-pulse" : isOnline ? "text-green-500" : "text-muted-foreground")}>
                             {isTyping ? "Typing..." : isOnline ? "Online" : `Last Seen ${formatLastSeen(lastSeen)}`}

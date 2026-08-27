@@ -112,7 +112,7 @@ const Index = ({ username }: { username: string }) => {
             name: meta?.name || "",
             avatar: meta?.avatar || "",
             type: meta?.type || "private",
-            messageTtl: meta?.messageTtl || 86400,
+            messageTtl: Number(meta?.messageTtl) || 86400,
         },
     }
 
@@ -172,11 +172,21 @@ const Index = ({ username }: { username: string }) => {
                                         // Toggle the tracker so we don't show the banner twice
                                         if (showBanner) todayBannerShown = true;
 
+                                        if (msg.isSystem === true || msg.senderId === "system") {
+                                            return (
+                                                <div key={msg.id} className="flex justify-center my-1 w-full">
+                                                    <span className="bg-muted/60 px-3 py-1 border border-border rounded max-w-[85%] font-medium text-[10px] text-muted-foreground md:text-[11px] xl:text-xs text-center">
+                                                        {msg.ciphertext}
+                                                    </span>
+                                                </div>
+                                            );
+                                        }
+
                                         return (
                                             <div key={msg.id} className="flex flex-col">
                                                 {showBanner && (
                                                     <div className="flex justify-center my-4">
-                                                        <span className="bg-muted/60 px-3 py-1 rounded font-medium text-[10px] text-muted-foreground md:text-[11px] xl:text-xs">
+                                                        <span className="bg-muted/60 px-3 py-1 border border-border rounded font-medium text-[10px] text-muted-foreground md:text-[11px] xl:text-xs">
                                                             Today
                                                         </span>
                                                     </div>

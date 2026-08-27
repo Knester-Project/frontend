@@ -1,5 +1,6 @@
 // Fancy Button
 declare type FancyButtonProps = {
+    type?: "button" | "submit" | "reset";
     text: string;
     loadingText?: string;
     icon?: React.ReactNode;

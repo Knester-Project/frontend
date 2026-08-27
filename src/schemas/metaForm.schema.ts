@@ -6,7 +6,7 @@ export const metaSchema = z.object({
     ),
     avatar: z.url({ error: "Avatar must be a valid image URL" }).or(z.literal("")).optional(),
     type: z.enum(["public", "private"]).optional(),
-    messageTtl: z.number().int().min(86400).max(604800).optional(),
+    messageTtl: z.coerce.number().int().min(86400).max(604800).optional(),
 });
 
 export type MetaInput = z.infer<typeof metaSchema>

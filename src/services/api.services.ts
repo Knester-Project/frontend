@@ -486,3 +486,7 @@ export const updateConvMeta = async (data: EditConvMetaPayload) => {
     const response = await userAxios.patch(`chat/conversations/${id}/meta`, rest);
     return response.data;
 }
+
+// Clear Chat
+
+// Delete Conversation

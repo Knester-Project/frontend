@@ -260,50 +260,51 @@ export default function MessageBubble({ message, senderDetails, highlighted }: M
 
                         {/* Message Sync Status */}
                         {isMe && (
-                            <div className="flex justify-center items-center">
-                                {/* Pending — transmitting */}
+                            <div className="flex justify-center items-center opacity-80 ml-1">
+
+                                {/* Pending (◌) — animated ring */}
                                 {message.syncStatus === "pending" && (
-                                    <span className="relative flex justify-center items-center size-3">
-                                        <span className="absolute inset-0 border border-current border-t-transparent rounded-full animate-spin" />
-                                        <span className="bg-current rounded-full size-1" />
-                                    </span>
+                                    <span className="border border-current rounded-full size-3.5 animate-spin" />
                                 )}
 
-                                {/* Sent — transmission completed */}
+                                {/* Sent (◎) — completed transmission */}
                                 {message.syncStatus === "sent" && (
-                                    <span className="relative flex justify-center items-center size-3">
-                                        <span className="absolute inset-0 opacity-50 border border-current rounded-full" />
-                                        <span className="bg-current rounded-full size-1.5" />
+                                    <span className="flex justify-center items-center border-[1.5px] border-current rounded-full size-3.5">
+                                        <span className="border border-current rounded-full size-1.5 animate-spin" />
                                     </span>
                                 )}
 
-                                {/* Delivered — reached recipient */}
+                                {/* Delivered (◎◎) — two destination nodes */}
                                 {message.syncStatus === "delivered" && (
-                                    <span className="relative flex justify-center items-center size-4">
-                                        <span className="left-0 absolute opacity-50 border border-current rounded-full size-2.5" />
-                                        <span className="right-0 absolute border border-current rounded-full size-2.5" />
+                                    <span className="flex items-center h-3.5">
+                                        {/* Left Node */}
+                                        <span className="flex justify-center items-center bg-inherit border-[1.5px] border-current rounded-full size-3.5">
+                                            <span className="border border-current rounded-full size-1.5 animate-spin" />
+                                        </span>
+                                        {/* Right Node (overlaps left, bg-inherit hides the left line) */}
+                                        <span className="flex justify-center items-center bg-inherit border-[1.5px] border-current rounded-full size-3.5">
+                                            <span className="border border-current rounded-full size-1.5 animate-spin" />
+                                        </span>
                                     </span>
                                 )}
 
-                                {/* Read — recipient has opened it */}
+                                {/* Read (◉) — confirmed/opened (larger inner dot) */}
                                 {message.syncStatus === "read" && (
-                                    <span className="relative flex justify-center items-center size-3.5">
-                                        <span className="absolute inset-0 opacity-60 border border-current rounded-full" />
-                                        <span className="bg-current rounded-full size-1.5" />
+                                    <span className="flex justify-center items-center border-[1.5px] border-current rounded-full size-3.5">
+                                        <span className="bg-current rounded-full size-2.5" />
                                     </span>
                                 )}
 
-                                {/* Failed */}
+                                {/* Failed (×) — broken transmission */}
                                 {message.syncStatus === "failed" && (
-                                    <span className="relative flex justify-center items-center size-3">
-                                        <span className="absolute bg-destructive w-3 h-px rotate-45" />
-                                        <span className="absolute bg-destructive w-3 h-px -rotate-45" />
+                                    <span className="relative flex justify-center items-center size-3.5 text-destructive">
+                                        <span className="absolute bg-current w-3.5 h-[1.5px] rotate-45" />
+                                        <span className="absolute bg-current w-3.5 h-[1.5px] -rotate-45" />
                                     </span>
                                 )}
                             </div>
                         )}
                     </div>
-
                 </div>
             </motion.div>
         </div>

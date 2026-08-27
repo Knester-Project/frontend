@@ -12,6 +12,7 @@ import { ReportDialog } from "../../Profile/ReportDialog";
 // Icons
 import { Edit2, Flag, MessageRemove, Lock, SearchNormal, Slash, TagUser, Trash, type Icon, ImportCircle, ExportCircle } from "iconsax-reactjs";
 import MetaForm from "@/components/MetaForm";
+import { Route } from "@/routes/_dashboard/messages";
 
 type ActionProps = {
     conversationId: string | null;
@@ -20,15 +21,16 @@ type ActionProps = {
     blockedByMe: boolean;
     blockedMe: boolean;
     profilePicture: string;
-    username: string;
     meta: Omit<Meta, "createdAt" | "owner">;
     onClose: () => void;
     isPrivate: boolean;
     toggleSearch: () => void;
 }
 
-const Actions = ({ conversationId, inCircle, hasReported, blockedByMe, blockedMe, profilePicture, username, meta, onClose, isPrivate, toggleSearch }: ActionProps) => {
+const Actions = ({ conversationId, inCircle, hasReported, blockedByMe, blockedMe, profilePicture, meta, onClose, isPrivate, toggleSearch }: ActionProps) => {
 
+    const { username: searchUsername } = Route.useSearch();
+    const username = searchUsername || "";
     const navigate = useNavigate();
     const [showMetaForm, setShowMetaForm] = useState<boolean>(false);
     const { toggleCircle, toggleBlock, report } = useChatRelationshipActions(username);
@@ -56,7 +58,7 @@ const Actions = ({ conversationId, inCircle, hasReported, blockedByMe, blockedMe
         conversationId,
         isPrivate,
         meta,
-        username,
+        onClose,
     }
 
     return (

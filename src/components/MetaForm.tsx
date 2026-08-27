@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { motion } from "framer-motion";
 import { sileo } from "sileo";
+import { Route } from "@/routes/_dashboard/messages";
 
 // Schemas, Utils
 import { metaSchema, type MetaInput } from "@/schemas/metaForm.schema";
@@ -34,11 +35,12 @@ type MetaFormType = {
     meta: Omit<Meta, "createdAt" | "owner">,
     conversationId: string | null,
     isPrivate: boolean,
-    username: string,
+    onClose: () => void,
 }
 
-const MetaForm = ({ meta, conversationId, isPrivate, username }: MetaFormType) => {
+const MetaForm = ({ meta, conversationId, isPrivate, onClose }: MetaFormType) => {
 
+    const { username } = Route.useSearch();
     const [newFile, setNewFIle] = useState<File | null>(null);
     const { register, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm({
         resolver: zodResolver(metaSchema),
@@ -46,7 +48,7 @@ const MetaForm = ({ meta, conversationId, isPrivate, username }: MetaFormType) =
             name: meta.name.trim() ? meta.name : undefined,
             avatar: meta.avatar.trim() ? meta.avatar : undefined,
             type: meta.type === "public" || meta.type === "private" ? meta.type : "private",
-            messageTtl: meta.messageTtl ?? 86400,
+            messageTtl: Number(meta.messageTtl ?? 86400),
         },
     });
 
@@ -76,15 +78,15 @@ const MetaForm = ({ meta, conversationId, isPrivate, username }: MetaFormType) =
         // allow picking the same file again
         e.target.value = "";
     };
-    
+
     const { uploadFiles } = usePresignedUpload();
-    const updateMeta = useUpdateConvMeta(username)
+    const updateMeta = useUpdateConvMeta(username || "")
     const submit: SubmitHandler<MetaInput> = async (data) => {
 
         if (!conversationId) return sileo.error({ title: "Conversation Not Found" })
 
         try {
-            let mediaUrls: string[]= [];
+            let mediaUrls: string[] = [];
 
             if (avatar && newFile) {
                 const uploads = await uploadFiles([newFile], "post");
@@ -97,6 +99,7 @@ const MetaForm = ({ meta, conversationId, isPrivate, username }: MetaFormType) =
 
             await updateMeta.mutateAsync(payload);
             sileo.success({ title: "Conversation details was updated successfully" });
+            onClose()
 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
@@ -193,7 +196,7 @@ const MetaForm = ({ meta, conversationId, isPrivate, username }: MetaFormType) =
                                     onClick={() => setValue("messageTtl", opt.value, { shouldValidate: true })}
                                     disabled={isSubmitting || !conversationId}
                                     className={cn(
-                                        "flex flex-col items-center gap-0.5 px-2 py-3 border rounded-xl transition-all",
+                                        "flex flex-col items-center gap-0.5 px-2 py-3 border rounded-xl transition-all cursor-pointer",
                                         active ? "border-primary bg-primary/5" : "border-border hover:bg-muted"
                                     )}
                                 >
@@ -203,8 +206,11 @@ const MetaForm = ({ meta, conversationId, isPrivate, username }: MetaFormType) =
                             );
                         })}
                     </div>
+                    {errors.messageTtl && (
+                        <ErrorText message={errors.messageTtl.message} />
+                    )}
                 </div>
-                <Button text="Update Details" disabled={isSubmitting || !conversationId} loading={isSubmitting} />
+                <Button type="submit" text="Update Details" disabled={isSubmitting || !conversationId} loading={isSubmitting} />
             </form>
         </main>
     );

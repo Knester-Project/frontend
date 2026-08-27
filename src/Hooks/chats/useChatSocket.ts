@@ -49,19 +49,23 @@ export const useChatSocket = (isAuthReady: boolean) => {
                 // Convert Redis message into our Dexie format and Save.
                 const localMessage = parseRedisMessage(incomingMsg);
                 await DBServices.saveIncomingMessage(localMessage);
+                const isSys = localMessage.isSystem === true || incomingMsg.senderId === "system";
 
-                const currentActiveId = useChatUIStore.getState().activeConversationId;
+                // If it is not a system message emit
+                if (!isSys) {
+                    const currentActiveId = useChatUIStore.getState().activeConversationId;
 
-                if (currentActiveId === incomingMsg.conversationId) {
-                    socket.emit("message:read", {
-                        conversationId: incomingMsg.conversationId,
-                        messageId: incomingMsg.id,
-                    });
-                } else {
-                    socket.emit("message:delivered", {
-                        conversationId: incomingMsg.conversationId,
-                        messageId: incomingMsg.id,
-                    });
+                    if (currentActiveId === incomingMsg.conversationId) {
+                        socket.emit("message:read", {
+                            conversationId: incomingMsg.conversationId,
+                            messageId: incomingMsg.id
+                        });
+                    } else {
+                        socket.emit("message:delivered", {
+                            conversationId: incomingMsg.conversationId,
+                            messageId: incomingMsg.id
+                        });
+                    }
                 }
             } catch (error) {
                 console.error("Error processing incoming socket message:", error);
@@ -89,6 +93,7 @@ export const useChatSocket = (isAuthReady: boolean) => {
         // Delivery Update
         const handleDeliveredUpdate = async (data: { messageId: string; userId: string }) => {
             try {
+                if (data.userId === user?._id) return;
                 await DBServices.markMessagesAsDelivered(data.messageId, user?._id);
             } catch (error) {
                 console.error("Error processing delivered update:", error);
@@ -98,6 +103,7 @@ export const useChatSocket = (isAuthReady: boolean) => {
         // Read Update
         const handleReadUpdate = async (data: { messageId: string; userId: string }) => {
             try {
+                if (data.userId === user?._id) return;
                 await DBServices.markMessagesAsRead(data.messageId, user?._id);
             } catch (error) {
                 console.error("Error processing read update:", error);
