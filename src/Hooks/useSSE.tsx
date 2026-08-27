@@ -50,7 +50,7 @@ export const useNotifications = (enabled: boolean, queries: CursorQueries) => {
             <div>
               <p className="font-semibold capitalize" dangerouslySetInnerHTML={{ __html: newNotification.message }} />
               <p className="text-[10px] text-gray-600 md:text-[11px] xl:text-xs">
-                Date and Time: {dateConverter(newNotification.createdAt)}
+                When?: {dateConverter(newNotification.createdAt)}
               </p>
             </div>
           </main>

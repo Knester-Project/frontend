@@ -104,7 +104,7 @@ export const useInputStates = (inputRef: RefObject<HTMLTextAreaElement | null>) 
 
     // Auto-Expanding Textarea Logic
     useEffect(() => {
-        
+
         const textarea = inputRef.current;
         if (!textarea) return;
 

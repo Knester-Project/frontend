@@ -1,5 +1,6 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { sileo } from 'sileo';
 
 // Services, Hooks, Constants, Utils and Stores
 import { singleConversationOptions, useMessages } from '@/services/userQueries';
@@ -17,6 +18,7 @@ import InputToolbar from './InputToolbar';
 import MessageBubble from './MessageBubble';
 import TypingIndicator from './TypingIndicator';
 import { useChatScroll, useJoinActiveConv, useJoinChatRoom, useSyncToDexie } from './SyncUI';
+import { useMessageSweeper } from '@/Hooks/chats/useMessageSweeper';
 
 // Icons
 import { Lock, Refresh } from 'iconsax-reactjs';
@@ -34,6 +36,32 @@ const Index = ({ username }: { username: string }) => {
 
     // State & Refs
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [highlightedMessageId, setHighlightedMessageId] = useState<string | null>(null);
+
+    const scrollToMessage = (messageId: string) => {
+        const element = document.querySelector(
+            `[data-message-id="${CSS.escape(messageId)}"]`
+        );
+
+        if (!element) {
+            sileo.info({
+                title: "Message isn't currently loaded",
+                description: "Scroll up to load older messages, then tap the search result again.",
+            });
+            return;
+        }
+
+        element.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+        });
+
+        setHighlightedMessageId(messageId);
+
+        setTimeout(() => {
+            setHighlightedMessageId(null);
+        }, 2000);
+    };
 
     // The Sync Engine
     const {
@@ -45,8 +73,8 @@ const Index = ({ username }: { username: string }) => {
     } = useMessages({ limit: MESSAGES_LIMIT }, conversationId || "", isEnabled);
 
     // Read strictly from Dexie
-    const messageTtl = convData.meta?.messageTtl
-    const localMessages = useReadMessages(conversationId || "", messageTtl || 86400)
+    const messageTtlMs = convData.meta?.messageTtl
+    const localMessages = useReadMessages(conversationId || "", messageTtlMs || 86400)
     const pageParams = messagesData?.pageParams;
 
     // IMPORTANT HOOKS
@@ -55,6 +83,7 @@ const Index = ({ username }: { username: string }) => {
     useSyncToDexie(messagesData);
     useJoinChatRoom(conversationId, user?._id);
     useChatScroll(messagesEndRef, localMessages);
+    useMessageSweeper(conversationId, messageTtlMs);
 
     const loadMoreRef = useInfiniteScroll({
         hasNextPage,
@@ -84,7 +113,7 @@ const Index = ({ username }: { username: string }) => {
             avatar: meta?.avatar || "",
             type: meta?.type || "private",
             messageTtl: meta?.messageTtl || 86400,
-        }
+        },
     }
 
     // Participant Map for MessageBubble
@@ -107,7 +136,7 @@ const Index = ({ username }: { username: string }) => {
 
     return (
         <main className='flex flex-col rounded-xl h-dvh'>
-            <Header {...headerProps} />
+            <Header {...headerProps} onMessageClick={scrollToMessage} />
 
             <section className="flex justify-center gap-1 bg-muted/30 px-4 py-2 border-border border-b">
                 <Lock variant='Bold' className="size-3 md:size-3.5 xl:size-4 text-foreground/60" />
@@ -152,7 +181,7 @@ const Index = ({ username }: { username: string }) => {
                                                         </span>
                                                     </div>
                                                 )}
-                                                <MessageBubble message={msg} senderDetails={participantMap[msg.senderId]} />
+                                                <MessageBubble message={msg} senderDetails={participantMap[msg.senderId]} highlighted={highlightedMessageId === msg.id} />
                                             </div>
                                         );
                                     })}

@@ -13,6 +13,7 @@ import Actions from "./Actions";
 
 // Icons
 import { ArrowLeft2, Call, MoreSquare, Video } from "iconsax-reactjs";
+import SearchMessage from "./SearchMessage";
 
 type HeaderProps = {
     profilePicture: string;
@@ -27,9 +28,10 @@ type HeaderProps = {
     };
     meta: Omit<Meta, "createdAt" | "owner">;
     conversationId: string | null;
+    onMessageClick: (messageId: string) => void;
 }
 
-const Header = ({ profilePicture, username, isOnline, lastSeen, relationship, meta, conversationId }: HeaderProps) => {
+const Header = ({ profilePicture, username, isOnline, lastSeen, relationship, meta, conversationId, onMessageClick }: HeaderProps) => {
 
     const navigate = useNavigate();
     const [isImageOpen, setIsImageOpen] = useState<boolean>(false);
@@ -40,7 +42,10 @@ const Header = ({ profilePicture, username, isOnline, lastSeen, relationship, me
     // Functions
     const toggleImages = () => setIsImageOpen((prev) => !prev);
     const toggleOptions = () => setOptionsOpen((prev) => !prev);
-    const toggleSearch = () => setSearch((prev) => !prev);
+    const toggleSearch = () => {
+        setOptionsOpen(false);
+        setSearch((prev) => !prev);
+    }
 
     const handleUnavailable = (value: string) => {
         sileo.info({
@@ -71,14 +76,7 @@ const Header = ({ profilePicture, username, isOnline, lastSeen, relationship, me
     return (
         <>
             {search ?
-                <section className="flex items-center gap-x-2">
-                    <button onClick={toggleSearch}
-                        className="hover:bg-primary/10 p-1.5 rounded-full transition-colors cursor-pointer"
-                        aria-label="Back">
-                        <ArrowLeft2 className="size-4 md:size-4.5 xl:size-5 text-muted-foreground" />
-                    </button>
-                    <input type="text" placeholder="🔍 Search" className="px-4 py-3 border border-border focus:border-primary rounded-lg focus:outline-none placeholder:text-[11px] md:placeholder:text-xs xl:placeholder:text-sm duration-300 focus:caret-primary" />
-                </section>
+                <SearchMessage conversationId={conversationId} toggleSearch={toggleSearch} onMessageClick={onMessageClick} />
                 : <main className="top-0 z-5 sticky flex items-center gap-3 bg-primary/10 backdrop-blur-lg p-3 md:p-4 xl:p-5">
                     <button onClick={() => navigate({ to: "/messages", search: { username: undefined } })}
                         className="hover:bg-primary/10 p-1.5 rounded-full transition-colors cursor-pointer"

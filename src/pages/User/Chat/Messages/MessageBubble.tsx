@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useTransform, useAnimation, type PanInfo } from 'framer-motion';
 
 // Stores & Utils
@@ -14,7 +14,7 @@ import { detectMediaType } from '@/utils/format';
 import { MediaGrid } from '@/components/MediaGrid';
 
 // Icons
-import { Lock1, Edit2, Trash, More, ArrowUp2, CloseSquare } from 'iconsax-reactjs';
+import { Lock1, Edit2, Trash, CloseSquare, ArrowLeft3 } from 'iconsax-reactjs';
 import { useDeleteMessage } from '@/Hooks/chats/useDeleteMessage';
 
 interface MessageBoxProps {
@@ -23,6 +23,7 @@ interface MessageBoxProps {
         username: string;
         avatar: string;
     };
+    highlighted?: boolean;
 }
 
 type ParsedPayload = {
@@ -31,7 +32,7 @@ type ParsedPayload = {
     replyTo: string | null;
 };
 
-export default function MessageBubble({ message, senderDetails }: MessageBoxProps) {
+export default function MessageBubble({ message, senderDetails, highlighted }: MessageBoxProps) {
 
     const { user } = meStore();
     const getSessionKey = useCryptoStore((state) => state.getSessionKey);
@@ -113,6 +114,28 @@ export default function MessageBubble({ message, senderDetails }: MessageBoxProp
     }).format(new Date(message.createdAt));
 
     // Actions
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const startLongPress = () => {
+        if (!isMe) return;
+
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+        }
+
+        timerRef.current = setTimeout(() => {
+            setShowMenu((prev) => !prev);
+            timerRef.current = null;
+        }, 1000);
+    };
+
+    const cancelLongPress = () => {
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+        }
+    };
+
     const handleEdit = () => {
         setEditingMessage(message);
         setShowMenu(false);
@@ -123,12 +146,13 @@ export default function MessageBubble({ message, senderDetails }: MessageBoxProp
         setShowMenu(false);
     };
 
+
     return (
         <div className={cn("relative flex w-full", isMe ? "justify-end" : "justify-start")}>
 
             {/* The Hidden Reply Icon that reveals on swipe */}
-            <motion.div className="top-1/2 left-0 absolute flex justify-center items-center bg-muted rounded-full size-8 -translate-y-1/2" style={{ opacity: replyIconOpacity, scale: replyIconScale }}>
-                <ArrowUp2 className="size-3 md:size-3.5 xl:size-4 text-primary -rotate-90" variant="Bold" />
+            <motion.div className="top-1/2 left-0 absolute flex justify-center items-center bg-primary/10 rounded-full size-6 md:size-7 xl:size-8 -translate-y-1/2" style={{ opacity: replyIconOpacity, scale: replyIconScale }}>
+                <ArrowLeft3 className="size-3 md:size-3.5 xl:size-4 text-primary" variant="Bold" />
             </motion.div>
 
             {/* The Draggable Message Container */}
@@ -140,22 +164,23 @@ export default function MessageBubble({ message, senderDetails }: MessageBoxProp
                 animate={controls}
                 style={{ x }}
                 className={cn("z-10 flex gap-2 max-w-[85%] md:max-w-[70%] font-medium")}
+                onPointerDown={isMe ? startLongPress : undefined}
+                onPointerUp={isMe ? cancelLongPress : undefined}
+                onPointerLeave={isMe ? cancelLongPress : undefined}
+                onPointerCancel={isMe ? cancelLongPress : undefined}
+                data-message-id={message.id}
             >
                 <div className={cn(
                     "relative flex flex-col shadow-sm p-3",
                     isMe ? "bg-primary/60 text-primary-foreground rounded-2xl rounded-br-sm"
-                        : "bg-accent/10 text-foreground border border-accent/20 rounded-2xl rounded-bl-sm"
-                )}>
+                        : "bg-accent/10 text-foreground border border-accent/20 rounded-2xl rounded-bl-sm",
+                    highlighted && "ring-2 ring-primary bg-primary/20 scale-[1.01]"
+                )}
+                >
 
                     {/* Context Menu Dropdown */}
                     {isMe && (
                         <div className="top-1 -left-6 absolute">
-                            <button onClick={() => setShowMenu(!showMenu)} className="p-1 rounded-full cursor-pointer">
-                                {showMenu ? <CloseSquare className="hover:bg-destructive/40 size-3 md:size-3.5 xl:size-4 hover:text-destructive" />
-                                    : <More className="hover:bg-muted size-3 md:size-3.5 xl:size-4 text-muted-foreground rotate-90" />
-                                }
-                            </button>
-
                             {showMenu && (
                                 <div className="top-full left-0 z-20 absolute bg-card shadow-lg mt-1 border border-border rounded-xl w-28 overflow-hidden smallText">
                                     <button onClick={handleEdit} className="flex items-center gap-2 hover:bg-primary/60 px-3 py-2 w-full text-foreground transition-colors cursor-pointer">
@@ -166,6 +191,10 @@ export default function MessageBubble({ message, senderDetails }: MessageBoxProp
                                     <button onClick={handleDelete} className="flex items-center gap-2 hover:bg-destructive/40 px-3 py-2 border-border border-t w-full text-destructive transition-colors cursor-pointer">
                                         <Trash className="size-3 md:size-3.5 xl:size-4" />
                                         Delete
+                                    </button>
+                                    <button onClick={() => setShowMenu((prev) => !prev)} className="flex items-center gap-2 hover:bg-destructive/40 px-3 py-2 border-border border-t w-full text-destructive transition-colors cursor-pointer">
+                                        <CloseSquare className="size-3 md:size-3.5 xl:size-4" />
+                                        Close
                                     </button>
                                 </div>
                             )}
