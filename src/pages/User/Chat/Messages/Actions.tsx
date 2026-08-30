@@ -11,7 +11,7 @@ import { ReportDialog } from "../../Profile/ReportDialog";
 
 // Icons
 import { Edit2, Flag, MessageRemove, Lock, SearchNormal, Slash, TagUser, Trash, type Icon, ImportCircle, ExportCircle } from "iconsax-reactjs";
-import MetaForm from "@/components/MetaForm";
+import MetaForm from "@/features/chat/MetaForm";
 import { Route } from "@/routes/_dashboard/messages";
 
 type ActionProps = {

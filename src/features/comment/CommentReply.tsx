@@ -8,7 +8,7 @@ import { useAddReply } from "@/services/userMutations";
 import { REPLIES_LIMIT } from "@/assets/constants";
 
 // UIs
-import ErrorText from "./ErrorText";
+import ErrorText from "../../components/errors/ErrorText";
 
 // Icons
 import { Send2 } from "iconsax-reactjs";

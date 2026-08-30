@@ -1,5 +1,5 @@
 // UIs
-import Main from "@/components/Main";
+import Main from "@/components/layouts/Main";
 import Create from "./Create";
 import Filter from "./Filter";
 import Posts from "./Posts";

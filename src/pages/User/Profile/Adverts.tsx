@@ -1,4 +1,4 @@
-import AdvertCard from "@/components/AdvertCard";
+import AdvertCard from "@/features/advert/AdvertCard";
 
 const Adverts = ({ adverts, isOwner }: { adverts: MyAdvert[], isOwner: boolean }) => {
 

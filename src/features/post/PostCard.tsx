@@ -9,11 +9,11 @@ import { POST_LIMIT } from "@/assets/constants";
 
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MediaGrid } from "@/components/MediaGrid";
-import Vibe from "@/components/Vibe";
-import Comment from "@/components/Comment";
-import Views from "@/components/Views";
-import ShareMenu from "@/components/Share";
+import { MediaGrid } from "@/features/media/MediaGrid";
+import Vibe from "@/features/shared/Vibe";
+import Comment from "@/features/comment/Comment";
+import Views from "@/features/shared/Views";
+import ShareMenu from "@/features/shared/Share";
 
 // Icons
 import { ChevronDown } from "lucide-react";

@@ -7,7 +7,7 @@ import { unlockPrivateKey, lockPrivateKey } from "@/utils/vault";
 import { useUpdateUser } from "@/services/userMutations";
 
 // UIs
-import Button from '@/components/Button';
+import Button from '@/components/common/Button';
 
 // Icons
 import { Loader2 } from "lucide-react";

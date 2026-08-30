@@ -9,9 +9,9 @@ import { useUserAdverts } from "@/services/userQueries";
 // UIs
 import MediaGallery from "./MediaGallery";
 import AccountStatus from "./AccountStatus";
-import Cobweb from "@/components/Cobweb";
-import AdvertLoader from "@/components/AdvertLoader";
-import AdvertError from "@/components/AdvertError";
+import Cobweb from "@/components/common/Cobweb";
+import AdvertLoader from "@/features/advert/AdvertLoader";
+import AdvertError from "@/features/advert/AdvertError";
 import Adverts from "./Adverts";
 import Posts from "./Posts";
 

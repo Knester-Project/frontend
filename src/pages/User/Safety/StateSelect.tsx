@@ -5,7 +5,7 @@ import { NIGERIAN_STATES } from "@/assets/states";
 
 // Icons
 import { ArrowDown2, SearchNormal1 } from "iconsax-reactjs";
-import ErrorText from "@/components/ErrorText";
+import ErrorText from "@/components/errors/ErrorText";
 
 type StateSelectProps = {
     value: string;

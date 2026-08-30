@@ -8,7 +8,7 @@ import { useProfileTheme } from '@/stores/profileTheme.store';
 
 // UIs
 import { Badge } from '@/components/ui/badge';
-import { Overlay } from '@/components/Overlay';
+import { Overlay } from '@/components/common/Overlay';
 import ProfileForm from './ProfileForm';
 import Invite from './Invite';
 import ProfilePictureEditor from './PictureEditor';

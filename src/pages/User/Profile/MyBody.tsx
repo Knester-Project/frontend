@@ -12,10 +12,10 @@ import MediaGallery from "./MediaGallery";
 import AccountStatus from "./AccountStatus";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import Cobweb from "@/components/Cobweb";
+import Cobweb from "@/components/common/Cobweb";
 import Adverts from "./Adverts";
-import AdvertLoader from "@/components/AdvertLoader";
-import AdvertError from "@/components/AdvertError";
+import AdvertLoader from "@/features/advert/AdvertLoader";
+import AdvertError from "@/features/advert/AdvertError";
 import Posts from "./Posts";
 
 // Icons

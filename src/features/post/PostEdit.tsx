@@ -10,7 +10,7 @@ import { usePresignedUpload } from "@/Hooks/usePresignedUpload";
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import MediaGridEditor from "@/components/MediaGridEditor";
+import MediaGridEditor from "@/features/media/MediaGridEditor";
 import { CharRing, HashtagPanel, ToolbarBtn } from "./CreatePost";
 
 

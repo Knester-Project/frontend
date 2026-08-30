@@ -6,10 +6,10 @@ import { useUserVault } from '@/services/userQueries';
 import { db } from '@/lib/db';
 
 // UIs
-import Main from '@/components/Main';
+import Main from '@/components/layouts/Main';
 import Conversations from './Conversations';
 import Messages from './Messages';
-import VaultSync from '@/components/VaultSync';
+import VaultSync from '@/features/chat/VaultSync';
 
 // Icons
 import { Loader } from 'lucide-react';

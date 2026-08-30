@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 
 // UIs
 import { Card } from "@/components/ui/card";
-import AdvertLoader from "@/components/AdvertLoader";
+import AdvertLoader from "@/features/advert/AdvertLoader";
 import AdvertCard from "@/pages/User/Feed/AdvertCard";
-import { Overlay } from '@/components/Overlay';
+import { Overlay } from '@/components/common/Overlay';
 import AdvertForm from "./AdvertForm";
 
 // Icons

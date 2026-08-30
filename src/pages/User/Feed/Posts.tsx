@@ -11,8 +11,8 @@ import { POST_LIMIT } from "@/assets/constants";
 
 // UIs
 import PostLoader from "./PostLoader";
-import NoPostsFound from "@/components/NotFoundPost";
-import PostCard from "./PostCard";
+import NoPostsFound from "@/features/post/NotFoundPost";
+import PostCard from "../../../features/post/PostCard";
 
 // Icons
 import { Clock, Flame, Sparkles } from "lucide-react";

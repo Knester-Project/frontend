@@ -9,8 +9,8 @@ import { usePresence } from "@/Hooks/usePresence";
 import { useChatSocket } from "@/Hooks/chats/useChatSocket";
 
 // UIs
-import Nav from "@/components/Nav";
-import InstallBtn from "@/components/InstallBtn";
+import Nav from "@/components/layouts/Nav";
+import InstallBtn from "@/components/layouts/InstallBtn";
 import { NOT_LIMIT } from "@/assets/constants";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {

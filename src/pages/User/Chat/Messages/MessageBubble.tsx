@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import { detectMediaType } from '@/utils/format';
 
 // UIs
-import { MediaGrid } from '@/components/MediaGrid';
+import { MediaGrid } from '@/features/media/MediaGrid';
 
 // Icons
 import { Lock1, Edit2, Trash, CloseSquare, ArrowLeft3 } from 'iconsax-reactjs';

@@ -4,9 +4,9 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 // Toast and Theme, and Providers
 import { Toaster } from "sileo";
-import { ThemeProviderEffect } from '@/components/ThemeProvider';
+import { ThemeProviderEffect } from '@/features/theme/ThemeProvider';
 import { NotificationInitializer } from '@/providers/Push';
-import { LocationGate } from '@/components/LocationGate';
+import { LocationGate } from '@/features/location/LocationGate';
 import { LocationProvider } from '@/providers/Location';
 
 // UIs

@@ -10,13 +10,13 @@ import { COMMENT_LIMIT, REPLIES_LIMIT } from "@/assets/constants";
 
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MediaGrid } from "./MediaGrid";
-import Views from "./Views";
+import { MediaGrid } from "../media/MediaGrid";
+import Views from "../shared/Views";
 import CommentVibe from "./CommentVibe";
 import CommentFlag from "./CommentFlag";
 import CommentReply from "./CommentReply";
 import CommentLoader from "./CommentLoader";
-import ReplyCard from "./ReplyCard";
+import ReplyCard from "../../components/ReplyCard";
 import CommentDelete from "./CommentDelete";
 import CommentReplyBtn from "./CommentReplyBtn";
 

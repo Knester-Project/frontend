@@ -13,7 +13,7 @@ import useInfiniteScroll from "@/Hooks/useInfiniteScroll";
 import { NEARBY_LIMIT } from "@/assets/constants";
 
 // UIs
-import Main from "@/components/Main";
+import Main from "@/components/layouts/Main";
 import DistanceSlider from "./DistanceSlider";
 import { EmptyHint } from "./EmptyHint";
 import StateSelector from "./StateSelector";

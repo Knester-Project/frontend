@@ -13,10 +13,10 @@ import { useUpdateConvMeta } from "@/services/userMutations";
 import { usePresignedUpload } from "@/Hooks/usePresignedUpload";
 
 // UIs
-import { Label } from "./ui/label";
-import ErrorText from "./ErrorText";
-import ZodInput from "./ZodInput";
-import Button from "./Button";
+import { Label } from "../../components/ui/label";
+import ErrorText from "../../components/errors/ErrorText";
+import ZodInput from "../../components/common/ZodInput";
+import Button from "../../components/common/Button";
 
 // Icons
 import { Loader2 } from "lucide-react";

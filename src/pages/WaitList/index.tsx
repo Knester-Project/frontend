@@ -8,8 +8,8 @@ import { isDisposableEmail } from "disposable-email-domains-js";
 import { useNewWaitList } from "@/services/userMutations";
 
 // UIs
-import Input from "@/components/Input";
-import Button from "@/components/Button";
+import Input from "@/components/common/Input";
+import Button from "@/components/common/Button";
 
 // Icons
 import { UserCirlceAdd } from "iconsax-reactjs";

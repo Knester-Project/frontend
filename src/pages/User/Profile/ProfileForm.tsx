@@ -16,7 +16,7 @@ import { useProfileTheme } from "@/stores/profileTheme.store";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import ErrorText from "@/components/ErrorText";
+import ErrorText from "@/components/errors/ErrorText";
 
 // Icons
 import {

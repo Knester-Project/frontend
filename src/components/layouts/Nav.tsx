@@ -14,8 +14,8 @@ import { useNotUnreadCount } from "@/services/userQueries";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import { NotificationBell } from "./PushBell";
-import { ThemeToggle } from "./ThemeToggle";
+import { NotificationBell } from "../../features/notification/PushBell";
+import { ThemeToggle } from "../../features/theme/ThemeToggle";
 
 // Logo
 import logo from "/logo.svg";

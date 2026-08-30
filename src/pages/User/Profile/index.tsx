@@ -5,7 +5,7 @@ import { Route } from '@/routes/_dashboard/profile';
 import { userProfileOptions } from '@/services/userQueries';
 
 // UIs
-import Main from '@/components/Main';
+import Main from '@/components/layouts/Main';
 import Header from './Header';
 import Body from './Body';
 import MyHeader from './MyHeader';

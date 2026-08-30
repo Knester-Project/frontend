@@ -10,8 +10,8 @@ import { useAuthUser } from '@/services/userMutations';
 import { flattenZodErrors } from '@/utils/zod';
 
 // Component
-import Button from '@/components/Button';
-import ErrorText from '@/components/ErrorText';
+import Button from '@/components/common/Button';
+import ErrorText from '@/components/errors/ErrorText';
 
 // Icons
 import { Rocket, ScanFace } from 'lucide-react';

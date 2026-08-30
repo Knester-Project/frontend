@@ -10,8 +10,8 @@ import { formatAmount } from "@/utils/format";
 import { useDeleteAdvert } from "@/services/userMutations";
 
 // UIs
-import AdvertEdit from "./AdvertEdit";
-import { Overlay } from "./Overlay";
+import AdvertEdit from "../AdvertEdit";
+import { Overlay } from "../../components/common/Overlay";
 
 //  Icons
 import { ArrowLeft3, ArrowRight3, Edit, Image, Messages2, PenTool, Tag2, Trash } from "iconsax-reactjs";

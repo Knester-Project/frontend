@@ -9,8 +9,8 @@ import { POST_LIMIT } from "@/assets/constants";
 
 // UIs
 import PostLoader from "../Feed/PostLoader";
-import NoPostsFound from "@/components/NotFoundPost";
-import PostCard from "../Feed/PostCard";
+import NoPostsFound from "@/features/post/NotFoundPost";
+import PostCard from "../../../features/post/PostCard";
 
 
 

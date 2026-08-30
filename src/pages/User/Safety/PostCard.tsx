@@ -8,11 +8,11 @@ import { POST_LIMIT } from "@/assets/constants";
 
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import ShareMenu from "@/components/Share";
-import Vibe from "@/components/Vibe";
-import { MediaGrid } from "@/components/MediaGrid";
-import Comment from "@/components/Comment";
-import Views from "@/components/Views";
+import ShareMenu from "@/features/shared/Share";
+import Vibe from "@/features/shared/Vibe";
+import { MediaGrid } from "@/features/media/MediaGrid";
+import Comment from "@/features/comment/Comment";
+import Views from "@/features/shared/Views";
 
 // Icons
 import { Verify, Flag, Location, Calendar1 } from "iconsax-reactjs"

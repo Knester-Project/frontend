@@ -13,13 +13,13 @@ import { isoDateTime } from "@/utils/format";
 // UIs
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import ErrorText from '@/components/ErrorText';
+import ErrorText from '@/components/errors/ErrorText';
 import StateSelect from "./StateSelect";
-import ZodInput from "@/components/ZodInput";
+import ZodInput from "@/components/common/ZodInput";
 
 // Icons
 import { AlertCircle, Loader, Rocket } from "lucide-react";
-import FileUploader from "@/components/FileUploader";
+import FileUploader from "@/features/media/FileUploader";
 
 
 export default function Create() {

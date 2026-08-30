@@ -8,8 +8,8 @@ import { POST_LIMIT } from "@/assets/constants";
 
 // Components
 import PostCard from "./PostCard";
-import PostCardSkeleton from "../../../components/PostLoader";
-import NoPostsFound from "@/components/NotFoundPost";
+import PostCardSkeleton from "../../../features/post/PostLoader";
+import NoPostsFound from "@/features/post/NotFoundPost";
 
 const Posts = () => {
 

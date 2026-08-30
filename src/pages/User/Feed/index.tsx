@@ -1,7 +1,7 @@
 // UIs
-import Main from "@/components/Main";
+import Main from "@/components/layouts/Main";
 import Trending from "./Trending";
-import CreatePost from "./CreatePost";
+import CreatePost from "../../../features/post/CreatePost";
 import PeopleAround from "./PeopleAround";
 import Posts from "./Posts";
 import Advert from "./Advert";

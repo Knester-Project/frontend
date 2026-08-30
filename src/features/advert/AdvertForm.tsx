@@ -21,10 +21,10 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import ErrorText from "@/components/ErrorText";
+import ErrorText from "@/components/errors/ErrorText";
 import { Label } from "@/components/ui/label";
-import FileUploader from "@/components/FileUploader";
-import CategorySelector from "./AdvertCategories";
+import FileUploader from "@/features/media/FileUploader";
+import CategorySelector from "../../../features/advert/AdvertCategories";
 
 // Icons
 import { X, Loader2, Rocket } from "lucide-react";

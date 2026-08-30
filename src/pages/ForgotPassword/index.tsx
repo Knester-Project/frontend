@@ -5,7 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 // Icons
 import { Eye, EyeSlash, Key, TickCircle, Unlock } from "iconsax-reactjs";
 import { useForgotPassword } from "@/services/userMutations";
-import Button from "@/components/Button";
+import Button from "@/components/common/Button";
 
 const defaultState = {
     username: "",

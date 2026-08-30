@@ -12,7 +12,7 @@ import { lockPrivateKey } from "@/utils/vault";
 import { db } from "@/lib/db";
 
 // UIs
-import Button from '@/components/Button';
+import Button from '@/components/common/Button';
 
 //Icons
 import { CircleCheckBig, Loader } from "lucide-react";

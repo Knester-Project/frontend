@@ -8,7 +8,7 @@ import { formatLastSeen } from "@/utils/format";
 import { useTypingStore } from "@/stores/typing.store";
 
 // UIs
-import { Overlay } from "@/components/Overlay";
+import { Overlay } from "@/components/common/Overlay";
 import Actions from "./Actions";
 
 // Icons

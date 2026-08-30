@@ -14,8 +14,8 @@ import { makeFilesUnique } from "@/utils/format";
 import { COMMENT_LIMIT } from "@/assets/constants";
 
 // UIs
-import ErrorText from "./ErrorText";
-import ToastInline from "./ToastInline";
+import ErrorText from "../../components/errors/ErrorText";
+import ToastInline from "../../components/common/ToastInline";
 import CommentCard from "./CommentCard";
 import CommentLoader from "./CommentLoader";
 

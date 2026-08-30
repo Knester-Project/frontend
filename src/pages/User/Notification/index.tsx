@@ -10,7 +10,7 @@ import useInfiniteScroll from "@/Hooks/useInfiniteScroll";
 import Empty from "./Empty";
 import Header from "./Header";
 import NotificationLoader from "./Loader";
-import NotificationBox from "@/components/NotificationBox";
+import NotificationBox from "@/features/notification/NotificationBox";
 
 
 const Index = () => {
