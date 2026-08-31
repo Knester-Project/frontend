@@ -10,15 +10,15 @@ import { REPLIES_LIMIT } from "@/assets/constants";
 
 // UIs
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import CommentVibe from "../features/comment/CommentVibe";
-import CommentReplyBtn from "../features/comment/CommentReplyBtn";
-import CommentFlag from "../features/comment/CommentFlag";
-import CommentDelete from "../features/comment/CommentDelete";
+import CommentVibe from "../comment/CommentVibe";
+import CommentReplyBtn from "../comment/CommentReplyBtn";
+import CommentFlag from "../comment/CommentFlag";
+import CommentDelete from "../comment/CommentDelete";
 
 // Icons
 import { ArrowDown2, ArrowUp2, Lock, Verify } from "iconsax-reactjs";
-import CommentLoader from "../features/comment/CommentLoader";
-import CommentReply from "../features/comment/CommentReply";
+import CommentLoader from "../comment/CommentLoader";
+import CommentReply from "../comment/CommentReply";
 
 const ReplyCard = ({ reply }: { reply: Reply }) => {
 

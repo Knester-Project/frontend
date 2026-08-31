@@ -16,7 +16,7 @@ import CommentVibe from "./CommentVibe";
 import CommentFlag from "./CommentFlag";
 import CommentReply from "./CommentReply";
 import CommentLoader from "./CommentLoader";
-import ReplyCard from "../../components/ReplyCard";
+import ReplyCard from "../shared/ReplyCard";
 import CommentDelete from "./CommentDelete";
 import CommentReplyBtn from "./CommentReplyBtn";
 

@@ -11,7 +11,7 @@ import { Card } from "@/components/ui/card";
 import AdvertLoader from "@/features/advert/AdvertLoader";
 import AdvertCard from "@/pages/User/Feed/AdvertCard";
 import { Overlay } from '@/components/common/Overlay';
-import AdvertForm from "./AdvertForm";
+import AdvertForm from "@/features/advert/AdvertForm";
 
 // Icons
 import { Shop } from "iconsax-reactjs";

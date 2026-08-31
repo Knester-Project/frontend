@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import ErrorText from "@/components/errors/ErrorText";
 import { Label } from "@/components/ui/label";
 import FileUploader from "@/features/media/FileUploader";
-import CategorySelector from "../../../features/advert/AdvertCategories";
+import CategorySelector from "./AdvertCategories";
 
 // Icons
 import { X, Loader2, Rocket } from "lucide-react";

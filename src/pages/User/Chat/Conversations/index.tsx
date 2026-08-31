@@ -7,6 +7,7 @@ const Index = () => {
 
     const { data } = useSuspenseQuery(allConversationsOptions());
     const conversationsData: ConversationsData = data;
+    console.log("The conversation data", data)
 
     return (
         <main>
