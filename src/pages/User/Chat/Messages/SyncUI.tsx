@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, type RefObject } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 // Utils and Stores
 import { getSocket } from '@/utils/socket';
@@ -26,22 +27,35 @@ export const useJoinActiveConv = (conversationId: string | null) => {
 
 // Join Chat Room and Update Read Status
 export const useJoinChatRoom = (conversationId: string | null, userId: string | undefined) => {
+
+    const queryClient = useQueryClient();
+
     useEffect(() => {
         if (!conversationId || !userId) return;
 
-        const interval = setInterval(() => {
-            const socket = getSocket();
-            if (socket && socket.connected) {
-                socket.emit("conversation:join", conversationId);
-                updateReadStatus(conversationId, userId, socket);
+        const socket = getSocket();
+        if (!socket) return;
 
-                // Clear the interval
-                clearInterval(interval);
-            }
-        }, 100);
+        const joinConversation = () => {
+            socket.emit("conversation:join", conversationId);
 
-        return () => clearInterval(interval);
-    }, [conversationId, userId]);
+            updateReadStatus(conversationId, userId, socket);
+
+            queryClient.invalidateQueries({
+                queryKey: ["conversations"],
+            });
+        };
+
+        if (socket.connected) {
+            joinConversation();
+        } else {
+            socket.once("connect", joinConversation);
+        }
+
+        return () => {
+            socket.off("connect", joinConversation);
+        };
+    }, [conversationId, userId, queryClient]);
 };
 
 // Sync Messages to Dexie

@@ -167,7 +167,7 @@ export default function UserCard({ user, index = 0 }: UserCardProps) {
             </div>
 
             {/* Chat CTA - Transformed into a proper flex button layout */}
-            <Link to="/messages" search={{ username: user.user.username }}
+            <Link to="/messages" search={{ username: user.user.username, group: undefined }}
                 className="flex justify-center items-center gap-2 bg-primary/10 hover:bg-primary w-full h-9 font-semibold text-[11px] text-primary hover:text-primary-foreground md:text-xs xl:text-sm transition-colors duration-300">
                 <MessageText1 className="size-4" />
                 <span>Start Chat</span>

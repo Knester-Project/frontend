@@ -568,3 +568,18 @@ declare type EditConvMetaPayload = {
     messageTtl?: number;
     conversationId?: string;
 }
+
+// Conversation Item
+declare type ConversationItem = {
+    id: string;
+    lastActivityAt: number;
+    meta: Meta;
+    participants: User[];
+    unread: number;
+};
+
+// Conversation Data
+declare type ConversationsData = {
+    conversations: ConversationItem[];
+    hasMore: boolean;
+};

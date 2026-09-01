@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 // Stores, Utils, and Hooks
 import { meStore } from "@/stores/me.store";
-import { initSocket, getSocket } from "@/utils/socket"; // <-- Import getSocket
+import { initSocket, getSocket } from "@/utils/socket";
 import { useNotifications } from "@/Hooks/useSSE";
 import { usePresence } from "@/Hooks/usePresence";
 import { useChatSocket } from "@/Hooks/chats/useChatSocket";

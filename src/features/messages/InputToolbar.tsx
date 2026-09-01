@@ -10,11 +10,11 @@ import { meStore } from "@/stores/me.store";
 import { useChatUIStore } from "@/stores/chatUI.store";
 import { useSendMessage } from "@/Hooks/chats/useSendMessage";
 import { useEditMessage } from "@/Hooks/chats/useEditMessage";
-import { useInputStates } from "./SyncUI";
+import { useInputStates } from "../../pages/User/Chat/Messages/SyncUI";
 
 // UIs
 import EmojiPicker from "./EmojiPicker";
-import ReplyBanner from "./ReplyBanner";
+import ReplyBanner from "../../pages/User/Chat/Messages/ReplyBanner";
 
 // Icons
 import { CloseSquare, Send2, GalleryEdit, EmojiHappy, Edit2, MessageEdit } from "iconsax-reactjs";

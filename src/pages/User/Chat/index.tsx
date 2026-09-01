@@ -9,7 +9,7 @@ import { db } from '@/lib/db';
 import Main from '@/components/layouts/Main';
 import Conversations from './Conversations';
 import Messages from './Messages';
-import VaultSync from '@/features/chat/VaultSync';
+import VaultSync from '@/features/messages/VaultSync';
 
 // Icons
 import { Loader } from 'lucide-react';

@@ -13,7 +13,7 @@ import Actions from "./Actions";
 
 // Icons
 import { ArrowLeft2, Call, MoreSquare, Video } from "iconsax-reactjs";
-import SearchMessage from "./SearchMessage";
+import SearchMessage from "../../../../features/messages/SearchMessage";
 
 type HeaderProps = {
     profilePicture: string;
@@ -77,7 +77,7 @@ const Header = ({ profilePicture, username, isOnline, lastSeen, relationship, me
             {search ?
                 <SearchMessage conversationId={conversationId} toggleSearch={toggleSearch} onMessageClick={onMessageClick} />
                 : <main className="top-0 z-5 sticky flex items-center gap-3 bg-primary/10 backdrop-blur-lg p-3 md:p-4 xl:p-5">
-                    <button onClick={() => navigate({ to: "/messages", search: { username: undefined } })}
+                    <button onClick={() => navigate({ to: "/messages", search: { username: undefined, group: undefined } })}
                         className="hover:bg-primary/10 p-1.5 rounded-full transition-colors cursor-pointer"
                         aria-label="Back">
                         <ArrowLeft2 className="size-4 md:size-4.5 xl:size-5 text-muted-foreground" />

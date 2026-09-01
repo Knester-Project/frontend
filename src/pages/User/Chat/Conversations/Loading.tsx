@@ -13,7 +13,7 @@ const ConvoLoading = () => {
                     <p className="smallText">Loading Conversations ...</p>
                 </div>
                 <div className="place-items-center grid bg-background rounded-md size-8 md:size-10 xl:size-12 duration-200 cursor-pointer">
-                    <MessageAdd1 className="size-4 md:size-5 xl:size-6" />
+                    <MessageAdd1 className="size-4 md:size-4.5 xl:size-5" />
                 </div>
             </header>
             <div className="mt-4">

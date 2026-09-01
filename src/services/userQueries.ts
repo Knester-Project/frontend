@@ -1,4 +1,4 @@
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery, infiniteQueryOptions } from "@tanstack/react-query";
 import { queryOptions } from '@tanstack/react-query';
 
 // API endpoints
@@ -249,13 +249,19 @@ export const useNotUnreadCount = () => {
 }
 
 // Fetch All Conversations
-export const allConversationsOptions = (queries: OffSetQueries = { offset: 0, limit: 20 }) => {
-    return queryOptions({
-        queryKey: ['conversations', queries],
-        queryFn: () => Api.fetchAllConv(queries),
-        staleTime: 1000 * 60 * 5,
-    });
-};
+export const allConversationsOptions = () => infiniteQueryOptions({
+    queryKey: ['conversations'],
+    queryFn: async ({ pageParam = 0 }) => {
+        return Api.fetchAllConv({ offset: pageParam as number, limit: 20 });
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+        if (lastPage?.data?.hasMore) {
+            return allPages.length * 20; 
+        }
+        return undefined;
+    }
+});
 
 // Fetch Vault
 export const useUserVault = () => {
@@ -277,7 +283,7 @@ export const singleConversationOptions = (username: string) => {
 // Fetch Messages
 export const useMessages = (queries: CursorQueries, conversationId: string, enabled = false) => {
     return useInfiniteQuery({
-        queryKey: ['messages', queries, conversationId],
+        queryKey: ['messages', conversationId, queries],
         maxPages: 5,
 
         queryFn: ({ pageParam }) => Api.fetchMessages(conversationId, { ...queries, cursor: pageParam }),

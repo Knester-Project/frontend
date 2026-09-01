@@ -12,11 +12,11 @@ import { useTypingStore } from "@/stores/typing.store";
 
 // UIs
 import Header from './Header';
-import Empty from './Empty';
-import { MessagesSkeleton } from './MessageLoader';
-import InputToolbar from './InputToolbar';
-import MessageBubble from './MessageBubble';
-import TypingIndicator from './TypingIndicator';
+import Empty from '../../../../features/messages/Empty';
+import { MessagesSkeleton } from '../../../../features/messages/MessageLoader';
+import InputToolbar from '../../../../features/messages/InputToolbar';
+import MessageBubble from '../../../../features/messages/MessageBubble';
+import TypingIndicator from '../../../../features/messages/TypingIndicator';
 import { useChatScroll, useJoinActiveConv, useJoinChatRoom, useSyncToDexie } from './SyncUI';
 import { useMessageSweeper } from '@/Hooks/chats/useMessageSweeper';
 
