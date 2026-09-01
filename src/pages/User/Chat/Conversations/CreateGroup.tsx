@@ -1,4 +1,4 @@
-const CreateForm = () => {
+const CreateGroup = () => {
     return ( 
         <main>
 
@@ -6,4 +6,4 @@ const CreateForm = () => {
      );
 }
  
-export default CreateForm;
+export default CreateGroup;

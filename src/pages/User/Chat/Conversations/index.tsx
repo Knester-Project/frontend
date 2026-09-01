@@ -13,12 +13,14 @@ import { Overlay } from "@/components/common/Overlay";
 import New from "./New";
 
 // Icons
-import { MessageAdd1, More } from "iconsax-reactjs";
+import { Add, MessageAdd1, Profile2User } from "iconsax-reactjs";
+import CreateGroup from "./CreateGroup";
 
 
 const Index = () => {
 
-    const [options, openOptions] = useState<boolean>(false);
+    const [newGroup, setNewGroup] = useState<boolean>(false);
+    const [newMessage, setNewMessage] = useState<boolean>(false);
 
     const {
         data,
@@ -38,13 +40,27 @@ const Index = () => {
     });
 
     // Functions
-    const toggleOptions = () => openOptions((prev) => !prev);
+    const toggleNewGroup = () => {
+        setNewGroup((prev) => !prev);
+        setNewMessage(false);
+    }
+    const toggleNewMessage = () => {
+        setNewMessage((prev) => !prev);
+        setNewGroup(false);
+    }
 
     return (
         <>
-            <Overlay open={options} onClose={toggleOptions}>
-                <New />
+            {/* New Chat */}
+            <Overlay open={newMessage} onClose={toggleNewMessage} variant="bottom">
+                <New onClose={toggleNewMessage} />
             </Overlay>
+
+            {/* New Group */}
+            <Overlay open={newGroup} onClose={toggleNewGroup} variant="bottom">
+                <CreateGroup />
+            </Overlay>
+
             <main className="flex flex-col bg-background h-full">
                 <header className="top-0 z-2 sticky flex justify-between items-center bg-primary/10 backdrop-blur-md px-4 py-4 border-border border-b">
                     <div>
@@ -52,9 +68,12 @@ const Index = () => {
                         <p className="smallText montserrat">{conversations.length} {`Conversation${conversations.length > 1 ? "s" : ""}`}</p>
                     </div>
                     <div className="flex items-center gap-x-3">
-                        <More onClick={toggleOptions} className="size-4 md:size-4.5 xl:size-5 rotate-90 cursor-pointer" />
-                        <button className="bg-primary/50 hover:bg-primary/70 p-2 rounded-full text-primary-foreground duration-200 cursor-pointer">
-                            <MessageAdd1 className="size-3 md:size-3.5 xl:size-4" />
+                        <button onClick={toggleNewGroup} className="relative unset">
+                            <Profile2User className="size-5 md:size-5.5 xl:size-6" variant="Linear" />
+                            <Add variant="Bold" className="-right-1 -bottom-1 absolute size-3 md:size-3.5 xl:size-4" />
+                        </button>
+                        <button onClick={toggleNewMessage} className="bg-primary/50 hover:bg-primary/70 p-2 rounded-full text-primary-foreground duration-200 cursor-pointer">
+                            <MessageAdd1 variant="Bold" className="size-4 md:size-4.5 xl:size-5" />
                         </button>
                     </div>
                 </header>

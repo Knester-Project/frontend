@@ -5,7 +5,7 @@ export const loginSchema = z.object({
         error: (issue) => issue.input === undefined
             ? "This field is required"
             : "Not a string"
-    }).min(5, { error: "Username must be up to 5 Characters." }),
+    }).min(2, { error: "Username must be up to 2 Characters." }),
 
     password: z.string({
         error: (issue) => issue.input === undefined

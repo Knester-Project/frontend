@@ -487,6 +487,8 @@ export const updateConvMeta = async (data: EditConvMetaPayload) => {
     return response.data;
 }
 
-// Clear Chat
-
-// Delete Conversation
+// Search a User
+export const searchFn = async (query: string) => {
+    const response = await userAxios.get(`users/search/query?query=${encodeURIComponent(query)}`);
+    return response.data;
+}

@@ -13,7 +13,7 @@ export function useCheckUsername(username: string) {
     return useQuery({
         queryKey: ['checkedUsername'],
         queryFn: () => Api.checkUsername(username),
-        enabled: username.trim().length >= 3,
+        enabled: username.trim().length >= 2,
     })
 }
 
