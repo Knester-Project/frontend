@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { APP_NAME } from '../__root';
+import { APP_NAME } from '@/routes/__root';
 
 // Queries
 import { allConversationsOptions, singleConversationOptions } from '@/services/userQueries';
@@ -9,7 +9,7 @@ import Chat from "@/pages/User/Chat";
 import Loader from '@/pages/User/Chat/Loader';
 import ErrorPage from '@/components/errors/Custom';
 
-export const Route = createFileRoute('/_dashboard/messages')({
+export const Route = createFileRoute('/_dashboard/messages/')({
 
   head: () => ({
     meta: [

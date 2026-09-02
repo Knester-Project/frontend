@@ -19,7 +19,6 @@ import { Route as DashboardSafetyRouteImport } from './routes/_dashboard/safety'
 import { Route as DashboardProfileRouteImport } from './routes/_dashboard/profile'
 import { Route as DashboardPeopleRouteImport } from './routes/_dashboard/people'
 import { Route as DashboardNotificationRouteImport } from './routes/_dashboard/notification'
-import { Route as DashboardMessagesRouteImport } from './routes/_dashboard/messages'
 import { Route as DashboardMarketRouteImport } from './routes/_dashboard/market'
 import { Route as DashboardInstallRouteImport } from './routes/_dashboard/install'
 import { Route as DashboardFeedRouteImport } from './routes/_dashboard/feed'
@@ -30,6 +29,9 @@ import { Route as AuthGuidelinesRouteImport } from './routes/_auth/guidelines'
 import { Route as AuthForgotRouteImport } from './routes/_auth/forgot'
 import { Route as AuthFeaturesRouteImport } from './routes/_auth/features'
 import { Route as AuthContactRouteImport } from './routes/_auth/contact'
+import { Route as DashboardMessagesRouteRouteImport } from './routes/_dashboard/messages/route'
+import { Route as DashboardMessagesIndexRouteImport } from './routes/_dashboard/messages/index'
+import { Route as DashboardMessagesIdRouteImport } from './routes/_dashboard/messages/$id'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -77,11 +79,6 @@ const DashboardPeopleRoute = DashboardPeopleRouteImport.update({
 const DashboardNotificationRoute = DashboardNotificationRouteImport.update({
   id: '/notification',
   path: '/notification',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardMessagesRoute = DashboardMessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardMarketRoute = DashboardMarketRouteImport.update({
@@ -134,10 +131,26 @@ const AuthContactRoute = AuthContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const DashboardMessagesRouteRoute = DashboardMessagesRouteRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardMessagesIndexRoute = DashboardMessagesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardMessagesRouteRoute,
+} as any)
+const DashboardMessagesIdRoute = DashboardMessagesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => DashboardMessagesRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/messages': typeof DashboardMessagesRouteRouteWithChildren
   '/contact': typeof AuthContactRoute
   '/features': typeof AuthFeaturesRoute
   '/forgot': typeof AuthForgotRoute
@@ -148,13 +161,14 @@ export interface FileRoutesByFullPath {
   '/feed': typeof DashboardFeedRoute
   '/install': typeof DashboardInstallRoute
   '/market': typeof DashboardMarketRoute
-  '/messages': typeof DashboardMessagesRoute
   '/notification': typeof DashboardNotificationRoute
   '/people': typeof DashboardPeopleRoute
   '/profile': typeof DashboardProfileRoute
   '/safety': typeof DashboardSafetyRoute
   '/search': typeof DashboardSearchRoute
   '/': typeof AuthIndexRoute
+  '/messages/$id': typeof DashboardMessagesIdRoute
+  '/messages/': typeof DashboardMessagesIndexRoute
 }
 export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
@@ -169,13 +183,14 @@ export interface FileRoutesByTo {
   '/feed': typeof DashboardFeedRoute
   '/install': typeof DashboardInstallRoute
   '/market': typeof DashboardMarketRoute
-  '/messages': typeof DashboardMessagesRoute
   '/notification': typeof DashboardNotificationRoute
   '/people': typeof DashboardPeopleRoute
   '/profile': typeof DashboardProfileRoute
   '/safety': typeof DashboardSafetyRoute
   '/search': typeof DashboardSearchRoute
   '/': typeof AuthIndexRoute
+  '/messages/$id': typeof DashboardMessagesIdRoute
+  '/messages': typeof DashboardMessagesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -183,6 +198,7 @@ export interface FileRoutesById {
   '/_dashboard': typeof DashboardRouteRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/_dashboard/messages': typeof DashboardMessagesRouteRouteWithChildren
   '/_auth/contact': typeof AuthContactRoute
   '/_auth/features': typeof AuthFeaturesRoute
   '/_auth/forgot': typeof AuthForgotRoute
@@ -193,19 +209,21 @@ export interface FileRoutesById {
   '/_dashboard/feed': typeof DashboardFeedRoute
   '/_dashboard/install': typeof DashboardInstallRoute
   '/_dashboard/market': typeof DashboardMarketRoute
-  '/_dashboard/messages': typeof DashboardMessagesRoute
   '/_dashboard/notification': typeof DashboardNotificationRoute
   '/_dashboard/people': typeof DashboardPeopleRoute
   '/_dashboard/profile': typeof DashboardProfileRoute
   '/_dashboard/safety': typeof DashboardSafetyRoute
   '/_dashboard/search': typeof DashboardSearchRoute
   '/_auth/': typeof AuthIndexRoute
+  '/_dashboard/messages/$id': typeof DashboardMessagesIdRoute
+  '/_dashboard/messages/': typeof DashboardMessagesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/privacy'
     | '/terms'
+    | '/messages'
     | '/contact'
     | '/features'
     | '/forgot'
@@ -216,13 +234,14 @@ export interface FileRouteTypes {
     | '/feed'
     | '/install'
     | '/market'
-    | '/messages'
     | '/notification'
     | '/people'
     | '/profile'
     | '/safety'
     | '/search'
     | '/'
+    | '/messages/$id'
+    | '/messages/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/privacy'
@@ -237,19 +256,21 @@ export interface FileRouteTypes {
     | '/feed'
     | '/install'
     | '/market'
-    | '/messages'
     | '/notification'
     | '/people'
     | '/profile'
     | '/safety'
     | '/search'
     | '/'
+    | '/messages/$id'
+    | '/messages'
   id:
     | '__root__'
     | '/_auth'
     | '/_dashboard'
     | '/privacy'
     | '/terms'
+    | '/_dashboard/messages'
     | '/_auth/contact'
     | '/_auth/features'
     | '/_auth/forgot'
@@ -260,13 +281,14 @@ export interface FileRouteTypes {
     | '/_dashboard/feed'
     | '/_dashboard/install'
     | '/_dashboard/market'
-    | '/_dashboard/messages'
     | '/_dashboard/notification'
     | '/_dashboard/people'
     | '/_dashboard/profile'
     | '/_dashboard/safety'
     | '/_dashboard/search'
     | '/_auth/'
+    | '/_dashboard/messages/$id'
+    | '/_dashboard/messages/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -348,13 +370,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardNotificationRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/_dashboard/messages': {
-      id: '/_dashboard/messages'
-      path: '/messages'
-      fullPath: '/messages'
-      preLoaderRoute: typeof DashboardMessagesRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
     '/_dashboard/market': {
       id: '/_dashboard/market'
       path: '/market'
@@ -425,6 +440,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthContactRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_dashboard/messages': {
+      id: '/_dashboard/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof DashboardMessagesRouteRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/messages/': {
+      id: '/_dashboard/messages/'
+      path: '/'
+      fullPath: '/messages/'
+      preLoaderRoute: typeof DashboardMessagesIndexRouteImport
+      parentRoute: typeof DashboardMessagesRouteRoute
+    }
+    '/_dashboard/messages/$id': {
+      id: '/_dashboard/messages/$id'
+      path: '/$id'
+      fullPath: '/messages/$id'
+      preLoaderRoute: typeof DashboardMessagesIdRouteImport
+      parentRoute: typeof DashboardMessagesRouteRoute
+    }
   }
 }
 
@@ -454,11 +490,27 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface DashboardMessagesRouteRouteChildren {
+  DashboardMessagesIdRoute: typeof DashboardMessagesIdRoute
+  DashboardMessagesIndexRoute: typeof DashboardMessagesIndexRoute
+}
+
+const DashboardMessagesRouteRouteChildren: DashboardMessagesRouteRouteChildren =
+  {
+    DashboardMessagesIdRoute: DashboardMessagesIdRoute,
+    DashboardMessagesIndexRoute: DashboardMessagesIndexRoute,
+  }
+
+const DashboardMessagesRouteRouteWithChildren =
+  DashboardMessagesRouteRoute._addFileChildren(
+    DashboardMessagesRouteRouteChildren,
+  )
+
 interface DashboardRouteRouteChildren {
+  DashboardMessagesRouteRoute: typeof DashboardMessagesRouteRouteWithChildren
   DashboardFeedRoute: typeof DashboardFeedRoute
   DashboardInstallRoute: typeof DashboardInstallRoute
   DashboardMarketRoute: typeof DashboardMarketRoute
-  DashboardMessagesRoute: typeof DashboardMessagesRoute
   DashboardNotificationRoute: typeof DashboardNotificationRoute
   DashboardPeopleRoute: typeof DashboardPeopleRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
@@ -467,10 +519,10 @@ interface DashboardRouteRouteChildren {
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardMessagesRouteRoute: DashboardMessagesRouteRouteWithChildren,
   DashboardFeedRoute: DashboardFeedRoute,
   DashboardInstallRoute: DashboardInstallRoute,
   DashboardMarketRoute: DashboardMarketRoute,
-  DashboardMessagesRoute: DashboardMessagesRoute,
   DashboardNotificationRoute: DashboardNotificationRoute,
   DashboardPeopleRoute: DashboardPeopleRoute,
   DashboardProfileRoute: DashboardProfileRoute,
