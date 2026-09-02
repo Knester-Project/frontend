@@ -492,3 +492,9 @@ export const searchFn = async (query: string) => {
     const response = await userAxios.get(`users/search/query?query=${encodeURIComponent(query)}`);
     return response.data;
 }
+
+// Add User to Group
+export const newGroupFn = async (data: NewGroupPayload) => {
+    const response = await userAxios.post(`chat/create/conversations`, data);
+    return response.data;
+}

@@ -564,7 +564,7 @@ declare type EditMessagePayload = {
 declare type EditConvMetaPayload = {
     name?: string;
     avatar?: string;
-    type?: public;
+    type?: string;
     messageTtl?: number;
     conversationId?: string;
 }
@@ -583,3 +583,13 @@ declare type ConversationsData = {
     conversations: ConversationItem[];
     hasMore: boolean;
 };
+
+// New Group Payload
+declare type NewGroupPayload = {
+    members: string[];
+    type: string;
+    owner: string;
+    name: string;
+    avatar: string;
+    isFeed: boolean;
+}

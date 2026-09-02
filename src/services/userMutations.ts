@@ -951,3 +951,19 @@ export function useUpdateConvMeta(name: string) {
         },
     });
 }
+
+// New Group
+export function useNewGroup() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: NewGroupPayload) => Api.newGroupFn(data),
+
+        onError: (error) => {
+            console.error("Failed to create new group", error)
+        },
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["conversations"] });
+        }
+    })
+}

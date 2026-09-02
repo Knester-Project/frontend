@@ -58,7 +58,7 @@ const Index = () => {
 
             {/* New Group */}
             <Overlay open={newGroup} onClose={toggleNewGroup} variant="bottom">
-                <CreateGroup />
+                <CreateGroup onClose={toggleNewGroup} />
             </Overlay>
 
             <main className="flex flex-col bg-background h-full">

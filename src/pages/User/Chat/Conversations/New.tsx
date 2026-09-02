@@ -111,7 +111,7 @@ const New = ({ onClose }: { onClose: () => void }) => {
 
 export default New;
 
-function EmptyHint({ text }: { text: string }) {
+export function EmptyHint({ text }: { text: string }) {
     return (
         <p className="px-6 py-10 text-muted-foreground text-center montserrat smallText">
             {text}
