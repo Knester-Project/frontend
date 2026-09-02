@@ -21,7 +21,7 @@ export const Route = createFileRoute('/_dashboard/messages')({
 
   validateSearch: (search: Record<string, string | undefined>) => ({
     username: search.username as string | undefined,
-    group: search.group as string | undefined,
+    isFeed: search.isFeed as string | undefined,
   }),
 
   loaderDeps: ({ search: { username } }) => ({ username }),

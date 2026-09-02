@@ -133,7 +133,7 @@ function SearchResultRow({ user }: { user: User }) {
                     to: "/messages",
                     search: {
                         username: `${user.username}`,
-                        group: undefined,
+                        isFeed: undefined,
                     },
                 })
             }

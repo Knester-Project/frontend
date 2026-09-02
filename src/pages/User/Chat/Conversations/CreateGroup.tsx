@@ -383,22 +383,6 @@ const NewGroup = ({ onClose }: { onClose: () => void; }) => {
                     </div>
                 </div>
 
-                {avatarFile && (
-                    <div className="flex justify-between items-center bg-muted/40 px-3 py-2 rounded-md">
-                        <div className="min-w-0">
-                            <p className="font-medium text-[10px] md:text-[11px] xl:text-xs truncate">
-                                {avatarFile.name}
-                            </p>
-                            <p className="text-[10px] text-muted-foreground md:text-[11px] xl:text-xs montserrat">
-                                {(avatarFile.size / 1024 / 1024).toFixed(2)} MB
-                            </p>
-                        </div>
-                        <span className="text-[10px] text-muted-foreground md:text-[11px] xl:text-xs">
-                            Max 10 MB
-                        </span>
-                    </div>
-                )}
-
                 {/* Group visibility */}
                 <div>
                     <p className="mb-2 font-medium smallText">

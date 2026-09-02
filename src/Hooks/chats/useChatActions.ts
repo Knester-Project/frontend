@@ -48,7 +48,7 @@ export const useChatActions = (conversationId: string) => {
             queryClient.invalidateQueries({ queryKey: ["conversations"] });
 
             // Kick the user back to the inbox screen instantly
-            navigate({ to: "/messages", search: { username: undefined, group: undefined } });
+            navigate({ to: "/messages", search: { username: undefined, isFeed: undefined } });
         },
         onError: (error) => {
             console.error("Failed to delete chat:", error);

@@ -197,7 +197,7 @@ const AdvertCard = ({ advert, isOwner }: { advert: MyAdvert, isOwner: boolean })
                                 </button>
                             </div>
                         ) : (
-                            <Link to="/messages" search={{ username: advert.vendorId.username, group: undefined }}
+                            <Link to="/messages" search={{ username: advert.vendorId.username, isFeed: undefined }}
                                 className="flex items-center gap-1.5 bg-primary/10 hover:bg-primary shadow-sm px-3 py-1.5 rounded-xl font-bold text-[10px] text-primary md:text-[11px] hover:text-primary-foreground xl:text-xs transition-colors cursor-pointer">
                                 <Messages2 className="size-3" />
                                 Chat

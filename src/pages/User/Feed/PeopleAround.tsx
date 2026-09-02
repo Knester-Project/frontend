@@ -140,7 +140,7 @@ const PeopleAround = () => {
 
                                 {/* Action */}
                                 <div className="shrink-0">
-                                    <Link to="/messages" search={{ username: user.user.username, group: undefined }}>
+                                    <Link to="/messages" search={{ username: user.user.username, isFeed: undefined }}>
                                         <Button size="sm" className="bg-primary hover:bg-transparent border border-transparent hover:border-primary hover:text-primary transition-all duration-300">
                                             <MessageText1 className="size-3.5" variant="Bold" />
                                             <span className="ml-1 text-xs">Chat</span>

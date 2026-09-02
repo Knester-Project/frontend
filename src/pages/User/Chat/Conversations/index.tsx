@@ -124,7 +124,7 @@ const ConversationCard = ({ convo }: { convo: ConversationItem }) => {
 
     return (
         <Link
-            to={"/messages"} search={{ username: isPrivate ? targetUser?.username : undefined, group: isGroup ? convo.meta.name : undefined }}
+            to={"/messages"} search={{ username: isPrivate ? targetUser?.username : undefined, isFeed: undefined }}
             className="flex items-center gap-4 hover:bg-accent/10 px-4 py-3 border-border/40 border-b transition-colors cursor-pointer"
         >
             {/* Avatar Section */}
