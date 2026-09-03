@@ -114,15 +114,14 @@ class LocationService {
 
         this.cacheLocation(coords);
 
-        // const { user } = meStore();
-        
-        // // Only update profile when the user is logged in
-        // if (user && user._id && user.username) {
-        //     await updateProfile({
-        //         location: coords,
-        //     });
+        // Only update profile when the user is logged in
+        const { user } = meStore();
+        if (user && user._id && user.username) {
+            await updateProfile({
+                location: coords,
+            });
 
-        // }
+        }
     }
 
     // Haversine distance. Returns metres.
