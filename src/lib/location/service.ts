@@ -115,12 +115,11 @@ class LocationService {
         this.cacheLocation(coords);
 
         // Only update profile when the user is logged in
-        const { user } = meStore();
-        if (user && user._id && user.username) {
+        const { user } = meStore.getState();
+        if (user?._id && user.username) {
             await updateProfile({
                 location: coords,
             });
-
         }
     }
 
