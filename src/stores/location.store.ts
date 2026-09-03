@@ -29,6 +29,7 @@ interface LocationStore extends LocationState {
 
     hasCachedLocation: boolean;
     hasValidLocation: boolean;
+    requiresPreciseLocation: boolean;
 
     initialize: () => Promise<void>;
     requestLocation: () => Promise<Coordinates | null>;
@@ -41,6 +42,7 @@ interface LocationStore extends LocationState {
 export const useLocationStore = create<LocationStore>((set, get) => ({
     hasCachedLocation: false,
     hasValidLocation: false,
+    requiresPreciseLocation: false,
 
     permission: "unknown",
     coordinates: null,
@@ -62,6 +64,14 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
         // Listen for permission changes.
         locationService.watchPermission((permission) => {
             set({ permission });
+
+            // Permission was changed/reset.
+            if (permission !== "granted") {
+                set({
+                    hasValidLocation: false,
+                    requiresPreciseLocation: false,
+                });
+            }
         });
 
         // Hydrate from cache.
@@ -74,6 +84,7 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
                 lastUpdated: cached.timestamp,
                 hasCachedLocation: true,
                 hasValidLocation: valid,
+                requiresPreciseLocation: !valid && cached.coords.accuracy > MAX_LOCATION_ACCURACY,
             });
         }
 
@@ -98,6 +109,7 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
                 permission: "granted",
                 hasCachedLocation: true,
                 hasValidLocation: valid,
+                requiresPreciseLocation: !valid && coords.accuracy > MAX_LOCATION_ACCURACY,
             });
 
             if (!valid) return null;
@@ -111,7 +123,10 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
 
             return coords;
         } catch {
-            set({ hasValidLocation: false });
+            set({ 
+                hasValidLocation: false,
+                requiresPreciseLocation: false,
+             });
             return null;
         } finally {
             set({ loading: false });
@@ -138,6 +153,7 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
             lastUpdated: null,
             hasCachedLocation: false,
             hasValidLocation: false,
+            requiresPreciseLocation: false,
         });
     },
 }));
