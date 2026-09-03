@@ -2,7 +2,8 @@ import z from "zod";
 
 const locationSchema = z.object({
     longitude: z.number(),
-    latitude: z.number()
+    latitude: z.number(),
+    accuracy: z.number(),
 });
 
 export const updateLocationSchema = locationSchema.transform(({ longitude, latitude }) => ({
