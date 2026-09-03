@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { locationService } from "@/lib/location/service";
 import { clearStoredLocation } from "@/lib/location/storage";
 
-export const MAX_LOCATION_ACCURACY = 100;
+export const MAX_LOCATION_ACCURACY = 150;
 
 const isValidLocation = (coordinates: Coordinates | null): boolean => {
     if (!coordinates) return false;
@@ -41,6 +41,7 @@ interface LocationStore extends LocationState {
 }
 
 export const useLocationStore = create<LocationStore>((set, get) => ({
+
     hasCachedLocation: false,
     hasValidLocation: false,
     requiresPreciseLocation: false,
@@ -139,6 +140,8 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
                 requiresPreciseLocation: false,
                 lastUpdated: Date.now(),
             });
+
+            console.log("Valid Location", useLocationStore.getState().hasValidLocation);
 
             if (locationService.shouldSync(coords)) {
                 await locationService.sync(coords);
