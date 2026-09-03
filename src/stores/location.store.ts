@@ -4,23 +4,26 @@ import { create } from "zustand";
 import { locationService } from "@/lib/location/service";
 import { clearStoredLocation } from "@/lib/location/storage";
 
-const MAX_LOCATION_ACCURACY = 100; // meters
+export const MAX_LOCATION_ACCURACY = 100;
 
 const isValidLocation = (coordinates: Coordinates | null): boolean => {
     if (!coordinates) return false;
 
     const { latitude, longitude, accuracy } = coordinates;
 
-    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+    if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90) {
         return false;
     }
-
-    if (!Number.isFinite(accuracy)) {
+    if (!Number.isFinite(longitude) || longitude < -180 || longitude > 180) {
+        return false;
+    }
+    if (!Number.isFinite(accuracy) || accuracy < 0) {
         return false;
     }
 
     return accuracy <= MAX_LOCATION_ACCURACY;
 };
+
 
 interface LocationStore extends LocationState {
 
@@ -83,37 +86,22 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
     },
 
     async requestLocation() {
-        if (get().loading) {
-            return get().coordinates;
-        }
-
+        if (get().loading) return get().coordinates;
         set({ loading: true });
 
         try {
             const coords = await locationService.requestLocation();
             const valid = isValidLocation(coords);
 
-            // Received coordinates, but not accurate enough.
-            if (!valid) {
-                set({
-                    coordinates: coords,
-                    hasCachedLocation: true,
-                    hasValidLocation: false,
-                    lastUpdated: Date.now(),
-                    permission: "granted",
-                });
-
-                return null;
-            }
-
-            // Valid device location.
             set({
                 coordinates: coords,
-                lastUpdated: Date.now(),
                 permission: "granted",
                 hasCachedLocation: true,
-                hasValidLocation: true,
+                hasValidLocation: valid,
             });
+
+            if (!valid) return null;
+            set({ lastUpdated: Date.now() });
 
             if (locationService.shouldSync(coords)) {
                 await locationService.sync(coords);
