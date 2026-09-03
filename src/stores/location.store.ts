@@ -63,8 +63,6 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
             return;
         }
 
-        console.log("Initializing")
-
         // Mark the initialization flow as busy immediately.
         set({ initializing: true });
 
@@ -122,7 +120,6 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
 
         try {
             const coords = await locationService.requestLocation();
-            console.log("Received location:", coords);
             const valid = isValidLocation(coords);
 
             set({
@@ -134,7 +131,6 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
             });
 
             if (!valid) {
-                console.log(`Location rejected. Accuracy: ${coords.accuracy}m`);
                 return null;
             }
             set({
@@ -143,18 +139,14 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
                 lastUpdated: Date.now(),
             });
 
-            console.log("Valid Location", useLocationStore.getState().hasValidLocation);
-
             if (locationService.shouldSync(coords)) {
-                console.log("It reached the sync part")
                 await locationService.sync(coords);
             } else {
                 locationService.cacheLocation(coords);
             }
 
             return coords;
-        } catch (error) {
-            console.error("Location request failed:", error);
+        } catch {
             set({
                 hasValidLocation: false,
                 requiresPreciseLocation: false,

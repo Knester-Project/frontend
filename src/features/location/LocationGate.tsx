@@ -9,7 +9,6 @@ import { PermissionScreen } from "./LocationPerm";
 export function LocationGate({ children }: { children: ReactNode }) {
 
     const { initialized, initializing, hasValidLocation, permission, initialize } = useLocationStore();
-    console.log("Has Valid Location", hasValidLocation, "Permission", permission, "Initialized", initialized);
 
     useEffect(() => {
         void initialize();
