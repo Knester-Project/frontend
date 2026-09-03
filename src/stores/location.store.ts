@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { locationService } from "@/lib/location/service";
 import { clearStoredLocation } from "@/lib/location/storage";
 
-export const MAX_LOCATION_ACCURACY = 100;
+export const MAX_LOCATION_ACCURACY = 200;
 
 const isValidLocation = (coordinates: Coordinates | null): boolean => {
     if (!coordinates) return false;
