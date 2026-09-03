@@ -42,6 +42,7 @@ declare type LocationState = {
 declare type Coordinates = {
     longitude: number;
     latitude: number;
+    accuracy: number;
 };
 
 declare type StoredLocation = {
