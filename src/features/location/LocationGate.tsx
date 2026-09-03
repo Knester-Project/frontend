@@ -8,14 +8,14 @@ import { PermissionScreen } from "./LocationPerm";
 
 export function LocationGate({ children }: { children: ReactNode }) {
 
-    const { initialized, hasValidLocation, permission, initialize } = useLocationStore();
+    const { initialized, initializing, hasValidLocation, permission, initialize } = useLocationStore();
     console.log("Has Valid Location", hasValidLocation, "Permission", permission, "Initialized", initialized);
 
     useEffect(() => {
-        initialize();
+        void initialize();
     }, [initialize]);
 
-    if (!initialized) {
+    if (!initialized || initializing) {
         return (
             <div className="fixed inset-0 flex justify-center items-center bg-background">
                 <div className="space-y-4 text-center">
@@ -31,7 +31,7 @@ export function LocationGate({ children }: { children: ReactNode }) {
     if (permission === "unsupported") {
         return (
             <div className="fixed inset-0 flex justify-center items-center bg-background px-6">
-                <div className="max-w-md text-center">
+                <div className="max-w-xl text-center">
                     <h1 className="font-bold text-lg sm:text-xl md:text-2xl xl:text-3xl">
                         Browser Not Supported
                     </h1>

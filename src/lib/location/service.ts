@@ -112,16 +112,17 @@ class LocationService {
     // Synchronize with backend.
     async sync(coords: Coordinates): Promise<void> {
 
-        const { user } = meStore();
-        
-        // Only update profile when the user is logged in
-        if (user?._id) {
-            await updateProfile({
-                location: coords,
-            });
-
-        }
         this.cacheLocation(coords);
+
+        // const { user } = meStore();
+        
+        // // Only update profile when the user is logged in
+        // if (user && user._id && user.username) {
+        //     await updateProfile({
+        //         location: coords,
+        //     });
+
+        // }
     }
 
     // Haversine distance. Returns metres.
