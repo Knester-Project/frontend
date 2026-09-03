@@ -268,6 +268,7 @@ declare type EditProfilePayload = {
     location?: {
         longitude: number;
         latitude: number;
+        accuracy: number;
     };
     profileLock?: boolean;
     discoverable?: boolean;

@@ -2,6 +2,9 @@ import { getStoredLocation, saveStoredLocation } from "./storage";
 
 // Services and Constants
 import { updateProfile } from "@/services/api.services";
+
+// Stores and Constants
+import { meStore } from "@/stores/me.store";
 const SIX_HOURS = 6 * 60 * 60 * 1000;
 
 // Minimum movement before syncing with backend.
@@ -108,10 +111,16 @@ class LocationService {
 
     // Synchronize with backend.
     async sync(coords: Coordinates): Promise<void> {
-        await updateProfile({
-            location: coords,
-        });
 
+        const { user } = meStore();
+        
+        // Only update profile when the user is logged in
+        if (user?._id) {
+            await updateProfile({
+                location: coords,
+            });
+
+        }
         this.cacheLocation(coords);
     }
 
