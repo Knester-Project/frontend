@@ -20,7 +20,7 @@ export function PermissionScreen() {
 
     return (
         <main className="z-[9999] fixed inset-0 flex justify-center items-center bg-background">
-            <section className="w-full max-w-xl">
+            <section className="p-2 w-full max-w-xl">
                 <div className="bg-card shadow-sm p-4 md:p-6 xl:p-8 border border-border rounded-3xl text-card-foreground">
 
                     {/* Icon */}

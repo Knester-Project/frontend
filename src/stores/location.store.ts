@@ -62,12 +62,13 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
             return;
         }
 
+        console.log("Initializing")
+
         // Mark the initialization flow as busy immediately.
         set({ initializing: true });
 
         try {
-            const permission =
-                await locationService.getPermission();
+            const permission = await locationService.getPermission();
             set({ permission });
 
             // Listen for permission changes.
@@ -102,7 +103,7 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
             if (permission === "granted") {
                 await get().refreshLocation();
             }
-            
+
             set({ initialized: true });
         } finally {
             set({
@@ -118,6 +119,7 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
 
         try {
             const coords = await locationService.requestLocation();
+            console.log("Received location:", coords);
             const valid = isValidLocation(coords);
 
             set({
@@ -128,7 +130,10 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
                 requiresPreciseLocation: !valid && coords.accuracy > MAX_LOCATION_ACCURACY,
             });
 
-            if (!valid) return null;
+            if (!valid) {
+                console.log( `Location rejected. Accuracy: ${coords.accuracy}m`);
+                return null;
+            }
             set({
                 hasValidLocation: true,
                 requiresPreciseLocation: false,
