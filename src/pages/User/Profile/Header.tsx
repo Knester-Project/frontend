@@ -101,7 +101,7 @@ const Header = ({ user }: { user: UserDetails }) => {
                         <p><span style={{ color: colors.primary }} className='font-semibold text-sm md:text-base xl:text-lg montserrat'>{totalPosts}</span> Posts</p>
                     </div>
                     <section className="flex justify-between gap-2 p-4">
-                        <Link to="/messages" search={{ username }} disabled={(relationship?.blockedMe || relationship?.blockedByMe) ?? false}>
+                        <Link to="/messages" search={{ username, isFeed: undefined }} disabled={(relationship?.blockedMe || relationship?.blockedByMe) ?? false}>
                             <ActionButton disabled={(relationship?.blockedMe || relationship?.blockedByMe) ?? false} color={colors.primary} icon={MessageText1} label="Message" />
                         </Link>
                         {/* Block/Unblock Toggle */}
