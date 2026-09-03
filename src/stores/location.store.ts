@@ -7,6 +7,7 @@ import { clearStoredLocation } from "@/lib/location/storage";
 export const MAX_LOCATION_ACCURACY = 200;
 
 const isValidLocation = (coordinates: Coordinates | null): boolean => {
+    console.log("isValidLocation", coordinates);
     if (!coordinates) return false;
 
     const { latitude, longitude, accuracy } = coordinates;
