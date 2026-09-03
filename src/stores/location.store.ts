@@ -30,6 +30,7 @@ interface LocationStore extends LocationState {
     hasCachedLocation: boolean;
     hasValidLocation: boolean;
     requiresPreciseLocation: boolean;
+    initializing: boolean;
 
     initialize: () => Promise<void>;
     requestLocation: () => Promise<Coordinates | null>;
@@ -43,6 +44,7 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
     hasCachedLocation: false,
     hasValidLocation: false,
     requiresPreciseLocation: false,
+    initializing: false,
 
     permission: "unknown",
     coordinates: null,
@@ -55,48 +57,62 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
     },
 
     async initialize() {
-        if (get().initialized) return;
 
-        const permission = await locationService.getPermission();
+        if (get().initialized || get().initializing) {
+            return;
+        }
 
-        set({ permission });
+        // Mark the initialization flow as busy immediately.
+        set({ initializing: true });
 
-        // Listen for permission changes.
-        locationService.watchPermission((permission) => {
+        try {
+            const permission =
+                await locationService.getPermission();
             set({ permission });
 
-            // Permission was changed/reset.
-            if (permission !== "granted") {
+            // Listen for permission changes.
+            await locationService.watchPermission(
+                (permission) => {
+                    set({ permission });
+                    if (permission !== "granted") {
+                        set({
+                            hasValidLocation: false,
+                            requiresPreciseLocation: false,
+                        });
+                    }
+                }
+            );
+
+            // Hydrate from cache.
+            const cached = locationService.getCachedLocation();
+
+            if (cached) {
+                const valid = isValidLocation(
+                    cached.coords
+                );
                 set({
-                    hasValidLocation: false,
-                    requiresPreciseLocation: false,
+                    coordinates: cached.coords,
+                    lastUpdated: cached.timestamp,
+                    hasCachedLocation: true,
+                    hasValidLocation: valid,
+                    requiresPreciseLocation: !valid && cached.coords.accuracy > MAX_LOCATION_ACCURACY,
                 });
             }
-        });
 
-        // Hydrate from cache.
-        const cached = locationService.getCachedLocation();
-
-        if (cached) {
-            const valid = isValidLocation(cached.coords);
+            if (permission === "granted") {
+                await get().refreshLocation();
+            }
+            
+            set({ initialized: true });
+        } finally {
             set({
-                coordinates: cached.coords,
-                lastUpdated: cached.timestamp,
-                hasCachedLocation: true,
-                hasValidLocation: valid,
-                requiresPreciseLocation: !valid && cached.coords.accuracy > MAX_LOCATION_ACCURACY,
+                initializing: false,
             });
         }
-
-        // Automatically refresh if permission is already granted.
-        if (permission === "granted") {
-            await get().refreshLocation();
-        }
-
-        set({ initialized: true });
     },
 
     async requestLocation() {
+
         if (get().loading) return get().coordinates;
         set({ loading: true });
 
@@ -113,7 +129,11 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
             });
 
             if (!valid) return null;
-            set({ lastUpdated: Date.now() });
+            set({
+                hasValidLocation: true,
+                requiresPreciseLocation: false,
+                lastUpdated: Date.now(),
+            });
 
             if (locationService.shouldSync(coords)) {
                 await locationService.sync(coords);
@@ -123,10 +143,10 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
 
             return coords;
         } catch {
-            set({ 
+            set({
                 hasValidLocation: false,
                 requiresPreciseLocation: false,
-             });
+            });
             return null;
         } finally {
             set({ loading: false });
@@ -136,8 +156,8 @@ export const useLocationStore = create<LocationStore>((set, get) => ({
     async refreshLocation() {
         const { coordinates } = get();
 
-        const hasValidCurrentLocation = isValidLocation(coordinates);
-        if (hasValidCurrentLocation && !locationService.isCacheExpired()) {
+        const valid = isValidLocation(coordinates);
+        if (valid && !locationService.isCacheExpired()) {
             return;
         }
 

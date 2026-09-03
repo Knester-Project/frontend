@@ -8,27 +8,17 @@ import { PermissionScreen } from "./LocationPerm";
 
 export function LocationGate({ children }: { children: ReactNode }) {
 
-    const { initialized, hasValidLocation, permission, initialize, refreshLocation, } = useLocationStore();
+    const { initialized, hasValidLocation, permission, initialize } = useLocationStore();
 
-    // Initialize the location system once.
     useEffect(() => {
         initialize();
     }, [initialize]);
 
-    // Refresh coordinates after initialization when necessary.
-    useEffect(() => {
-        if (!initialized) return;
-
-        refreshLocation();
-    }, [initialized, refreshLocation]);
-
-    // Prevent flashing while checking permissions/location.
     if (!initialized) {
         return (
             <div className="fixed inset-0 flex justify-center items-center bg-background">
                 <div className="space-y-4 text-center">
                     <div className="mx-auto border-4 border-primary border-t-transparent rounded-full size-8 md:size-9 xl:size-10 animate-spin" />
-
                     <p className="text-[11px] text-muted-foreground md:text-xs xl:text-sm">
                         Preparing your experience...
                     </p>
@@ -37,7 +27,6 @@ export function LocationGate({ children }: { children: ReactNode }) {
         );
     }
 
-    // Browser doesn't support geolocation.
     if (permission === "unsupported") {
         return (
             <div className="fixed inset-0 flex justify-center items-center bg-background px-6">
@@ -56,11 +45,9 @@ export function LocationGate({ children }: { children: ReactNode }) {
         );
     }
 
-    // Allow application to render when we have valid device-derived coordinates.
     if (hasValidLocation) {
         return children;
     }
 
-    // No acceptable location yet.
     return <PermissionScreen />;
 }
