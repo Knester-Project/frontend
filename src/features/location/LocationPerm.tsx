@@ -122,7 +122,7 @@ export function PermissionScreen() {
 
                     {/* Optional local reset */}
                     {needsPreciseLocation && (
-                        <button type="button" className="mt-4 w-full text-muted-foreground hover:text-foreground text-sm underline underline-offset-4" onClick={handleResetLocation}>
+                        <button type="button" className="mt-4 w-full text-muted-foreground hover:text-foreground underline underline-offset-4 smallText" onClick={handleResetLocation}>
                             Clear saved location
                         </button>
                     )}
