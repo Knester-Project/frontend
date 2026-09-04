@@ -80,11 +80,11 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     }, [isAuthReady]);
 
     return (
-        <div>
+        <main>
             <Nav />
             <InstallBtn />
             {children}
-        </div>
+        </main>
     );
 };
 

@@ -14,6 +14,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as DashboardRouteRouteImport } from './routes/_dashboard/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
+import { Route as DashboardSettingsRouteImport } from './routes/_dashboard/settings'
 import { Route as DashboardSearchRouteImport } from './routes/_dashboard/search'
 import { Route as DashboardSafetyRouteImport } from './routes/_dashboard/safety'
 import { Route as DashboardProfileRouteImport } from './routes/_dashboard/profile'
@@ -55,6 +56,11 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthRouteRoute,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardSearchRoute = DashboardSearchRouteImport.update({
   id: '/search',
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof DashboardProfileRoute
   '/safety': typeof DashboardSafetyRoute
   '/search': typeof DashboardSearchRoute
+  '/settings': typeof DashboardSettingsRoute
   '/': typeof AuthIndexRoute
   '/messages/$id': typeof DashboardMessagesIdRoute
   '/messages/': typeof DashboardMessagesIndexRoute
@@ -188,6 +195,7 @@ export interface FileRoutesByTo {
   '/profile': typeof DashboardProfileRoute
   '/safety': typeof DashboardSafetyRoute
   '/search': typeof DashboardSearchRoute
+  '/settings': typeof DashboardSettingsRoute
   '/': typeof AuthIndexRoute
   '/messages/$id': typeof DashboardMessagesIdRoute
   '/messages': typeof DashboardMessagesIndexRoute
@@ -214,6 +222,7 @@ export interface FileRoutesById {
   '/_dashboard/profile': typeof DashboardProfileRoute
   '/_dashboard/safety': typeof DashboardSafetyRoute
   '/_dashboard/search': typeof DashboardSearchRoute
+  '/_dashboard/settings': typeof DashboardSettingsRoute
   '/_auth/': typeof AuthIndexRoute
   '/_dashboard/messages/$id': typeof DashboardMessagesIdRoute
   '/_dashboard/messages/': typeof DashboardMessagesIndexRoute
@@ -239,6 +248,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/safety'
     | '/search'
+    | '/settings'
     | '/'
     | '/messages/$id'
     | '/messages/'
@@ -261,6 +271,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/safety'
     | '/search'
+    | '/settings'
     | '/'
     | '/messages/$id'
     | '/messages'
@@ -286,6 +297,7 @@ export interface FileRouteTypes {
     | '/_dashboard/profile'
     | '/_dashboard/safety'
     | '/_dashboard/search'
+    | '/_dashboard/settings'
     | '/_auth/'
     | '/_dashboard/messages/$id'
     | '/_dashboard/messages/'
@@ -334,6 +346,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/_dashboard/settings': {
+      id: '/_dashboard/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/_dashboard/search': {
       id: '/_dashboard/search'
@@ -516,6 +535,7 @@ interface DashboardRouteRouteChildren {
   DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardSafetyRoute: typeof DashboardSafetyRoute
   DashboardSearchRoute: typeof DashboardSearchRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
@@ -528,6 +548,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardProfileRoute: DashboardProfileRoute,
   DashboardSafetyRoute: DashboardSafetyRoute,
   DashboardSearchRoute: DashboardSearchRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(

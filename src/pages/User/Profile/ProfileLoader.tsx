@@ -4,14 +4,14 @@ export default function ProfileLoader() {
     return (
         <div className="space-y-6 mx-auto p-4 max-w-7xl">
             {/* Header Banner & Profile Section */}
-            <div className="relative shadow-sm border border-border rounded-xl overflow-hidden">
+            <div className="relative shadow-sm border border-border/40 rounded-xl overflow-hidden">
                 {/* Banner Skeleton */}
                 <Skeleton className="rounded-none w-full h-32" />
 
                 <div className="p-4 md:p-5 xl:p-6 pt-0">
                     {/* Avatar Skeleton */}
                     <div className="relative -mt-12 mb-4">
-                        <Skeleton className="border-4 border-border rounded-2xl size-24" />
+                        <Skeleton className="border-4 border-border/40 rounded-2xl size-24" />
                     </div>
 
                     {/* Name and Tags */}
@@ -39,7 +39,7 @@ export default function ProfileLoader() {
             </div>
 
             {/* About Me Section */}
-            <div className="space-y-4 shadow-sm p-6 border border-border rounded-xl">
+            <div className="space-y-4 shadow-sm p-6 border border-border/40 rounded-xl">
                 <div className="flex justify-between items-center">
                     <div className="space-y-2">
                         <Skeleton className="w-24 h-6" />
