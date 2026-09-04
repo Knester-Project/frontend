@@ -15,10 +15,16 @@ export const loginSchema = z.object({
 
     device: z.object({
         ua: z.string().optional(),
-        type: z.enum(["desktop", "mobile", "tablet", "console", "embedded", "smarttv", "wearable", "xr"]).optional(),
+        type: z.string().optional(),
         os: z.string().optional(),
-        browser: z.string().optional()
-    }),
+        osVersion: z.string().optional(),
+        engineName: z.string().optional(),
+        engineVersion: z.string().optional(),
+        cpuArchitecture: z.string().optional(),
+        browserName: z.string().optional(),
+        browserVersion: z.string().optional(),
+        browserMajor: z.string().optional(),
+    }).optional(),
 })
 
 export type AuthInput = z.infer<typeof loginSchema>

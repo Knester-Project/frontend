@@ -5,17 +5,35 @@ declare type ContactPayload = {
     inquiryType: string,
     message: string,
     device: {
-        ua?: string,
-        type?: string,
-        os?: string,
-        browser?: string,
+        ua?: string;
+        type?: string;
+        os?: string;
+        osVersion?: string;
+        engineName?: string;
+        engineVersion?: string;
+        cpuArchitecture?: string;
+        browserName?: string;
+        browserVersion?: string;
+        browserMajor?: string;
     }
 }
 
 // New WaitList Payload 
 declare type WaitListPayload = {
     name: string,
-    email: string
+    email: string,
+    device: {
+        ua?: string;
+        type?: string;
+        os?: string;
+        osVersion?: string;
+        engineName?: string;
+        engineVersion?: string;
+        cpuArchitecture?: string;
+        browserName?: string;
+        browserVersion?: string;
+        browserMajor?: string;
+    }
 }
 
 type PubicKey = {

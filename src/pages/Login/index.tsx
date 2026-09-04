@@ -49,12 +49,18 @@ const Index = () => {
         ua: navigator.userAgent,
         type: result.device.type,
         os: result.os.name,
-        browser: result.browser.name,
-    };
+        osVersion: result.os.version,
+        engineName: result.engine.name,
+        engineVersion: result.engine.version,
+        cpuArchitecture: result.cpu.architecture,
+        browserName: result.browser.name,
+        browserVersion: result.browser.version,
+        browserMajor: result.browser.major,
 
+    };
+    
     const authUser = useAuthUser();
-    const onSubmit = async (e: React.FormEvent) => {
-        console.log("The submit button was pressed")
+    const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!allRequirementsMet)
@@ -114,7 +120,7 @@ const Index = () => {
                     </div>
                     {errors.password && <ErrorText message={errors.password[0]} />}
                 </div>
-                <Button text="Join the Party" loadingText={"Joining..."} disabled={authUser.isPending} loading={authUser.isPending} icon={<ScanFace className='size-4 md:size-4.5 xl:size-5' />} variant='primary' />
+                <Button type="submit" text="Join the Party" loadingText={"Joining..."} disabled={authUser.isPending} loading={authUser.isPending} icon={<ScanFace className='size-4 md:size-4.5 xl:size-5' />} variant='primary' />
             </form>
             <Link to="/forgot" className='block mt-4 ml-auto w-fit font-semibold text-muted-foreground hover:text-primary duration-200'>Can’t remember your password?</Link>
         </main>

@@ -42,7 +42,14 @@ const Index = () => {
         ua: navigator.userAgent,
         type: result.device.type,
         os: result.os.name,
-        browser: result.browser.name,
+        osVersion: result.os.version,
+        engineName: result.engine.name,
+        engineVersion: result.engine.version,
+        cpuArchitecture: result.cpu.architecture,
+        browserName: result.browser.name,
+        browserVersion: result.browser.version,
+        browserMajor: result.browser.major,
+
     };
 
     const hasAllValues = Object.values(formData)
