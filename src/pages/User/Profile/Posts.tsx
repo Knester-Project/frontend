@@ -29,8 +29,8 @@ const Posts = ({ isOwner, username }: { isOwner: boolean, username: string }) =>
         fetchNextPage,
     });
 
+    const pageParams = data?.pageParams;
     const posts = data?.pages.flatMap((page) => page.data.posts) ?? [];
-    const nextCursor = data?.pages[0]?.data?.nextCursor || null;
 
     return (
         <main>
@@ -50,7 +50,7 @@ const Posts = ({ isOwner, username }: { isOwner: boolean, username: string }) =>
                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3 }} className="gap-5 columns-1 md:columns-2">
                         {posts.map((post, index) => (
-                            <PostCard key={post._id} post={post} index={index} nextCursor={nextCursor} isOwner={isOwner} />
+                            <PostCard key={post._id} post={post} index={index} isOwner={isOwner} />
                         ))}
                     </motion.div>
 
@@ -64,11 +64,11 @@ const Posts = ({ isOwner, username }: { isOwner: boolean, username: string }) =>
                     )}
 
                     {/* No more data */}
-                    {!hasNextPage && posts.length > 0 && (
-                        <p className="py-4 font-medium text-foreground/80 text-xs text-center">
+                    {!hasNextPage && posts.length > 0 && pageParams?.[0] !== undefined ? (
+                        <p className="py-4 font-medium text-muted-foreground text-center smallText">
                             You've caught up on all posts!
                         </p>
-                    )}
+                    ) : null}
 
                     {/* Intersection trigger */}
                     <div ref={loadMoreRef} className="w-full h-4" />

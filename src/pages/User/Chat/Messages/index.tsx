@@ -160,7 +160,7 @@ const Index = ({ username }: { username: string }) => {
                                     {isFetchingNextPage && <Refresh className="mx-auto my-2 size-3 md:size-3.5 xl:size-4 animate-spin" />}
 
                                     {!hasNextPage && localMessages && localMessages.length > 0 && pageParams?.[0] !== undefined ? (
-                                        <p className="py-4 font-medium text-foreground/80 text-center smallText">
+                                        <p className="py-4 font-medium text-muted-foreground text-center smallText">
                                             You've caught up on all messages!
                                         </p>
                                     ) : null}

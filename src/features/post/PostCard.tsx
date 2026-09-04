@@ -24,9 +24,10 @@ import { Link } from "@tanstack/react-router";
 
 
 // Thread Continuation Bubble
-function ThreadBubble({ post, isOwner = false, nextCursor = null }: { post: Post, isOwner?: boolean, nextCursor?: string | null, }) {
+function ThreadBubble({ post, isOwner = false }: { post: Post, isOwner?: boolean }) {
 
     const [edit, setEdit] = useState<boolean>(false);
+    const [vibed, setVibed] = useState<boolean>(post.hasVibed);
 
     // Constants
     const gallery = post.media.map((url) => ({
@@ -36,11 +37,20 @@ function ThreadBubble({ post, isOwner = false, nextCursor = null }: { post: Post
 
     // Functions
     const toggleEdit = () => setEdit((prev) => !prev);
+    const toggleVibe = usePostVibe(post._id, "feed", { limit: POST_LIMIT })
+    const handleVibe = () => {
+        setVibed((prev) => !prev);
+        toggleVibe.mutate({ postId: post._id, postModel: "Post" }, {
+            onError: () => {
+                setVibed((prev) => !prev);
+            }
+        });
+    };
 
     return (
         <>
             {edit ?
-                <EditPost post={post} onClose={toggleEdit} nextCursor={nextCursor} />
+                <EditPost post={post} onClose={toggleEdit} />
                 :
                 <main className="relative mt-2 pl-8">
                     {/* Thread line */}
@@ -76,8 +86,11 @@ function ThreadBubble({ post, isOwner = false, nextCursor = null }: { post: Post
                                 <MediaGrid media={gallery} />
                             )}
 
-                            <div className="flex justify-between items-center mt-2">
-                                <Comment postId={post._id} comments={post.comments} postModel="Post" />
+                            <div className="flex justify-between items-center mt-4">
+                                <div className="flex items-center gap-x-5">
+                                    <Vibe handleToggle={handleVibe} userVibed={vibed} vibes={post.vibes} />
+                                    <Comment postId={post._id} comments={post.comments} postModel="Post" />
+                                </div>
                                 <Views views={post.views} />
                             </div>
                         </section>
@@ -91,12 +104,11 @@ function ThreadBubble({ post, isOwner = false, nextCursor = null }: { post: Post
 type PostCardProps = {
     post: Post,
     index?: number,
-    nextCursor?: string | null,
     isOwner?: boolean,
 }
 
 // Main PostCard 
-export default function PostCard({ post, index = 0, nextCursor = null, isOwner = false }: PostCardProps) {
+export default function PostCard({ post, index = 0, isOwner = false }: PostCardProps) {
 
     const [edit, setEdit] = useState<boolean>(false)
     const [vibed, setVibed] = useState<boolean>(post.hasVibed);
@@ -138,7 +150,7 @@ export default function PostCard({ post, index = 0, nextCursor = null, isOwner =
 
     return (
         <>
-            {edit ? <EditPost post={post} onClose={toggleEdit} nextCursor={nextCursor} />
+            {edit ? <EditPost post={post} onClose={toggleEdit} />
                 :
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.06, duration: 0.3 }}
                     className="relative bg-card shadow-sm hover:shadow-md border border-border/60 hover:border-border/80 rounded-2xl h-fit overflow-hidden transition-all duration-200">

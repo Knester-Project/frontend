@@ -16,7 +16,7 @@ import Button from '@/components/common/Button';
 
 //Icons
 import { CircleCheckBig, Loader } from "lucide-react";
-import { TagUser, Eye, EyeSlash, Lock, TickCircle, ShieldSecurity, UserCirlceAdd, Danger, LoginCurve,  } from 'iconsax-reactjs';
+import { TagUser, Eye, EyeSlash, Lock, TickCircle, ShieldSecurity, UserCirlceAdd, Danger, LoginCurve, } from 'iconsax-reactjs';
 
 
 const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
@@ -98,13 +98,13 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
             onSuccess: async (response) => {
                 const phrase = response.data.recoveryUsername;
                 setRecoveryPhrase(phrase);
-                
+
                 try {
                     sileo.show({ title: "Generating Secure E2EE Keys..." });
-                    
+
                     // Generate the ECDH Identity Keys
                     const keyPair = await generateIdentityKeyPair();
-                    
+
                     // Export them to JSON (JWK)
                     const publicJwk = await exportKeyToJwk(keyPair.publicKey);
                     const privateJwk = await exportKeyToJwk(keyPair.privateKey);
@@ -178,21 +178,31 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                             <label htmlFor="username" className='font-medium cursor-pointer'>Username</label>
                             <input type="text" id="username" className='bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none duration-300 focus:caret-primary' onChange={handleUsername} value={enteredUsername} title="Please enter only letters, numbers, and underscores (spaces will be replaced with underscores)" minLength={2} placeholder="Inclusive.Iguana" required />
                             <div className="right-3 bottom-4 absolute cursor-pointer transform">
-                                {(isLoading) && <Loader className="size-3 md:size-4 xl:size-5 text-foreground animate-spin" />}
+                                {(isLoading) && <Loader className="size-4 md:size-4.5 xl:size-5 text-foreground animate-spin" />}
                             </div>
                         </div>
+                        {isLoading && <p className='text-muted-foreground smallText'>Checking username availability...</p>}
                         {isError &&
                             <div className='bg-red-100 my-4 p-4 rounded-xl text-red-500 capitalize'>
-                                <p>{error.message === "Request failed with status code 409" ? "Username already chosen, kindly try a new one" : "Sorry, we couldn't validate your username now, kindly try again."}</p>
+                                <p>{error.message === "Request failed with status code 409"
+                                    ? "Username already chosen, kindly try a new one"
+                                    : "Sorry, we couldn't validate your username now, kindly try again."
+                                }</p>
                                 <div className='flex gap-x-2'>{generatedUsernames.map((username) => (
-                                    <p key={username} className='font-medium text-black'>{username}</p>
-                                ))}</div>
-                            </div>}
-                        {data && <div className='bg-green-100 my-4 p-4 rounded-xl text-green-500 capitalize'>
-                            <CircleCheckBig className='inline mr-0.5 size-4 md:size-4.5 xl:size-5' />
-                            {data.message} press continue to enter password.
-                        </div>}
-                        <Button type="submit" text="Continue" loadingText={"Validating Invitation..."} disabled={validateInvite.isPending || (isLoading || isError)} loading={validateInvite.isPending} icon={<LoginCurve className='size-4 md:size-4.5 xl:size-5' />} variant='primary' />
+                                    <p key={username} className='font-medium'>{username}</p>
+                                ))}
+                                </div>
+                            </div>
+                        }
+                        {data &&
+                            <div className="my-4">
+                                <div className='bg-green-100 p-4 rounded-xl text-green-500 capitalize'>
+                                    <CircleCheckBig className='inline mr-0.5 size-4 md:size-4.5 xl:size-5' />
+                                    {data.message} press continue to enter password.
+                                </div>
+                                <Button type="submit" text="Continue" loadingText={"Validating Invitation..."} disabled={validateInvite.isPending || (isLoading || isError)} loading={validateInvite.isPending} icon={<LoginCurve className='size-4 md:size-4.5 xl:size-5' />} variant='primary' />
+                            </div>
+                        }
                     </form>
                 </div>}
             {passwordPage &&

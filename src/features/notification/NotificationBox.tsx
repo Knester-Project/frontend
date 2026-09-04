@@ -18,7 +18,7 @@ import { NOT_LIMIT } from "@/assets/constants";
 
 const URL = import.meta.env.VITE_URL;
 
-export default function NotificationBox({ notification, nextCursor }: { notification: InAppNotification; nextCursor: string | null }) {
+export default function NotificationBox({ notification }: { notification: InAppNotification }) {
 
     const config = NOTIF_TYPES[notification.type];
     const Icon = config.icon;
@@ -26,7 +26,6 @@ export default function NotificationBox({ notification, nextCursor }: { notifica
 
     const queries = {
         limit: NOT_LIMIT,
-        ...(nextCursor ? { cursor: nextCursor } : {}),
     };
 
     const notificationUrl = `${URL}${buildNotificationUrl(

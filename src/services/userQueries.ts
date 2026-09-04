@@ -11,16 +11,22 @@ import { meStore } from "@/stores/me.store";
 // Check UserName Details
 export function useCheckUsername(username: string) {
     return useQuery({
-        queryKey: ['checkedUsername'],
+        queryKey: ['checkedUsername', username],
         queryFn: () => Api.checkUsername(username),
         enabled: username.trim().length >= 2,
+        staleTime: 0,
+        gcTime: 0,
+        refetchOnMount: 'always',
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     })
 }
+
 
 // Fetch Safety Posts
 export const useSafetyPosts = (queries: SafetyQueries) => {
     return useInfiniteQuery({
-        queryKey: ["safety-posts", queries],
+        queryKey: ["safety-posts", { state: queries.state, city: queries.city, name: queries.name, street: queries.street, limit: queries.limit }],
         refetchOnWindowFocus: false,
         maxPages: 5,
 
@@ -41,7 +47,7 @@ export const useSafetyPosts = (queries: SafetyQueries) => {
 // Fetch Comments for a Post
 export const useComments = (commentQueries: CommentQueries, enabled: boolean) => {
     return useInfiniteQuery({
-        queryKey: ["comments", commentQueries],
+        queryKey: ["comments", { postId: commentQueries.postId, limit: commentQueries.limit }],
         maxPages: 5,
 
         queryFn: ({ pageParam }) =>
@@ -61,7 +67,7 @@ export const useComments = (commentQueries: CommentQueries, enabled: boolean) =>
 // Fetch Reply for a Comment or Reply
 export const useReplies = (replyQueries: ReplyQueries, enabled: boolean) => {
     return useInfiniteQuery({
-        queryKey: ["replies", replyQueries],
+        queryKey: ["replies", { id: replyQueries.id, type: replyQueries.type, limit: replyQueries.limit }],
         maxPages: 5,
 
         queryFn: ({ pageParam }) =>
@@ -111,7 +117,7 @@ export const useReferralLink = (enabled: boolean) => {
 // User Feed
 export const useFeed = (feedQueries: CursorQueries) => {
     return useInfiniteQuery({
-        queryKey: ["feed", feedQueries],
+        queryKey: ["feed", { limit: feedQueries.limit }],
         maxPages: 5,
 
         queryFn: ({ pageParam }) => Api.feed({ ...feedQueries, cursor: pageParam }),
@@ -134,7 +140,7 @@ export const useTrendingTags = () => {
 // In-Circle Posts
 export const useCirclePosts = (feedQueries: CursorQueries) => {
     return useInfiniteQuery({
-        queryKey: ["in-circle", feedQueries],
+        queryKey: ["in-circle", { limit: feedQueries.limit }],
         maxPages: 5,
 
         queryFn: ({ pageParam }) => Api.circlePosts({ ...feedQueries, cursor: pageParam }),
@@ -149,7 +155,7 @@ export const useCirclePosts = (feedQueries: CursorQueries) => {
 // Trending Posts
 export const useTrendingPosts = (feedQueries: CursorQueries) => {
     return useInfiniteQuery({
-        queryKey: ["trending", feedQueries],
+        queryKey: ["trending", { limit: feedQueries.limit }],
         maxPages: 5,
 
         queryFn: ({ pageParam }) => Api.trendingPosts({ ...feedQueries, cursor: pageParam }),
@@ -164,7 +170,7 @@ export const useTrendingPosts = (feedQueries: CursorQueries) => {
 // Profile Posts
 export const useProfilePosts = (feedQueries: CursorQueries, username: string) => {
     return useInfiniteQuery({
-        queryKey: ["profile-posts", feedQueries],
+        queryKey: ["profile-posts", { limit: feedQueries.limit }],
         maxPages: 5,
 
         queryFn: ({ pageParam }) => Api.profilePosts({ ...feedQueries, cursor: pageParam }, username),
@@ -187,7 +193,13 @@ export const usePeoplePage = () => {
 // Nearby People
 export const useNearByPeople = (queries: PeopleQueries) => {
     return useInfiniteQuery({
-        queryKey: ['nearby', queries],
+        queryKey: ['nearby', {
+            radiusKm: queries.radiusKm,
+            state: queries.state,
+            limit: queries.limit,
+            premiumOnly: queries.premiumOnly,
+            onlineOnly: queries.onlineOnly
+        }],
         refetchOnWindowFocus: false,
         maxPages: 5,
         staleTime: 10 * 60000,
@@ -228,7 +240,7 @@ export const useServerTime = () => {
 // Fetch Notifications
 export const useNotification = (queries: CursorQueries) => {
     return useInfiniteQuery({
-        queryKey: ['notification', queries],
+        queryKey: ['notification', { limit: queries.limit }],
         maxPages: 5,
 
         queryFn: ({ pageParam }) => Api.fetchNotifications({ ...queries, cursor: pageParam }),
@@ -257,7 +269,7 @@ export const allConversationsOptions = () => infiniteQueryOptions({
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
         if (lastPage?.data?.hasMore) {
-            return allPages.length * 20; 
+            return allPages.length * 20;
         }
         return undefined;
     }
@@ -283,7 +295,7 @@ export const singleConversationOptions = (username: string) => {
 // Fetch Messages
 export const useMessages = (queries: CursorQueries, conversationId: string, enabled = false) => {
     return useInfiniteQuery({
-        queryKey: ['messages', conversationId, queries],
+        queryKey: ['messages', conversationId, { limit: queries.limit }],
         maxPages: 5,
 
         queryFn: ({ pageParam }) => Api.fetchMessages(conversationId, { ...queries, cursor: pageParam }),

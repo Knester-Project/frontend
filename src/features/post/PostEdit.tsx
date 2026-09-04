@@ -29,10 +29,9 @@ interface MediaFile {
 interface EditPostFormProps {
     post: Post;
     onClose: () => void;
-    nextCursor?: string | null,
 }
 
-export default function EditPost({ post, onClose, nextCursor }: EditPostFormProps) {
+export default function EditPost({ post, onClose }: EditPostFormProps) {
 
     const [content, setContent] = useState(post.content);
     const [hashtags, setHashtags] = useState<string[]>(post.hashtags);
@@ -46,7 +45,7 @@ export default function EditPost({ post, onClose, nextCursor }: EditPostFormProp
 
     const fileRef = useRef<HTMLInputElement>(null);
     const { uploadFiles } = usePresignedUpload();
-    const feedQueries = { limit: POST_LIMIT, ...(nextCursor ? { cursor: nextCursor } : {}) };
+    const feedQueries = { limit: POST_LIMIT };
 
     // Constraints
     const totalMediaCount = existingMedia.length + newMediaFiles.length;

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-// Services
+// Services and Stores
 import { useFeed, useCirclePosts, useTrendingPosts } from "@/services/userQueries";
 import useInfiniteScroll from "@/Hooks/useInfiniteScroll";
+import { meStore } from "@/stores/me.store";
 
 // Utils and Constants
 import { cn } from "@/lib/utils";
@@ -25,6 +26,7 @@ const TABS = [
 
 const Posts = () => {
 
+    const { user } = meStore();
     const [activeTab, setActiveTab] = useState("latest");
 
     const emptyText =
@@ -63,7 +65,10 @@ const Posts = () => {
         fetchNextPage,
     });
 
-    const posts = data?.pages.flatMap((page) => page.data.posts) ?? [];
+    const pageParams = data?.pageParams;
+    const posts: Post[] = data?.pages.flatMap((page) => page.data.posts) ?? [];
+
+    console.log("The post", posts)
 
     return (
         <main className="space-y-4 py-10">
@@ -108,7 +113,7 @@ const Posts = () => {
                     <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3 }} className="space-y-4">
                         {posts.map((post, index) => (
-                            <PostCard key={post._id} post={post} index={index} />
+                            <PostCard isOwner={user?._id === post.user._id} key={post._id} post={post} index={index} />
                         ))}
                     </motion.div>
 
@@ -122,11 +127,11 @@ const Posts = () => {
                     )}
 
                     {/* No more data */}
-                    {!hasNextPage && posts.length > 0 && (
-                        <p className="py-4 font-medium text-foreground/80 text-xs text-center">
+                    {!hasNextPage && posts.length > 0 && pageParams?.[0] !== undefined ? (
+                        <p className="py-4 font-medium text-muted-foreground text-center smallText">
                             You've caught up on all posts!
                         </p>
-                    )}
+                    ) : null}
 
                     {/* Intersection trigger */}
                     <div ref={loadMoreRef} className="w-full h-4" />
