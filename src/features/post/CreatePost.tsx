@@ -363,6 +363,7 @@ export default function PostComposer() {
     const handleSubmit = async () => {
 
         if (allEmpty || anyOverLimit) return;
+        sileo.info({ title: "Creating Post" })
 
         try {
 

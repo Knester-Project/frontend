@@ -176,7 +176,7 @@ export default function Invite() {
                                     <div className="bg-primary/5 mt-auto px-4 py-3 border border-primary/10 rounded-xl">
                                         <p className="text-[11px] text-muted-foreground leading-relaxed">
                                             🔗 Every signup through your link is tracked to your account.
-                                            <span className="block font-semibold text-accent">DO NOT SHARE AT RANDOM.</span>
+                                            <span className="block font-semibold">DO NOT SHARE AT RANDOM.</span>
                                         </p>
                                     </div>
                                 </div>

@@ -189,10 +189,10 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                                 ))}</div>
                             </div>}
                         {data && <div className='bg-green-100 my-4 p-4 rounded-xl text-green-500 capitalize'>
-                            <CircleCheckBig className='inline size-3 md:size-4 xl:size-5' />
+                            <CircleCheckBig className='inline mr-0.5 size-4 md:size-4.5 xl:size-5' />
                             {data.message} press continue to enter password.
                         </div>}
-                        <Button text="Continue" loadingText={"Validating Invitation..."} disabled={validateInvite.isPending || (isLoading || isError)} loading={validateInvite.isPending} icon={<LoginCurve className='size-4 md:size-4.5 xl:size-5' />} variant='primary' />
+                        <Button type="submit" text="Continue" loadingText={"Validating Invitation..."} disabled={validateInvite.isPending || (isLoading || isError)} loading={validateInvite.isPending} icon={<LoginCurve className='size-4 md:size-4.5 xl:size-5' />} variant='primary' />
                     </form>
                 </div>}
             {passwordPage &&
@@ -248,7 +248,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                                 ))}
                             </div>
                         </div>
-                        <Button text="Create Account" loadingText={"Setting up encryption..."} disabled={createUser.isPending || isGeneratingKeys || !allRequirementsMet || !passwordsMatch} loading={createUser.isPending || isGeneratingKeys} icon={<UserCirlceAdd className='size-4 md:size-4.5 xl:size-5' />} variant='primary' />
+                        <Button type="submit" text="Create Account" loadingText={"Setting up encryption..."} disabled={createUser.isPending || isGeneratingKeys || !allRequirementsMet || !passwordsMatch} loading={createUser.isPending || isGeneratingKeys} icon={<UserCirlceAdd className='size-4 md:size-4.5 xl:size-5' />} variant='primary' />
                     </form>
                 </div>
             }
@@ -278,7 +278,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                     </div>
                     <div className='bg-background p-4 md:p-6 xl:p-8 border border-border rounded-2xl'>
                         <p className='my-2 font-medium text-base md:text-lg xl:text-xl text-center montserrat'>{recoveryPhrase}</p>
-                        <Button onClick={() => handleCopy(recoveryPhrase)} text={copied ? 'Copied!' : 'Copy Recovery Phrase'} disabled={false} loading={false} icon={<TickCircle className="size-4 md:size-4.5 xl:size-5" />} variant='success' />
+                        <Button type="button" onClick={() => handleCopy(recoveryPhrase)} text={copied ? 'Copied!' : 'Copy Recovery Phrase'} disabled={false} loading={false} icon={<TickCircle className="size-4 md:size-4.5 xl:size-5" />} variant='success' />
                     </div>
                     {copied && <Link to={"/onboarding"} className='block bg-primary hover:bg-accent my-4 p-3 rounded-2xl w-full text-center'>Continue</Link>}
                 </div>
