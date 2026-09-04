@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_dashboard/settings')({
     head: () => ({
         meta: [
             {
-                title: `Your Feed | ${APP_NAME}`,
+                title: `Your Settings | ${APP_NAME}`,
             },
         ],
     }),
