@@ -54,6 +54,7 @@ const Index = () => {
 
     const authUser = useAuthUser();
     const onSubmit = async (e: React.FormEvent) => {
+        console.log("The submit button was pressed")
         e.preventDefault();
 
         if (!allRequirementsMet)

@@ -31,7 +31,7 @@ const InviteOnly = () => {
             <section className="space-y-3">
                 <Link to="/waitlist" className='block bg-primary hover:bg-gradient-to-r hover:from-primary hover:to-accent my-4 py-3 rounded-2xl rounded-xl w-full font-medium text-neutral-100 duration'>Join Waitlist</Link>
 
-                <div className='flex gap-x-5'>
+                <div className='flex justify-between'>
                     <p className="text-[11px] text-muted-foreground md:text-xs xl:text-sm">
                         Have questions?{' '}
                         <Link to="/contact" className="text-foreground hover:underline">
