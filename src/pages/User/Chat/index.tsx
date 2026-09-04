@@ -77,7 +77,7 @@ function VaultStatus({ type }: VaultStatusProps) {
 
     return (
         <Main>
-            <div className="flex flex-col justify-center items-center gap-2 h-full min-h-[50vh]">
+            <div className="flex flex-col justify-center items-center gap-2 h-[80vh] h-full">
                 {isLoading ? (
                     <Loader className="size-6 md:size-7 xl:size-8 text-primary animate-spin" />
                 ) : (

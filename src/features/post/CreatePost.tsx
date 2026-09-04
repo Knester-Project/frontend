@@ -318,7 +318,7 @@ export default function PostComposer() {
     const removeSlot = (idx: number) =>
         setSlots((prev) => prev.filter((_, i) => i !== idx));
 
-    const allEmpty = slots.every((s) => !s.content.trim() || s.mediaFiles.length === 0);
+    const allEmpty = slots.every((s) => !s.content.trim() && s.mediaFiles.length === 0);
     const anyOverLimit = slots.some((s) => s.content.length > MAX_CHARS);
 
     const newPost = useNewPost()

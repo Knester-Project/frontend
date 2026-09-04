@@ -8,7 +8,7 @@ import { EmojiHappy } from "iconsax-reactjs";
 
 const index = () => {
 
-    const launchDate = new Date(2026, 7, 30);
+    const launchDate = new Date(2026, 9, 31);
 
     return (
         <main className="mx-auto p-4 w-full max-w-screen-2xl">

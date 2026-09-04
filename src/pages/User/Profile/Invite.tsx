@@ -106,7 +106,7 @@ export default function Invite() {
                                 </div>
                             </div>
 
-                            <div className="flex sm:flex-row flex-col gap-0 sm:divide-x divide-y sm:divide-y-0 divide-border/40">
+                            <div className="flex md:flex-row flex-col gap-0 md:divide-x divide-y md:divide-y-0 divide-border/40">
                                 {/* QR code section */}
                                 <div className="flex flex-col justify-center items-center gap-4 p-6 sm:w-56 shrink-0">
                                     <div className="relative bg-white shadow-md p-3 ring-border/30 rounded-2xl ring-1">
@@ -134,7 +134,7 @@ export default function Invite() {
                                             Invite Link
                                         </p>
                                         <div className="flex items-center gap-2 px-3 py-2.5 border border-accent/30 rounded-xl">
-                                            <p className="flex-1 font-mono text-[11px] text-foreground/80 md:text-xs xl:text-sm truncate select-all">
+                                            <p className="flex-1 font-mono text-muted-foreground truncate select-all smallText">
                                                 {inviteUrl}
                                             </p>
                                             <motion.button whileTap={{ scale: 0.9 }} onClick={handleCopy} className={cn(
@@ -144,12 +144,12 @@ export default function Invite() {
                                                     {copied ? (
                                                         <motion.span key="check" initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                                                             exit={{ scale: 0.6, opacity: 0 }} className="flex items-center gap-1 cursor-pointer">
-                                                            <Check className="size-3" /> Copied
+                                                            <Check className="size-3 md:size-3.5 xl:size-4" /> Copied
                                                         </motion.span>
                                                     ) : (
                                                         <motion.span key="copy" initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                                                             exit={{ scale: 0.6, opacity: 0 }} className="flex items-center gap-1 cursor-pointer">
-                                                            <Copy className="size-3" /> Copy
+                                                            <Copy className="size-3 md:size-3.5 xl:size-4" /> Copy
                                                         </motion.span>
                                                     )}
                                                 </AnimatePresence>
@@ -174,7 +174,7 @@ export default function Invite() {
                                     )}
 
                                     <div className="bg-primary/5 mt-auto px-4 py-3 border border-primary/10 rounded-xl">
-                                        <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed">
+                                        <p className="text-[11px] text-muted-foreground leading-relaxed">
                                             🔗 Every signup through your link is tracked to your account.
                                             <span className="block font-semibold text-accent">DO NOT SHARE AT RANDOM.</span>
                                         </p>
