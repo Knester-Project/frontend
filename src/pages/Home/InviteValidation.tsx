@@ -176,7 +176,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                     <form onSubmit={onSubmit} className="space-y-6">
                         <div className="relative flex flex-col gap-y-1">
                             <label htmlFor="username" className='font-medium cursor-pointer'>Username</label>
-                            <input type="text" id="username" className='bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none text-sm md:text-base xl:text-lg duration-300 focus:caret-primary' onChange={handleUsername} value={enteredUsername} title="Please enter only letters, numbers, and underscores (spaces will be replaced with underscores)" minLength={5} placeholder="Inclusive.Iguana" required />
+                            <input type="text" id="username" className='bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none duration-300 focus:caret-primary' onChange={handleUsername} value={enteredUsername} title="Please enter only letters, numbers, and underscores (spaces will be replaced with underscores)" minLength={2} placeholder="Inclusive.Iguana" required />
                             <div className="right-3 bottom-4 absolute cursor-pointer transform">
                                 {(isLoading) && <Loader className="size-3 md:size-4 xl:size-5 text-foreground animate-spin" />}
                             </div>
@@ -210,7 +210,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                                 Password
                             </label>
                             <div className="relative">
-                                <input type={showPassword ? 'text' : 'password'} id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none w-full text-sm md:text-base xl:text-lg duration-300 focus:caret-primary" placeholder="Enter your password" required />
+                                <input type={showPassword ? 'text' : 'password'} id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none w-full duration-300 focus:caret-primary" placeholder="Enter your password" required />
                                 <button type="button" onClick={() => setShowPassword(!showPassword)} className="top-1/2 right-3 absolute text-foreground hover:text-gray-600 -translate-y-1/2 cursor-pointer transform">
                                     {showPassword ? <EyeSlash className="size-4 md:size-4.5 xl:size-5" /> : <Eye className="size-4 md:size-4.5 xl:size-5" />}
                                 </button>
@@ -222,7 +222,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                                 Confirm Password
                             </label>
                             <div className="relative">
-                                <input type={showConfirmPassword ? 'text' : 'password'} id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none w-full text-sm md:text-base xl:text-lg duration-300 focus:caret-primary" placeholder="Confirm your password" required />
+                                <input type={showConfirmPassword ? 'text' : 'password'} id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="bg-background px-4 py-2.5 border border-border rounded-2xl focus:outline-none w-full duration-300 focus:caret-primary" placeholder="Confirm your password" required />
                                 <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="top-1/2 right-3 absolute text-foreground hover:text-gray-600 -translate-y-1/2 cursor-pointer transform">
                                     {showConfirmPassword ? <EyeSlash className="size-4 md:size-4.5 xl:size-5" /> : <Eye className="size-4 md:size-4.5 xl:size-5" />}
                                 </button>
