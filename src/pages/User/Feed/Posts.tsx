@@ -68,8 +68,6 @@ const Posts = () => {
     const pageParams = data?.pageParams;
     const posts: Post[] = data?.pages.flatMap((page) => page.data.posts) ?? [];
 
-    console.log("The post", posts)
-
     return (
         <main className="space-y-4 py-10">
             {/* Section header */}
