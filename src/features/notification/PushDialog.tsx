@@ -42,7 +42,7 @@ export function NotificationDialog({ isOpen, onClose }: NotificationDialogProps)
             onClose();
         } catch (error) {
             console.log("Handle Subscribe Failed", error);
-            sileo.error({ title: "Setup Failed", description: "Couldn't enable notifications." });
+            sileo.error({ title: "Setup Failed", description: "Couldn't enable notifications. Try it in the website if you are currently doing this in the Installed App" });
         }
     };
 

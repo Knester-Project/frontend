@@ -8,7 +8,6 @@ import { useDeleteMedia } from "@/services/userMutations";
 
 // Icons
 import { CloseSquare, Trash, PlayCircle } from "iconsax-reactjs";
-import { Rocket } from "lucide-react";
 
 interface MediaViewerProps {
     src: string;
@@ -24,14 +23,14 @@ export default function MediaViewer({ src, alt = "User media", isOwner = false }
     const deleteMedia = useDeleteMedia();
     const handleDelete = (url: string) => {
         sileo.action({
-            title: "File Deletion",
+            title: "Delete Media",
             description: "Do you wish to delete this Media?",
             button: {
-                title: "Delete",
+                title: deleteMedia.isPending ? "Deleting..." : "Delete",
                 onClick: () => {
                     deleteMedia.mutate((url), {
                         onSuccess: () => {
-                            sileo.success({ title: "Media Deleted !!!", icon: <Rocket className="size-3.5" />, });
+                            sileo.success({ title: "Media Deleted !!!", });
                         },
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         onError: (error: any) => {

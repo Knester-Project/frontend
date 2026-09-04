@@ -47,10 +47,10 @@ const AdvertCard = ({ advert, isOwner }: { advert: MyAdvert, isOwner: boolean })
     const deleteAdvert = useDeleteAdvert();
     const handleDeletion = () => {
         sileo.action({
-            title: "Advert Deletion",
+            title: "Delete Advert",
             description: "Do you wish to delete this advert?",
             button: {
-                title: "Delete",
+                title: deleteAdvert.isPending ? "Deleting..." : "Delete",
                 onClick: () => {
                     deleteAdvert.mutate(advert._id,
                         {

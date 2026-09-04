@@ -404,7 +404,7 @@ export default function PostComposer() {
             <div className="px-4 pt-4">
                 {slots.map((slot, idx) => (
                     <PostSlot key={idx} avatar={user?.profile?.profilePicture} username={user?.username} hashtags={slot.hashtags}
-                        content={slot.content} setContent={(v) => updateSlot(idx, { content: v.trim() })} mediaFiles={slot.mediaFiles}
+                        content={slot.content} setContent={(v) => updateSlot(idx, { content: v })} mediaFiles={slot.mediaFiles}
                         setMediaFiles={(val) => updateSlot(idx, { mediaFiles: typeof val === "function" ? val(slot.mediaFiles) : val })}
                         setHashtags={(val) => updateSlot(idx, { hashtags: typeof val === "function" ? val(slot.hashtags) : val })}
                         isPrivate={isPrivate} setIsPrivate={setIsPrivate} isFirst={idx === 0} isThread={idx < slots.length - 1} onRemove={() => removeSlot(idx)}

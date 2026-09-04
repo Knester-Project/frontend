@@ -109,7 +109,7 @@ const AdvertEdit = ({ advert, onClose }: UpdateAdvertProps) => {
             await updateAdvert.mutateAsync(payload);
             sileo.success({ title: "Advert updated successfully", icon: <Edit className="size-3.5" /> });
             onClose();
-            
+
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             const message = error?.response?.data?.message || "Couldn't update advert now.";
@@ -120,10 +120,10 @@ const AdvertEdit = ({ advert, onClose }: UpdateAdvertProps) => {
     const mediaUpdate = useUpdateAdvertMedia();
     const handleMediaDelete = (url: string) => {
         sileo.action({
-            title: "File Deletion",
-            description: "Do you wish to delete this file?",
+            title: "Delete Media",
+            description: "Do you wish to delete this media?",
             button: {
-                title: "Delete",
+                title: mediaUpdate.isPending ? "Deleting..." : "Delete",
                 onClick: () => {
                     mediaUpdate.mutate(
                         { url, advertId: advert._id },

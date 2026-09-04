@@ -84,10 +84,10 @@ export default function EditPost({ post, onClose, nextCursor }: EditPostFormProp
     const removeExistingMedia = (url: string) => {
         setDeletingMedia(url)
         sileo.action({
-            title: "File Deletion",
-            description: "Do you wish to delete this file?",
+            title: "Delete Media",
+            description: "Do you wish to delete this media?",
             button: {
-                title: "Delete",
+                title: updateMedia.isPending ? "Deleting..." : "Delete",
                 onClick: () => {
                     updateMedia.mutate({ postId: post._id, url }, {
                         onSuccess: () => {
