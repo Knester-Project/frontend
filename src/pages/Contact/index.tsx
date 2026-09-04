@@ -165,7 +165,7 @@ const Index = () => {
                             </Label>
                             <textarea name="message" className="bg-background p-2 px-4 py-3 border border-border rounded-lg focus:outline-none w-full h-24 placeholder:text-[11px] placeholder:text-muted-foreground md:placeholder:text-xs text-sm xl:placeholder:text-sm md:text-base xl:text-lg duration-300 focus:caret-primary resize-none" value={formData.message} onChange={handleInputChange} placeholder="Tell us how we can help you"></textarea>
                         </div>
-                        <Button onClick={handleSubmit} text="Send Message" loadingText="Sending..." disabled={newContact.isPending || !hasAllValues} loading={newContact.isPending} classNames="rounded-lg" icon={<Send2 className="size-4 md:size-5 xl:size-6" />} />
+                        <Button type="button" onClick={handleSubmit} text="Send Message" loadingText="Sending..." disabled={newContact.isPending || !hasAllValues} loading={newContact.isPending} classNames="rounded-lg" icon={<Send2 className="size-4 md:size-5 xl:size-6" />} />
                     </div>
                 </CardContent>
             </Card>

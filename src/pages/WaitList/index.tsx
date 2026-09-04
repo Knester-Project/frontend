@@ -97,7 +97,7 @@ const Index = () => {
 
                     <Input type="email" name="email" label="Email Address" placeholder="Your@email.com" value={formData.email} onChange={handleInputChange} required />
 
-                    <Button onClick={handleSubmit} text="Join List" loadingText="Joining..." disabled={newWaitList.isPending || !hasAllValues} loading={newWaitList.isPending} classNames="rounded-lg" icon={<UserCirlceAdd className="size-4 md:size-5 xl:size-6" />} />
+                    <Button type="button" onClick={handleSubmit} text="Join List" loadingText="Joining..." disabled={newWaitList.isPending || !hasAllValues} loading={newWaitList.isPending} classNames="rounded-lg" icon={<UserCirlceAdd className="size-4 md:size-5 xl:size-6" />} />
                 </div>
                 <p className="mt-4 text-foreground text-xs text-center">
                     By joining, you agree to our{" "}
