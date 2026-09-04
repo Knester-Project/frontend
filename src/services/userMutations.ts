@@ -206,7 +206,7 @@ export function useCreateUser() {
 
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (data: { username: string, password: string, referrer: string }) => Api.createUser(data),
+        mutationFn: (data: NewUserPayload) => Api.createUser(data),
         onError: (error) => {
             console.error("Create User failed:", error);
         },

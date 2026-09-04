@@ -41,7 +41,7 @@ export const validateInvite = async (data: { invitationCode: string }) => {
 };
 
 // Create User
-export const createUser = async (data: { username: string, password: string, referrer: string }) => {
+export const createUser = async (data: NewUserPayload) => {
     const response = await axiosUnauthInstance.post("users/create", data);
     return response.data;
 }

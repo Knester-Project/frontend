@@ -51,6 +51,13 @@ type EncryptedVault = {
     iv: string
 }
 
+// New User
+declare type NewUserPayload = {
+    username: string,
+    password: string,
+    referrer: string,
+}
+
 // Update User Payload
 declare type UserUpdatePayload = {
     publicKey: PublicKey;
