@@ -74,11 +74,11 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
                                 {fullName}
                             </h3>
                             {verified && (
-                                <Verify variant={`${verified ? "Bold" : "Outline"}`} className="size-5 text-safety" />
+                                <Verify variant={`${verified ? "Bold" : "Outline"}`} className="size-4 md:size-4.5 xl:size-5 text-safety" />
                             )}
                         </div>
 
-                        <p className="text-gray-400 text-xs md:text-sm">
+                        <p className="text-muted-foreground text-xs md:text-sm">
                             {dateConverter(createdAt)}
                         </p>
                     </div>
@@ -92,7 +92,7 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
             </header>
 
             {/* Location */}
-            <section className="flex flex-wrap gap-3 mb-4 text-gray-400 text-xs md:text-sm">
+            <section className="flex flex-wrap gap-3 mb-4 text-muted-foreground text-xs md:text-sm">
                 <div className="flex gap-1">
                     <Location className="size-4" />
                     <span>{locationText}</span>

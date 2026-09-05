@@ -132,18 +132,18 @@ export default function UserCard({ user, index = 0 }: UserCardProps) {
                 {/* Badges - Increased gap slightly for better readability */}
                 <div className="flex flex-wrap justify-center gap-1.5">
                     {user.user.isPremium && (
-                        <Badge className="bg-primary/10 text-primary">
-                            <Verify className="size-3" /> Premium
+                        <Badge className="bg-premium/10 text-premium">
+                            <Verify variant="Bold" className="size-3" /> Premium
                         </Badge>
                     )}
                     {user.user.isCore && (
-                        <Badge className="bg-amber-500/10 text-amber-600">
-                            <Verify className="size-3" /> Core
+                        <Badge className="bg-core/10 text-core">
+                            <Verify variant="Bold" className="size-3" /> Core
                         </Badge>
                     )}
                     {user.user.isModerator && (
-                        <Badge className="bg-blue-500/10 text-blue-600">
-                            <Verify className="size-3" /> Mod
+                        <Badge className="bg-moderator/10 text-moderator">
+                            <Verify variant="Bold" className="size-3" /> Mod
                         </Badge>
                     )}
                     {isLocked && (

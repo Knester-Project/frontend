@@ -187,24 +187,23 @@ export default function PostCard({ post, index = 0, isOwner = false }: PostCardP
                                         </Link>
 
                                         {post.user?.isPremium && (
-                                            <div className="inline-flex items-center gap-0.5 bg-premium/10 px-1.5 py-0.5 rounded-md font-bold text-[8px] text-premium md:text-[9px] xl:text-[10px] uppercase tracking-wide">
-                                                <Verify className="size-2.5 md:size-3 xl:size-3.5" /> Pro
+                                            <div className="inline-flex items-center gap-x-0.5 bg-premium/10 px-1.5 py-0.5 rounded-md font-bold text-[8px] text-premium md:text-[9px] xl:text-[10px] uppercase tracking-wide">
+                                                <Verify variant="Bold" className="size-2.5 md:size-3 xl:size-3.5" /> Pro
                                             </div>
                                         )}
                                         {post.user?.isCore && (
-                                            <div className="bg-core/10 px-1.5 py-0.5 rounded-md font-bold text-[8px] text-core md:text-[9px] xl:text-[10px] uppercase tracking-wide">
-                                                <Verify className="size-2.5 md:size-3 xl:size-3.5" />
-                                                Core
+                                            <div className="inline-flex items-center gap-x-0.5 bg-core/10 px-1.5 py-0.5 rounded-md font-bold text-[8px] text-core md:text-[9px] xl:text-[10px] break-keep uppercase">
+                                                <Verify variant="Bold" className="size-2.5 md:size-3 xl:size-3.5" /> Core
                                             </div>
                                         )}
                                         {post.user?.isModerator && (
-                                            <div className="bg-moderator/10 px-1.5 py-0.5 rounded-md font-bold text-[8px] text-moderator md:text-[9px] xl:text-[10px] uppercase tracking-wide">
-                                                <Verify className="size-2.5 md:size-3 xl:size-3.5" />
+                                            <div className="inline-flex items-center gap-x-0.5 bg-moderator/10 px-1.5 py-0.5 rounded-md font-bold text-[8px] text-moderator md:text-[9px] xl:text-[10px] uppercase tracking-wide">
+                                                <Verify variant="Bold" className="size-2.5 md:size-3 xl:size-3.5" />
                                                 Moderator
                                             </div>
                                         )}
                                         {post.edited && (
-                                            <div className="inline-flex items-center gap-x-1 text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] dark:text-gray-400/60">
+                                            <div className="inline-flex items-center gap-x-0.5 text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] dark:text-gray-400/60">
                                                 <Edit className="size-2.5 md:size-3 xl:size-3.5" />
                                                 <span>edited</span>
                                             </div>

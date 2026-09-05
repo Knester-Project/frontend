@@ -87,19 +87,19 @@ const Nav = () => {
                                 {(!unreadError && unreadLoading) &&
                                     <>
                                         <Refresh className="animate-spin" />
-                                        <span className="-top-1 -right-1 absolute bg-red-500 px-1 pb-[1px] rounded-full text-white text-xs">...</span>
+                                        <span className="-top-1 -right-1 absolute bg-red-500 px-1 py-0.5 rounded-full text-white text-xs">...</span>
                                     </>
                                 }
                                 {(!unreadError && !unreadLoading) &&
                                     <>
                                         <Notification />
-                                        <span className="-top-1 -right-1 absolute bg-red-500 px-1 pb-[1px] rounded-full text-white text-xs">{unread.count}</span>
+                                        <span className="-top-1 -right-1 absolute bg-red-500 px-1 py-0.5 rounded-full text-white text-xs">{unread.count}</span>
                                     </>
                                 }
                                 {unreadError &&
                                     <>
                                         <Danger />
-                                        <span className="-top-1 -right-1 absolute bg-red-500 px-1 pb-[1px] rounded-full text-white text-xs">0</span>
+                                        <span className="-top-1 -right-1 absolute bg-red-500 px-1 py-0.5 rounded-full text-white text-xs">0</span>
                                     </>
                                 }
                             </Button>

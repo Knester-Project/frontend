@@ -105,16 +105,16 @@ const ReplyCard = ({ reply }: { reply: Reply }) => {
                                 {reply.user.username}
                             </p>
                             {reply.user.profile?.profileLock && (
-                                <Lock variant="Bold" className="size-3.5 md:size-4 xl:size-4.5 text-foreground/60" />
+                                <Lock variant="Bold" className="size-3 md:size-3.5 xl:size-4 text-foreground/60" />
                             )}
                             {reply.user.isPremium && (
-                                <Verify variant="Bold" className="size-3.5 md:size-4 xl:size-4.5 text-premium" />
+                                <Verify variant="Bold" className="size-3 md:size-3.5 xl:size-4 text-premium" />
                             )}
                             {reply.user.isModerator && (
-                                <Verify variant="Bold" className="size-3.5 md:size-4 xl:size-4.5 text-moderator" />
+                                <Verify variant="Bold" className="size-3 md:size-3.5 xl:size-4 text-moderator" />
                             )}
                             {reply.user.isCore && (
-                                <Verify variant="Bold" className="size-3.5 md:size-4 xl:size-4.5 text-core" />
+                                <Verify variant="Bold" className="size-3 md:size-3.5 xl:size-4 text-core" />
                             )}
                         </div>
 
