@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 
 // Icons
 import { Loader2 } from "lucide-react";
-import { Like1, Profile2User, TickCircle, Lock, ArrowRight3 } from "iconsax-reactjs";
+import { Like1, Profile2User, TickCircle, Lock, ArrowRight3, InfoCircle } from "iconsax-reactjs";
 
 
 
@@ -61,7 +61,8 @@ export default function GenreOnboarding() {
     const handleGroupClick = (group: GenreGroup) => {
         sileo.info({
             title: "Groups aren't available yet",
-            description: `"${group.name}" will be open once the feature launches. Stay tuned!`
+            description: `"${group.name}" will be open once the feature launches. Stay tuned!`,
+            icon: <InfoCircle />
         })
     };
 

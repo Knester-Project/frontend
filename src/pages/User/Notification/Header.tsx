@@ -6,7 +6,7 @@ import { NOT_LIMIT } from "@/assets/constants";
 
 // UIs
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { TickCircle } from "iconsax-reactjs";
+import { InfoCircle, TickCircle } from "iconsax-reactjs";
 
 // Icons
 const notificationTypes = [
@@ -28,7 +28,7 @@ const Header = ({ type, update }: { type: string, update: (value: string) => voi
 
     const updateAll = useMarkAllNot("notification", { limit: NOT_LIMIT });
     const handleUpdateAll = () => {
-        sileo.info({ title: "Updating All !!!" });
+        sileo.info({ title: "Updating All !!!", icon: <InfoCircle /> });
 
         updateAll.mutate({
             onSuccess: () => {

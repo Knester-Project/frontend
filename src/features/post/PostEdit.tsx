@@ -119,7 +119,7 @@ export default function EditPost({ post, onClose }: EditPostFormProps) {
             newMediaFiles.length > 0;
 
         if (!isDirty) {
-            sileo.info({ title: "No changes detected." });
+            sileo.error({ title: "No changes detected." });
             onClose();
             return;
         }

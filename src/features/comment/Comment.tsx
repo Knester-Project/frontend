@@ -51,7 +51,7 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
                 handleClose: closeToast,
             });
         }
-        
+
         try {
 
             let mediaUrl: string | null = null;
@@ -109,6 +109,7 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const loadMoreRef = useInfiniteScroll({ hasNextPage, isFetchingNextPage, fetchNextPage, root: scrollRef.current })
 
+    const pageParams = data?.pageParams;
     const fetchedComments = data?.pages.flatMap((page) => page.data.comments) ?? [];
 
     return (
@@ -161,11 +162,11 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
                         )}
 
                         {/* No more data */}
-                        {!hasNextPage && fetchedComments.length > 0 && (
-                            <p className="py-4 text-primary text-center">
+                        {!hasNextPage && fetchedComments.length > 0 && pageParams?.[0] !== undefined ? (
+                            <p className="py-4 font-medium text-primary text-center smallText">
                                 No more comments to show
                             </p>
-                        )}
+                        ) : null}
 
                         {/* Intersection trigger */}
                         <div ref={loadMoreRef} className="w-full h-4" />

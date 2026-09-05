@@ -64,7 +64,7 @@ const Advert = () => {
                     </div>
                 </div>
                 {(!isBusy && isPremium && adverts.length < MAX) && (
-                    <button onClick={toggleNew} className="bg-primary hover:bg-primary/90 ml-auto px-3 py-1 rounded-md w-fit font-semibold text-primary-foreground text-xs transition-colors cursor-pointer">
+                    <button onClick={toggleNew} className="bg-primary hover:bg-primary/90 ml-auto px-3 py-1 rounded-md w-fit font-medium text-primary-foreground text-xs transition-colors cursor-pointer">
                         New Advert
                     </button>
                 )}
@@ -143,7 +143,7 @@ const Advert = () => {
                 <div className="flex flex-col items-center gap-3 bg-accent/10 mx-auto px-5 py-6 border border-border rounded-xl w-full">
                     <Shop className="size-8" />
                     <p className="text-muted-foreground text-xs text-center">You haven't created any adverts yet.</p>
-                    <button onClick={toggleNew} className="bg-primary hover:bg-primary/90 px-3 py-1 rounded-xl font-semibold text-primary-foreground text-xs transition-colors cursor-pointer">
+                    <button onClick={toggleNew} className="bg-primary hover:bg-primary/90 px-3 py-1 rounded-xl font-medium text-primary-foreground text-xs transition-colors cursor-pointer">
                         New Advert
                     </button>
                 </div>

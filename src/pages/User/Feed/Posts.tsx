@@ -71,7 +71,7 @@ const Posts = () => {
     return (
         <main className="space-y-4 py-10">
             {/* Section header */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-6 p-2">
                 <h2 className="font-semibold uppercase tracking-wide smallText">
                     {activeTab === "foryou" ? "Your Circle" : activeTab} Posts
                 </h2>
@@ -109,7 +109,7 @@ const Posts = () => {
             ) : (
                 <>
                     <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3 }} className="space-y-4">
+                        transition={{ duration: 0.3 }} className="lg:space-y-4">
                         {posts.map((post, index) => (
                             <PostCard isOwner={user?._id === post.user._id} key={post._id} post={post} index={index} />
                         ))}

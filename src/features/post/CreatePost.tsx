@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 
 // Icons
 import { Hash, X, Send, Plus, GitBranch, Rocket } from "lucide-react";
-import { GalleryEdit, Hashtag, Global, Trash, Lock } from "iconsax-reactjs";
+import { GalleryEdit, Hashtag, Global, Trash, Lock, InfoCircle } from "iconsax-reactjs";
 
 const MAX_CHARS = import.meta.env.VITE_POST_LENGTH;
 const THREAD_LENGTH = import.meta.env.VITE_THREAD_LENGTH;
@@ -321,7 +321,7 @@ export default function PostComposer() {
     const allEmpty = slots.every((s) => !s.content.trim() && s.mediaFiles.length === 0);
     const anyOverLimit = slots.some((s) => s.content.length > MAX_CHARS);
 
-    const newPost = useNewPost()
+    const newPost = useNewPost();
 
     // Helper Function
     async function buildPayload(slots: SlotData[], isPrivate: boolean) {
@@ -359,11 +359,10 @@ export default function PostComposer() {
         setIsUploading(false);
         return processedSlots;
     }
-
     const handleSubmit = async () => {
 
         if (allEmpty || anyOverLimit) return;
-        sileo.info({ title: "Creating Post" })
+        sileo.info({ title: "Creating Post", icon: <InfoCircle /> })
 
         try {
 
@@ -372,7 +371,7 @@ export default function PostComposer() {
             // Create Post
             newPost.mutate(payload, {
                 onSuccess: () => {
-                    sileo.success({ title: "New Post !!!", icon: <Rocket className="size-3.5" />, });
+                    sileo.success({ title: "New Post !!!", icon: <Rocket />, });
                     setSlots([emptySlot()]);
                     setIsPrivate(false);
                 },

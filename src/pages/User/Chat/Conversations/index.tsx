@@ -10,11 +10,11 @@ import { formatLastSeen } from "@/utils/format";
 
 // UI
 import { Overlay } from "@/components/common/Overlay";
+import CreateGroup from "./CreateGroup";
 import New from "./New";
 
 // Icons
 import { Add, MessageAdd1, Profile2User } from "iconsax-reactjs";
-import CreateGroup from "./CreateGroup";
 
 
 const Index = () => {

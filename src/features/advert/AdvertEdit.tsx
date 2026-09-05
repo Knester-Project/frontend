@@ -79,7 +79,7 @@ const AdvertEdit = ({ advert, onClose }: UpdateAdvertProps) => {
 
         // If nothing changed, prevent unnecessary API calls
         if (!isDirty && !hasNewMedia && !hasCategoriesChanged) {
-            sileo.info({ title: "No changes detected." });
+            sileo.error({ title: "No changes detected." });
             onClose();
             return;
         }

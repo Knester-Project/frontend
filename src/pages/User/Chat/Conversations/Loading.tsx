@@ -6,7 +6,7 @@ import { MessageAdd1 } from "iconsax-reactjs";
 
 const ConvoLoading = () => {
     return (
-        <main className="px-[1rem] sm:px-8 md:px-[3rem] lg:px-[4rem] 2xl:px-[6rem] xl:px-[5rem] py-3">
+        <main>
             <header className="flex justify-between items-center bg-primary/10 p-4 rounded-xl">
                 <div>
                     <h1 className="font-bold text-lg md:text-xl xl:text-2xl">Messages</h1>
@@ -23,16 +23,14 @@ const ConvoLoading = () => {
                         className="flex items-center gap-3 px-4 py-3"
                     >
                         {/* Avatar */}
-                        <Skeleton className="rounded-full w-12 h-12" />
+                        <Skeleton className="rounded-full size-12" />
 
                         {/* Content */}
                         <div className="flex-1 min-w-0">
                             <div className="flex justify-between items-center">
-                                <Skeleton className="rounded-md w-24 h-4" />
-                                <Skeleton className="rounded-md w-10 h-3" />
+                                <Skeleton className="rounded-md w-2/3 h-6" />
                             </div>
-
-                            <Skeleton className="mt-2 rounded-md w-[70%] h-3" />
+                            <Skeleton className="mt-2 rounded-md w-full h-3" />
                         </div>
                     </div>
                 ))}

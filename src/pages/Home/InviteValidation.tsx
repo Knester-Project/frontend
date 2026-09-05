@@ -15,7 +15,7 @@ import Button from "@/components/common/Button";
 
 // Icons
 import { CircleCheckBig, Loader } from "lucide-react";
-import { TagUser, Eye, EyeSlash, Lock, TickCircle, ShieldSecurity, UserCirlceAdd, Danger, LoginCurve } from "iconsax-reactjs";
+import { TagUser, Eye, EyeSlash, Lock, TickCircle, ShieldSecurity, UserCirlceAdd, Danger, LoginCurve, InfoCircle } from "iconsax-reactjs";
 
 type Page = "username" | "password" | "recovery";
 
@@ -143,7 +143,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
 
         try {
             // Create the user first.
-            sileo.show({ title: "Creating your account..." });
+            sileo.info({ title: "Creating your account...", icon: <InfoCircle /> });
 
             createUser.mutate({
                 username: enteredUsername,
@@ -162,7 +162,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
 
                     try {
                         // Generate E2EE identity keys.
-                        sileo.show({ title: "Generating Secure E2EE Keys..." });
+                        sileo.info({ title: "Generating Secure E2EE Keys...", icon: <InfoCircle /> });
                         const keyPair = await generateIdentityKeyPair();
 
                         // Export keys to JWK.
@@ -170,7 +170,7 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                         const privateJwk = await exportKeyToJwk(keyPair.privateKey);
 
                         // Encrypt the PRIVATE key with the recovery
-                        sileo.show({ title: "Securing your private key..." });
+                        sileo.info({ title: "Securing your private key...", icon: <InfoCircle /> });
                         const encryptedVault = await lockPrivateKey(privateJwk, phrase)
 
                         // Save raw private key locally.
@@ -407,7 +407,15 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                             </div>
                         </div>
                         {allRequirementsMet && passwordsMatch &&
-                            <Button type="submit" text="Create Account" loadingText="Setting up encryption..." disabled={createUser.isPending || updateUser.isPending || isGeneratingKeys} loading={createUser.isPending || updateUser.isPending || isGeneratingKeys} icon={<UserCirlceAdd className="size-4 md:size-4.5 xl:size-5" />} variant="primary" />
+                            <Button
+                                type="submit"
+                                text="Create Account"
+                                loadingText="Setting up encryption..."
+                                disabled={createUser.isPending || updateUser.isPending || isGeneratingKeys}
+                                loading={createUser.isPending || updateUser.isPending || isGeneratingKeys}
+                                icon={<UserCirlceAdd className="size-4 md:size-4.5 xl:size-5" />}
+                                variant="primary"
+                            />
                         }
                     </form>
                 </div>
@@ -453,7 +461,15 @@ const InviteValidation = ({ invitationCode }: { invitationCode: string }) => {
                         <p className="my-2 font-medium text-base md:text-lg xl:text-xl text-center break-words montserrat">
                             {recoveryPhrase}
                         </p>
-                        <Button type="button" onClick={handleCopy} text={copied ? "Copied!" : "Copy Recovery Phrase"} disabled={!recoveryPhrase} loading={false} icon={<TickCircle className="size-4 md:size-4.5 xl:size-5" />} variant="success" />
+                        <Button
+                            type="button"
+                            onClick={handleCopy}
+                            text={copied ? "Copied!" : "Copy Recovery Phrase"}
+                            disabled={!recoveryPhrase}
+                            loading={false}
+                            icon={<TickCircle className="size-4 md:size-4.5 xl:size-5" />}
+                            variant="success"
+                        />
                     </div>
 
                     {copied && (

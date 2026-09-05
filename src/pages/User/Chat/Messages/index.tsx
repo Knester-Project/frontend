@@ -44,7 +44,7 @@ const Index = ({ username }: { username: string }) => {
         );
 
         if (!element) {
-            sileo.info({
+            sileo.error({
                 title: "Message isn't currently loaded",
                 description: "Scroll up to load older messages, then tap the search result again.",
             });

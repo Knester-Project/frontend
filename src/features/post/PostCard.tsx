@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "@tanstack/react-router";
 
 // Utils, Services and Constants
 import { cn } from "@/lib/utils";
@@ -14,12 +15,11 @@ import Vibe from "@/features/shared/Vibe";
 import Comment from "@/features/comment/Comment";
 import Views from "@/features/shared/Views";
 import ShareMenu from "@/features/shared/Share";
+import EditPost from "./PostEdit";
 
 // Icons
 import { ChevronDown } from "lucide-react";
 import { Edit, Flag, Verify } from "iconsax-reactjs";
-import EditPost from "./PostEdit";
-import { Link } from "@tanstack/react-router";
 
 
 
@@ -77,7 +77,7 @@ function ThreadBubble({ post, isOwner = false }: { post: Post, isOwner?: boolean
                             }
                         </section>
                         <section className="flex-1 mt-2 pb-1 min-w-0">
-                            <p className="mb-2 text-[11px] text-foreground/85 md:text-xs xl:text-sm leading-relaxed whitespace-pre-wrap">
+                            <p className="mb-2 text-foreground/85 leading-relaxed whitespace-pre-wrap smallText">
                                 {post.content}
                             </p>
 
@@ -153,7 +153,7 @@ export default function PostCard({ post, index = 0, isOwner = false }: PostCardP
             {edit ? <EditPost post={post} onClose={toggleEdit} />
                 :
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.06, duration: 0.3 }}
-                    className="relative bg-card shadow-sm hover:shadow-md border border-border/60 hover:border-border/80 rounded-2xl h-fit overflow-hidden transition-all duration-200">
+                    className="relative bg-card shadow-sm hover:shadow-md lg:border border-border/60 border-y hover:border-border/80 lg:rounded-2xl h-fit overflow-hidden transition-all duration-200">
 
                     <main className="p-4 pb-14 overflow-y-auto hide-scrollbar">
                         {/* Thread badge */}
@@ -230,7 +230,7 @@ export default function PostCard({ post, index = 0, isOwner = false }: PostCardP
                         </section>
 
                         {/* Content */}
-                        <p className="my-3 text-[11px] text-foreground/90 md:text-xs xl:text-sm leading-relaxed whitespace-pre-wrap">
+                        <p className="my-3 leading-relaxed whitespace-pre-wrap">
                             {post.content}
                         </p>
 

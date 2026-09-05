@@ -118,8 +118,15 @@ const Index = () => {
                     </div>
                 </div>
 
-                <Button type="button" text="Recover Account" loadingText={"Recovering..."} disabled={recoverPassword.isPending} loading={recoverPassword.isPending} icon={<Unlock className='size-4 md:size-4.5 xl:size-5' />} variant='primary' />
-
+                <Button
+                    type="submit"
+                    text="Recover Account"
+                    loadingText={"Recovering..."}
+                    disabled={recoverPassword.isPending}
+                    loading={recoverPassword.isPending}
+                    icon={<Unlock className='size-4 md:size-4.5 xl:size-5' />}
+                    variant='primary'
+                />
             </form>
         </main>
     );
