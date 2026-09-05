@@ -10,7 +10,7 @@ import { POST_LIMIT } from "@/assets/constants";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ShareMenu from "@/features/shared/Share";
 import Vibe from "@/features/shared/Vibe";
-import { MediaGrid } from "@/features/media/MediaGrid";
+import PostMediaGrid from "@/features/media/PostMediaGrid";
 import Comment from "@/features/comment/Comment";
 import Views from "@/features/shared/Views";
 
@@ -124,7 +124,7 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
             </div>
 
             {/* Media */}
-            {media.length > 0 && <MediaGrid media={gallery} />}
+            {media.length > 0 && <PostMediaGrid media={gallery} />}
 
             {/* Social Media */}
             {socialMedia?.length > 0 && (
@@ -143,9 +143,9 @@ const PostCard = ({ post }: { post: SafetyPost }) => {
                 {vibes === 1 && hasVibed ? (
                     <p className="text-muted-foreground">You vibed with this</p>
                 ) : vibes > 0 && hasVibed ? (
-                    <p className="text-muted-foreground">You and {vibes - 1} people vibed with this</p>
+                    <p className="text-muted-foreground">You and {(vibes - 1) > 1 ? `${vibes - 1} people` : `${vibes - 1} person`} vibed with this</p>
                 ) : vibes > 0 ? (
-                    <p className="text-muted-foreground">{vibes} people vibed with this</p>
+                    <p className="text-muted-foreground">{vibes === 1 ? `1 person` : `${vibes} people`}  vibed with this</p>
                 ) : null}
                 <Views views={views} />
             </div>

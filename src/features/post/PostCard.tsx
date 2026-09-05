@@ -16,6 +16,7 @@ import Comment from "@/features/comment/Comment";
 import Views from "@/features/shared/Views";
 import ShareMenu from "@/features/shared/Share";
 import EditPost from "./PostEdit";
+import PostMediaGrid from "../media/PostMediaGrid";
 
 // Icons
 import { ChevronDown } from "lucide-react";
@@ -236,7 +237,7 @@ export default function PostCard({ post, index = 0, isOwner = false }: PostCardP
 
                         {/* Media Grid */}
                         {post.media && post.media.length > 0 && (
-                            <MediaGrid media={gallery} />
+                            <PostMediaGrid media={gallery} />
                         )}
 
                         {/* Hashtags */}
