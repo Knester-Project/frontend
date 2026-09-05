@@ -8,14 +8,14 @@ import { Share } from "iconsax-reactjs";
 const ShareMenu = ({ route, title, text }: { route: string; title: string; text: string }) => {
 
     const [open, setOpen] = useState<boolean>(false);
-    const [origin, setOrigin] = useState("");
+    const [origin, setOrigin] = useState<string>("");
 
     // Handle SSR safety for window object
     useEffect(() => {
         setOrigin(window.location.origin);
     }, []);
 
-    const shareUrl = `${origin}/${route}`;
+    const shareUrl = `${origin}${route}`;
     const encodedUrl = encodeURIComponent(shareUrl);
     const encodedText = encodeURIComponent(`${text} `);
 

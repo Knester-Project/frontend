@@ -25,12 +25,12 @@ export default function VaultSync({ mode, userEncryptedVault }: SecuritySyncProp
 
     const [recoveryPhrase, setRecoveryPhrase] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
-    
+
     const updateUser = useUpdateUser();
 
     const handleRestore = async () => {
         if (!userEncryptedVault) return sileo.error({ title: "Vault data missing from server." });
-        
+
         try {
             const privateJwk = await unlockPrivateKey(
                 userEncryptedVault.vaultData,
@@ -38,7 +38,7 @@ export default function VaultSync({ mode, userEncryptedVault }: SecuritySyncProp
                 userEncryptedVault.iv,
                 recoveryPhrase.trim()
             );
-            
+
             // Save to Dexie
             await db.identity.put({
                 id: "me",
@@ -47,7 +47,7 @@ export default function VaultSync({ mode, userEncryptedVault }: SecuritySyncProp
             });
 
             sileo.success({ title: "Messages unlocked successfully!" });
-            
+
         } catch (error) {
             console.error("Decryption failed:", error);
             sileo.error({ title: "Invalid Recovery Phrase. Please check your spelling and try again." });
@@ -121,8 +121,8 @@ export default function VaultSync({ mode, userEncryptedVault }: SecuritySyncProp
                     {mode === "restore" ? "Unlock Your Messages" : "Sync Your Security Keys"}
                 </h2>
                 <p className="text-muted-foreground">
-                    {mode === "restore" 
-                        ? "You are logging in from a new browser. Enter your recovery phrase to decrypt your chat history." 
+                    {mode === "restore"
+                        ? "You are logging in from a new browser. Enter your recovery phrase to decrypt your chat history."
                         : "Your security keys haven't been backed up to the server. Enter your recovery phrase to secure them."}
                 </p>
             </div>
@@ -152,12 +152,13 @@ export default function VaultSync({ mode, userEncryptedVault }: SecuritySyncProp
                     </div>
                 )}
 
-                <Button 
-                    text={mode === "restore" ? "Decrypt Messages" : "Sync Keys"} 
-                    disabled={isProcessing || !recoveryPhrase} 
-                    loading={isProcessing} 
-                    icon={isProcessing ? <Loader2 className="animate-spin" /> : <ShieldSecurity />} 
-                    variant='primary' 
+                <Button
+                    type="submit"
+                    text={mode === "restore" ? "Decrypt Messages" : "Sync Keys"}
+                    disabled={isProcessing || !recoveryPhrase}
+                    loading={isProcessing}
+                    icon={isProcessing ? <Loader2 className="animate-spin" /> : <ShieldSecurity />}
+                    variant='primary'
                 />
             </form>
         </div>
