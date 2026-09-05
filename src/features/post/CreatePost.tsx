@@ -337,6 +337,7 @@ export default function PostComposer() {
                 let mediaUrls: string[] = [];
 
                 if (slot.mediaFiles.length > 0) {
+                    sileo.info({ title: "Uploading Media", icon: <InfoCircle /> })
                     // Upload all files in this slot in ONE request
                     const uploads = await uploadFiles(
                         slot.mediaFiles.map((m) => m.file),
@@ -365,7 +366,7 @@ export default function PostComposer() {
         sileo.info({ title: "Creating Post", icon: <InfoCircle /> })
 
         try {
-
+            sileo.info({ title: "Finalising Post Creation", icon: <InfoCircle /> })
             const payload = await buildPayload(slots, isPrivate);
 
             // Create Post

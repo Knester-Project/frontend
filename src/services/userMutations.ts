@@ -518,13 +518,25 @@ export function useRelationshipActions(targetUsername: string) {
 
 // Create New Post
 export function useNewPost() {
+    const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: (data: PostPayload[]) => Api.newPost(data),
+
+        onSuccess: async (response) => {
+            console.log("Post created successfully:", response?.data);
+
+            // Refresh the feed so the newly-created post appears at the top.
+            await queryClient.invalidateQueries({
+                queryKey: ["feed"],
+                refetchType: "active",
+            });
+        },
+
         onError: (error) => {
             console.error("Post Creation failed:", error);
         },
-    })
+    });
 }
 
 // Toggle Vibe for Feed Post/Trending Post/Circle Post

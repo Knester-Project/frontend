@@ -47,6 +47,7 @@ const Posts = () => {
         );
     }
 
+    const pageParams = data?.pageParams;
     const posts = data?.pages.flatMap((page) => page.data.data) ?? [];
 
     if (posts.length === 0) {
@@ -70,11 +71,11 @@ const Posts = () => {
             )}
 
             {/* No more data */}
-            {!hasNextPage && posts.length > 0 && (
+            {!hasNextPage && posts.length > 0 && pageParams?.[0] !== undefined ? (
                 <p className="py-4 text-primary text-center">
                     No more posts to show
                 </p>
-            )}
+            ) : null}
 
             {/* Intersection trigger */}
             <div ref={loadMoreRef} className="w-full h-4" />
