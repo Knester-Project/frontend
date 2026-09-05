@@ -109,7 +109,7 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const loadMoreRef = useInfiniteScroll({ hasNextPage, isFetchingNextPage, fetchNextPage, root: scrollRef.current })
 
-    const pageParams = data?.pageParams;
+    const pageParams = data?.pageParams || [];
     const fetchedComments = data?.pages.flatMap((page) => page.data.comments) ?? [];
 
     return (
@@ -128,7 +128,7 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
                     <Drawer.Description className="sr-only">Comment Section</Drawer.Description>
                     <div className="flex-shrink-0 bg-gray-300 dark:bg-gray-600 mx-auto my-4 rounded-full w-12 h-1.5 cursor-grab" />
 
-                    <section ref={scrollRef} className="flex-1 p-4 overflow-y-auto hide-scrollbar">
+                    <section ref={scrollRef} className="flex-1 p-2 md:p-3 xl:p-4 overflow-y-auto hide-scrollbar">
 
                         <Drawer.Title className="mb-4 px-2 font-bold text-base md:text-lg xl:text-xl">Comments</Drawer.Title>
 
@@ -162,7 +162,7 @@ const Comment = ({ comments, postId, postModel }: { comments: number; postId: st
                         )}
 
                         {/* No more data */}
-                        {!hasNextPage && fetchedComments.length > 0 && pageParams?.[0] !== undefined ? (
+                        {!hasNextPage && fetchedComments.length > 0 && pageParams?.length > 1 ? (
                             <p className="py-4 font-medium text-primary text-center smallText">
                                 No more comments to show
                             </p>
