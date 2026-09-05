@@ -88,7 +88,7 @@ export function CharRing({ content }: CharRingProps) {
                 />
             </svg>
             {remaining <= 50 && (
-                <span className={cn("z-10 font-bold text-[8px] md:text-[9px] xl:text-[10px] montserrat", isOverLimit ? "text-destructive" : "text-gray-600 dark:text-gray-400")}>
+                <span className={cn("z-10 font-bold text-[8px] md:text-[9px] xl:text-[10px] montserrat", isOverLimit ? "text-destructive" : "text-muted-foreground")}>
                     {remaining}
                 </span>
             )}
@@ -133,8 +133,8 @@ export function HashtagPanel({ hashtags, setHashtags }: HashtagPanelProps) {
             transition={{ duration: 0.22 }} className="overflow-hidden">
             <div className="space-y-3 bg-accent/10 mt-2 p-3 border border-border/60 rounded-xl">
                 <div className="flex justify-between items-center montserrat">
-                    <p className="font-semibold text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] dark:text-gray-400 uppercase tracking-widest">Hashtags</p>
-                    <span className="text-[10px] text-gray-600 dark:text-gray-400">{remaining} remaining</span>
+                    <p className="font-semibold text-[9px] text-muted-foreground md:text-[10px] xl:text-[11px] uppercase tracking-widest">Hashtags</p>
+                    <span className="text-[10px] text-muted-foreground">{remaining} remaining</span>
                 </div>
 
                 {hashtags.length > 0 && (
@@ -152,27 +152,27 @@ export function HashtagPanel({ hashtags, setHashtags }: HashtagPanelProps) {
 
                 {remaining > 0 && (
                     <div className="flex items-center gap-2 bg-background px-3 py-2 border border-border/50 rounded-lg">
-                        <Hash className="size-3.5 text-gray-600 dark:text-gray-400 shrink-0" />
+                        <Hash className="size-3.5 text-muted-foreground shrink-0" />
                         <input value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKeyDown}
                             placeholder="Type a tag and press Space or Enter…"
-                            className="flex-1 bg-transparent focus:outline-none text-[11px] placeholder:text-gray-600 md:text-xs xl:text-sm" autoFocus />
+                            className="flex-1 bg-transparent focus:outline-none text-[11px] placeholder:text-muted-foreground md:text-xs xl:text-sm" autoFocus />
                     </div>
                 )}
 
                 <div>
-                    <p className="mb-1.5 text-[10px] text-gray-600 dark:text-gray-400">Suggestions</p>
+                    <p className="mb-1.5 text-[10px] text-muted-foreground">Suggestions</p>
                     <div className="flex flex-wrap gap-1.5">
                         {(!isLoading && !isError && data && data?.data.length > 0) ?
                             data.data.map((tag: Tags) => (
                                 <button key={`hash_${tag.tag}`} disabled={remaining === 0} onClick={() => addTag(tag.tag)}
-                                    className="hover:bg-primary/5 disabled:opacity-30 px-2.5 py-1 border border-border hover:border-primary rounded-lg text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] hover:text-primary dark:text-gray-400 transition-all cursor-pointer disabled:pointer-events-none">
+                                    className="hover:bg-primary/5 disabled:opacity-30 px-2.5 py-1 border border-border hover:border-primary rounded-lg text-[9px] text-muted-foreground md:text-[10px] xl:text-[11px] hover:text-primary transition-all cursor-pointer disabled:pointer-events-none">
                                     #{tag.tag}
                                 </button>
                             ))
                             :
                             fallbackSuggestions.map((tag) => (
                                 <button key={tag} disabled={remaining === 0} onClick={() => addTag(tag)}
-                                    className="hover:bg-primary/5 disabled:opacity-30 px-2.5 py-1 border border-border hover:border-primary rounded-lg text-[9px] text-gray-600 md:text-[10px] xl:text-[11px] hover:text-primary dark:text-gray-400 transition-all cursor-pointer disabled:pointer-events-none">
+                                    className="hover:bg-primary/5 disabled:opacity-30 px-2.5 py-1 border border-border hover:border-primary rounded-lg text-[9px] text-muted-foreground md:text-[10px] xl:text-[11px] hover:text-primary transition-all cursor-pointer disabled:pointer-events-none">
                                     #{tag}
                                 </button>
                             ))
@@ -230,9 +230,9 @@ function PostSlot({ avatar, username, content, setContent, mediaFiles,
 
             <div className="flex-1 pb-3 min-w-0">
                 <div className="flex justify-between items-center mb-1">
-                    <span className="font-semibold">{username || "user"}</span>
+                    <span className="font-medium">{username || "user"}</span>
                     {!isFirst && (
-                        <button onClick={onRemove} className="p-1 text-gray-600 hover:text-destructive dark:hover:text-destructive dark:text-gray-400/50 transition-colors cursor-pointer">
+                        <button onClick={onRemove} className="p-1 text-muted-foreground hover:text-destructive dark:hover:text-destructive transition-colors cursor-pointer">
                             <Trash className="size-3.5" />
                         </button>
                     )}
@@ -240,7 +240,7 @@ function PostSlot({ avatar, username, content, setContent, mediaFiles,
 
                 <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder={isFirst ? "What's on your mind?" : "Continue your thread…"}
                     rows={isFirst ? 4 : 3} className={cn(
-                        "bg-transparent focus:outline-none w-full text-[11px] placeholder:text-gray-600 md:text-xs xl:text-sm leading-relaxed resize-none hide-scrollbar", isOverLimit && "text-destructive")} />
+                        "bg-transparent focus:outline-none w-full placeholder:text-muted-foreground leading-relaxed resize-none hide-scrollbar", isOverLimit && "text-destructive")} />
 
                 <AnimatePresence>
                     {mediaFiles.length > 0 && (
@@ -250,7 +250,7 @@ function PostSlot({ avatar, username, content, setContent, mediaFiles,
                                 <div key={i} className="group relative rounded-xl aspect-square overflow-hidden">
                                     <img src={m.url} alt="" className="w-full h-full object-cover" />
                                     <button onClick={() => removeMedia(i)}
-                                        className="top-1.5 right-1.5 absolute flex justify-center items-center bg-background rounded-full size-6 md:size-7 xl:size-8 cursor-pointer">
+                                        className="top-1.5 right-1.5 absolute flex justify-center items-center bg-background rounded-full size-6 md:size-6.5 xl:size-7 cursor-pointer">
                                         <X className="size-3 md:size-3.5 xl:size-4 group-hover:text-destructive duration-300" />
                                     </button>
                                 </div>
@@ -285,7 +285,7 @@ export function ToolbarBtn({ icon, label, onClick, disabled, active }: ToolbarBt
     return (
         <button onClick={onClick} disabled={disabled} className={cn(
             "flex items-center gap-1.5 px-2 py-1.5 rounded-lg font-medium text-[10px] md:text-[11px] xl:text-xs transition-all cursor-pointer",
-            active ? "bg-primary/10 text-primary" : "text-gray-600 dark:text-gray-400 hover:bg-accent/20",
+            active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-accent/20",
             disabled && "opacity-30 pointer-events-none")}>
             {icon}
             <span>{label}</span>
@@ -414,7 +414,7 @@ export default function PostComposer() {
 
             <div className="px-4 pb-2">
                 <button onClick={addSlot} disabled={slots.length >= THREAD_LENGTH}
-                    className="group flex items-center gap-2 disabled:opacity-30 py-1 text-gray-600 hover:text-primary dark:text-gray-400 text-xs transition-colors cursor-pointer disabled:pointer-events-none">
+                    className="group flex items-center gap-2 disabled:opacity-30 py-1 text-muted-foreground hover:text-primary text-xs transition-colors cursor-pointer disabled:pointer-events-none">
                     <div className="flex justify-center items-center border border-border group-hover:border-primary/50 border-dashed rounded-full size-5 transition-colors">
                         <Plus className="size-3" />
                     </div>
@@ -425,7 +425,7 @@ export default function PostComposer() {
             <div className="mx-4 bg-border/40 h-px" />
 
             <div className="flex justify-between items-center px-4 py-2.5">
-                <p className="text-[11px] text-gray-600 dark:text-gray-400 montserrat">
+                <p className="text-[11px] text-muted-foreground montserrat">
                     {isThread ? `${slots.length} posts in thread` : "Single post"}
                 </p>
                 <Button size="sm" disabled={allEmpty || anyOverLimit || newPost.isPending || isUploading} onClick={handleSubmit} className="gap-1.5 shadow-primary/20 shadow-sm px-4 rounded-lg h-8 font-semibold text-xs">

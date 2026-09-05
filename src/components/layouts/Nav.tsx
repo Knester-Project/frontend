@@ -169,7 +169,9 @@ const Nav = () => {
                             </div>
                             <div className="flex justify-between items-center mt-4 text-muted-foreground text-xs">
                                 <p>Knester {new Date().getFullYear()}</p>
-                                <ThemeToggle />
+                                <div onClick={() => setIsMobileMenuOpen(false)}>
+                                    <ThemeToggle />
+                                </div>
                             </div>
                         </motion.div>
                     )}

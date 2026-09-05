@@ -4,9 +4,10 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { QueryClient } from '@tanstack/react-query';
 import { sileo } from 'sileo';
 
-// Styles and Stores
+// Styles, Stores and Utils
 import './index.css';
 import { useInstallStore } from './stores/install.store';
+import { saveLastRoute } from './utils/route-persistence';
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
@@ -18,6 +19,15 @@ const router = createRouter({
   routeTree, context: {
     queryClient: queryClient,
   },
+})
+
+// Saving Users Navigation List
+router.subscribe("onResolved", ({ toLocation }) => {
+  saveLastRoute(
+    toLocation.pathname,
+    toLocation.searchStr,
+    toLocation.hash,
+  )
 })
 
 // Register the router instance for type safety

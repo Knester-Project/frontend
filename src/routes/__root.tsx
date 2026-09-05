@@ -11,6 +11,7 @@ import { LocationProvider } from '@/providers/Location';
 
 // UIs
 import NotFound from "@/pages/NotFound";
+import RestoreLastRoute from '@/components/common/RestoreRoute';
 
 export const APP_NAME = "Knester";
 
@@ -46,11 +47,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
             {
                 title: APP_NAME,
             },
-            {
-                name: "description",
-                content:
-                    "A platform that connects users with similar interests, providing a seamless experience for anyone interested.",
-            },
         ],
     }),
     component: RootComponent,
@@ -64,6 +60,7 @@ function RootComponent() {
                 <LocationGate>
                     <NotificationInitializer>
                         <Outlet />
+                        <RestoreLastRoute />
                         <ThemeProviderEffect />
                         <Toaster position="top-center" theme="system" />
                     </NotificationInitializer>
